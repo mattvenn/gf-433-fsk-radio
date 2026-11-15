@@ -1,4 +1,4 @@
-> Running: step 1/6 (generate the 8 cells) since 23:52, ETA 23:57
+> Running: step 2/6 (DRC / antenna / LVS / sizes / mutations, 8 cells) since 23:53, ETA 00:03
 
 # Handoff: first-pass layout of the receiver (rx_*), DRC / LVS / antenna / extraction (sim server)
 
