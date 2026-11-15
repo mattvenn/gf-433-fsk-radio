@@ -282,17 +282,40 @@ def draw_res(c, x0, ntop, e):
 
 
 DUMSP = 300                            # dummy poly to the diffusion end
+TAPREACH = 14000                       # a diffusion further than this from its row's rail tap moves next to it
+ISLTAP = 14000                         # n-well islands: an n+ tap at least this often (DF.13: 20 um)
 
 
-def draw_elem(c, x0, row, Y, e, chan):
-    """One element; returns (x1, [(net, x, y, kind)], info)."""
+class NLayers:
+    """Proxy: draw lsdiv's P-strip geometry (pads below the diffusion) with n layers (the top row of an NN band)."""
+    MAP = {'pdiff': 'ndiff', 'pdc': 'ndc'}
+
+    def __init__(self, c):
+        self.c = c
+
+    def r(self, layer, *a):
+        self.c.r(self.MAP.get(layer, layer), *a)
+
+
+def draw_elem(c, x0, row, Y, e, chan, topn=False):
+    """One element; returns (x1, [(net, x, y, kind)], info). topn: the top row holds n devices (an NN band)."""
     if e['k'] == 'res':
-        assert row == 'N'
-        return draw_res(c, x0, Y['n_top'], e)
+        if row == 'N':
+            return draw_res(c, x0, Y['n_top'], e)
+        assert topn and e['n'] > 1, e
+        f = Frame(c, y0=2 * Y['p_bot'], flip=True)      # the N-row drawing mirrored about the row's bottom edge
+        x1, t, g = draw_res(f, x0, Y['p_bot'], e)
+        return x1, [(net, xx, f.Y(yy), k) for (net, xx, yy, k) in t], dict(cb=f.Y(g['ct']), ct=f.Y(g['cb']))
     W, L = um(e['W']), um(e['L'])
     dx = (L + DUMSP) if e.get('dummy') else 0
     yb = Y['n_top'] - W if row == 'N' else Y['p_bot']
-    x1, t, g = LL.strip(c, x0 + dx, yb, W, e['seq'], L, 'n' if row == 'N' else 'p', chan)
+    # DF.14 (an n diffusion within 20 um of a p+ tap): a short strip in a tall row sits next to its rail instead
+    if row == 'N' and yb - 600 > TAPREACH:
+        yb = 600
+    if row == 'P' and topn and 'p_top' in Y and Y['p_top'] - (yb + W) > TAPREACH:
+        yb = Y['p_top'] - W
+    cc = NLayers(c) if (row == 'P' and topn) else c
+    x1, t, g = LL.strip(cc, x0 + dx, yb, W, e['seq'], L, 'n' if row == 'N' else 'p', chan)
     if dx:
         for xa in (x0, x1 + DUMSP):
             c.r('poly', xa, yb - LL.ENDCAP, xa + L, yb + W + LL.ENDCAP)
@@ -309,10 +332,13 @@ def elem_w(e, chan):
 
 # ---- a band ------------------------------------------------------------------------------------------------------
 class Band:
-    """cols: [(name, P elements, N elements)]. ports: nets that are cell ports or leave the band."""
+    """cols: [(name, P elements, N elements)]. ports: nets that are cell ports or leave the band.
+    top='N': an NN band: the top row holds n devices too (pads facing down onto the channel) and the top rail is a
+    second VSS rail (for the nfet caps, tails and other VSS-side parts; no VDD terminal allowed)."""
 
-    def __init__(self, name, cols, ports=(), pins=(), x0=900, search=True, nmin=0):
+    def __init__(self, name, cols, ports=(), pins=(), x0=900, search=True, nmin=0, top='P'):
         self.name, self.cols, self.x0 = name, [list(c) for c in cols], x0
+        self.top, self.top_rail = top, ('VDD' if top == 'P' else 'VSS')
         self.ports = set(ports) | set(pins)   # nets that leave the band
         self.pins = set(pins)                 # cell ports among them (labelled as ports at the band edge)
         self.nmin = nmin                     # minimum N row height (nm)
@@ -328,7 +354,7 @@ class Band:
                     for net in e['seq']:
                         cnt[net] = cnt.get(net, 0) + 1
                     gates |= set(e['seq'][1::2])
-                    if row == 'P' and e['bulk'] != 'VDD':
+                    if row == 'P' and top == 'P' and e['bulk'] != 'VDD':
                         cnt[e['bulk']] = cnt.get(e['bulk'], 0) + 2
         self.cnt = cnt
         # channel nets: every net with more than one terminal, every gate, every port; VDD / VSS where they show up
@@ -336,6 +362,14 @@ class Band:
         chan = {n for n in cnt if n not in ('VDD', 'VSS') and (cnt[n] > 1 or n in gates or n in self.ports)}
         for _, P, N in self.cols:
             for e in P:
+                if top == 'N':
+                    assert not ('VDD' in (e.get('seq') or []) or 'VDD' in (e.get('a'), e.get('b'))), \
+                        f'{name}: VDD terminal in an NN band'
+                    if e['k'] == 'res' and 'VSS' in (e['a'], e['b']):
+                        chan.add('VSS')
+                    if e['k'] == 'mos' and 'VSS' in e['seq'][1::2]:
+                        chan.add('VSS')
+                    continue
                 if e['k'] == 'mos' and ('VSS' in e['seq']):
                     chan.add('VSS')
                 if e['k'] == 'mos' and 'VDD' in e['seq'][1::2]:
@@ -359,15 +393,24 @@ class Band:
         place = []
         prevb = None                         # well of the previous P element ('VDD' or an island bulk)
         prevn = None                         # kind of the previous N element (resistors keep RGAP)
+        lasttap = -10 ** 9
         for (name, P, N), off in zip(cols, offs):
             xp, xn = x + off, x
             cp, cn, taps = [], [], []
             for e in P:
+                if self.top == 'N':
+                    if prevb is not None and (e['k'] == 'res' or prevb == 'res'):
+                        xp += RGAP - DGAP
+                    cp.append(xp)
+                    xp += elem_w(e, self.chan) + DGAP
+                    prevb = e['k']
+                    continue
                 b = e['bulk']
                 if prevb is not None and b != prevb:
                     xp += WELLGAP - DGAP
-                if b != 'VDD' and b != prevb:            # island start: tap column first
-                    taps.append((xp, b))
+                if b != 'VDD' and (b != prevb or xp + elem_w(e, self.chan) - lasttap > ISLTAP):
+                    taps.append((xp, b))                 # island start (and every ISLTAP): a tap column
+                    lasttap = xp
                     xp += TAPW + DGAP
                 cp.append(xp)
                 xp += elem_w(e, self.chan) + DGAP
@@ -386,7 +429,7 @@ class Band:
         out = []
         for name, P, N, cp, cn, taps in place:
             for e, x0 in zip(P, cp):
-                _, t, g = draw_elem(c, x0, 'P', Y, e, self.chan)
+                _, t, g = draw_elem(c, x0, 'P', Y, e, self.chan, topn=self.top == 'N')
                 out += [(net, xx, yy, k, 'P', g, e) for (net, xx, yy, k) in t]
             for (x0, b) in taps:
                 out.append((b, x0 + TAPW // 2, Y['p_bot'] - 5, 'tap', 'P', dict(x0=x0), None))
@@ -397,6 +440,8 @@ class Band:
 
     def is_chan(self, t):
         net, xx, yy, kind, side, g, e = t
+        if net == 'VSS' and self.top == 'N':
+            return kind in ('g', 'r')
         if net == 'VSS':
             return (side == 'P') or kind in ('g', 'r')
         if net == 'VDD':
@@ -476,12 +521,13 @@ class Band:
 
         exl = [(net, ex) for net, v in exits.items() for ex in (v if isinstance(v, list) else [v])]
         verts = []                           # (net, x, edge) M3 verticals: 'top' / 'bottom' / 'through'
+        VE = ('top', 'bottom', 'through', 'throughb')     # throughb: a through riser with its pin at the bottom
         for net, (edge, x) in exl:
-            if edge in ('top', 'bottom', 'through') and x is not None:
+            if edge in VE and x is not None:
                 verts.append((net, snap(x), edge))
                 used.append(snap(x))
         for net, (edge, x) in exl:
-            if edge in ('top', 'bottom', 'through') and x is None:
+            if edge in VE and x is None:
                 a, b = self.span0.get(net, (self.x0, self.xend))
                 x = pick((a + b) // 2, a - 3000, b + 3000)
                 verts.append((net, snap(x), edge))
@@ -489,11 +535,15 @@ class Band:
         ties = {}
         for net in ('VDD', 'VSS'):
             if net in self.span0:
+                assert not (net == 'VDD' and self.top == 'N'), f'{self.name}: a VDD tie in an NN band'
                 a, b = self.span0[net]
                 # top edge (local) holds the VDD rail, bottom the VSS rail
                 x = pick(a, a - 4000, b + 4000)
                 ties[net] = x
                 used.append(x)
+        # a 'through' riser of a net with no terminal in this band is a plain M3 pass-through (no track, no via)
+        passthru = [(n, x) for n, x, e in verts if e in ('through', 'throughb') and n not in self.span0]
+        verts = [v for v in verts if not (v[2] in ('through', 'throughb') and v[0] not in self.span0)]
         extra = {}
         for net, x, edge in verts:
             extra.setdefault(net, []).append(x)
@@ -508,8 +558,9 @@ class Band:
         trk, span = LL.assign_tracks(stubs, extra)
         ntrk = (max(trk.values()) + 1) if trk else 1
         ty = {n: Y['t0'] + k * TPITCH for n, k in trk.items()}
-        Y['p_bot'] = snap(Y['t0'] + (ntrk - 1) * TPITCH + 190 + 230 + 635 + 80)
-        hp = [um(e['W']) for _, P, *_ in self.pl for e in P] or [1000]
+        ppad = max([635] + [res_top(e) for _, P, *_ in self.pl for e in P if e['k'] == 'res'])
+        Y['p_bot'] = snap(Y['t0'] + (ntrk - 1) * TPITCH + 190 + 230 + ppad + 80)
+        hp = [um(e['W']) if e['k'] == 'mos' else res_height(e) for _, P, *_ in self.pl for e in P] or [1000]
         Y['p_top'] = Y['p_bot'] + max(hp)
         islands = any(b for *_, taps in self.pl for b in taps)
         Y['vdd_b'] = Y['p_top'] + (1400 if islands else 600)
@@ -535,7 +586,7 @@ class Band:
             elif net == 'VSS' and side == 'N':
                 yt = g['cb'] if kind != 'rb' else yy + 360
                 c.r('m1', xx - 190, Y['vss_t'] - 300, xx + 190, yt)
-            elif net == 'VDD' and side == 'P':
+            elif net == self.top_rail and side == 'P':
                 c.r('m1', xx - 190, g['ct'], xx + 190, Y['vdd_b'] + 300)
             elif kind in ('g', 'r', 'rb', 'tap'):
                 raise SystemExit(f'{self.name}: unhandled terminal {net} {side} {kind} at {xx}')
@@ -553,36 +604,37 @@ class Band:
             for (x0, b) in taps:
                 hi = max(um(e['W']) for e in P if e['bulk'] == b)
                 hp_isl.setdefault(b, []).append(hi)
-                c.r('nsd', x0, Y['p_bot'], x0 + TAPW, Y['p_bot'] + max(hi, 760))
-                c.r('nsc', x0 + 75, Y['p_bot'] + 75, x0 + TAPW - 75, Y['p_bot'] + max(hi, 760) - 75)
-                c.r('m1', x0, Y['p_bot'] - 5, x0 + TAPW, Y['p_bot'] + max(hi, 760))
+                c.r('nsd', x0, Y['p_bot'], x0 + TAPW, Y['p_bot'] + max(hi, 1000))       # NP.8a: >= 0.35 um2
+                c.r('nsc', x0 + 75, Y['p_bot'] + 75, x0 + TAPW - 75, Y['p_bot'] + max(hi, 1000) - 75)
+                c.r('m1', x0, Y['p_bot'] - 5, x0 + TAPW, Y['p_bot'] + max(hi, 1000))
         # wells: VDD runs (to the rail's n-well strip) and islands
+        items = []                           # (x0, x1, bulk) of every P element and island tap
+        for name, P, N, cp, cn, taps in (self.pl if self.top == 'P' else []):
+            items += [(x0, x0 + elem_w(e, self.chan), e['bulk']) for e, x0 in zip(P, cp)]
+            items += [(x0, x0 + TAPW, b) for (x0, b) in taps]
         runs = []                            # (x0, x1, bulk)
-        for name, P, N, cp, cn, taps in self.pl:
-            tapx = {b: x0 for (x0, b) in taps}
-            for e, x0 in zip(P, cp):
-                b = e['bulk']
-                xa = tapx.pop(b, x0) if b != 'VDD' else x0
-                x1 = x0 + elem_w(e, self.chan)
-                if runs and runs[-1][2] == b and xa - runs[-1][1] < WELLGAP:
-                    runs[-1] = (runs[-1][0], x1, b)
-                else:
-                    runs.append((xa, x1, b))
+        for xa, x1, b in sorted(items):
+            if runs and runs[-1][2] == b and xa - runs[-1][1] < WELLGAP:
+                runs[-1] = (runs[-1][0], max(x1, runs[-1][1]), b)
+            else:
+                runs.append((xa, x1, b))
         Y['nw_b'] = Y['p_bot'] - 80 - 450
         for xa, x1, b in runs:
             if b == 'VDD':
                 c.r('nwell', xa - 600, Y['nw_b'], x1 + 600, Y['vdd_b'] + 1900)
             else:
                 hi = max(um(e['W']) for _, P, *_ in self.pl for e in P if e['bulk'] == b)
-                c.r('nwell', xa - 450, Y['nw_b'], x1 + 450, Y['p_bot'] + max(hi, 760) + 450)
+                c.r('nwell', xa - 450, Y['nw_b'], x1 + 450, Y['p_bot'] + max(hi, 1000) + 450)
         # rails (M3 windows where an M3 vertical crosses), the rail n-well strip and taps
-        skip_t = [(x - 700, x + 700) for x in list(m3_used) + [x for n, x, e in verts if e in ('top', 'through')]
-                  + ([ties['VDD']] if 'VDD' in ties else [])]
-        skip_b = [(x - 700, x + 700) for x in list(m3_used) + [x for n, x, e in verts if e in ('bottom', 'through')]
-                  + ([ties['VSS']] if 'VSS' in ties else [])]
+        skip_t = [(x - 700, x + 700) for x in list(m3_used) + [x for n, x, e in verts if e in ('top', 'through', 'throughb')]
+                  + ([ties['VDD']] if 'VDD' in ties else []) + [x for n, x in passthru]]
+        skip_b = [(x - 700, x + 700) for x in list(m3_used) + [x for n, x, e in verts if e in ('bottom', 'through', 'throughb')]
+                  + ([ties['VSS']] if 'VSS' in ties else []) + [x for n, x in passthru]]
+        if self.top == 'N' and 'VSS' in ties:
+            skip_t.append((ties['VSS'] - 700, ties['VSS'] + 700))
         # rails: drawn by stack(), once per shared rail, with the union of both bands' M3 windows
         rails = [('VSS', tuple(sorted((c.Y(Y['vss_b']), c.Y(Y['vss_t'])))), skip_b),
-                 ('VDD', tuple(sorted((c.Y(Y['vdd_b']), c.Y(Y['vdd_t'])))), skip_t)]
+                 (self.top_rail, tuple(sorted((c.Y(Y['vdd_b']), c.Y(Y['vdd_t'])))), skip_t)]
         # M3 ties to the rails
         for net, x in ties.items():
             yr = (Y['vdd_b'] + Y['vdd_t']) // 2 if net == 'VDD' else (Y['vss_b'] + Y['vss_t']) // 2
@@ -591,12 +643,15 @@ class Band:
             c.via2(x, yr)
         # exits
         pins = {}
+        for net, x in passthru:
+            c.r('m3', x - 190, Y['vss_b'], x + 190, Y['vdd_t'])
+            pins.setdefault(net, []).append((x, c.Y(Y['vdd_t']), 'through'))
         for net, x, edge in verts:
             c.via2(x, ty[net])
-            ya = Y['vss_b'] if edge in ('bottom', 'through') else ty[net]
-            yb = Y['vdd_t'] if edge in ('top', 'through') else ty[net]
+            ya = Y['vss_b'] if edge in ('bottom', 'through', 'throughb') else ty[net]
+            yb = Y['vdd_t'] if edge in ('top', 'through', 'throughb') else ty[net]
             c.r('m3', x - 190, ya, x + 190, yb)
-            ye = Y['vss_b'] if edge == 'bottom' else Y['vdd_t']
+            ye = Y['vss_b'] if edge in ('bottom', 'throughb') else Y['vdd_t']
             pins.setdefault(net, []).append((x, c.Y(ye), edge))
             if net in self.pins:
                 c.label(net, 'm3', x, ye - 200 if ye == Y['vdd_t'] else ye + 200, port=True)
@@ -656,28 +711,26 @@ def stack(cell, bands, exits, m3_shared=None, margin=900):
     if callable(exits):
         exits = exits(bands, xr)
     metas = []
-    y = 0
     m3_shared = list(m3_shared or [])
     xmin = STRAPX1 + 700 if len(bands) > 1 else 700     # M3 rail straps at the left edge
+    prev = None                                         # (net, y0, y1) of the stack's top rail so far
     for i, b in enumerate(bands):
-        flip = i % 2 == 1
-        if not flip:
-            m = b.finish(cell, xr, y0=y, flip=False, exits=exits[i], m3_used=m3_shared, xmin=xmin)
-            # next (mirrored) band shares this band's VDD rail: its local vdd rail maps onto [vdd_b, vdd_t]
-            top_rail = (y + m['Y']['vdd_b'], y + m['Y']['vdd_t'])
+        # each band shares the stack's top rail: drawn once into scratch to learn its local rails, then for real,
+        # mirrored if its own top rail is the one that matches
+        m0 = b.finish(Cell('scratch'), xr, y0=0, flip=False, exits=exits[i], m3_used=m3_shared, xmin=xmin)
+        Yl = m0['Y']
+        bot, top = ('VSS', Yl['vss_b'], Yl['vss_t']), (b.top_rail, Yl['vdd_b'], Yl['vdd_t'])
+        if prev is None:
+            flip, y0 = False, 0
+        elif prev[0] == bot[0]:
+            flip, y0 = False, prev[1] - bot[1]
+        elif prev[0] == top[0]:
+            flip, y0 = True, prev[1] + top[2]
         else:
-            # draw once into scratch to learn its local Y, then for real with y0 so that local vdd_t -> top_rail[0]
-            tmp = Cell('scratch')
-            m0 = b.finish(tmp, xr, y0=0, flip=False, exits=exits[i], m3_used=m3_shared, xmin=xmin)
-            y0 = top_rail[0] + m0['Y']['vdd_t']
-            m = b.finish(cell, xr, y0=y0, flip=True, exits=exits[i], m3_used=m3_shared, xmin=xmin)
-            top_rail = None
+            raise SystemExit(f'{b.name}: no rail to share with {prev}')
+        m = b.finish(cell, xr, y0=y0, flip=flip, exits=exits[i], m3_used=m3_shared, xmin=xmin)
+        prev = (top[0], y0 + top[1], y0 + top[2]) if not flip else (bot[0], y0 - bot[2], y0 - bot[1])
         metas.append(m)
-        if not flip:
-            y = None
-        else:
-            # next unmirrored band shares this band's VSS rail (local [-2400, 0] -> global [y0, y0 + 2400])
-            y = y0 + RAIL
     ylo = min(m['y'][0] for m in metas)
     yhi = max(m['y'][1] for m in metas)
     draw_rails(cell, metas, xr)
@@ -719,8 +772,9 @@ def draw_rails(cell, metas, xr, x0=0, m3_only=()):
 
 
 # ---- output ------------------------------------------------------------------------------------------------------
-def write(cells, top, gds, out, extra_tcl=''):
-    """Write <out>/<top>.tcl (every cell), run magic on it (.mag files + GDS)."""
+def write(cells, top, gds, out, extra_tcl='', fill=True):
+    """Write <out>/<top>.tcl (every cell), run magic on it (.mag files + GDS), then the dummy COMP fill
+    (layout/gen/rx_fill.py, DCF.1a) into the GDS."""
     out = Path(out)
     out.mkdir(parents=True, exist_ok=True)
     for old in out.glob('*.mag'):
@@ -731,6 +785,11 @@ def write(cells, top, gds, out, extra_tcl=''):
     r = subprocess.run(['nice', '-n', '19', 'magic', '-rcfile', MAGICRC, '-noconsole', '-dnull', f'{top}.tcl'],
                        cwd=out, capture_output=True, text=True)
     (out / 'magic_gen.log').write_text(r.stdout + r.stderr)
+    if fill:
+        import rx_fill
+        n = rx_fill.fill(str(Path(gds).resolve()), top)
+        with open(out / 'magic_gen.log', 'a') as f:
+            f.write(f'\nrx_fill: {n} dummy COMP squares\n')
     return out / 'magic_gen.log'
 
 
