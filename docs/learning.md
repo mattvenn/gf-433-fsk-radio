@@ -322,3 +322,31 @@ experiments (the noise of an N-step count, a device of N random unit cells, a ch
 
 Receiver numbers in sections 12–20 are from `docs/rx_design.md` on branch `rx-option-b`
 (schematic level, before layout).
+
+## Questions to revisit
+Things that were easy to forget during the review sessions. Try each one before opening the answer.
+
+1. A transistor's thermal noise, referred to its gate, behaves like a resistor of about how many ohms?
+   <details><summary>Answer</summary>About 1 / g<sub>m</sub> (γ / g<sub>m</sub>, with γ near 1); a differential pair has two,
+   about 2 / g<sub>m</sub>. So low noise needs large g<sub>m</sub>, which needs current: at 10 mS a pair adds about 200 Ω of noise
+   against the dipole's 73 Ω (NF ≈ 5.7 dB).</details>
+2. What is 8 mS × 1.2 kΩ?
+   <details><summary>Answer</summary>9.6 (milli × kilo cancel). A single stage above a few hundred means a prefix has slipped.</details>
+3. A −100 dBm signal over −109 dBm of noise: how far above, and in what unit?
+   <details><summary>Answer</summary>9 dB. The difference of two dBm values is a ratio, in dB.</details>
+4. Noise in a 1 MHz bandwidth with NF 5 dB?
+   <details><summary>Answer</summary>−174 + 60 + 5 = −109 dBm. Adding dB moves toward zero.</details>
+5. In zero IF with 72° I/Q, an interferer at +80 kHz: where is its mirror, and which one is the problem?
+   <details><summary>Answer</summary>The mirror is at −80 kHz (flip the sign), 16 dB weaker. The interferer itself is the problem; a
+   mirror only lands in band if the interferer was already in band.</details>
+6. A Bode plot falls from −20 dB at 1 MHz to −80 dB at 10 MHz. How many poles, and where should you measure?
+   <details><summary>Answer</summary>60 dB/decade = 3 poles, measured on the asymptote, about a decade past the corner.</details>
+7. What does g<sub>m</sub> = 1 mS mean, and what sets it?
+   <details><summary>Answer</summary>1 µA of drain current per mV on the gate. The bias current and W / L set it; the gate voltage settles
+   wherever it must. Gain = g<sub>m</sub> × R = (g<sub>m</sub> / I) × (I · R).</details>
+8. Why do baseband stages 2 and 3 get away with tiny, low-current, noisy transistors?
+   <details><summary>Answer</summary>Friis: their noise, referred to the input, is divided by the gain in front of them (stage 1, and the LNA
+   before the mixer). Only the first gain stage's noise counts in full.</details>
+9. How does the baseband's AC coupling between stages work (the PMOS gate cap, the 0.42/12 µm subthreshold PMOS on
+   `vgr`, and the stacked diode-connected pair)?
+   <details><summary>Answer</summary>(To be covered in the review session.)</details>
