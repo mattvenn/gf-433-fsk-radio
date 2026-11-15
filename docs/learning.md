@@ -5,7 +5,7 @@
 Notes written while designing this block, so the reasoning can be reused when explaining it to others.
 Each section gives the idea in plain words, then the number from our own simulation. Results are
 schematic simulations unless marked otherwise. Sections 1–7 come from the VCO study (scripts in `sim/vco/`,
-results in [vco_study.md](vco_study.md)). Sections 8–17 come from the review sessions on the current DAC and
+results in [vco_study.md](vco_study.md)). Sections 8–18 come from the review sessions on the current DAC and
 the receiver (2026-11-08 to 11-15); their figures are drawn by the scripts in `sim/learning/`.
 
 ## 1. What sets a ring oscillator's frequency
@@ -252,5 +252,36 @@ interleaved by 1 %, and in common-centroid order (ABBA) by 0 %, because both cen
 72 + 55 − 119 = 8° (`sim/learning/lo_delay.py`). The fix copies lsdiv's level shifter *and its load* for the Q tap,
 and requires the layout to copy lsdiv's cell; the simulated I/Q phase is then 71–74° at every corner.
 
-Receiver numbers in sections 12–17 are from `docs/rx_design.md` on branch `rx-option-b`
+## 18. Loading the ring, the Miller effect, and calibrating out a systematic jump
+- **Any load slows a ring.** Each stage's delay is about C · V / I, so extra capacitance on any node lowers f.
+  Hanging the receiver's Q level shifter on node a2 lowered the ring by 1.8 % (417.16 → 409.60 MHz at tt, code 9),
+  about one coarse code. A fixed offset is harmless, because the servo tunes the absolute frequency; but permanent
+  slowdowns all come out of the same tuning headroom, so keep a running total.
+- **The Miller effect.** Inside every inverter, C<sub>gd</sub> connects the input to the output. When the input
+  moves by v the output moves by −A · v, so the voltage across C<sub>gd</sub> changes by (1 + A) · v and the input
+  sees C<sub>gd</sub> × (1 + A) to ground. No loop around the amplifier is needed: the transistor's own capacitance is
+  the path. The level shifter's first inverter is biased at its switching point, where A is largest, so it loads
+  the ring through its 2 fF coupling cap far more than its bare gate would. Example: 0.3 fF with a gain of 5 looks
+  like 1.8 fF.
+- **Switching an amplifier's supply changes its Miller load.** Unpowering the Q copy (gain about 0) removes that
+  capacitance, and the ring jumps up by 0.42–0.71 MHz over the corners, 14–23 fine-DAC steps (31 kHz each).
+
+![Q tap shifts](img/learning/q_tap_shifts.png)
+
+**Fig. 6.** The receiver's Q tap moves the ring twice: permanently by −1.8 % when it is added, and by +0.57 MHz
+(at tt) each time its supply is switched, if rx_en gates it. Kept powered, it moves the ring by under 7 kHz
+(`sim/learning/q_tap_shifts.py`, numbers from `docs/rx_design.md` Table II).
+
+- **Counting a frequency takes time.** The RP2350 counts edges of f / 16 for a gate time T. The count is ±1, so the
+  resolution is 16 / T in the ring's frequency: 16 kHz at 1 ms (enough for the coarse search), 1.6 kHz at 10 ms
+  (the fine servo). A reciprocal count (timing whole periods with the 150 MHz clock) gets 290 Hz in 10 ms
+  (`docs/tuning.md`). So re-tuning after a 0.57 MHz jump by measurement alone takes about 11 ms, far more than
+  the receiver's 1–2 ms settling.
+- **Feed-forward plus feedback.** Because the jump is systematic (the same chip, the same temperature, the same jump),
+  the RP2350 can measure it once, store the DAC word for each state, and write the stored word at the same moment as
+  rx_en, in microseconds. The servo then only trims the slow drift between packets, and an occasional re-calibration
+  tracks any change of the jump with temperature. A random error could not be handled this way: it would have to
+  be measured every time.
+
+Receiver numbers in sections 12–18 are from `docs/rx_design.md` on branch `rx-option-b`
 (schematic level, before layout).
