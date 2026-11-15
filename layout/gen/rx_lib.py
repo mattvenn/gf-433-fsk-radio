@@ -140,6 +140,14 @@ def risers(bands, nets, xr, sep=None):
     return xs
 
 
+def load_gen(name):
+    """A layout generator layout/gen/<name>.py as a module (sim/rx has netlisters of the same names)."""
+    spec = importlib.util.spec_from_file_location('lay_' + name, HERE / f'{name}.py')
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
 def dev(cell, name):
     for d in cell['devs']:
         if d['name'] == name:
@@ -606,15 +614,18 @@ class Band:
                     tracks={n: [k, c.Y(ty[n]), span[n]] for n, k in trk.items()}, offs=self.offs,
                     xend=self.xend, m3=[x for n, x, e in verts] + list(ties.values()))
 
-def rail(c, yb, yt, x0, x1, tap=None, m3=True, skip=()):
+def rail(c, yb, yt, x0, x1, tap=None, m3=True, skip=(), m3_only=False):
     """tx_drv.py rail(): M1 + M2 from x0 to x1 (via1 every 2 um), M3 with via2 every 2 um except in the skip
-    windows, a tap strip ('p' / 'n') under it."""
-    c.r('m1', x0, yb, x1, yt)
-    c.r('m2', x0, yb, x1, yt)
-    x = x0 + 400
-    while x + 400 < x1:
-        c.r('v1', x - 130, yb + 300, x + 130, yt - 300)
-        x += 2000
+    windows, a tap strip ('p' / 'n') under it. m3_only: only the M3 + via2 (on a rail another generator drew)."""
+    if not m3_only:
+        c.r('m1', x0, yb, x1, yt)
+        c.r('m2', x0, yb, x1, yt)
+        x = x0 + 400
+        while x + 400 < x1:
+            c.r('v1', x - 130, yb + 300, x + 130, yt - 300)
+            x += 2000
+    else:
+        tap = None
     if m3:
         segs, a = [], x0
         for (s0, s1) in sorted(skip):
@@ -677,7 +688,7 @@ STRAP = {'VSS': (400, 1400), 'VDD': (1800, 2800)}   # M3 straps joining the rail
 STRAPX1 = 2800
 
 
-def draw_rails(cell, metas, xr, x0=0):
+def draw_rails(cell, metas, xr, x0=0, m3_only=()):
     """Every band's rails, a shared rail once with the union of the bands' M3 windows; n-well strip under VDD.
     With more than one rail per net, an M3 strap per net at the left edge joins them (windows in the other net's
     rails' M3, a via2 column where it crosses its own)."""
@@ -697,8 +708,10 @@ def draw_rails(cell, metas, xr, x0=0):
                     r[1].append((a - 300, b + 300))
     lab = set()
     for (yb, yt), (net, skip) in sorted(rails.items()):
-        rail(c, yb, yt, x0, xr, tap=('p' if net == 'VSS' else 'n', (x0 + 300, xr - 300)), skip=skip)
-        if net == 'VDD':
+        mo = (yb, yt) in m3_only
+        rail(c, yb, yt, x0 + (300 if mo else 0), xr - (300 if mo else 0),
+             tap=('p' if net == 'VSS' else 'n', (x0 + 300, xr - 300)), skip=skip, m3_only=mo)
+        if net == 'VDD' and not mo:
             c.r('nwell', x0 + 150, yb + 500, xr - 150, yb + 1900)
         if net not in lab:
             c.label(net, 'm2', x0 + 1000, (yb + yt) // 2, port=True)

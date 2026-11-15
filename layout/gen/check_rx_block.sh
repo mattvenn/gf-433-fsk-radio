@@ -26,13 +26,17 @@ NICE="nice -n 19"
 
 NL=$(bash xschem/gen/netlist.sh xschem "$OUT/xsch" $B) || { echo "netlist failed: $NL"; exit 1; }
 SRC=$OUT/xsch/${B}_lvs.spice
-sed -e ':a;N;$!ba;s/\n+/ /g' "$OUT/xsch/$B.spice" > "$SRC"     # one line per device (for the mutations)
+# one line per device (for the mutations); lsdiv's level shifter (ls_ac) has "Cc a0 net1 2e-15": Cc is drawn as
+# M2 / M3 metal fingers, which extract as parasitic C, not a device, so (as layout/gen/check_lsdiv.sh) the LVS copy
+# drops that line (its value is checked by the extraction)
+sed -e ':a;N;$!ba;s/\n+/ /g' "$OUT/xsch/$B.spice" | sed -e '/^Cc a0 /d' > "$SRC"
+ncc=$(grep -c '^Cc a0 ' "$OUT/xsch/$B.spice")
 
 cd "$OUT"
 : > summary.txt
 log() { echo "$*" | tee -a summary.txt; }
 log "gds $GDS  top $B  source $SRC  magic $(magic --version)  klayout $(klayout -v)  $(date -Iseconds)"
-log "== schematic: xschem/$B.sch; $NL"
+log "== schematic: xschem/$B.sch; $NL; LVS copy: removed $ncc 'Cc a0' metal-finger cap line(s)"
 
 # ---- magic DRC + LVS extraction ----
 cat > magic.tcl <<EOF
