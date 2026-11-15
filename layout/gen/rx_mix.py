@@ -1,0 +1,74 @@
+#!/usr/bin/env python3
+"""Layout of the passive double-balanced mixer rx_mix (four transmission gates + hold caps), gf180mcuD.
+
+    python3 layout/gen/rx_mix.py [--out build/rx_layout/gen/rx_mix] [--gds layout/rx_mix.gds]
+
+Circuit and sizes: sim/rx/rx_mix.py block() (= xschem/rx_mix.sch).
+One band (layout/gen/rx_lib.py), symmetric about the cell centre:
+  Cbp (3 fingers) | NMOS switches (N row) | PMOS switches (P row) | Cbn (3 fingers)
+  switches: the four NMOS on one diffusion   rfp |S1 lo| bbp |S3 lob| rfn |S2 lo| bbn |S4 lob| rfp
+            the four PMOS on one diffusion   rfp |S1 lob| bbp |S3 lo| rfn |S2 lob| bbn |S4 lo| rfp
+  each diffusion is symmetric (rf at both ends and in the middle, every gate one finger). The N and P diffusions
+  stand side by side, not one above the other: a transmission gate's N and P gates are complementary, so stacked
+  they would ask for lo below lob at one finger and above it at the next (a track-order cycle in the channel). lo and lob leave on M3 straight up through the VDD rail (right angles to the rf / bb
+  tracks), rf on the left edge, bb on the right edge (M2).
+Pins: VDD, VSS (rails), rfp, rfn (left), bbp, bbn (right), lo, lob (M3, top edge).
+"""
+import argparse
+import sys
+from pathlib import Path
+
+HERE = Path(__file__).resolve().parent
+sys.path.insert(0, str(HERE))
+import rx_lib as R  # noqa: E402
+from ring_core import Cell  # noqa: E402
+
+PINS = ['VDD', 'VSS', 'rfp', 'rfn', 'bbp', 'bbn', 'lo', 'lob']
+EXITS = dict(rfp=('left', None), rfn=('left', None), bbp=('right', None), bbn=('right', None),
+             lo=('top', None), lob=('top', None))
+
+
+def cols():
+    c = R.sim_cells()['rx_mix']
+    d = lambda n: R.dev(c, n)
+    sn = {k: d(k) for k in ('S1n', 'S2n', 'S3n', 'S4n')}
+    sp = {k: d(k) for k in ('S1p', 'S2p', 'S3p', 'S4p')}
+    wn, wp = {x['w'] for x in sn.values()}, {x['w'] for x in sp.values()}
+    assert len(wn) == len(wp) == 1 and all(x['m'] == 1 for x in list(sn.values()) + list(sp.values()))
+    # every switch's nets as drawn must be the netlister's (d, g, s) up to d/s swap
+    nseq = ['rfp', 'lo', 'bbp', 'lob', 'rfn', 'lo', 'bbn', 'lob', 'rfp']
+    pseq = ['rfp', 'lob', 'bbp', 'lo', 'rfn', 'lob', 'bbn', 'lo', 'rfp']
+    for seq, devs in ((nseq, sn), (pseq, sp)):
+        drawn = sorted((tuple(sorted((seq[i - 1], seq[i + 1]))), seq[i]) for i in range(1, len(seq), 2))
+        want = sorted((tuple(sorted((x['nets'][0], x['nets'][2]))), x['nets'][1]) for x in devs.values())
+        assert drawn == want, (drawn, want)
+    L = sn['S1n']['l']
+    cbp, cbn = d('Cbp'), d('Cbn')
+    return [
+        ('CBP', [], [R.from_dev(cbp, nf=3)]),
+        ('SWN', [], [R.mos(wn.pop(), L, nseq, 'VSS')]),
+        ('SWP', [R.mos(wp.pop(), L, pseq, 'VDD')], []),
+        ('CBN', [], [R.from_dev(cbn, nf=3)]),
+    ]
+
+
+def build():
+    cell = Cell('rx_mix')
+    band = R.Band('rx_mix', cols(), pins=PINS[2:], search=True)
+    metas, bb = R.stack(cell, [band], [EXITS])
+    return [cell], dict(bbox=bb, bands=metas)
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument('--out', default=str(R.REPO / 'build' / 'rx_layout' / 'gen' / 'rx_mix'))
+    ap.add_argument('--gds', default=str(R.REPO / 'layout' / 'rx_mix.gds'))
+    a = ap.parse_args()
+    cells, meta = build()
+    R.save_meta(a.out, meta)
+    log = R.write(cells, 'rx_mix', a.gds, a.out)
+    print('rx_mix', R.bbox_str(meta['bbox']), 'magic log', log)
+
+
+if __name__ == '__main__':
+    main()

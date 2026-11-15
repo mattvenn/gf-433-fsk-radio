@@ -1,4 +1,4 @@
-> Not started.
+> Running: step 1/4 (block layouts + checks: rx_bias, rx_mix, rx_lna clean; 5 to go) since 22:30, ETA 04:00
 
 # Handoff: first-pass layout of the receiver (rx_*), DRC / LVS / antenna / extraction (sim server)
 
