@@ -17,6 +17,10 @@ The layout labels every net with its sim name, so the benches' probes (v(xl.tail
         added to a copy of the extracted subckt, as the original drives the comparator alone).
   chain rx_chain.py realfsk: FSK through the real ring LO at -70 dBm with the extracted rx_top (C only) and the
         extracted lsdiv on a0 (both level shifters extracted: no stand-in caps).
+  startup  (1) rx_startup.py: the ring's power-up (VDD ramped in 10 us, codes 0 and 31, tt) with the extracted
+        rx_lsq on a2 (no stand-in caps on the Q side), against the same deck without it; pass: fundamental mode
+        (a0 -> a2 phase 0.2 +- 0.07), f within 1 % of the base, lsq toggles. (2) the extracted rx_bias alone, VDD and
+        en ramped 0 -> 3.3 V in 10 us: nb must settle at the schematic's value (the beta multiplier's start-up).
 Results: build/rx_layout/bench/<mode>.json (rows) and a printed summary.
 """
 import argparse
@@ -280,9 +284,62 @@ def run_chain(level, kind, flo=411.05e6):
     return [r]
 
 
+# ---- startup ------------------------------------------------------------------------------------------------------
+def run_startup(kind, tstop=12e-6):
+    import rx_startup
+    rows = []
+    jobs = [(c, k) for c in (0, 31) for k in ('base', 'rx')]
+
+    def one(j):
+        c, k = j
+        deck = rx_startup.deck(c, k, tstop)
+        if k == 'rx':
+            deck = swap(deck, 'rx_lsq', kind)
+            deck = '\n'.join(ln for ln in deck.splitlines() if not ln.startswith(('Cpaq ', 'Cpgq '))) + '\n'
+        d, log, bad = rxc.run(f'su_c{c}_{k}', deck, sub=SUB, timeout=4 * 3600)
+        try:
+            r = rx_startup.analyse(d, tstop)
+        except Exception as e:  # noqa: BLE001
+            r = dict(error=str(e))
+        r.update(code=c, case=k, bad=bad)
+        print(json.dumps(r), flush=True)
+        return r
+    rows = rxc.pmap(one, jobs, 2)
+    for c in (0, 31):
+        b = [r for r in rows if r['code'] == c and r['case'] == 'base'][0]
+        x = [r for r in rows if r['code'] == c and r['case'] == 'rx'][0]
+        if 'f' in b and 'f' in x:
+            x['df_pct'] = (x['f'] / b['f'] - 1) * 100
+            x['pass'] = bool(abs(x['mode'] - 0.2) <= 0.07 and abs(x['df_pct']) < 1 and x.get('lsq_toggles', 0) > 2)
+    # the bias alone: extracted vs schematic, VDD and en ramped together
+    for which in ('sch', 'pex'):
+        sub = rx_bias.block() if which == 'sch' else pex('rx_bias', kind)
+        deck = f"""* rx_bias power-up ({which})
+{rxc.hdr('typical')}{sub}
+VDD VDD 0 pwl(0 0 10u 3.3)
+VSS VSS 0 0
+Ven en 0 pwl(0 0 10u 3.3)
+Xb VDD VSS en enb nb rx_bias
+.control
+option temp=27
+tran 2n 30u 0 2n uic
+meas tran nb_end find v(nb) at=29u
+meas tran nb_mid find v(nb) at=12u
+meas tran idd_end find i(VDD) at=29u
+.endc
+.end
+"""
+        d, log, bad = rxc.run(f'su_bias_{which}', deck, sub=SUB, timeout=1800)
+        m = rxc.meas(log)
+        r = dict(case=f'bias_{which}', nb_end=m.get('nb_end'), nb_mid=m.get('nb_mid'), idd_end=m.get('idd_end'), bad=bad)
+        print(json.dumps(r), flush=True)
+        rows.append(r)
+    return rows
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument('mode', choices=['lo', 'lna', 'bb', 'lim', 'chain'])
+    ap.add_argument('mode', choices=['lo', 'lna', 'bb', 'lim', 'chain', 'startup'])
     ap.add_argument('--corners', default='typical,ss,ff')
     ap.add_argument('--jobs', type=int, default=3)
     ap.add_argument('--pex', default='rcx', help='extraction: rcx (R + C, rcfix) or c (C only)')
@@ -300,6 +357,8 @@ def main():
         rows = run_bb(cs, a.jobs, a.pex)
     elif a.mode == 'lim':
         rows = run_lim(cs, a.jobs, a.pex)
+    elif a.mode == 'startup':
+        rows = run_startup(a.pex)
     else:
         rows = run_chain(a.level, a.pex)
     (OUT / f'{a.mode}.json').write_text(json.dumps(dict(mode=a.mode, pex=a.pex, corners=cs, rows=rows,
