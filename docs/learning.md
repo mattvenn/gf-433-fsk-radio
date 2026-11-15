@@ -205,6 +205,9 @@ LNA's own roll-off at 1.3 GHz takes that to about 15–17 dB below the main resp
 
 ![Friis](img/learning/friis.png)
 
+**In one line:** the more gain in front of a stage, the less its noise matters, so later stages can use small,
+low-current, noisier transistors.
+
 **Fig. 9.** Two stages with equal noise, the first with a gain of 5.6 (15 dB). At stage 2's input the signal and stage 1's
 noise are already ×5.6, stage 2's own noise is not; referred back to the input it is ÷5.6, and the total noise rises by
 only 1.6 % (noise voltages add in power, √(1² + 0.18²)) (`sim/learning/friis.py`).
