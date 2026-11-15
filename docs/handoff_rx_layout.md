@@ -1,4 +1,4 @@
-> Running: step 4/6 (LNA / baseband / hysteresis benches on the extraction) since 23:54, ETA 23:59
+> Running: step 5/6 (LO ring bench (I/Q phase, ring shift) on tt/ss/ff; the FSK chain started alongside) since 23:54, ETA 00:34
 
 # Handoff: first-pass layout of the receiver (rx_*), DRC / LVS / antenna / extraction (sim server)
 
