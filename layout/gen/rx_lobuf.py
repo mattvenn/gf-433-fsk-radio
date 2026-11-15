@@ -11,7 +11,8 @@ Fingers: at most 4.2 um (P) / 2.5 um (N) each, so the P and N rows stay short.
 The cell sits right above its mixer in rx_top (the same for I and Q): lo and lob leave on M3 through the bottom
 edge at the mixer's lo / lob pin x (layout/gen/rx_mix.py meta, the cells centred on each other), so both outputs
 reach the switches with equal wire and cross the mixer's rf / bb tracks at right angles.
-Pins: VDD, VSS (rails), in (M2, left edge), en (M3, top edge), lo, lob (M3, bottom edge).
+Pins: VDD, VSS (rails), in, en (M2, right edge: away from the LNA, which sits left of the mixers in rx_top),
+lo, lob (M3, bottom edge).
 """
 import argparse
 import json
@@ -83,7 +84,7 @@ def build():
     def exits(bands, xr):
         dx = R.snap((xr - wmix) / 2)             # mixer origin in lobuf coordinates (cells centred)
         info['mix_dx'] = dx
-        return [dict(**{'in': ('left', None)}, en=('top', None), lo=('bottom', xlo + dx), lob=('bottom', xlob + dx))]
+        return [dict(**{'in': ('right', None)}, en=('right', None), lo=('bottom', xlo + dx), lob=('bottom', xlob + dx))]
     metas, bb = R.stack(cell, [band], exits)
     return [cell], dict(bbox=bb, bands=metas, mix_dx=info['mix_dx'])
 

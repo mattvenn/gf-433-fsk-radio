@@ -47,6 +47,12 @@ def parse(text):
     return cells
 
 
+def inst(name):
+    """Instance name as a path component: magic writes the layout's 'lo_bi' as Xlo_bi, the sim has xlo / xbi; both
+    become lo_bi."""
+    return name.lower().lstrip('x')
+
+
 def flat(cells, top, nets=None, path=''):
     """Flattened devices: (model, [nets], {w, l, m})."""
     c = cells[top]
@@ -65,7 +71,7 @@ def flat(cells, top, nets=None, path=''):
                 out.append((model, conn, dict(w=num(p['r_width']), l=num(p['r_length']), m=1)))
         elif model in cells:
             sub = cells[model]
-            out += flat(cells, model, dict(zip(sub['pins'], conn)), path + t[0] + '_')
+            out += flat(cells, model, dict(zip(sub['pins'], conn)), path + inst(t[0]) + '_')
     return out
 
 
@@ -73,7 +79,8 @@ def name_auto(lay, ref):
     """Give layout nets without a label (magic names them a_..#, w_..#) the sim name of the net whose devices have
     the same signature: the set of (model, L, role, the device's other nets) with unknown names as '?'. Iterated, so
     one resolved name can resolve its neighbours. Returns the renamed layout devices and the unresolved names."""
-    auto = lambda n: '#' in n
+    simn = {x for _, n, _ in ref for x in n}
+    auto = lambda n: '#' in n or n not in simn          # no sim name (magic's a_..#, or a hierarchical label)
     def sigs(devs, known):
         s = defaultdict(set)
         for model, n, p in devs:
@@ -84,7 +91,7 @@ def name_auto(lay, ref):
             else:
                 roles = [(n[0], 'r', (q[1],)), (n[1], 'r', (q[0],))]
             for net, role, oth in roles:
-                s[net].add((model, round(p['l'], 3), role, oth))
+                s[net].add((model, round(p['l'], 1), role, oth))      # L to 0.1 um: magic rounds R lengths
         return s
     names = {x for _, n, _ in lay for x in n}
     for _ in range(4):

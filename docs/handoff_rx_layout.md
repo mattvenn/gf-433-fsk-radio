@@ -1,4 +1,4 @@
-> Running: step 2/4 (rx_top floorplan + assembly; all 7 blocks clean) since 01:00, ETA 05:00
+> Running: step 3/4 (extraction + benches; all 8 cells incl. rx_top DRC/LVS/antenna/size clean) since 23:37, ETA 02:37
 
 # Handoff: first-pass layout of the receiver (rx_*), DRC / LVS / antenna / extraction (sim server)
 

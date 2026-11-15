@@ -170,16 +170,37 @@ else:
     ls[i] = ls[i][:w.start()] + f'W={float(w.group(1)) * 0.9:.4f}u' + ls[i][w.end():]
     what = f'{ls[i].split()[0]} W x 0.9'
 save('xsch/mut_m.spice', ls, what)
-# 2: the gate of the first device whose gate is not a supply -> VSS (or VDD)
+# 2: the gate of the first top-level device whose gate is not a supply -> VSS; for a cell of instances only
+#    (rx_top), two nets of its first instance line swapped (a wrong connection between blocks)
 ls = list(lines)
+what = None
 for i in idx:
     t = ls[i].split()
-    if t[2] not in ('VSS', 'VDD'):
-        new = 'VSS' if t[2] != 'VSS' else 'VDD'
+    if t[2] not in ('VSS', 'VDD') and any(l.split()[0] == t[0] for l in lines if l.split()):
+        new = 'VSS'
         what = f'{t[0]} gate {t[2]} -> {new}'
         t[2] = new
         ls[i] = ' '.join(t)
         break
+inside = False
+top_insts = []
+for i, l in enumerate(lines):
+    t = l.split()
+    if t and t[0].lower() == '.subckt':
+        inside = t[1] == top
+    elif t and t[0].lower() == '.ends':
+        inside = False
+    elif inside and t and t[0][0] in 'xX' and not re.search(r'[np]fet_03v3|ppolyf', l):
+        top_insts.append(i)
+if top_insts:
+    ls = list(lines)
+    i = top_insts[0]
+    t = ls[i].split()
+    sig = [k for k in range(1, len(t) - 1) if t[k] not in ('VDD', 'VSS')]
+    a, b = sig[0], sig[1]
+    what = f'{t[0]} nets {t[a]} <-> {t[b]}'
+    t[a], t[b] = t[b], t[a]
+    ls[i] = ' '.join(t)
 save('xsch/mut_g.spice', ls, what)
 PYEOF
 mut_ok=1

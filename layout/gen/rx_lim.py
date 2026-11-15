@@ -14,7 +14,8 @@ Two bands (layout/gen/rx_lib.py), bottom to top:
      Rp..r / Rp..b; one tiny well per coupling node glp, gln, gcp, gcn). N row: RLa / RLb (ppolyf_u), Rvb1, Rvb2
      (ppolyf_u_1k) and Mvbsnk.
   Nets between the bands climb on M3 risers.
-Pins: VDD, VSS (rails), inp, inn (M2, left edge), q (M2, right edge), nb (M3, bottom edge), enb (M2, left edge).
+Pins: VDD, VSS (rails), inp, inn, enb, nb (M3, bottom edge), q (M3, top edge, through band 2). The receiver's
+signal flows up in rx_top: the baseband below, q out of the top edge.
 """
 import argparse
 import sys
@@ -60,15 +61,16 @@ def build(cell_name=CELL):
     D = {d['name']: d for d in R.flat_devs(R.sim_cells(), CELL)}
     B1, B2 = bands(D)
     cell = Cell(cell_name)
-    b1 = R.Band('lim_sig', B1, ports=RISE, pins=['inp', 'inn', 'q', 'nb', 'enb'], search=True)
-    b2 = R.Band('lim_bias', B2, ports=RISE, search=False)
+    b1 = R.Band('lim_sig', B1, ports=RISE + ['q'], pins=['inp', 'inn', 'nb', 'enb'], search=True)
+    b2 = R.Band('lim_bias', B2, ports=RISE + ['q'], pins=['q'], search=False)
 
     def exits(bands_, xr):
-        x = R.risers(bands_, RISE, xr)
+        x = R.risers(bands_, RISE + ['q'], xr)
         e1 = {n: ('top', x[n]) for n in RISE if n != 'nb'}
         e1['nb'] = ('throughb', x['nb'])
-        e1.update(inp=('left', None), inn=('left', None), enb=('left', None), q=('right', None))
+        e1.update(inp=('bottom', None), inn=('bottom', None), enb=('bottom', None), q=('top', x['q']))
         e2 = {n: ('top', x[n]) for n in RISE}
+        e2['q'] = ('throughb', x['q'])                  # band 2 is mirrored: its local bottom is the cell top
         return [e1, e2]
     metas, bb = R.stack(cell, [b1, b2], exits)
     return [cell], dict(bbox=bb, bands=metas)

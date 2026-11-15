@@ -4,7 +4,7 @@
     python3 layout/gen/rx_bias.py [--out build/rx_layout/gen/rx_bias] [--gds layout/rx_bias.gds]
 
 Circuit and sizes: sim/rx/rx_bias.py block() (= xschem/rx_bias.sch), read through rx_lib.sim_cells().
-One band (layout/gen/rx_lib.py), columns left to right:
+Two bands (layout/gen/rx_lib.py; the second mirrored onto the first's VDD rail), columns left to right:
   INV  : Ie (en -> enb)
   SW   : Msw (VDD -> vh, gate enb) over Moff / Moff2 (nb, x to VSS)
   MIR  : MP1 / MP2 as one diffusion, fingers A B B A with the shared source vh in the middle of each pair (common
@@ -25,7 +25,8 @@ import rx_lib as R  # noqa: E402
 from ring_core import Cell  # noqa: E402
 
 PINS = ['VDD', 'VSS', 'en', 'enb', 'nb']
-EXITS = dict(en=('left', None), enb=('right', None), nb=('right', None))
+EXITS = dict(en=('right', None), enb=('right', None), nb=('right', None))
+RISE = ['nb', 'enb', 'x', 'n2', 'vh', 'nr']
 
 
 def cols():
@@ -53,8 +54,17 @@ def cols():
 
 def build():
     cell = Cell('rx_bias')
-    band = R.Band('rx_bias', cols(), pins=PINS[2:], search=True)
-    metas, bb = R.stack(cell, [band], [EXITS])
+    c = cols()
+    b0 = R.Band('bias_mir', c[:3], ports=RISE, pins=PINS[2:], search=True)
+    b1 = R.Band('bias_su', c[3:], ports=RISE, search=True)
+
+    def exits(bands, xr):
+        x = R.risers(bands, [n for n in RISE if all(n in b.span0 for b in bands)], xr)
+        e0 = {n: [('top', v)] for n, v in x.items()}
+        for n, e in EXITS.items():
+            e0[n] = e0.get(n, []) + [e]
+        return [e0, {n: ('top', v) for n, v in x.items()}]
+    metas, bb = R.stack(cell, [b0, b1], exits)
     return [cell], dict(bbox=bb, bands=metas)
 
 

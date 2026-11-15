@@ -43,6 +43,7 @@ _ls.loader.exec_module(LL)
 snap, um = LL.snap, LL.um
 
 RAIL = 2400
+GRID = 680              # rx_top's routing grid: every track and pin of a band sits on it (block origins on it too)
 DGAP = LL.DGAP          # same-well diffusion gap
 WELLGAP = 2600          # P elements in different wells (NW.2b 1.4 um + 0.43 / 0.6 enclosures + margin)
 RGAP = 1300             # resistor to anything in the N row (PRES.3 0.6 um to COMP; HRES.1: the HRES markers grow
@@ -125,18 +126,26 @@ def flat_devs(cells, top, nets=None, path=''):
 def risers(bands, nets, xr, sep=None):
     """M3 riser x per net shared by several bands: the middle of the overlap of the nets' terminal spans (or of
     their union), nudged apart to M3P."""
-    sep = sep or M3P + 200
+    sep = sep or 2 * GRID
+    g = lambda v: int(round(v / GRID)) * GRID
     xs = {}
     for net in nets:
         sp = [b.span0[net] for b in bands if net in b.span0]
         lo, hi = max(a for a, b in sp), min(b for a, b in sp)
-        xs[net] = snap((lo + hi) / 2) if lo <= hi else snap((min(a for a, b in sp) + max(b for a, b in sp)) / 2)
+        xs[net] = g((lo + hi) / 2) if lo <= hi else g((min(a for a, b in sp) + max(b for a, b in sp)) / 2)
+    order = sorted(xs, key=lambda n: xs[n])
+    for i in range(1, len(order)):
+        if xs[order[i]] - xs[order[i - 1]] < sep:
+            xs[order[i]] = xs[order[i - 1]] + sep
+    for n in order:                          # clear of the M3 rail straps at the left edge (stack())
+        if xs[n] < STRAPX1 + 700:
+            xs[n] = -(-(STRAPX1 + 700) // GRID) * GRID
     order = sorted(xs, key=lambda n: xs[n])
     for i in range(1, len(order)):
         if xs[order[i]] - xs[order[i - 1]] < sep:
             xs[order[i]] = xs[order[i - 1]] + sep
     for n in xs:
-        assert 700 <= xs[n] <= xr - 700, (n, xs[n])
+        assert STRAPX1 + 700 <= xs[n] <= xr - 700, (n, xs[n])
     return xs
 
 
@@ -492,7 +501,7 @@ class Band:
         return self.xend
 
     # -- vertical plan, tracks, drawing --
-    def finish(self, cell, xr, y0=0, flip=False, exits=None, m3_used=(), xmin=700):
+    def finish(self, cell, xr, y0=0, flip=False, exits=None, m3_used=(), xmin=700, align=None):
         """exits: {net: (edge, x)} with edge 'top' / 'bottom' (M3 to that edge of the band) / 'left' / 'right'
         (M2 track to x 0 / xr); x None picks one. m3_used: x positions of M3 verticals crossing this band (risers of
         other bands): kept free. Returns meta (with the band's global y extent)."""
@@ -505,15 +514,21 @@ class Band:
         t0 = self.terms(Null(), self.pl, dict(Y, p_bot=10 ** 7))
         npad = max([yy for (net, xx, yy, k, side, g, e) in t0 if side == 'N'] + [Y['n_top']])
         Y['t0'] = snap(npad + 230 + 190 + 5)
+        # tracks on the global GRID: unflipped, y0 + t0 = 0 (mod GRID); flipped, slack under the P row (below)
+        if align is None:
+            align = ('flip', y0) if flip else ('y0', y0)
+        if align[0] == 'y0':
+            Y['t0'] += (-(align[1] + Y['t0'])) % GRID
         # M3 verticals of this band: exits and VDD / VSS ties, at x positions apart from each other and m3_used
         used = [x for x in m3_used]
 
         def free(x):
             return all(abs(x - u) >= M3P for u in used)
 
-        def pick(pref, lo, hi):
+        def pick(pref, lo, hi, step=85):
             lo, hi = max(lo, xmin), min(hi, xr - 700)
-            cands = sorted(range(snap(lo), snap(hi) + 1, 85), key=lambda v: abs(v - pref))
+            lo = -(-lo // step) * step
+            cands = sorted(range(lo, snap(hi) + 1, step), key=lambda v: abs(v - pref))
             for x in cands:
                 if free(x):
                     return snap(x)
@@ -529,7 +544,7 @@ class Band:
         for net, (edge, x) in exl:
             if edge in VE and x is None:
                 a, b = self.span0.get(net, (self.x0, self.xend))
-                x = pick((a + b) // 2, a - 3000, b + 3000)
+                x = pick((a + b) // 2, a - 3000, b + 3000, step=GRID)      # exits on the grid
                 verts.append((net, snap(x), edge))
                 used.append(snap(x))
         ties = {}
@@ -561,8 +576,13 @@ class Band:
         ppad = max([635] + [res_top(e) for _, P, *_ in self.pl for e in P if e['k'] == 'res'])
         Y['p_bot'] = snap(Y['t0'] + (ntrk - 1) * TPITCH + 190 + 230 + ppad + 80)
         hp = [um(e['W']) if e['k'] == 'mos' else res_height(e) for _, P, *_ in self.pl for e in P] or [1000]
-        Y['p_top'] = Y['p_bot'] + max(hp)
         islands = any(b for *_, taps in self.pl for b in taps)
+        dv = (1400 if islands else 600) + max(hp) + RAIL
+        if align[0] == 'flip':
+            # flipped onto a rail whose bottom is at global g0: track t lands at g0 + vdd_t - t, so pad the P row
+            # up until that is on the GRID
+            Y['p_bot'] += (-(align[1] + Y['p_bot'] + dv - Y['t0'])) % GRID
+        Y['p_top'] = Y['p_bot'] + max(hp)
         Y['vdd_b'] = Y['p_top'] + (1400 if islands else 600)
         Y['vdd_t'] = Y['vdd_b'] + RAIL
         terms = self.terms(c, self.pl, Y)
@@ -645,7 +665,11 @@ class Band:
         pins = {}
         for net, x in passthru:
             c.r('m3', x - 190, Y['vss_b'], x + 190, Y['vdd_t'])
-            pins.setdefault(net, []).append((x, c.Y(Y['vdd_t']), 'through'))
+            bot = dict(exl).get(net, ('', None))[0] == 'throughb'
+            pins.setdefault(net, []).append((x, c.Y(Y['vss_b'] if bot else Y['vdd_t']),
+                                             'throughb' if bot else 'through'))
+            if net in self.pins:
+                c.label(net, 'm3', x, Y['vss_b'] + 200 if bot else Y['vdd_t'] - 200, port=True)
         for net, x, edge in verts:
             c.via2(x, ty[net])
             ya = Y['vss_b'] if edge in ('bottom', 'through', 'throughb') else ty[net]
@@ -717,19 +741,24 @@ def stack(cell, bands, exits, m3_shared=None, margin=900):
     for i, b in enumerate(bands):
         # each band shares the stack's top rail: drawn once into scratch to learn its local rails, then for real,
         # mirrored if its own top rail is the one that matches
-        m0 = b.finish(Cell('scratch'), xr, y0=0, flip=False, exits=exits[i], m3_used=m3_shared, xmin=xmin)
-        Yl = m0['Y']
-        bot, top = ('VSS', Yl['vss_b'], Yl['vss_t']), (b.top_rail, Yl['vdd_b'], Yl['vdd_t'])
+        kw = dict(exits=exits[i], m3_used=m3_shared, xmin=xmin)
+        bot = ('VSS', -RAIL, 0)
         if prev is None:
-            flip, y0 = False, 0
-        elif prev[0] == bot[0]:
+            flip, y0, al = False, 0, ('y0', 0)
+        elif prev[0] == 'VSS':
             flip, y0 = False, prev[1] - bot[1]
-        elif prev[0] == top[0]:
-            flip, y0 = True, prev[1] + top[2]
+            al = ('y0', y0)
+        elif prev[0] == b.top_rail:
+            # mirrored: its local top rail lands on the stack's top rail [g0, g0 + RAIL]; learn its height first
+            flip, al = True, ('flip', prev[1])
+            Yl = b.finish(Cell('scratch'), xr, y0=0, flip=False, align=al, **kw)['Y']
+            y0 = prev[1] + Yl['vdd_t']
         else:
             raise SystemExit(f'{b.name}: no rail to share with {prev}')
-        m = b.finish(cell, xr, y0=y0, flip=flip, exits=exits[i], m3_used=m3_shared, xmin=xmin)
-        prev = (top[0], y0 + top[1], y0 + top[2]) if not flip else (bot[0], y0 - bot[2], y0 - bot[1])
+        m = b.finish(cell, xr, y0=y0, flip=flip, align=al, **kw)
+        Yl = m['Y']
+        prev = ((b.top_rail, y0 + Yl['vdd_b'], y0 + Yl['vdd_t']) if not flip
+                else ('VSS', y0 - Yl['vss_t'], y0 - Yl['vss_b']))
         metas.append(m)
     ylo = min(m['y'][0] for m in metas)
     yhi = max(m['y'][1] for m in metas)

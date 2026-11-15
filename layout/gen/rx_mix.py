@@ -11,8 +11,8 @@ One band (layout/gen/rx_lib.py), symmetric about the cell centre:
   each diffusion is symmetric (rf at both ends and in the middle, every gate one finger). The N and P diffusions
   stand side by side, not one above the other: a transmission gate's N and P gates are complementary, so stacked
   they would ask for lo below lob at one finger and above it at the next (a track-order cycle in the channel). lo and lob leave on M3 straight up through the VDD rail (right angles to the rf / bb
-  tracks), rf on the left edge, bb on the right edge (M2).
-Pins: VDD, VSS (rails), rfp, rfn (left), bbp, bbn (right), lo, lob (M3, top edge).
+  tracks), rf on the left edge (the LNA's side in rx_top), bb on the right edge (M2).
+Pins: VDD, VSS (rails), rfp, rfn (M2, left edge), bbp, bbn (M2, right edge), lo, lob (M3, top edge).
 """
 import argparse
 import sys

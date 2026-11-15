@@ -15,8 +15,8 @@ Three bands (layout/gen/rx_lib.py), bottom to top:
   B-B and A-A): both centroids sit on the diffusion's centre line; a poly-only dummy finger 0.3 um past each end.
   Load resistors: ppolyf_u U-shapes, RLp and RLn side by side around the pair.
   Stage 1's outputs (outp, outn), nb and vcm climb to bands 0 and 2 on M3 risers (one x per net through all bands).
-Pins: VDD, VSS (rails), inp, inn (M2, left edge, band 1), oip, oin (M2, right, band 2), oqp, oqn (M2, right,
-band 0), nb (M3, top edge), enb (M2, right edge, band 0).
+Pins: VDD, VSS (rails), inp, inn (M2, left edge, band 1), oip, oin (M2, right edge, band 2: the I mixer sits
+up there in rx_top), oqp, oqn, nb, enb (M2, right edge, band 0: the Q mixer below it).
 """
 import argparse
 import sys
@@ -95,19 +95,18 @@ def build():
     cell = Cell('rx_lna')
     rv = [('RV', [R.from_dev(D['Mvs'], seq=['VDD', 'enb', 'vt'])], [hr(D, 'Rv1', 4), hr(D, 'Rv2', 4)])]
     up = ['outp', 'outn', 'nb', 'vcm']
-    b0 = R.Band('lna_q', stage2(D, 'x2q_') + rv + [('CV', [], [cvcm(D, 2)])], ports=up, pins=['oqp', 'oqn', 'enb'],
-                search=False)
+    b0 = R.Band('lna_q', stage2(D, 'x2q_') + rv + [('CV', [], [cvcm(D, 2)])], ports=up,
+                pins=['enb', 'oqp', 'oqn', 'nb'], search=False)
     b1 = R.Band('lna_1', stage1(D), ports=up, pins=['inp', 'inn'], search=False)
-    b2 = R.Band('lna_i', stage2(D, 'x2i_') + [('CV', [], [cvcm(D, 3)])], ports=up, pins=['oip', 'oin', 'nb'],
+    b2 = R.Band('lna_i', stage2(D, 'x2i_') + [('CV', [], [cvcm(D, 3)])], ports=up, pins=['oip', 'oin'],
                 search=False)
 
     def exits(bands, xr):
         x = R.risers(bands, up, xr)
-        return [dict(oqp=('right', None), oqn=('right', None), enb=('right', None),
-                     **{n: ('top', x[n]) for n in up}),
+        return [dict(enb=('right', None), oqp=('right', None), oqn=('right', None),
+                     nb=[('top', x['nb']), ('right', None)], **{n: ('top', x[n]) for n in up if n != 'nb'}),
                 dict(inp=('left', None), inn=('left', None), **{n: ('through', x[n]) for n in up}),
-                dict(oip=('right', None), oin=('right', None), nb=('through', x['nb']),
-                     **{n: ('bottom', x[n]) for n in up if n != 'nb'})]
+                dict(oip=('right', None), oin=('right', None), **{n: ('bottom', x[n]) for n in up})]
     metas, bb = R.stack(cell, [b0, b1, b2], exits)
     return [cell], dict(bbox=bb, bands=metas)
 

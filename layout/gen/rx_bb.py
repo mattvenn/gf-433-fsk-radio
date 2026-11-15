@@ -16,8 +16,8 @@ Three bands (layout/gen/rx_lib.py), bottom to top:
      Rp..r / Rp..b) and one tiny well per coupling node (Rp2aa on g2p, ...: the bulk is that ~60 MOhm node).
      N row: the loads R1a / R1b (ppolyf_u), R2a / R2b, R3a / R3b and Rvb1 (ppolyf_u_1k serpentines).
   Nets between bands climb on M3 risers. The coupling nodes g2p / g2n / g3p / g3n run only between B and C, short.
-Pins: VDD, VSS (rails), inp, inn (M2, left edge, band B), outp, outn (M2, right edge, band B), nb (M3, bottom
-edge), enb (M2, left edge, band B).
+Pins: VDD, VSS (rails), inp, inn, enb and nb (M3, bottom edge: they pass band A on M3), outp, outn (M3, top edge,
+through band C). The receiver's signal flows up in rx_top: mixer below, limiter above.
 """
 import argparse
 import sys
@@ -93,15 +93,16 @@ def build(cell_name=CELL):
     D = devs()
     A, B, C = bands(D)
     cell = Cell(cell_name)
-    bA = R.Band('bb_caps', A, ports=RISE_AB, pins=['nb'], top='N', search=False)
-    bB = R.Band('bb_sig', B, ports=RISE_AB + RISE_BC, pins=['inp', 'inn', 'outp', 'outn', 'enb'], search=False)
-    bC = R.Band('bb_bias', C, ports=RISE_BC, search=False)
+    bA = R.Band('bb_caps', A, ports=RISE_AB, pins=['nb', 'inp', 'inn', 'enb'], top='N', search=False)
+    bB = R.Band('bb_sig', B, ports=RISE_AB + RISE_BC + ['inp', 'inn', 'enb'], search=False)
+    bC = R.Band('bb_bias', C, ports=RISE_BC, pins=['outp', 'outn'], search=False)
     risers = sorted(set(RISE_AB) | set(RISE_BC))
 
     def exits(bands_, xr):
-        x = R.risers(bands_, risers, xr)
+        x = R.risers(bands_, risers + ['inp', 'inn', 'enb'], xr)
         ea = {n: ('top', x[n]) for n in RISE_AB if n != 'nb'}
         ea['nb'] = ('throughb', x['nb'])
+        ea.update({n: ('throughb', x[n]) for n in ('inp', 'inn', 'enb')})      # pass the cap band to the bottom
         eb = {}
         for n in risers:
             inA, inC = n in RISE_AB, n in RISE_BC
@@ -113,10 +114,9 @@ def build(cell_name=CELL):
                 eb[n] = ('bottom', x[n])
             else:
                 eb[n] = ('top', x[n])
-        eb.update(inp=('left', None), inn=('left', None), enb=('left', None))
-        eb['outp'] = [eb['outp'], ('right', None)]
-        eb['outn'] = [eb['outn'], ('right', None)]
+        eb.update({n: ('bottom', x[n]) for n in ('inp', 'inn', 'enb')})
         ec = {n: ('top', x[n]) for n in RISE_BC}       # C is mirrored: its local top (VDD rail) faces band B
+        ec.update(outp=('throughb', x['outp']), outn=('throughb', x['outn']))   # and its local bottom is the top
         return [ea, eb, ec]
     metas, bb = R.stack(cell, [bA, bB, bC], exits)
     return [cell], dict(bbox=bb, bands=metas)
