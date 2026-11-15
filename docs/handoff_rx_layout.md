@@ -1,4 +1,4 @@
-> Running: step 3/6 (extraction (C and R+C), 8 cells) since 23:54, ETA 23:59
+> Running: step 4/6 (LNA / baseband / hysteresis benches on the extraction) since 23:54, ETA 23:59
 
 # Handoff: first-pass layout of the receiver (rx_*), DRC / LVS / antenna / extraction (sim server)
 
