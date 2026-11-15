@@ -1,5 +1,5 @@
 * rx_mix: magic R+C extraction of layout/rx_mix.gds (layout/gen/pex.sh)
-* extracted 2026-11-15T23:47:45+01:00 with magic 8.3.642, mode c, from rx_mix.gds
+* extracted 2026-11-15T23:54:28+01:00 with magic 8.3.642, mode c, from rx_mix.gds
 .subckt rx_mix VDD VSS rfp rfn bbp bbn lo lob
 X0 VSS bbp VSS VSS nfet_03v3 ad=2.2932p pd=8.75u as=33.0876p ps=0.13912m w=8.19u l=5u
 X1 rfp lob bbn VSS nfet_03v3 ad=8p pd=18u as=4p ps=9u w=8u l=0.28u
@@ -15,27 +15,27 @@ X10 bbp lob rfp VDD pfet_03v3 ad=8p pd=17u as=16p ps=34u w=16u l=0.28u
 X11 rfp lo bbn VDD pfet_03v3 ad=16p pd=34u as=8p ps=17u w=16u l=0.28u
 X12 VSS bbn VSS VSS nfet_03v3 ad=2.2932p pd=8.75u as=0 ps=0 w=8.19u l=5u
 X13 bbn lob rfn VDD pfet_03v3 ad=8p pd=17u as=8p ps=17u w=16u l=0.28u
-C0 lob bbp 1.24465f
-C1 lob VDD 0.65003f
-C2 bbp VDD 0.10032f
-C3 rfn rfp 2.58231f
-C4 rfn bbn 1.44397f
-C5 lo rfn 1.14054f
-C6 bbn rfp 1.5904f
-C7 lo rfp 1.12024f
-C8 lo bbn 1.23007f
-C9 lob rfn 1.05507f
-C10 lob rfp 1.13241f
-C11 bbp rfn 3.73332f
-C12 rfn VDD 0.10587f
-C13 bbp rfp 2.18678f
-C14 lob bbn 1.95104f
-C15 VDD rfp 0.44704f
-C16 lo lob 2.09599f
-C17 bbp bbn 0.95565f
-C18 bbn VDD 0.14198f
-C19 lo bbp 2.22567f
-C20 lo VDD 0.6759f
+C0 bbp rfn 3.73332f
+C1 rfn VDD 0.10587f
+C2 bbp rfp 2.18678f
+C3 lob bbn 1.95104f
+C4 VDD rfp 0.44704f
+C5 lo lob 2.09599f
+C6 bbp bbn 0.95565f
+C7 lo bbp 2.22567f
+C8 bbn VDD 0.14198f
+C9 lo VDD 0.6759f
+C10 lob bbp 1.24465f
+C11 lob VDD 0.65003f
+C12 bbp VDD 0.10032f
+C13 rfn rfp 2.58231f
+C14 rfn bbn 1.44397f
+C15 lo rfn 1.14054f
+C16 bbn rfp 1.5904f
+C17 lo rfp 1.12024f
+C18 lo bbn 1.23007f
+C19 lob rfn 1.05507f
+C20 lob rfp 1.13241f
 C21 bbn VSS 8.874f
 C22 rfn VSS 0.6515f
 C23 bbp VSS 8.72756f

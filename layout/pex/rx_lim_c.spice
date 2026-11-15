@@ -1,5 +1,5 @@
 * rx_lim: magic R+C extraction of layout/rx_lim.gds (layout/gen/pex.sh)
-* extracted 2026-11-15T23:47:49+01:00 with magic 8.3.642, mode c, from rx_lim.gds
+* extracted 2026-11-15T23:54:33+01:00 with magic 8.3.642, mode c, from rx_lim.gds
 .subckt rx_lim VDD VSS inp inn q nb enb
 X0 mRpLa mRpLa vb vb pfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=1u
 X1 cb cb VDD VDD pfet_03v3 ad=1p pd=4u as=0.45p ps=2.9u w=1u l=0.5u
@@ -48,8 +48,8 @@ X43 gcn vgr vb vb pfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=12u
 X44 inp glp inp inp pfet_03v3 ad=12.285p pd=26.57u as=24.57p ps=53.14u w=12.285u l=10u
 X45 ln gcn ln ln pfet_03v3 ad=12.285p pd=26.57u as=24.57p ps=53.14u w=12.285u l=10u
 X46 lp gln tL VSS nfet_03v3 ad=2p pd=5u as=2p ps=5u w=4u l=0.5u
-C0 ca VDD 0.90731f
-C1 gln vb 2.65772f
+C0 gln vb 2.65772f
+C1 ca VDD 0.90731f
 C2 lp inn 0.18927f
 C3 enb gln 0.01156f
 C4 inn inp 0.31251f
@@ -172,8 +172,8 @@ C120 ca co 0.34422f
 C121 gcp gcn 1.16018f
 C122 gln tL 0.66214f
 C123 mRpLa glp 2.72864f
-C124 gcn nb 0.46544f
-C125 gcp ln 2.31969f
+C124 gcp ln 2.31969f
+C125 gcn nb 0.46544f
 C126 VDD mRpCb 0.13847f
 C127 nb ln 0.42806f
 C128 vgr mRpLb 1.38037f

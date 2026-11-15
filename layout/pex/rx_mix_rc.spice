@@ -1,20 +1,20 @@
 * rx_mix: magic R+C extraction of layout/rx_mix.gds (layout/gen/pex.sh)
-* extracted 2026-11-15T23:47:45+01:00 with magic 8.3.642, mode rc, from rx_mix.gds
+* extracted 2026-11-15T23:54:28+01:00 with magic 8.3.642, mode rc, from rx_mix.gds
 .subckt rx_mix VDD VSS rfp rfn bbp bbn lo lob
 X0 VSS.t11 bbp.t4 VSS.t11 VSS.t10 nfet_03v3 ad=2.2932p pd=8.75u as=0 ps=0 w=8.19u l=5u
-X1 rfp.t2 lob.t0 bbn.t2 VSS.t15 nfet_03v3 ad=8p pd=18u as=4p ps=9u w=8u l=0.28u
-X2 bbp.t1 lo.t1 rfp.t0 VSS.t12 nfet_03v3 ad=4p pd=9u as=8p ps=18u w=8u l=0.28u
+X1 rfp.t0 lob.t0 bbn.t0 VSS.t15 nfet_03v3 ad=8p pd=18u as=4p ps=9u w=8u l=0.28u
+X2 bbp.t3 lo.t1 rfp.t3 VSS.t12 nfet_03v3 ad=4p pd=9u as=8p ps=18u w=8u l=0.28u
 X3 VSS.t1 bbn.t6 VSS.t1 VSS.t0 nfet_03v3 ad=3.6855p pd=17.28u as=0 ps=0 w=8.19u l=5u
 X4 VSS.t9 bbp.t5 VSS.t9 VSS.t8 nfet_03v3 ad=2.2932p pd=8.75u as=0 ps=0 w=8.19u l=5u
-X5 rfn.t0 lo.t3 bbp.t0 VDD.t0 pfet_03v3 ad=8p pd=17u as=8p ps=17u w=16u l=0.28u
-X6 rfn.t2 lob.t1 bbp.t3 VSS.t14 nfet_03v3 ad=4p pd=9u as=4p ps=9u w=8u l=0.28u
+X5 rfn.t1 lo.t3 bbp.t1 VDD.t0 pfet_03v3 ad=8p pd=17u as=8p ps=17u w=16u l=0.28u
+X6 rfn.t0 lob.t1 bbp.t0 VSS.t14 nfet_03v3 ad=4p pd=9u as=4p ps=9u w=8u l=0.28u
 X7 VSS.t5 bbn.t4 VSS.t5 VSS.t4 nfet_03v3 ad=2.2932p pd=8.75u as=0 ps=0 w=8.19u l=5u
 X8 VSS.t7 bbp.t6 VSS.t7 VSS.t6 nfet_03v3 ad=3.6855p pd=17.28u as=0 ps=0 w=8.19u l=5u
-X9 bbn.t0 lo.t0 rfn.t1 VSS.t13 nfet_03v3 ad=4p pd=9u as=4p ps=9u w=8u l=0.28u
-X10 bbp.t2 lob.t3 rfp.t1 VDD.t2 pfet_03v3 ad=8p pd=17u as=16p ps=34u w=16u l=0.28u
-X11 rfp.t3 lo.t2 bbn.t3 VDD.t1 pfet_03v3 ad=16p pd=34u as=8p ps=17u w=16u l=0.28u
+X9 bbn.t2 lo.t0 rfn.t2 VSS.t13 nfet_03v3 ad=4p pd=9u as=4p ps=9u w=8u l=0.28u
+X10 bbp.t2 lob.t3 rfp.t2 VDD.t2 pfet_03v3 ad=8p pd=17u as=16p ps=34u w=16u l=0.28u
+X11 rfp.t1 lo.t2 bbn.t1 VDD.t1 pfet_03v3 ad=16p pd=34u as=8p ps=17u w=16u l=0.28u
 X12 VSS.t3 bbn.t5 VSS.t3 VSS.t2 nfet_03v3 ad=2.2932p pd=8.75u as=0 ps=0 w=8.19u l=5u
-X13 bbn.t1 lob.t2 rfn.t3 VDD.t3 pfet_03v3 ad=8p pd=17u as=8p ps=17u w=16u l=0.28u
+X13 bbn.t3 lob.t2 rfn.t3 VDD.t3 pfet_03v3 ad=8p pd=17u as=8p ps=17u w=16u l=0.28u
 R0 bbn.n3 bbn.t6 20.1627
 R1 bbn.n4 bbn.t5 20.1627
 R2 bbn.n5 bbn.t4 20.1627
@@ -24,18 +24,18 @@ R5 bbn.n5 bbn.n4 1.31734
 R6 bbn.n3 bbn.n2 1.31024
 R7 bbn bbn.n5 1.05445
 R8 bbn.n4 bbn 0.959711
-R9 bbn.n0 bbn.t2 0.39425
-R10 bbn.n0 bbn.t0 0.39425
+R9 bbn.n0 bbn.t0 0.39425
+R10 bbn.n0 bbn.t2 0.39425
 R11 bbn bbn.n3 0.358132
-R12 bbn.n1 bbn.t3 0.21925
-R13 bbn.n1 bbn.t1 0.21925
+R12 bbn.n1 bbn.t1 0.21925
+R13 bbn.n1 bbn.t3 0.21925
 R14 rfn.n2 rfn.n0 9.10015
 R15 rfn.n2 rfn.n1 6.31346
 R16 rfn rfn.n2 1.72471
-R17 rfn.n1 rfn.t1 0.39425
-R18 rfn.n1 rfn.t2 0.39425
+R17 rfn.n1 rfn.t2 0.39425
+R18 rfn.n1 rfn.t0 0.39425
 R19 rfn.n0 rfn.t3 0.21925
-R20 rfn.n0 rfn.t0 0.21925
+R20 rfn.n0 rfn.t1 0.21925
 R21 bbp.n0 bbp.t6 20.9964
 R22 bbp.n0 bbp.t5 19.6796
 R23 bbp.n1 bbp.t4 19.6796
@@ -46,15 +46,15 @@ R27 bbp.n5 bbp.n4 2.80015
 R28 bbp bbp.n3 1.63826
 R29 bbp.n1 bbp.n0 1.31734
 R30 bbp.n3 bbp.n1 1.31024
-R31 bbp.n2 bbp.t3 0.39425
-R32 bbp.n2 bbp.t1 0.39425
-R33 bbp.n4 bbp.t0 0.21925
+R31 bbp.n2 bbp.t0 0.39425
+R32 bbp.n2 bbp.t3 0.39425
+R33 bbp.n4 bbp.t1 0.21925
 R34 bbp.n4 bbp.t2 0.21925
 R35 bbp.n6 bbp 0.00168421
-R36 rfp.n0 rfp.t3 9.05364
-R37 rfp.n0 rfp.t1 7.84101
-R38 rfp.n2 rfp.t0 6.54615
-R39 rfp.n1 rfp.t2 6.54615
+R36 rfp.n0 rfp.t1 9.05364
+R37 rfp.n0 rfp.t2 7.84101
+R38 rfp.n2 rfp.t3 6.54615
+R39 rfp.n1 rfp.t0 6.54615
 R40 rfp.n2 rfp.n1 1.21313
 R41 rfp rfp.n2 0.815237
 R42 rfp.n1 rfp.n0 0.426816
@@ -328,27 +328,27 @@ R309 VSS.n98 VSS.n5 0.00425
 R310 VSS.n102 VSS.n101 0.00425
 R311 VSS.n106 VSS.n3 0.00425
 R312 VSS.n107 VSS.n0 0.00425
-C0 bbn bbp 0.95565f
-C1 bbp lob 1.24465f
-C2 rfn bbp 3.73332f
-C3 VDD bbp 0.10032f
-C4 bbn lob 1.95104f
-C5 rfn bbn 1.44397f
-C6 rfn lob 1.05507f
-C7 lo bbp 2.22567f
-C8 rfp bbp 2.18678f
-C9 VDD bbn 0.14198f
-C10 VDD lob 0.65003f
-C11 rfn VDD 0.10587f
-C12 lo bbn 1.23007f
-C13 lo lob 2.09599f
-C14 rfn lo 1.14054f
-C15 rfp bbn 1.5904f
-C16 rfp lob 1.13241f
-C17 rfn rfp 2.58231f
-C18 VDD lo 0.6759f
-C19 rfp VDD 0.44704f
-C20 rfp lo 1.12024f
+C0 lo lob 2.09599f
+C1 rfn lo 1.14054f
+C2 rfp bbn 1.5904f
+C3 rfp lob 1.13241f
+C4 rfn rfp 2.58231f
+C5 VDD lo 0.6759f
+C6 rfp VDD 0.44704f
+C7 rfp lo 1.12024f
+C8 bbn bbp 0.95565f
+C9 bbp lob 1.24465f
+C10 rfn bbp 3.73332f
+C11 VDD bbp 0.10032f
+C12 bbn lob 1.95104f
+C13 rfn bbn 1.44397f
+C14 rfn lob 1.05507f
+C15 lo bbp 2.22567f
+C16 rfp bbp 2.18678f
+C17 VDD bbn 0.14198f
+C18 VDD lob 0.65003f
+C19 rfn VDD 0.10587f
+C20 lo bbn 1.23007f
 C21 bbn VSS 8.9541f
 C22 rfn VSS 2.14278f
 C23 bbp VSS 9.05894f
@@ -420,39 +420,39 @@ C88 lo.t1 VSS 0.4959f
 C89 lo.t0 VSS 0.49275f
 C90 lo.n2 VSS 1.45753f
 C91 lo.n3 VSS 0.14712f
-C92 rfp.t3 VSS 2.46647f
-C93 rfp.t1 VSS 2.42726f
+C92 rfp.t1 VSS 2.46647f
+C93 rfp.t2 VSS 2.42726f
 C94 rfp.n0 VSS 0.57574f
-C95 rfp.t2 VSS 1.16205f
+C95 rfp.t0 VSS 1.16205f
 C96 rfp.n1 VSS 0.25291f
-C97 rfp.t0 VSS 1.16205f
+C97 rfp.t3 VSS 1.16205f
 C98 rfp.n2 VSS 0.28691f
 C99 bbp.t6 VSS 2.22059f
 C100 bbp.t5 VSS 2.19926f
 C101 bbp.n0 VSS 0.71433f
 C102 bbp.t4 VSS 2.19926f
 C103 bbp.n1 VSS 0.39521f
-C104 bbp.t3 VSS 0.1126f
-C105 bbp.t1 VSS 0.1126f
+C104 bbp.t0 VSS 0.1126f
+C105 bbp.t3 VSS 0.1126f
 C106 bbp.n2 VSS 0.4274f
 C107 bbp.n3 VSS 0.16549f
-C108 bbp.t0 VSS 0.22519f
+C108 bbp.t1 VSS 0.22519f
 C109 bbp.t2 VSS 0.22519f
 C110 bbp.n4 VSS 0.72528f
 C111 bbp.n5 VSS 0.13948f
 C112 bbp.n6 VSS 0.25313f
 C113 rfn.t3 VSS 0.86537f
-C114 rfn.t0 VSS 0.86537f
+C114 rfn.t1 VSS 0.86537f
 C115 rfn.n0 VSS 3.2502f
-C116 rfn.t1 VSS 0.43268f
-C117 rfn.t2 VSS 0.43268f
+C116 rfn.t2 VSS 0.43268f
+C117 rfn.t0 VSS 0.43268f
 C118 rfn.n1 VSS 1.6005f
 C119 rfn.n2 VSS 1.12299f
-C120 bbn.t2 VSS 0.08099f
-C121 bbn.t0 VSS 0.08099f
+C120 bbn.t0 VSS 0.08099f
+C121 bbn.t2 VSS 0.08099f
 C122 bbn.n0 VSS 0.34704f
-C123 bbn.t3 VSS 0.16199f
-C124 bbn.t1 VSS 0.16199f
+C123 bbn.t1 VSS 0.16199f
+C124 bbn.t3 VSS 0.16199f
 C125 bbn.n1 VSS 0.56145f
 C126 bbn.n2 VSS 0.19627f
 C127 bbn.t6 VSS 1.59411f

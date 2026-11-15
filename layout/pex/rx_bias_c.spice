@@ -1,5 +1,5 @@
 * rx_bias: magic R+C extraction of layout/rx_bias.gds (layout/gen/pex.sh)
-* extracted 2026-11-15T23:47:42+01:00 with magic 8.3.642, mode c, from rx_bias.gds
+* extracted 2026-11-15T23:54:25+01:00 with magic 8.3.642, mode c, from rx_bias.gds
 .subckt rx_bias VDD VSS en enb nb
 X0 VSS nr VSS ppolyf_u r_width=2u r_length=29.72u
 X1 x nb VSS VSS nfet_03v3 ad=2p pd=6u as=2p ps=6u w=2u l=0.28u
@@ -22,34 +22,34 @@ X17 n2 nb nr VSS nfet_03v3 ad=2p pd=6u as=1p ps=3u w=2u l=0.5u
 X18 VSS nb VSS VSS nfet_03v3 ad=8.19p pd=18.38u as=0 ps=0 w=8.19u l=10u
 X19 vh n2 nb VDD pfet_03v3 ad=2p pd=5u as=4p ps=10u w=4u l=1u
 X20 nb enb VSS VSS nfet_03v3 ad=0.42p pd=2.84u as=0.189p ps=1.74u w=0.42u l=0.28u
-C0 vh en 0.00139f
-C1 en nb 0.26886f
-C2 en n2 0.18292f
-C3 vh VDD 1.29048f
-C4 VDD nb 2.51337f
-C5 x en 0.03867f
-C6 VDD n2 1.59517f
-C7 enb en 6.35468f
-C8 vh nb 0.784f
-C9 vh n2 2.80573f
-C10 x VDD 0.90319f
-C11 nb n2 3.63931f
-C12 enb VDD 0.72196f
-C13 nr en 0.08089f
-C14 x vh 1.54113f
-C15 x nb 2.18179f
-C16 enb vh 0.25355f
-C17 x n2 0.42354f
-C18 enb nb 5.7547f
-C19 enb n2 0.11728f
-C20 nr VDD 0.56081f
-C21 x enb 0.45325f
-C22 nr vh 0.04885f
-C23 nr nb 2.47068f
-C24 nr n2 1.21756f
-C25 x nr 0.01134f
-C26 enb nr 0.04735f
-C27 en VDD 0.43518f
+C0 en VDD 0.43518f
+C1 vh en 0.00139f
+C2 en nb 0.26886f
+C3 en n2 0.18292f
+C4 vh VDD 1.29048f
+C5 VDD nb 2.51337f
+C6 x en 0.03867f
+C7 VDD n2 1.59517f
+C8 enb en 6.35468f
+C9 vh nb 0.784f
+C10 vh n2 2.80573f
+C11 x VDD 0.90319f
+C12 nb n2 3.63931f
+C13 enb VDD 0.72196f
+C14 nr en 0.08089f
+C15 x vh 1.54113f
+C16 x nb 2.18179f
+C17 enb vh 0.25355f
+C18 x n2 0.42354f
+C19 enb nb 5.7547f
+C20 enb n2 0.11728f
+C21 nr VDD 0.56081f
+C22 x enb 0.45325f
+C23 nr vh 0.04885f
+C24 nr nb 2.47068f
+C25 nr n2 1.21756f
+C26 x nr 0.01134f
+C27 enb nr 0.04735f
 C28 en VSS 2.98873f
 C29 enb VSS 1.76876f
 C30 nb VSS 19.6801f
