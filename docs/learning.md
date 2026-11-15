@@ -5,7 +5,7 @@
 Notes written while designing this block, so the reasoning can be reused when explaining it to others.
 Each section gives the idea in plain words, then the number from our own simulation. Results are
 schematic simulations unless marked otherwise. Sections 1–7 come from the VCO study (scripts in `sim/vco/`,
-results in [vco_study.md](vco_study.md)). Sections 8–19 come from the review sessions on the current DAC and
+results in [vco_study.md](vco_study.md)). Sections 8–20 come from the review sessions on the current DAC and
 the receiver (2026-11-08 to 11-15); their figures are drawn by the scripts in `sim/learning/`.
 
 ## 1. What sets a ring oscillator's frequency
@@ -305,5 +305,20 @@ whatever the size, the most g<sub>m</sub> per µA; in strong inversion g<sub>m</
 wider device stays nearer the ceiling. The baseband runs at µA near the ceiling (efficient, slow); the LNA runs at mA
 with wide devices (fast, power-hungry).
 
-Receiver numbers in sections 12–19 are from `docs/rx_design.md` on branch `rx-option-b`
+## 20. √N: one law behind processing gain, mismatch and flicker noise
+Things that add **in step** grow as N; things that add **at random** grow only as √N. So whenever a quantity is the
+sum of N independent random parts, its relative fluctuation falls as 1 / √N, and its power as 1 / N.
+- **Processing gain:** a bit's quadrant count adds the signal's N steps coherently and the noise's steps at random.
+- **Mismatch (Pelgrom):** a transistor is many small random patches (dopants, edges); σ ∝ 1 / √(W · L).
+- **Flicker noise:** each oxide trap disturbs only its own patch of channel. A bigger gate has more traps, but their
+  random sum grows as √N while the channel's charge grows as N, so v<sub>n</sub>² ∝ 1 / (W · L). That is why the bias
+  reference uses 196-unit arrays and baseband stage 1 uses 16 × 20/1 µm devices.
+
+![sqrt N](img/learning/sqrt_n.png)
+
+**Fig. 8.** Left: 60 random walks of ±1 steps spread as ±√N while N coherent steps reach N. Right: three Monte Carlo
+experiments (the noise of an N-step count, a device of N random unit cells, a channel with N random traps) all fall on
+1 / √N, fitted slopes −0.500, −0.499 and −0.497 (`sim/learning/sqrt_n.py`).
+
+Receiver numbers in sections 12–20 are from `docs/rx_design.md` on branch `rx-option-b`
 (schematic level, before layout).
