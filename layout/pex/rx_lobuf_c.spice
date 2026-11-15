@@ -1,0 +1,177 @@
+* rx_lobuf: magic R+C extraction of layout/rx_lobuf.gds (layout/gen/pex.sh)
+* extracted 2026-11-15T23:47:46+01:00 with magic 8.3.642, mode c, from rx_lobuf.gds
+.subckt rx_lobuf VDD VSS in en lo lob
+X0 t x VDD VDD pfet_03v3 ad=1.05p pd=4.1u as=1.05p ps=4.1u w=1.05u l=0.28u
+X1 lob Ny2 VSS VSS nfet_03v3 ad=1.25p pd=3.5u as=2.5p ps=7u w=2.5u l=0.28u
+X2 Ny2 Ny1 VDD VDD pfet_03v3 ad=1.25p pd=3.5u as=2.5p ps=7u w=2.5u l=0.28u
+X3 a b VDD VDD pfet_03v3 ad=1.05p pd=4.1u as=1.05p ps=4.1u w=1.05u l=0.28u
+X4 VSS Py2 lo VSS nfet_03v3 ad=2.5p pd=7u as=1.25p ps=3.5u w=2.5u l=0.28u
+X5 VDD Ny0 Ny1 VDD pfet_03v3 ad=2p pd=6u as=2p ps=6u w=2u l=0.28u
+X6 Py0 a VDD VDD pfet_03v3 ad=0.625p pd=2.25u as=1.25p ps=4.5u w=1.25u l=0.28u
+X7 VDD b Ny0 VDD pfet_03v3 ad=1.25p pd=4.5u as=0.625p ps=2.25u w=1.25u l=0.28u
+X8 tb t VDD VDD pfet_03v3 ad=3.75p pd=9.5u as=3.75p ps=9.5u w=3.75u l=0.28u
+X9 a ta VSS VSS nfet_03v3 ad=1p pd=4u as=1p ps=4u w=1u l=0.28u
+X10 b VSS tb VDD pfet_03v3 ad=2.5p pd=7u as=2.5p ps=7u w=2.5u l=0.28u
+X11 x in VDD VDD pfet_03v3 ad=0.3p pd=1.6u as=0.6p ps=3.2u w=0.6u l=0.28u
+X12 lo Py2 VDD VDD pfet_03v3 ad=4.165p pd=10.33u as=2.0825p ps=5.165u w=4.165u l=0.28u
+X13 b VDD tb VSS nfet_03v3 ad=1p pd=4u as=1p ps=4u w=1u l=0.28u
+X14 VDD en Py0 VDD pfet_03v3 ad=1.25p pd=4.5u as=0.625p ps=2.25u w=1.25u l=0.28u
+X15 a b VSS VSS nfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=0.28u
+X16 b a VSS VSS nfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=0.28u
+X17 Py2 Py1 VDD VDD pfet_03v3 ad=1.25p pd=3.5u as=2.5p ps=7u w=2.5u l=0.28u
+X18 VDD Py2 lo VDD pfet_03v3 ad=2.0825p pd=5.165u as=2.0825p ps=5.165u w=4.165u l=0.28u
+X19 Py2 Py1 VSS VSS nfet_03v3 ad=2p pd=6u as=2p ps=6u w=2u l=0.28u
+X20 Py1 Py0 VDD VDD pfet_03v3 ad=2p pd=6u as=2p ps=6u w=2u l=0.28u
+X21 VSS Ny2 lob VSS nfet_03v3 ad=2.5p pd=7u as=1.25p ps=3.5u w=2.5u l=0.28u
+X22 VSS en Pgs VSS nfet_03v3 ad=1p pd=4u as=0.28p ps=1.56u w=1u l=0.28u
+X23 Ny0 b Ngs VSS nfet_03v3 ad=1p pd=4u as=0.28p ps=1.56u w=1u l=0.28u
+X24 VSS en g0s VSS nfet_03v3 ad=0.5p pd=3u as=0.14p ps=1.06u w=0.5u l=0.28u
+X25 tb t VSS VSS nfet_03v3 ad=1.5p pd=5u as=1.5p ps=5u w=1.5u l=0.28u
+X26 Py1 Py0 VSS VSS nfet_03v3 ad=0.8p pd=3.6u as=0.8p ps=3.6u w=0.8u l=0.28u
+X27 t x VSS VSS nfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=0.28u
+X28 VDD Ny2 lob VDD pfet_03v3 ad=2.0825p pd=5.165u as=4.165p ps=10.33u w=4.165u l=0.28u
+X29 VDD Ny2 lob VDD pfet_03v3 ad=4.165p pd=10.33u as=2.0825p ps=5.165u w=4.165u l=0.28u
+X30 Ny0 en VDD VDD pfet_03v3 ad=0.625p pd=2.25u as=1.25p ps=4.5u w=1.25u l=0.28u
+X31 VSS Ny1 Ny2 VSS nfet_03v3 ad=2p pd=6u as=2p ps=6u w=2u l=0.28u
+X32 Pgs a Py0 VSS nfet_03v3 ad=0.28p pd=1.56u as=1p ps=4u w=1u l=0.28u
+X33 VDD en x VDD pfet_03v3 ad=0.6p pd=3.2u as=0.3p ps=1.6u w=0.6u l=0.28u
+X34 VSS Ny0 Ny1 VSS nfet_03v3 ad=0.8p pd=3.6u as=0.8p ps=3.6u w=0.8u l=0.28u
+X35 ta t VDD VDD pfet_03v3 ad=1.25p pd=4.5u as=1.25p ps=4.5u w=1.25u l=0.28u
+X36 a ta VDD VDD pfet_03v3 ad=2.5p pd=7u as=2.5p ps=7u w=2.5u l=0.28u
+X37 VDD Ny1 Ny2 VDD pfet_03v3 ad=2.5p pd=7u as=1.25p ps=3.5u w=2.5u l=0.28u
+X38 b a VDD VDD pfet_03v3 ad=1.05p pd=4.1u as=1.05p ps=4.1u w=1.05u l=0.28u
+X39 lob Ny2 VDD VDD pfet_03v3 ad=2.0825p pd=5.165u as=2.0825p ps=5.165u w=4.165u l=0.28u
+X40 VDD Py1 Py2 VDD pfet_03v3 ad=2.5p pd=7u as=1.25p ps=3.5u w=2.5u l=0.28u
+X41 ta t VSS VSS nfet_03v3 ad=0.5p pd=3u as=0.5p ps=3u w=0.5u l=0.28u
+X42 lo Py2 VSS VSS nfet_03v3 ad=1.25p pd=3.5u as=2.5p ps=7u w=2.5u l=0.28u
+X43 lo Py2 VDD VDD pfet_03v3 ad=2.0825p pd=5.165u as=4.165p ps=10.33u w=4.165u l=0.28u
+X44 Ngs en VSS VSS nfet_03v3 ad=0.28p pd=1.56u as=1p ps=4u w=1u l=0.28u
+X45 g0s in x VSS nfet_03v3 ad=0.14p pd=1.06u as=0.5p ps=3u w=0.5u l=0.28u
+C0 lo lob 0.40261f
+C1 tb lob 0.48724f
+C2 ta en 0.07312f
+C3 lob a 0.0038f
+C4 ta b 0.06137f
+C5 g0s VDD 0
+C6 in lo 0.09056f
+C7 ta t 1.27093f
+C8 in tb 0.03717f
+C9 in a 0.15892f
+C10 en Py0 0.73089f
+C11 en b 2.94909f
+C12 g0s lob 0.00261f
+C13 Py0 b 0.17687f
+C14 en Py2 0.70787f
+C15 t en 1.04578f
+C16 Py0 Py2 0
+C17 lo x 0.06205f
+C18 x tb 0.17958f
+C19 t b 0.21425f
+C20 x a 0
+C21 ta VDD 0.33618f
+C22 Ny0 en 0.81999f
+C23 in g0s 0.00494f
+C24 Ny1 en 0.00102f
+C25 Ny0 b 1.41643f
+C26 lo Py1 0.14534f
+C27 Ny1 b 0.00411f
+C28 Py1 a 0
+C29 ta lob 0.02078f
+C30 Pgs en 0.00905f
+C31 VDD en 0.62438f
+C32 Pgs Py0 0.07271f
+C33 VDD Py0 0.35441f
+C34 Ny1 Ny0 1.27426f
+C35 g0s x 0.03739f
+C36 VDD b 1.522f
+C37 VDD Py2 0.84617f
+C38 t VDD 0.53468f
+C39 in ta 0.29598f
+C40 lob en 0.08077f
+C41 VDD Ny0 0.36888f
+C42 Ny1 VDD 0.58929f
+C43 lob b 0.25839f
+C44 lo tb 0.00378f
+C45 t lob 0.09542f
+C46 lo a 0.47966f
+C47 in en 1.02618f
+C48 ta x 0
+C49 in Py0 0.0923f
+C50 in b 1.6034f
+C51 lob Ny0 0.5145f
+C52 Ny1 lob 0.20682f
+C53 Pgs VDD 0
+C54 in Py2 0.67175f
+C55 in t 0.09656f
+C56 lo g0s 0
+C57 x en 0.54597f
+C58 VDD lob 0.98303f
+C59 x b 0.06191f
+C60 t x 1.7784f
+C61 Py1 en 0.12279f
+C62 in Pgs 0.00248f
+C63 Py1 Py0 1.276f
+C64 in VDD 0.13872f
+C65 Py1 b 0
+C66 Ny2 en 0
+C67 Py1 Py2 2.44938f
+C68 Ngs en 0.00905f
+C69 lo ta 0.10101f
+C70 in lob 0.58091f
+C71 Ngs b 0.00888f
+C72 ta a 1.27941f
+C73 VDD x 0.38363f
+C74 Ny0 Ny2 0.00506f
+C75 Ny1 Ny2 2.32672f
+C76 lo en 0.46562f
+C77 Ngs Ny0 0.07147f
+C78 lo Py0 0.53184f
+C79 tb en 0.06062f
+C80 Py1 VDD 0.56475f
+C81 lo b 0.13724f
+C82 x lob 0.08182f
+C83 a en 1.31385f
+C84 lo Py2 3.02187f
+C85 tb b 0.80645f
+C86 a Py0 1.46313f
+C87 lo t 0.28918f
+C88 VDD Ny2 0.87593f
+C89 a b 2.81922f
+C90 t tb 1.34876f
+C91 a Py2 0
+C92 Ngs VDD 0.00217f
+C93 t a 0.00509f
+C94 in x 1.38153f
+C95 tb Ny0 0.06857f
+C96 lob Ny2 4.35651f
+C97 g0s en 0.00471f
+C98 Ngs lob 0.00392f
+C99 g0s b 0
+C100 in Py1 0.44552f
+C101 lo Pgs 0
+C102 lo VDD 1.6746f
+C103 g0s t 0
+C104 VDD tb 1.55451f
+C105 Pgs a 0.00896f
+C106 VDD a 0.76119f
+C107 lo VSS 1.71905f
+C108 in VSS 1.25555f
+C109 en VSS 2.16692f
+C110 lob VSS 2.61645f
+C111 VDD VSS 61.9463f
+C112 Pgs VSS 0.10589f
+C113 g0s VSS 0.06752f
+C114 Ngs VSS 0.10696f
+C115 Py0 VSS 0.7974f
+C116 a VSS 1.53504f
+C117 x VSS 0.76485f
+C118 Py1 VSS 1.17586f
+C119 ta VSS 0.84769f
+C120 b VSS 2.08213f
+C121 Ny0 VSS 0.84821f
+C122 tb VSS 1.17359f
+C123 Ny1 VSS 1.11824f
+C124 t VSS 1.27894f
+C125 Py2 VSS 1.63136f
+C126 Ny2 VSS 1.67581f
+.ends

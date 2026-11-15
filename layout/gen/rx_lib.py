@@ -145,7 +145,7 @@ def risers(bands, nets, xr, sep=None):
         if xs[order[i]] - xs[order[i - 1]] < sep:
             xs[order[i]] = xs[order[i - 1]] + sep
     for n in xs:
-        assert STRAPX1 + 700 <= xs[n] <= xr - 700, (n, xs[n])
+        assert STRAPX1 + 700 <= xs[n] <= xr - STRAPX1 - 700, (n, xs[n], xr)
     return xs
 
 
@@ -203,7 +203,7 @@ class Null:
 
 # ---- elements ----------------------------------------------------------------------------------------------------
 def mos(W, L, seq, bulk, dummy=False):
-    """dummy: a poly-only dummy finger (same L, floating, no diffusion under it) 0.3 um past each end."""
+    """dummy: a poly-only dummy finger (same L, no diffusion under it) 0.3 um past each end, tied to VSS."""
     return dict(k='mos', W=W, L=L, seq=list(seq), bulk=bulk, dummy=dummy)
 
 
@@ -328,6 +328,14 @@ def draw_elem(c, x0, row, Y, e, chan, topn=False):
     if dx:
         for xa in (x0, x1 + DUMSP):
             c.r('poly', xa, yb - LL.ENDCAP, xa + L, yb + W + LL.ENDCAP)
+            if row == 'N':
+                # tied to VSS (a floating dummy is a node with no DC path in the extraction): the poly runs down
+                # to a contact on the VSS rail's top edge
+                xc = snap(xa + L / 2)
+                c.r('poly', xa, 30, xa + L, yb - LL.ENDCAP + 5)
+                c.r('poly', xc - 185, 30, xc + 185, 400)
+                c.r('pc', xc - 115, 100, xc + 115, 330)
+                c.r('m1', xc - 190, -100, xc + 190, 400)
         x1 += dx
     return x1, t, g
 
@@ -501,7 +509,7 @@ class Band:
         return self.xend
 
     # -- vertical plan, tracks, drawing --
-    def finish(self, cell, xr, y0=0, flip=False, exits=None, m3_used=(), xmin=700, align=None):
+    def finish(self, cell, xr, y0=0, flip=False, exits=None, m3_used=(), xmin=700, align=None, xmax=None):
         """exits: {net: (edge, x)} with edge 'top' / 'bottom' (M3 to that edge of the band) / 'left' / 'right'
         (M2 track to x 0 / xr); x None picks one. m3_used: x positions of M3 verticals crossing this band (risers of
         other bands): kept free. Returns meta (with the band's global y extent)."""
@@ -526,7 +534,7 @@ class Band:
             return all(abs(x - u) >= M3P for u in used)
 
         def pick(pref, lo, hi, step=85):
-            lo, hi = max(lo, xmin), min(hi, xr - 700)
+            lo, hi = max(lo, xmin), min(hi, xr - 700 if xmax is None else xmax)
             lo = -(-lo // step) * step
             cands = sorted(range(lo, snap(hi) + 1, step), key=lambda v: abs(v - pref))
             for x in cands:
@@ -736,12 +744,13 @@ def stack(cell, bands, exits, m3_shared=None, margin=900):
         exits = exits(bands, xr)
     metas = []
     m3_shared = list(m3_shared or [])
-    xmin = STRAPX1 + 700 if len(bands) > 1 else 700     # M3 rail straps at the left edge
+    xmin = STRAPX1 + 700 if len(bands) > 1 else 700     # M3 rail straps at the left and right edges
+    xmax = xr - xmin
     prev = None                                         # (net, y0, y1) of the stack's top rail so far
     for i, b in enumerate(bands):
         # each band shares the stack's top rail: drawn once into scratch to learn its local rails, then for real,
         # mirrored if its own top rail is the one that matches
-        kw = dict(exits=exits[i], m3_used=m3_shared, xmin=xmin)
+        kw = dict(exits=exits[i], m3_used=m3_shared, xmin=xmin, xmax=xmax)
         bot = ('VSS', -RAIL, 0)
         if prev is None:
             flip, y0, al = False, 0, ('y0', 0)
@@ -766,14 +775,16 @@ def stack(cell, bands, exits, m3_shared=None, margin=900):
     return metas, (0, ylo, xr, yhi)
 
 
-STRAP = {'VSS': (400, 1400), 'VDD': (1800, 2800)}   # M3 straps joining the rails of a multi-band cell
-STRAPX1 = 2800
+STRAP = {'VSS': (400, 2400), 'VDD': (2900, 4900)}   # M3 straps joining the rails of a multi-band cell, at the
+STRAPX1 = 4900                                      # left edge and mirrored at the right edge (2 um each: the
+                                                    # LNA's 4.9 mA through one 1 um strap cost 12 % of its tail
+                                                    # current in the R + C extraction)
 
 
 def draw_rails(cell, metas, xr, x0=0, m3_only=()):
     """Every band's rails, a shared rail once with the union of the bands' M3 windows; n-well strip under VDD.
-    With more than one rail per net, an M3 strap per net at the left edge joins them (windows in the other net's
-    rails' M3, a via2 column where it crosses its own)."""
+    With more than one rail per net, an M3 strap per net at each edge joins them (windows in the other net's
+    rails' M3; it merges with its own rails' M3)."""
     rails = {}
     for m in metas:
         for net, (yb, yt), skip in m['rails']:
@@ -783,11 +794,12 @@ def draw_rails(cell, metas, xr, x0=0, m3_only=()):
     c = Frame(cell)
     if len(rails) > 2:
         ys = [y for k in rails for y in k]
-        for net, (a, b) in STRAP.items():
-            c.r('m3', a, min(ys), b, max(ys))
-            for (yb, yt), r in rails.items():
-                if r[0] != net:                  # (its own rails' M3, with their via2 row, merge with the strap)
-                    r[1].append((a - 300, b + 300))
+        for net, (a0, b0) in STRAP.items():
+            for a, b in ((a0, b0), (xr - b0, xr - a0)):
+                c.r('m3', a, min(ys), b, max(ys))
+                for (yb, yt), r in rails.items():
+                    if r[0] != net:              # (its own rails' M3, with their via2 row, merge with the strap)
+                        r[1].append((a - 300, b + 300))
     lab = set()
     for (yb, yt), (net, skip) in sorted(rails.items()):
         mo = (yb, yt) in m3_only
