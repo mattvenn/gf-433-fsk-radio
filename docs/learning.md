@@ -5,7 +5,7 @@
 Notes written while designing this block, so the reasoning can be reused when explaining it to others.
 Each section gives the idea in plain words, then the number from our own simulation. Results are
 schematic simulations unless marked otherwise. Sections 1–7 come from the VCO study (scripts in `sim/vco/`,
-results in [vco_study.md](vco_study.md)). Sections 8–18 come from the review sessions on the current DAC and
+results in [vco_study.md](vco_study.md)). Sections 8–19 come from the review sessions on the current DAC and
 the receiver (2026-11-08 to 11-15); their figures are drawn by the scripts in `sim/learning/`.
 
 ## 1. What sets a ring oscillator's frequency
@@ -283,5 +283,27 @@ and requires the layout to copy lsdiv's cell; the simulated I/Q phase is then 71
   tracks any change of the jump with temperature. A random error could not be handled this way: it would have to
   be measured every time.
 
-Receiver numbers in sections 12–18 are from `docs/rx_design.md` on branch `rx-option-b`
+## 19. gm: the transistor's exchange rate from volts to current
+g<sub>m</sub> says how much drain current changes per volt on the gate: 1 mS = 1 mA/V = 1 µA per mV. A load resistor
+turns that current back into voltage, so gain = g<sub>m</sub> × R (and mS × kΩ is a plain number). 1 / g<sub>m</sub> is
+a resistance: 1 mS ↔ 1 kΩ, what you see looking into a source or a diode-connected transistor.
+
+| Stage | g<sub>m</sub> | 1 mV on the gate gives | × load | = output |
+|---|---|---|---|---|
+| LNA | ≈ 10 mS | 10 µA | × 800 Ω | 8 mV (gain 8) |
+| Baseband stage 2 | ≈ 0.09 mS (from its ≈ 25 dB gain) | 0.09 µA | × 200 kΩ | 18 mV (gain 18) |
+
+The knobs are the **bias current** (set by the tail or mirror; it costs power) and **W / L** (a wider device needs
+less overdrive for the same current, so more g<sub>m</sub>; it costs area and capacitance). The gate voltage is not set
+directly: it settles wherever that W / L needs it to carry the current.
+
+![gm against current](img/learning/gm_vs_current.png)
+
+**Fig. 7.** g<sub>m</sub> against drain current for W / L = 1, 10 and 100 (EKV-style interpolation with round-number
+parameters, illustrative, not a GF180 simulation; `sim/learning/gm_vs_current.py`). In weak inversion g<sub>m</sub> ≈ I / 34 mV
+whatever the size, the most g<sub>m</sub> per µA; in strong inversion g<sub>m</sub> = 2I / V<sub>ov</sub> grows only as √I, and a
+wider device stays nearer the ceiling. The baseband runs at µA near the ceiling (efficient, slow); the LNA runs at mA
+with wide devices (fast, power-hungry).
+
+Receiver numbers in sections 12–19 are from `docs/rx_design.md` on branch `rx-option-b`
 (schematic level, before layout).
