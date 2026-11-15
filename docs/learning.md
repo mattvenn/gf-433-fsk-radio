@@ -202,6 +202,13 @@ LNA's own roll-off at 1.3 GHz takes that to about 15–17 dB below the main resp
 - **Friis:** F<sub>total</sub> = F<sub>1</sub> + (F<sub>2</sub> − 1)/G<sub>1</sub> + … Noise added before the
   first gain is amplified as much as the signal; later noise is divided by the gain in front of it. So the first
   stage sets the noise figure, and every 10 Ω of pad routing before the LNA costs about 0.35 dB.
+
+![Friis](img/learning/friis.png)
+
+**Fig. 9.** Two stages with equal noise, the first with a gain of 5.6 (15 dB). At stage 2's input the signal and stage 1's
+noise are already ×5.6, stage 2's own noise is not; referred back to the input it is ÷5.6, and the total noise rises by
+only 1.6 % (noise voltages add in power, √(1² + 0.18²)) (`sim/learning/friis.py`).
+
 - **Gain-bandwidth:** a resistor-loaded stage has A = g<sub>m</sub> · R<sub>L</sub> and a corner at
   1 / (2π R<sub>L</sub> C), so A × f ≈ g<sub>m</sub> / (2πC): raise R<sub>L</sub> and the corner drops as fast as
   the gain rises. At 434 MHz that caps a stage at about 13 dB (sky130 and GF180 alike), so the LNA uses two
