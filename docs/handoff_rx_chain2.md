@@ -1,4 +1,4 @@
-> Not started
+> Running: step 2/3 (FSK chain, real ring LO, second-pass extracted rx_top, tt, -70 dBm) since 13:03, ETA 23:03
 
 # Handoff: FSK decode on the second-pass receiver layout (sim server)
 
