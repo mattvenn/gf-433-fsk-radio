@@ -89,7 +89,8 @@ function solve(spec, iters) {
     }
     for (const [nm, cls, a, b] of nets) {
       const pa = pin(a), pb = pin(b);
-      c += (WEIGHT[nm] === undefined ? 0.5 : WEIGHT[nm]) * (Math.abs(pa[0] - pb[0]) + Math.abs(pa[1] - pb[1]));
+      const wt = spec.weights && spec.weights[nm] !== undefined ? spec.weights[nm] : WEIGHT[nm];
+      c += (wt === undefined ? 0.5 : wt) * (Math.abs(pa[0] - pb[0]) + Math.abs(pa[1] - pb[1]));
       if (['clk', 'dig', 'fine', 'lo', 'en', 'tx'].includes(cls) && rxNames.length) {
         const s1 = [[pa[0], pa[1], pb[0], pa[1]], [pb[0], pa[1], pb[0], pb[1]]], s2 = [[pa[0], pa[1], pa[0], pb[1]], [pa[0], pb[1], pb[0], pb[1]]];
         const hit = segs => rxNames.filter(m => m !== own(a) && m !== own(b)).filter(m => segs.some(s => crosses(s, R[m]))).length;
