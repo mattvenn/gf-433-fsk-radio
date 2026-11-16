@@ -152,7 +152,7 @@
     ['bq_p', 'rx', 'rx.mix_q.bbp', 'rx.bb_q.inp'], ['bq_n', 'rx', 'rx.mix_q.bbn', 'rx.bb_q.inn'],
     ['oi_p', 'rx', 'rx.bb_i.outp', 'rx.lim_i.inp'], ['oi_n', 'rx', 'rx.bb_i.outn', 'rx.lim_i.inn'],
     ['oq_p', 'rx', 'rx.bb_q.outp', 'rx.lim_q.inp'], ['oq_n', 'rx', 'rx.bb_q.outn', 'rx.lim_q.inn'],
-    ['rx_en lo_i', 'en', 'xmac.rx_en', 'rx.lobuf_i.en'], ['rx_en lo_q', 'en', 'xmac.rx_en', 'rx.lobuf_q.en'],
+    ['rx_en lo_i', 'en', 'rx.bias.en', 'rx.lobuf_i.en'], ['rx_en lo_q', 'en', 'rx.bias.en', 'rx.lobuf_q.en'],   // inside the receiver, as rx_top's en
   ].concat(['lna', 'bb_i', 'bb_q', 'lim_i', 'lim_q'].flatMap(c => [[`nb ${c}`, 'ana', 'rx.bias.nb', `rx.${c}.nb`], [`enb ${c}`, 'en', 'rx.bias.enb', `rx.${c}.enb`]]));
   const NET_CLASSES = {
     rfin: 'RX input', rx: 'RX signal', rxout: 'RX outputs', lo: 'LO', clk: 'ring-derived clock', dig: '25 MHz / SPI', fine: 'fine-tune bus',
@@ -167,6 +167,7 @@
     track: 0.8,            // um per wire in the top routing channel (tt_wrapper: 0.8 um M2 tracks)
     r1: 150,               // 1. RX input <-> macro and ring-derived / digital wires >= (um)
     r2a: 40, r2b: 120, r2m: 150,   // 2. a2 wire <=, ls -> rx <=, ls load - lsq load <=
+    r6: 300,               // 6. total extra length of the wires routed round the receiver <=
     r3: 40,                // 3. ua[4] / ua[5] -> LNA <=
     r4: 80,                // 4. tx_drv -> ua[2] / ua[3] <=
     r7: 200, r7b: 60,      // 7. DAC line (longest) <=, mdac.vg -> vco_top.vg <=
@@ -265,9 +266,80 @@
       const ownA = ownerOf(a), ownB = ownerOf(b);
       const others = Object.values(R.inst).filter(i => i.name !== ownA && i.name !== ownB).map(i => i.rect);
       const est = [a, b].some(r => { const o = ownerOf(r); return o && R.inst[o] && (R.inst[o].pins[r.slice(o.length + 1)] || {}).est; });
-      out.push({ name, cls, a, b, pa, pb, len: manhattan(pa, pb), segs: lRoute(pa, pb, others), est });
+      const n = { name, cls, a, b, pa, pb, len: manhattan(pa, pb), segs: lRoute(pa, pb, others), est };
+      // a clock / digital / DAC / enable / TX / LO wire whose L route crosses a receiver block (not one of its own
+      // ends; wires with both ends in the receiver are its own routing) is routed round the receiver on a grid
+      const rxOwn = [ownA, ownB].map(o => o && R.inst[o] && R.inst[o].cat.group === 'rx');
+      if (NOT_OVER_RX.includes(cls) && !(rxOwn[0] && rxOwn[1])) {
+        const rx = Object.values(R.inst).filter(i => i.cat.group === 'rx' && i.name !== ownA && i.name !== ownB).map(i => i.rect);
+        if (n.segs.some(sg => rx.some(r => segCrosses(sg, r, 0.6)))) {
+          const segs = mazeRoute(tile, pa, pb, rx);
+          if (segs) { n.segs = segs; n.len = segs.reduce((t, q) => t + Math.abs(q[2] - q[0]) + Math.abs(q[3] - q[1]), 0); n.detour = n.len - manhattan(pa, pb); }
+          else n.blocked = true;
+        }
+      }
+      out.push(n);
     }
     return out;
+  }
+
+  // Shortest Manhattan path from a to b on a GRID um grid that avoids the obstacle rects (each grown by 0.4 um),
+  // with a small penalty per turn; returns axis-aligned segments from a to b, or null when there is no way round.
+  const GRID = 2;
+  function mazeRoute(tile, a, b, obst) {
+    const nx = Math.ceil(tile.w / GRID), ny = Math.ceil(tile.h / GRID), N = nx * ny, blk = new Uint8Array(N);
+    for (const r of obst) {
+      const x0 = Math.max(0, Math.floor((r[0] - 0.4) / GRID)), x1 = Math.min(nx - 1, Math.floor((r[0] + r[2] + 0.4) / GRID));
+      const y0 = Math.max(0, Math.floor((r[1] - 0.4) / GRID)), y1 = Math.min(ny - 1, Math.floor((r[1] + r[3] + 0.4) / GRID));
+      for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) blk[y * nx + x] = 1;
+    }
+    const cell = p => [Math.min(nx - 1, Math.max(0, Math.floor(p[0] / GRID))), Math.min(ny - 1, Math.max(0, Math.floor(p[1] / GRID)))];
+    const [sx, sy] = cell(a), [tx, ty] = cell(b), S0 = sy * nx + sx, T = ty * nx + tx;
+    blk[S0] = 0; blk[T] = 0;
+    // A* over (cell, direction), direction 0..3 = +x -x +y -y, 4 = start
+    const g = new Float64Array(N * 5).fill(Infinity), from = new Int32Array(N * 5).fill(-1), heap = [];
+    const push = (f, k) => { heap.push([f, k]); let i = heap.length - 1; while (i) { const p = (i - 1) >> 1; if (heap[p][0] <= heap[i][0]) break; [heap[p], heap[i]] = [heap[i], heap[p]]; i = p; } };
+    const pop = () => { const top = heap[0], last = heap.pop(); if (heap.length) { heap[0] = last; let i = 0; for (;;) { const l = 2 * i + 1, r = l + 1; let m = i; if (l < heap.length && heap[l][0] < heap[m][0]) m = l; if (r < heap.length && heap[r][0] < heap[m][0]) m = r; if (m === i) break; [heap[m], heap[i]] = [heap[i], heap[m]]; i = m; } } return top; };
+    const h = c => Math.abs((c % nx) - tx) + Math.abs(((c / nx) | 0) - ty);
+    g[S0 * 5 + 4] = 0; push(h(S0), S0 * 5 + 4);
+    const D = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+    let end = -1;
+    while (heap.length) {
+      const [, k] = pop(), c = (k / 5) | 0, d = k % 5;
+      if (c === T) { end = k; break; }
+      const cx = c % nx, cy = (c / nx) | 0;
+      for (let e = 0; e < 4; e++) {
+        const x = cx + D[e][0], y = cy + D[e][1];
+        if (x < 0 || y < 0 || x >= nx || y >= ny) continue;
+        const c2 = y * nx + x; if (blk[c2]) continue;
+        const k2 = c2 * 5 + e, ng = g[k] + 1 + (d !== 4 && d !== e ? 0.5 : 0);
+        if (ng < g[k2]) { g[k2] = ng; from[k2] = k; push(ng + h(c2), k2); }
+      }
+    }
+    if (end < 0) return null;
+    const cells = []; for (let k = end; k >= 0; k = from[k]) cells.push((k / 5) | 0);
+    cells.reverse();
+    const pts = [a];
+    const ctr = c => [((c % nx) + 0.5) * GRID, (((c / nx) | 0) + 0.5) * GRID];
+    let prev = a;
+    for (let i = 0; i < cells.length; i++) {
+      const p = ctr(cells[i]), q = i === 0 ? [p[0], a[1]] : null;
+      if (q) { if (q[0] !== prev[0]) pts.push(q); prev = q; }
+      pts.push(p); prev = p;
+    }
+    const last = pts[pts.length - 1];
+    if (last[0] !== b[0]) pts.push([b[0], last[1]]);
+    pts.push(b);
+    // merge collinear points into segments
+    const segs = [];
+    for (let i = 0; i < pts.length - 1; i++) {
+      const s0 = [pts[i][0], pts[i][1], pts[i + 1][0], pts[i + 1][1]];
+      if (s0[0] === s0[2] && s0[1] === s0[3]) continue;
+      const L = segs[segs.length - 1];
+      if (L && ((L[0] === L[2] && s0[0] === s0[2] && L[2] === s0[0]) || (L[1] === L[3] && s0[1] === s0[3] && L[3] === s0[1]))) { L[2] = s0[2]; L[3] = s0[3]; }
+      else segs.push(s0);
+    }
+    return segs;
   }
 
   // The routing channel along the top: every net with a top-edge TT pin runs horizontally there, between the pin's
@@ -400,20 +472,17 @@
         `${cross.length} signals cross VAPWR ↔ VDPWR (3.3 V both, no level shifters; listed under Nets). Closest VAPWR ↔ VDPWR blocks ${fmt(sep, 1)} µm.`);
     }
 
-    // 6. no digital or LO wire over the receiver
+    // 6. no digital or LO wire over the receiver: such wires are routed round it (routeNets); fails only when there is
+    // no way round, warns when the detours add up past the threshold
     if (rxInst.length) {
-      const over = [];
-      for (const n of nets) {
-        if (!ok(n) || !NOT_OVER_RX.includes(n.cls)) continue;
-        const own = [ownerOf(n.a), ownerOf(n.b)];
-        for (const ri of rxInst) {
-          if (own.includes(ri.name)) continue;
-          if (n.segs.some(sg => segCrosses(sg, ri.rect, 0.6))) { over.push(`${n.name} over ${ri.cat.label || ri.name}`); break; }
-        }
-      }
+      const rr = nets.filter(n => ok(n) && n.detour !== undefined), bl = nets.filter(n => ok(n) && n.blocked);
+      const tot = rr.reduce((t, n) => t + n.detour, 0);
       const ch = rxInst.filter(ri => chanSh.some(c => overlap(c, ri.rect) > 0)).map(ri => ri.cat.label || ri.name);
-      add(6, 'No digital or LO wire over the RX', over.length || ch.length ? 'fail' : 'pass', over.length + ch.length ? `${over.length + ch.length}` : 'none',
-        (over.length ? `Flylines over receiver blocks: ${over.slice(0, 12).join(', ')}${over.length > 12 ? ` and ${over.length - 12} more` : ''}. ` : 'No clock, digital, DAC, enable, TX or LO flyline crosses a receiver block (its own wires excepted). ') +
+      const big = rr.slice().sort((p, q) => q.detour - p.detour);
+      add(6, 'No digital or LO wire over the RX', bl.length || ch.length ? 'fail' : tot > s.r6 ? 'warn' : 'pass',
+        bl.length ? `${bl.length} blocked` : rr.length ? `${rr.length} round, +${fmt(tot)} µm` : 'none',
+        (bl.length ? `No way round the receiver for: ${bl.map(n => n.name).join(', ')}. ` : '') +
+        (rr.length ? `Routed round the receiver (their straight L route would cross it): ${big.slice(0, 10).map(n => `${n.name} +${fmt(n.detour)}`).join(', ')}${big.length > 10 ? ` and ${big.length - 10} more` : ''} µm; detours ${fmt(tot)} µm in all (want ≤ ${s.r6}). ` : 'No clock, digital, DAC, enable, TX or LO wire needs to cross the receiver. ') +
         (ch.length ? `The top channel runs over: ${ch.join(', ')}. ` : '') + 'The baseband and limiter AC-coupling nodes are ~60 MΩ.');
     } else add(6, 'No digital or LO wire over the RX', 'info', '-', 'Place the receiver.');
 

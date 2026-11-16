@@ -435,7 +435,7 @@ function draw() {
     if (n.missing) continue;
     if (S.layers.bus && n.cls === 'fine' && !/^dac_(tn\[0\]|tn\[30\]|sdn)$/.test(n.name)) continue;
     const hot = S.hoverNet === n.name;
-    const pts = [n.pa, n.segs[0].slice(2, 4), n.pb];
+    const pts = [n.segs[0].slice(0, 2)].concat(n.segs.map(q => q.slice(2, 4)));   // the L route, or the route round the receiver
     out.push(`<polyline data-net="${esc(n.name)}" points="${pts.map(p => `${p[0]},${Y(p[1])}`).join(' ')}" fill="none" stroke="${NET_COLOR[n.cls]}" stroke-width="${(hot ? 2.6 : n.cls === 'fine' ? 0.7 : 1.1) * scale}" stroke-opacity="${hot ? 1 : .8}" ${n.cls === 'en' ? `stroke-dasharray="${3 * scale} ${2 * scale}"` : n.est ? `stroke-dasharray="${1 * scale} ${1.5 * scale}"` : ''}/>`);
     out.push(`<polyline data-net="${esc(n.name)}" points="${pts.map(p => `${p[0]},${Y(p[1])}`).join(' ')}" fill="none" stroke="transparent" stroke-width="${7 * scale}"/>`);
   }
@@ -704,7 +704,7 @@ const WHY = {
   'LNA at ua[4] / ua[5]': 'The input pair: short, symmetric wires keep the input match and the common-mode rejection, and keep the input away from everything else.',
   'TX driver at ua[2] / ua[3]': 'tx_drv pushes 12.6 mA of 434 MHz edges into the pads: long wires add R, L and C, and radiate inside the tile. It is off while receiving, so its distance from the RX is soft, but ua[3] is the pad next to ua[4].',
   'Supply domains': 'VAPWR (3.3 V) feeds the quiet analog (vco_top, mdac, vctrl_pd, the code inverters) and the receiver; VDPWR feeds tx_drv and the digital macro; VGND is shared. Each block should take its supply from a nearby stripe of its own rail, and every signal between the two domains is a place where the supplies and grounds meet (listed under Supply crossings; all 3.3 V to 3.3 V, no level shifters).',
-  'No digital or LO wire over the RX': 'The baseband and limiter AC-coupling nodes are about 60 MΩ: a µV of coupling there is a signal. No clock, digital, DAC, enable, TX or LO flyline may cross a receiver block (its own wires excepted), nor the top channel run over it.',
+  'No digital or LO wire over the RX': 'The baseband and limiter AC-coupling nodes are about 60 MΩ: a µV of coupling there is a signal. So no clock, digital, DAC, enable, TX or LO wire runs over a receiver block (its own wires excepted, and the receiver\'s internal wiring). A wire whose straight L route would cross the receiver is routed round it on a 2 µm grid and drawn that way; the rule warns when the detours add up past the threshold and fails only when a wire has no way round, or the top channel runs over the receiver.',
   'Short fine-tune bus': 'The 37 DAC control lines (thermometer, binary and ΣΔ) from tx_fine to mdac switch with the code and the ΣΔ dither; short lines are less load for the macro and less coupling. mdac\'s vg output goes straight into the ring\'s shared node: it must be short.',
   'Macro near the top edge': 'The TT digital pins are on the top edge (x 15–321); the macro talks to them (clk, rst_n, SPI, fsk, ck_o and the dividers), and the code and enable pins go to vco_top and tx_drv. Their wires run in a channel along the top, as tall as the number of wires side by side at each x. The macro should sit close under it.',
   'Fit and spacing': 'Everything inside 693.28 × 325.36 µm, 2–3 µm between blocks for guard rings (the keep-out setting), nothing in the macro\'s halo, nothing on a reserved area.',
@@ -794,7 +794,7 @@ function renderIO() {
 function renderSettings() {
   const el = $('#secSettings'), s = S.settings;
   const fields = [['keepout', 'keep-out between blocks, µm'], ['track', 'top channel track pitch, µm'], ['r1', '1. RX input ↔ macro / clocks ≥'], ['r2a', '2. a2 wire ≤'], ['r2b', '2. ls → rx ≤'], ['r2m', '2. |I load − Q load| ≤'],
-    ['lsq', '2. lsq wire inside rx_top, µm'], ['r3', '3. ua[4] / ua[5] → LNA ≤'], ['r4', '4. tx_drv → ua[2] / ua[3] ≤'], ['r7', '7. longest DAC line ≤'], ['r7b', '7. mdac.vg → vco_top.vg ≤'], ['r8', '8. macro top ↔ tile top ≤'], ['r11', '11. cgm_ref → ring vbnf / vctrl ≤'], ['r11d', '11. their gap to clock / DAC wires ≥']];
+    ['lsq', '2. lsq wire inside rx_top, µm'], ['r6', '6. total detour round the RX ≤'], ['r3', '3. ua[4] / ua[5] → LNA ≤'], ['r4', '4. tx_drv → ua[2] / ua[3] ≤'], ['r7', '7. longest DAC line ≤'], ['r7b', '7. mdac.vg → vco_top.vg ≤'], ['r8', '8. macro top ↔ tile top ≤'], ['r11', '11. cgm_ref → ring vbnf / vctrl ≤'], ['r11d', '11. their gap to clock / DAC wires ≥']];
   el.innerHTML = `<h2>Thresholds <span class="meta">shared with everyone</span></h2>
     <div class="row">${fields.map(([k, l]) => `<label class="f">${l}<input type="number" step="0.5" data-set="${k}" value="${s[k]}"></label>`).join('')}</div>
     <div class="row edit-only"><button class="btn" id="bReset">Reset to defaults</button></div>`;

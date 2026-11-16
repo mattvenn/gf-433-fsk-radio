@@ -42,8 +42,9 @@ for n, i in d['inst'].items():
 col = {'rfin': 'red', 'rx': 'teal', 'rxout': 'darkcyan', 'lo': 'magenta', 'clk': 'orange', 'dig': 'gray', 'fine': 'purple', 'en': 'olive', 'tx': 'brown', 'ana': 'green'}
 for nt in d['nets']:
     a, b = nt['pa'], nt['pb']
-    s0 = nt['segs'][0]
-    ax.plot([a[0], s0[2], b[0]], [a[1], s0[3], b[1]], color=col[nt['cls']], lw=.7 if nt['cls'] == 'fine' else 1.1, alpha=.75)
+    xs = [nt['segs'][0][0]] + [q[2] for q in nt['segs']]
+    ys = [nt['segs'][0][1]] + [q[3] for q in nt['segs']]
+    ax.plot(xs, ys, color=col[nt['cls']], lw=.7 if nt['cls'] == 'fine' else 1.1, alpha=.75)
 if '--pins' in sys.argv:
     for n, i in d['inst'].items():
         for p, (x, y, est) in i['pins'].items():

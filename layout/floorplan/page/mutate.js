@@ -28,13 +28,13 @@ const MUT = [
   ['tx_drv moved 300 µm from ua[2] / ua[3]', 4, v => { v.place.xtxd.x = 600; v.place.xtxd.y = 200; }],
   ['mdac moved to the far corner from the macro', 7, v => { const m = FP.resolve(cat, v).inst.xmac.rect; v.place.xmdac = { x: m[0] > 300 ? 3 : 530, y: 3, orient: 'R0' }; }],
   ['the macro dropped to the bottom (far from the top edge)', 8, v => { v.place.xmac.y = 3; }],
-  ['ck routed straight through the largest receiver block (macro above it, vco_top below it)', 6, v => {
+  ['ck: its straight route through the largest receiver block (macro above it, vco_top below it): it must go round', 6, v => {
     const R = FP.resolve(cat, v), big = Object.values(R.inst).filter(i => i.cat.group === 'rx').sort((a, b) => b.rect[2] * b.rect[3] - a.rect[2] * a.rect[3])[0].rect;
     const cx = big[0] + big[2] / 2, mck = cat.xmac.pins.ck, vn = vco(v), vck = cat[vn].pins.ck;
     if (v.pins) { delete v.pins.xmac; delete v.pins[vn]; }
     v.est = {}; v.place.xmac = { x: cx - mck.x, y: big[1] + big[3] + 10, orient: 'R0' };   // ck on its south edge
     v.place[vn] = { x: cx - vck.x, y: big[1] - 80, orient: 'R0' };                          // ck on its edge, below the block
-  }, 'ck over'],
+  }, 'ck'],
   ['vco_top split: cgm_ref moved 200 µm from the ring', 11, v => { v.place['vco.ref'].y += 150; v.place['vco.ref'].x -= 50; }],
 ];
 let bad = 0;
@@ -43,7 +43,7 @@ for (const [what, rule, f, expect] of MUT) {
   const v = clone(base), [s0, v0] = st(base, rule);
   f(v);
   const [s1, v1, d1] = st(v, rule);
-  const caught = expect ? s1 === 'fail' && d1.includes(expect) : RANK[s1] > RANK[s0];
+  const caught = RANK[s1] > RANK[s0] && (!expect || d1.includes(expect));
   console.log(`${caught ? 'caught ' : 'MISSED '} rule ${String(rule).padEnd(2)} ${s0.padEnd(4)} ${String(v0).padEnd(14)} -> ${s1.padEnd(4)} ${String(v1).padEnd(14)} ${what}  [on ${base.id}]`);
   if (!caught) bad++;
 }
