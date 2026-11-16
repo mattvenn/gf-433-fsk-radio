@@ -1,4 +1,4 @@
-> Not started.
+> Done (2026-11-16): page https://claude.ai/artifact/942zW17HYnwDF8qCuYhQk3, see docs/floorplan_spec.md
 
 # Handoff: port the OOK radio's interactive floorplan page to this project (cloud session)
 
