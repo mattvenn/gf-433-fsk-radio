@@ -100,7 +100,7 @@ It is to become an **FM radio toolkit**:
      corrects it) and the FSK overshoot at a major carry (firmware keeps the FSK pair inside one block of 32).
 4. **Reference layout: done** (`docs/ref_layout.md`, `layout/cgm_ref.gds`, 238.8 × 69.4 µm, DRC/LVS/antenna clean).
    Extracted core + extracted reference: f within −0.03 % of the schematic reference at tt/ss/ff, vbnf start-up
-   88–94 µs. **Top level `vco_top` done** (`docs/top_layout.md`, 407.7 × 70.8 µm, DRC/LVS/antenna clean, no Metal4/5): the extracted
+   88–94 µs. **Top level `vco_top` done** (`docs/top_layout.md`, 386.6 × 70.8 µm since the 2026-11-16 decap redraw (was 407.7), DRC/LVS/antenna clean, no Metal4/5): the extracted
    top matches the blocks within 0.07 % (tt 418.0 MHz at code 9 with the LS). As a straight row it needs a 2x2;
    folded (about 29k µm²) it would fit a 1x2. Open: a0 tap for the TX driver, full start-up to settling.
    - **Tempco at room temperature is +100…+140 ppm/°C (about 45–60 kHz/°C)**, schematic and layout alike. The sizing

@@ -9,7 +9,7 @@ schematic is `xschem/vco_top.sch` (`xschem/gen/vco_top.py`), and it is the layou
 
 ![vco_top layout](img/vco_top.png)
 
-**Fig. 1.** The vco_top layout, 407.7 × 70.8 µm. From the left: the VDD_LS decap, the level shifter and ÷4 (lsdiv,
+**Fig. 1.** The vco_top layout, 386.6 × 70.8 µm. From the left: the VDD_LS decap, the level shifter and ÷4 (lsdiv,
 raised so its a0 pin meets the ring's), the ring core, and the bias reference with its 1 MΩ / 20 pF filter.
 
 ![vco_top schematic](img/xschem/vco_top.png)
@@ -17,7 +17,8 @@ raised so its a0 pin meets the ring's), the ring core, and the bias reference wi
 **Fig. 2.** The vco_top schematic: the LVS source of Fig. 1.
 
 ## Floorplan
-- **Size:** bbox −100.74 … 306.94 × −4.00 … 66.80 µm, 407.7 × 70.8 µm (28 862 µm²). The core grew 1.0 µm in x on
+- **Size:** bbox −79.62 … 306.94 × −4.00 … 66.80 µm, 386.6 × 70.8 µm (27 367 µm²). It was 407.7 µm wide (28 862 µm²)
+  until 2026-11-16, when the VDD_LS decap was redrawn (below). The core grew 1.0 µm in x on
   2026-11-12 (the PMOS vg decap, `docs/ring_layout_v3.md`); `CORE_DX` in `layout/gen/vco_top.py` carries it. All blocks share the core's y
   origin (the bottom VSS rail, y −2.4 … 0).
 - **Placement** (block origin in vco_top; the block GDS cells are instances, unchanged):
@@ -27,8 +28,10 @@ raised so its a0 pin meets the ring's), the ring core, and the bias reference wi
   - `lsdiv` at (−42.39, 31.455): its a0 M2 spine (right edge, y 4.715) touches the core's a0 M2 tap (left edge,
     y 36.17). **There is no a0 wire**: the extracted a0 total is 5.83 fF, the sum of the two blocks' own a0 C
     (core 3.20 fF, lsdiv 1.99 fF Cc + 0.63 fF);
-  - `decap_ls` at (−100.74, 0): 5 nfet_03v3 gate-cap fingers of W 49.14 / L 10 µm (2457 µm², about 10.0 pF at
-    4.07 fF/µm²), gate VDD_LS, source / drain / bulk VSS, the finger of the reference's CF.
+  - `decap_ls` at (−79.62, 0): nfet_03v3 gate-cap fingers of L 10 µm, gate VDD_LS, source / drain / bulk VSS:
+    3 fingers of W 55.9 µm left of lsdiv and 3 of W 26.0 µm under lsdiv (2457 µm² in all, about 10.0 pF at
+    4.07 fF/µm²). The schematic keeps 5 fingers of W 49.14 µm (`DCLS`): netgen adds parallel widths, so the same
+    total W matches. The under-lsdiv group's gate strap joins the VDD_LS spine on M2.
 - **Supplies:**
   - **VDD** (ring + reference): the core's VDD rail (y 43.2 … 45.6) goes up an M2 drop (x 58 … 62) to an M3
     strap along the top edge (y 62.88 … 66.80), which runs over the reference's filter to its VDD rail
@@ -39,8 +42,9 @@ raised so its a0 pin meets the ring's), the ring core, and the bias reference wi
     an M3 strap over all of it (with a gap at the core's vg pin) for the Metal4 VGND via3s at tile level.
     lsdiv's left M3 VSS strap is extended down into that rail (4 µm wide under lsdiv), so its switching current
     returns straight to the bottom rail rather than through the core's substrate-tap ring.
-  - Two p+ tap columns stand under lsdiv. Without them the empty area there (45 × 24 µm) fails the KLayout rule
-    DCF.1a (no gap of 20 µm or more between active areas without dummy fill).
+  - The empty area under lsdiv (45 × 24 µm) held two p+ tap columns until 2026-11-16, only so that it passed the
+    KLayout rule DCF.1a (no gap of 20 µm or more between active areas without dummy fill). The decap's second
+    group fills it now.
 - **Pins** (labels in `vco_top`): bit0–4, bitb0–4, ck, VDD and VDD_LS on M3 at the top edge; vg on M3 at the bottom
   edge (the core's pin); vctrl and vbn (the unfiltered bias, a monitor) on M2 at the right edge (the reference's
   pins); VSS on M2 / M3 along the bottom; a0 on M2 at the lsdiv / core junction (see Limits).
@@ -56,12 +60,12 @@ Tile facts, from `tt-support-tools` (main branch, `tech/gf180mcuD/`, read 2026-1
 
 **vco_top does not fit a 1x2 tile; it needs the 2x2.** The width is set by the a0 abutment and the reference's
 abutment: lsdiv + core + reference alone are 40.49 + 70.09 + 238.75 = 349.33 µm, 2.7 µm more than the 1x2 tile's
-whole width, before the decap (55 µm) and any margin. The height (70.8 µm) uses 22 % of the tile. In the 2x2 tile
-the macro uses 57 % of the width and leaves about 240 µm of height free for the transmitter and receiver blocks.
+whole width, before the decap (34 µm) and any margin. The height (70.8 µm) uses 22 % of the tile. In the 2x2 tile
+the macro uses 54 % of the width and leaves about 240 µm of height free for the transmitter and receiver blocks.
 
 ![vco_top in the 2x2 tile](img/vco_top_tile.png)
 
-**Fig. 3.** vco_top in the 2x2 analog tile, 407.7 × 70.8 µm placed 20 µm from the left edge and 14 µm above the ua
+**Fig. 3.** vco_top in the 2x2 analog tile (the 407.7 µm wide version, before the decap was redrawn) placed 20 µm from the left edge and 14 µm above the ua
 pads. The red dashed line is the 1x2 tile's right edge. Proposed Metal4 stripes: VDPWR and VGND over the reference
 (they land on the VDD M3 strap at the top edge and the VSS M3 strap at the bottom edge) and a separate VDD_LS
 branch over the decap's M3 pad.
@@ -155,7 +159,6 @@ in 10 µs, all nodes at 0 V at t = 0):
   codes and vctrl values (these are in the block-level results).
 - The Metal4 stripe positions in Fig. 3 are a proposal: the tile-level power grid, the ua pin routes and their R / C
   are not designed yet.
-- The empty area under lsdiv holds only two substrate-tap columns (for DCF.1a); it could hold about 3 pF more decap.
 
 ## Files
 - `layout/gen/vco_top.py` → `layout/vco_top.gds` (cells vco_top, ring_core, ring_inv, ring_inv_m, lsdiv, cgm_ref,

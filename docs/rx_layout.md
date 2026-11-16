@@ -8,19 +8,87 @@ assembled rx_top was generated from Python, checked with DRC (design rule check)
 antenna checks, extracted (PEX, parasitic extraction), and re-simulated with the schematic benches from `sim/rx/`.
 No device size was changed from the schematic.
 
-**Summary (2026-11-16).** rx_top is 328.2 × 400.4 µm (131,434 µm²) with its 12 µm margin, 304.2 × 376.4 µm
-(114,522 µm²) for the core, and the cells alone add up to 81,851 µm²: 4.0 × the device area, well above the
-40,000-60,000 µm² estimate. The baseband arms are half of the cell area. Every cell and rx_top is clean in magic DRC,
-KLayout DRC, antenna and LVS, with every device size checked against the simulation netlists. On the extraction
-the LNA (low-noise amplifier) loses 1.8 dB of gain and 0.4 dB of NF (noise figure) at tt (24.19 dB, 7.58 dB), the
-baseband matches its schematic to within 0.8 dB, and the comparator hysteresis is ±36.3 mV (schematic ±36.1 mV).
-The LO (local oscillator) I/Q (in-phase and quadrature) phase is 75.7-78.2° against 72.0-72.7° in the schematic,
-inside the 72 ± 25° stop rule, and the ring's frequency shift from the receiver's load matches the schematic to
-0.02 %. The FSK (frequency-shift keying) decode through the real ring LO on the extracted rx_top gives 0 bit errors
-of 4 at −70 dBm, with the same steps per bit as the schematic (−8, +7, −7, +7).
+**Summary (2026-11-16, second pass).** rx_top is 299.4 × 376.0 µm (112,573 µm²) with its 12 µm margin, 275.4 ×
+352.0 µm (96,939 µm²) for the core, and the cells add up to 70,391 µm². The first pass was 131,434 µm²: the second
+pass removed the empty space inside the cells (14 % of rx_top, 14 % of the cells; "Second pass" below), with no
+device size changed. Every cell and rx_top is clean in magic DRC, KLayout DRC, antenna and LVS, with every device
+size checked against the simulation netlists. On the second-pass extraction the LNA (low-noise amplifier) gives
+24.46 dB and an NF (noise figure) of 7.54 dB at tt (schematic 25.97 dB, 7.18 dB), the baseband matches its schematic
+to within 0.8 dB, and the comparator hysteresis is ±36.3 mV (schematic ±36.1 mV). The LO (local oscillator) I/Q
+(in-phase and quadrature) phase is 75.5-78.0° against 72.0-72.7° in the schematic, inside the 72 ± 25° stop rule,
+and the ring's frequency shift from the receiver's load matches the schematic to 0.02 %. The FSK (frequency-shift
+keying) decode through the real ring LO on the first-pass rx_top gave 0 bit errors of 4 at −70 dBm, with the same
+steps per bit as the schematic; it was not re-run on the second pass (below). rx_top is still taller (376 µm) than
+the tile (325.36 µm).
 
 Brief: `docs/handoff_rx_layout.md`. Generators: `layout/gen/rx_*.py`. Bench results (JSON):
 `docs/rx_layout_results/`; check logs and run directories (not committed): `build/rx_layout/`.
+
+## Second pass: empty space trimmed
+
+The first pass left a lot of empty space inside the cells, mostly for two reasons: a long thin device setting a whole
+band's width (Mvbsnk, the 0.42 / 50 µm vgr sink, lying flat needs 52 µm of row in rx_bb and rx_lim), and one tall
+device setting a whole row's height (the mixer's PMOS switches, rx_lim's Cvb, rx_lsq's Hq). Each fix keeps every
+device's total W and L, every matching pattern and the I / Q copies identical.
+
+Table S1. Cells, first pass against second pass.
+
+| Cell | First pass (µm) | Second pass (µm) | Area | Change |
+|---|---|---|---|---|
+| rx_lna | 133.9 × 70.1 | 98.1 × 75.5 | −21 % | stage 1's Rgp RLp RLn Rgn moved into its empty P row (poly on the substrate, no n-well); the N row holds only the pair and the tail |
+| rx_mix (× 2) | 51.3 × 36.1 | 44.4 × 28.1 | −33 % | PMOS switches as 2 fingers of W/2, mirrored so each switch's fingers share a centroid, in the P row over Cbn |
+| rx_lsq | 40.5 × 61.7 | 40.5 × 55.0 | −11 % | Hq as 6 fingers of W/3 over Cq; the lsdiv level-shifter copy untouched (still asserted strip for strip) |
+| rx_bb (× 2) | 145.8 × 144.2 | 130.7 × 144.2 | −10 % | Mvbsnk as an *overlay* along stage 2 / 3, whose devices sit on the VSS rail |
+| rx_lim (× 2) | 127.8 × 67.4 | 115.7 × 59.3 | −20 % | Mvbsnk as an overlay over the small comparator devices; Cvb to the bias band, next to the vb devices |
+| rx_bias | 62.6 × 35.7 | 84.2 × 24.8 | −7 % | one flat band, which fits over the LNA in rx_top |
+| rx_lobuf (× 2), rx_decap | | unchanged | | |
+| **sum of cells** | | | **81,851 → 70,391 µm²** | |
+| **rx_top** | 328.2 × 400.4 | **299.4 × 376.0** | **131,434 → 112,573 µm²** | |
+
+- **The overlay** (`rx_lib.py`, `Band(overlay=...)`): the long device lies just above the short devices under it,
+  whose stubs to the channel cross its gate poly and diffusion (legal: M1 over poly). Its own three pads sit in lanes
+  at least 0.7 µm from those stubs, its VSS pad drops to the rail where nothing is under it, and the placer tries
+  both orientations. It sits just above the devices under it, not at the channel edge, so its diffusion stays within
+  20 µm of the rail's p+ tap (DF.14).
+- **rx_bias:** a two-band version (Rb and Cnb in a band with n devices on both sides) is the smallest cell,
+  36.6 × 42.5 µm (−30 %), but in rx_top it is the tallest block over the LNA and raised row A by 12.8 µm across the
+  whole receiver. The flat band fits under the mixer column's top instead.
+- **rx_top:** the decap moved from beside rx_bias to above rx_lsq. Two shorts showed up in the first build and are
+  now prevented in `rx_top.py`: the decap had landed on the mixer column's power strap (VDD to VSS), and a row-B
+  bottom pin (the Q baseband arm's inp / inn) landed right over rx_lsq's VSS strap, so the router went through the
+  strap. The rx_lsq column (and the decap) now move right until their straps are clear of every row-B pin.
+- **vco_top** (`docs/top_layout.md`) is 21.1 µm narrower (386.6 µm): the VDD_LS decap is 3 tall fingers plus 3
+  short ones under lsdiv, where two tap columns stood only for DCF.1a, with the same 245.7 µm of W. Its LVS result
+  is the same as before the change (the devices match; the only error is the `a2` port the layout doesn't have
+  yet, an integration item below). The tile wrapper passes LVS with all 7 mutations caught, and its KLayout DRC
+  shows only the DCF.1a on the empty tile area it had before. vco_top was not re-extracted: `pex_top.sh` stops on
+  the missing a2 port.
+
+Table S2. Benches on the extraction, first pass / second pass (R + C, tt unless stated).
+
+| Quantity | Schematic | First pass | Second pass |
+|---|---|---|---|
+| LNA gain, tt / ss / ff (dB) | 25.97 / 25.22 / 26.46 | 24.19 / 23.50 / 24.64 | 24.46 / 23.78 / 24.90 |
+| LNA NF, tt / ss / ff (dB) | 7.18 / 7.65 / 6.93 | 7.58 / 8.01 / 7.35 | 7.54 / 7.98 / 7.31 |
+| LNA current, tt (mA) | 4.89 | 4.65 | 4.65 |
+| LNA −3 dB, tt (MHz) | 225 | 193 | 198 |
+| Baseband gain incl. limiter stage, tt / ss / ff (dB) | 69.2 / 68.1 / 70.2 | 69.7 / 68.3 / 70.8 | 69.7 / 68.3 / 70.9 |
+| Baseband −3 dB low, high, tt (kHz) | 8.5, 143 | 8.3, 142.5 | 8.3, 142.5 |
+| Comparator hysteresis (mV) | ±36.1 | ±36.3 | ±36.3 |
+| LO I/Q phase, tt / ss / ff (°) | 72.2 / 72.7 / 72.0 | 77.2 / 78.2 / 75.7 | 77.0 / 78.0 / 75.5 |
+| Ring shift from the receiver, tt / ss / ff (%) | −1.81 / −1.76 / −1.87 | −1.81 / −1.74 / −1.87 | −1.81 / −1.74 / −1.87 |
+| LO path current, tt (mA) | 1.16 | 1.7 | 1.71 |
+| Start-up: mode, frequency vs no Q tap | | fundamental, −2.2 % | fundamental, −2.2 % |
+| rx_bias at power-up, nb (V) | 0.979 | 0.978 | 0.978 |
+| FSK decode, −70 dBm, tt | 0 of 4 errors | 0 of 4 errors | not re-run |
+
+The second pass changes none of the results by more than 0.3 dB, 0.2° or 0.2 kHz; the LNA gains 0.27 dB and its
+−3 dB point 5 MHz from the shorter stage-1 wiring. The FSK chain run (8.7 h) was stopped on the second pass to free
+the machine; with no device size changed and the LO bench as before, the decode is expected to be the same, but that
+is not checked. The first-pass figures are in `docs/img/rx_layout/first_pass/`, the first-pass bench results in
+`docs/rx_layout_results/` (the second-pass ones are in `docs/rx_layout_results/second_pass/`).
+
+The tables and figures below are the first pass, except Figs. 1-8, which now show the second-pass layouts.
 
 ## How the cells were made
 
@@ -70,13 +138,13 @@ the I/Q phase (below).
 
 ![rx_lna](img/rx_layout/rx_lna.png)
 
-**Fig. 1.** rx_lna, stage 1 and both stage-2 copies: 133.9 × 70.1 µm. The Q outputs leave the bottom band and the I
+**Fig. 1.** rx_lna, stage 1 and both stage-2 copies: 98.1 × 75.5 µm (first pass 133.9 × 70.1 µm). The Q outputs leave the bottom band and the I
 outputs the top band, so each mixer sits level with its stage 2.
 
 ![rx_mix](img/rx_layout/rx_mix.png)
 
-**Fig. 2.** rx_mix, the passive double-balanced mixer: 51.3 × 36.1 µm. The NMOS and PMOS switch diffusions sit side
-by side, each symmetric about its centre.
+**Fig. 2.** rx_mix, the passive double-balanced mixer: 44.4 × 28.1 µm (first pass 51.3 × 36.1 µm). The NMOS switch
+diffusion is in the N row, the PMOS one (2 fingers per switch) in the P row over Cbn, each symmetric about its centre.
 
 ![rx_lobuf](img/rx_layout/rx_lobuf.png)
 
@@ -84,22 +152,24 @@ by side, each symmetric about its centre.
 
 ![rx_lsq](img/rx_layout/rx_lsq.png)
 
-**Fig. 4.** rx_lsq, the Q-tap level shifter built by lsdiv.py's own `build()`: 40.5 × 61.7 µm, with every
+**Fig. 4.** rx_lsq, the Q-tap level shifter built by lsdiv.py's own `build()`: 40.5 × 55.0 µm (first pass 61.7 µm tall), with every
 level-shifter strip and track at lsdiv's coordinates.
 
 ![rx_bb](img/rx_layout/rx_bb.png)
 
-**Fig. 5.** rx_bb, one baseband arm: 145.8 × 144.2 µm, the largest cell. The 4 pF load caps (8 per arm) are nfet
+**Fig. 5.** rx_bb, one baseband arm: 130.7 × 144.2 µm (first pass 145.8 µm wide), the largest cell. Mvbsnk is the
+thin strip over stage 2 / 3. The 4 pF load caps (8 per arm) are nfet
 gate caps in their own band.
 
 ![rx_lim](img/rx_layout/rx_lim.png)
 
-**Fig. 6.** rx_lim, the AC-coupled limiting stage and the comparator: 127.8 × 67.4 µm. Extracted hysteresis
+**Fig. 6.** rx_lim, the AC-coupled limiting stage and the comparator: 115.7 × 59.3 µm (first pass 127.8 × 67.4 µm),
+with Mvbsnk as the thin strip over the comparator devices. Extracted hysteresis
 ±36.3 mV at tt.
 
 ![rx_bias](img/rx_layout/rx_bias.png)
 
-**Fig. 7.** rx_bias, the constant-gm reference: 62.6 × 35.7 µm. The extracted cell gives nb 0.978 V and 51 µA at
+**Fig. 7.** rx_bias, the constant-gm reference: 84.2 × 24.8 µm (first pass 62.6 × 35.7 µm). The extracted cell gives nb 0.978 V and 51 µA at
 power-up (schematic 0.979 V).
 
 ### rx_top
@@ -134,12 +204,13 @@ LVS and extraction don't see it.
 
 ![rx_top](img/rx_layout/rx_top.png)
 
-**Fig. 8.** rx_top, the whole receiver (fill hidden): 328.2 × 400.4 µm with the 12 µm margin, core utilisation
-71 %. Row A (LNA, mixer column, rx_lsq) at the bottom, the baseband arms in row B and the limiters in row C.
+**Fig. 8.** rx_top, the whole receiver (fill hidden): 299.4 × 376.0 µm with the 12 µm margin (first pass 328.2 ×
+400.4 µm), core utilisation 73 %. Row A (LNA with rx_bias over it, mixer column, rx_lsq with the decap over it) at
+the bottom, the baseband arms in row B and the limiters in row C.
 
 ## Area
 
-Table II. Area per cell against the device area (gate and resistor area) from `docs/rx_design.md`, open question 5.
+Table II. First pass: area per cell against the device area (gate and resistor area) from `docs/rx_design.md`, open question 5.
 
 | Cell | Size (µm) | Area (µm²) | Device area (µm²) |
 |---|---|---|---|

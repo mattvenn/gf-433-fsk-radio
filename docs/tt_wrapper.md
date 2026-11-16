@@ -9,14 +9,15 @@ and `lef/tt_um_mattvenn_gf433_vco.lef`. It passes the TT precheck and layout ver
 
 ![TT wrapper layout](img/tt_wrapper.png)
 
-**Fig. 1.** The wrapper, 711.20 × 325.36 µm. vco_top (407.7 × 70.8 µm, mirrored) sits at the bottom right, next to
+**Fig. 1.** The wrapper, 711.20 × 325.36 µm. vco_top (386.6 × 70.8 µm, mirrored) sits at the bottom right, next to
 the analog pads; the bit, ck and tie-low routes go up to the digital pins on the top edge.
 
 ## Floorplan
 - **Template:** `tt_analog_2x2.def` from tt-support-tools (`tech/gf180mcuD/def/analog/`). Every pin is a Metal4
   rectangle: ua[0…7] (3 × 1 µm) on the bottom edge, the digital pins (0.3 × 1 µm) on the top edge. The wrapper
   draws the boundary and every pin exactly as the template definition (DEF) file gives them.
-- **vco_top:** mirrored left to right, origin (602.94, 14.0) µm, bbox x 297.0 … 703.68, y 10.0 … 80.8 µm. The mirror
+- **vco_top:** mirrored left to right, origin (602.94, 14.0) µm, bbox x 296.0 … 682.56, y 10.0 … 80.8 µm (to x 703.68 until
+  the VDD_LS decap was redrawn on 2026-11-16). The mirror
   puts the reference's edge, with the vctrl and vbn pins, on the left, next to ua[1] (x 283.64 µm) and ua[0]
   (x 327.32 µm). The block cells are copied in unchanged.
 - **Analog routes:** vctrl goes from the macro edge on M2, down on M3 and under the macro (y 5 … 6 µm) to ua[0],
