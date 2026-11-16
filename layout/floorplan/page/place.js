@@ -242,6 +242,11 @@ const SPECS = [
     fixed: { xmac: { x: 428.3, y: 143, orient: 'R90' }, 'rx.lna': { x: 76.5, y: 3, orient: 'R90' } },
     movable: ALLMOV,
   },
+  {
+    id: 'BM2', name: "B - Matt's edit, cgm_ref against the ring", rx: 'cells', vco: 'parts', runs: 4, iters: 150000, fit: 'all',
+    seedFrom: 'seeds/BM.json',
+    movable: ['rx.lim_q', 'vco.ref', 'rx.bias', 'xvpd', 'xbits', 'vco.decap'],
+  },
 ];
 
 function current() {
@@ -337,6 +342,11 @@ const prev = fs.existsSync(file) ? JSON.parse(fs.readFileSync(file)).variants : 
 const out = [];
 out.push(only && only !== 'current' ? prev.find(q => q.id === 'current') : current());
 for (const spec of SPECS) {
+  if (spec.seedFrom) {
+    const sd = JSON.parse(fs.readFileSync(path.join(dir, spec.seedFrom)));
+    spec.est = sd.est; spec.pins = sd.pins; spec.base = spec.seedFrom; spec.fixed = {};
+    for (const [n, p] of Object.entries(sd.place)) if (!spec.movable.includes(n) && !FP.DBG.some(q => q[0] === n)) spec.fixed[n] = p;
+  }
   if (only && only !== spec.id) { const p = prev.find(q => q.id === spec.id); if (p) out.push(p); continue; }
   let best = null;
   for (let run = 0; run < (spec.runs || 4); run++) {
