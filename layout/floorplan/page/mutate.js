@@ -33,10 +33,11 @@ const MUT = [
     v.est = {}; v.place.xmac = { x: cx - mck.x, y: big[1] + big[3] + 10, orient: 'R0' };   // ck on its south edge
     v.place.xvco = { x: cx - vck.x, y: big[1] - 80, orient: 'R0' };                         // ck on its north edge
   }, 'ck over'],
+  ['vco_top split: cgm_ref moved 200 µm from the ring', 11, v => { v.place['vco.ref'].y += 150; v.place['vco.ref'].x -= 50; }],
 ];
 let bad = 0;
 for (const [what, rule, f, expect] of MUT) {
-  const base = pool.find(b => st(b, rule)[0] !== 'fail') || pool[0];
+  const base = pool.find(b => !['fail', '-'].includes(st(b, rule)[0])) || pool[0];
   const v = clone(base), [s0, v0] = st(base, rule);
   f(v);
   const [s1, v1, d1] = st(v, rule);

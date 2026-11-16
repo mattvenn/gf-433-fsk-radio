@@ -54,6 +54,21 @@
   // where vco_top's sub-blocks sit, in its own bbox frame (docs/top_layout.md "Floorplan"; vco_top.py)
   const VCO_ZONES = { decap_ls: [0, 0, 37.2, 70.8], lsdiv: [37.23, 33.06, 40.49, 36.7], ring: [77.72, 0, 70.09, 51.88], cgm_ref: [148.81, 1.6, 237.75, 69.2] };
   const VCO_A2 = { layer: 'Metal2', x: 89.89, y: 41.17, est: true };     // the ring's a2 node (ring_core_v3 label); no pin yet
+  // vco_top's parts, from vco_top.gds: ring_core at (77.72, 0) 70.09 x 51.875, lsdiv at (37.23, 33.055) 40.49 x 36.705,
+  // cgm_ref at (147.81, 1.6) 238.75 x 69.195, decap_ls at (0, 1.6) 78.62 x 59.955 (L-shaped: its left 37.2 um, and
+  // three short fingers under lsdiv, which stay with the core unit). Pins from the cells' own labels.
+  const VCO_PARTS = {
+    'vco.core': { cell: 'ring_core_v3 + lsdiv', label: 'ring + lsdiv', w: 110.58, h: 69.76, inVco: [37.23, 0],
+      zones: { lsdiv: [0, 33.055, 40.49, 36.705], ring: [40.49, 0, 70.09, 51.875] },
+      pins: { ck: { layer: 'Metal2', x: 0.15, y: 38.4 }, ls: { layer: 'Metal3', x: 20.98, y: 69.56 }, a2: { layer: 'Metal2', x: 52.66, y: 41.17, est: true },
+        vg: { layer: 'Metal3', x: 72.58, y: 0.3 }, bit2: { layer: 'Metal3', x: 84.07, y: 51.58 }, vbnf: { layer: 'Metal2', x: 110.38, y: 46.67 },
+        vctrl: { layer: 'Metal2', x: 110.38, y: 16.94 }, VDD: { layer: 'Metal2', x: 42.47, y: 48.36 }, VDD_LS: { layer: 'Metal2', x: 1.3, y: 46.37 } } },
+    'vco.ref': { cell: 'cgm_ref', label: 'cgm_ref (bias + 1 MΩ / 20 pF)', w: 238.75, h: 69.195, inVco: [147.81, 1.6],
+      pins: { vbnf: { layer: 'Metal2', x: 0.1, y: 45.065 }, vctrl_l: { layer: 'Metal2', x: 0.1, y: 15.335, est: true },
+        vctrl: { layer: 'Metal2', x: 238.65, y: 15.335 }, vbn: { layer: 'Metal2', x: 238.65, y: 48.605 }, VDD: { layer: 'Metal2', x: 116.24, y: 66.48 } } },
+    'vco.decap': { cell: 'decap_ls', label: 'VDD_LS decap 10 pF', w: 37.23, h: 59.955, inVco: [0, 1.6],
+      pins: { VDD_LS: { layer: 'Metal2', x: 18.6, y: 59.9, est: true } } },
+  };
   const MAC_RXEN = { layer: 'Metal3', x: 170, y: 256.7, est: true };      // tx_fine rx_en: not hardened yet (integration prep)
 
   function buildCatalog(data) {
@@ -61,6 +76,10 @@
     const real = (inst, cell, extra) => Object.assign({ inst, cell, w: C[cell].w, h: C[cell].h, pins: C[cell].pins, m4: C[cell].m4 || [] }, extra || {});
     cat.xvco = real('xvco', 'vco_top', { supply: 'VAPWR', group: 'vco', label: 'vco_top', zones: VCO_ZONES,
       pins: Object.assign({}, C.vco_top.pins, C.vco_top.pins.a2 ? {} : { a2: VCO_A2 }) });
+    // vco_top as its parts (the same layout, cut along its own sub-cells: vco_top.gds instance boxes). The ring and
+    // lsdiv stay one unit: their a0 pins abut with no wire (a0 is 5.83 fF in all). Own frames: lower-left = 0, 0.
+    for (const [n, p] of Object.entries(VCO_PARTS)) cat[n] = Object.assign({ inst: n, supply: 'VAPWR', group: 'vco', vco: 'parts', m4: [] }, p);
+    cat.xvco.vco = 'block';
     cat.xmdac = real('xmdac', 'mdac', { supply: 'VAPWR', group: 'fine', label: 'mdac' });
     cat.xvpd = real('xvpd', 'vctrl_pd', { supply: 'VAPWR', group: 'vco', label: 'vctrl_pd' });
     cat.xbits = { inst: 'xbits', cell: 'bits_inv', w: 20.16, h: 7.84, supply: 'VAPWR', group: 'vco', label: 'code inverters', glue: true,
@@ -83,7 +102,8 @@
     return cat;
   }
   const rxMode = v => (v && v.rx === 'cells' ? 'cells' : 'block');
-  const inMode = (c, v) => !c.rx || c.rx === rxMode(v);
+  const vcoMode = v => (v && v.vco === 'parts' ? 'parts' : 'block');
+  const inMode = (c, v) => (!c.rx || c.rx === rxMode(v)) && (!c.vco || c.vco === vcoMode(v));
 
   const MIM_FF = 0;                          // no MIM in this design (gf180mcuD here: no MIM layer used)
   const DECAP_FF = 2.4;                      // fF / um2 of decap tile: nfet_03v3 gate cap 4.07 fF/um2 (top_layout.md) at ~60 % fill
@@ -94,6 +114,11 @@
 
   // ---- nets: [name, class, from, to]; endpoints "inst.pin", "pad:<tile pin>", or "RX.<port>" (the receiver's port,
   // on rx_top or on the cell that has it, by the variant's receiver mode)
+  const VCO_PORT = { ls: 'vco.core.ls', a2: 'vco.core.a2', ck: 'vco.core.ck', vg: 'vco.core.vg', vbnf: 'vco.core.vbnf', bit2: 'vco.core.bit2',
+    vctrl: 'vco.ref.vctrl', vbn: 'vco.ref.vbn' };
+  // inside vco_top, only when it is placed as parts: the wires its abutments made unnecessary
+  const VCO_NETS = [['vbnf ref', 'ana', 'vco.ref.vbnf', 'vco.core.vbnf'], ['vctrl ring', 'ana', 'vco.ref.vctrl_l', 'vco.core.vctrl'],
+    ['VDD_LS decap', 'ana', 'vco.decap.VDD_LS', 'vco.core.VDD_LS']];
   const RX_PORT = { inp: 'rx.lna.inp', inn: 'rx.lna.inn', ls: 'rx.lobuf_i.in', aq: 'rx.lsq.aq', en: 'rx.bias.en', q_i: 'rx.lim_i.q', q_q: 'rx.lim_q.q' };
   const DACN = [];
   for (let i = 0; i < 31; i++) DACN.push([`dac_tn[${i}]`, 'fine', `xmac.dac_tn[${i}]`, `xmdac.ns${i + 1}`]);
@@ -102,17 +127,17 @@
   const NETS = [
     ['rx_inp', 'rfin', 'pad:ua[4]', 'RX.inp'], ['rx_inn', 'rfin', 'pad:ua[5]', 'RX.inn'],
     ['tx_out_n', 'tx', 'xtxd.out_n', 'pad:ua[2]'], ['tx_out_p', 'tx', 'xtxd.out_p', 'pad:ua[3]'],
-    ['vctrl', 'ana', 'pad:ua[0]', 'xvco.vctrl'], ['vctrl pd', 'ana', 'xvpd.a', 'xvco.vctrl'], ['vbn', 'ana', 'pad:ua[1]', 'xvco.vbn'],
-    ['ls rx', 'lo', 'xvco.ls', 'RX.ls'], ['ls tx', 'lo', 'xvco.ls', 'xtxd.ls'], ['a2', 'lo', 'xvco.a2', 'RX.aq'],
-    ['vg', 'ana', 'xmdac.vg', 'xvco.vg'], ['vbnf', 'ana', 'xvco.vbnf', 'xmdac.vbnf'],
-    ['ck', 'clk', 'xvco.ck', 'xmac.ck'],
+    ['vctrl', 'ana', 'pad:ua[0]', 'VCO.vctrl'], ['vctrl pd', 'ana', 'xvpd.a', 'VCO.vctrl'], ['vbn', 'ana', 'pad:ua[1]', 'VCO.vbn'],
+    ['ls rx', 'lo', 'VCO.ls', 'RX.ls'], ['ls tx', 'lo', 'VCO.ls', 'xtxd.ls'], ['a2', 'lo', 'VCO.a2', 'RX.aq'],
+    ['vg', 'ana', 'xmdac.vg', 'VCO.vg'], ['vbnf', 'ana', 'VCO.vbnf', 'xmdac.vbnf'],
+    ['ck', 'clk', 'VCO.ck', 'xmac.ck'],
     ['ck_o', 'clk', 'xmac.ck_o', 'pad:uo_out[0]'], ['div16', 'clk', 'xmac.div16', 'pad:uo_out[1]'],
     ['div64', 'clk', 'xmac.div64', 'pad:uo_out[2]'], ['div1024', 'clk', 'xmac.div1024', 'pad:uo_out[3]'],
     ['clk', 'dig', 'pad:clk', 'xmac.clk'], ['rst_n', 'dig', 'pad:rst_n', 'xmac.rst_n'],
     ['sclk', 'dig', 'pad:uio_in[0]', 'xmac.sclk'], ['mosi', 'dig', 'pad:uio_in[1]', 'xmac.mosi'], ['cs_n', 'dig', 'pad:uio_in[2]', 'xmac.cs_n'],
     ['miso', 'dig', 'xmac.miso', 'pad:uio_out[3]'], ['fsk', 'dig', 'pad:ui_in[7]', 'xmac.fsk'],
     ['rx_en', 'en', 'xmac.rx_en', 'RX.en'],
-    ['code', 'en', 'pad:ui_in[2]', 'xbits.in'], ['bits', 'en', 'xbits.out', 'xvco.bit2'],
+    ['code', 'en', 'pad:ui_in[2]', 'xbits.in'], ['bits', 'en', 'xbits.out', 'VCO.bit2'],
     ['en_p', 'en', 'pad:ui_in[5]', 'xtxd.en_p'], ['en_n', 'en', 'pad:ui_in[6]', 'xtxd.en_n'],
     ['q_i', 'rxout', 'RX.q_i', 'pad:uo_out[4]'], ['q_q', 'rxout', 'RX.q_q', 'pad:uo_out[5]'],
   ].concat(DACN);
@@ -146,6 +171,7 @@
     r4: 80,                // 4. tx_drv -> ua[2] / ua[3] <=
     r7: 200, r7b: 60,      // 7. DAC line (longest) <=, mdac.vg -> vco_top.vg <=
     r8: 40,                // 8. macro top <-> tile top <=
+    r11: 40, r11d: 50,     // 11. (vco_top split) cgm_ref -> ring vbnf / vctrl <=, and their distance from aggressor wires >=
     lsq: 43.5,             // um: rx_top's lsq wire (the Q LO level shifter output, rx_layout.md), used in block mode
   };
 
@@ -186,7 +212,7 @@
       const p = (v.place || {})[n];
       if (!p || !inMode(c, v)) continue;
       let w = c.w, h = c.h;
-      if (c.reshape && v.est && v.est[n]) { w = v.est[n].w; h = (v.est[n].area || c.w * c.h) / w; }
+      if (!c.glue && v.est && v.est[n]) { w = v.est[n].w; h = (v.est[n].area || c.w * c.h) / w; }   // reshaped (a re-layout / re-harden)
       const pl = { x: p.x, y: p.y, orient: p.orient || 'R0' };
       const [pw, ph] = placedSize(pl.orient, w, h);
       const rect = [pl.x, pl.y, pw, ph];
@@ -199,19 +225,23 @@
       const m4 = (c.m4 || []).map(r => c.reshape ? [0, 0, w, h] : r).map(r => mapRect(pl, w, h, r));
       const straps = (c.straps || []).map(s => ({ net: s.net === 'VDD' ? 'VDPWR' : 'VGND', r: mapRect(pl, w, h, [s.x * sx, 0, s.w, h]) }));
       const zones = {};
-      for (const [zn, z] of Object.entries(c.zones || {})) zones[zn] = mapRect(pl, w, h, z);
-      inst[n] = { name: n, cat: c, pl, w, h, rect, pins, m4, straps, zones, supply: c.supply,
+      for (const [zn, z] of Object.entries(c.zones || {})) zones[zn] = mapRect(pl, w, h, [z[0] * sx, z[1] * sy, z[2] * sx, z[3] * sy]);
+      const reshaped = Math.abs(w - c.w) > 1e-6 || Math.abs(h - c.h) > 1e-6;
+      inst[n] = { name: n, cat: c, pl, w, h, rect, pins, m4, straps, zones, supply: c.supply, reshaped,
         halo: c.halo ? [rect[0] - c.halo, rect[1] - c.halo, rect[2] + 2 * c.halo, rect[3] + 2 * c.halo] : null };
     }
     const decaps = [];
     for (const [n, d] of Object.entries(DECAPS)) ((v.decaps || {})[n] || []).forEach((r, i) =>
       decaps.push({ name: `${n}.${i + 1}`, base: n, idx: i, def: d, rect: [r.x, r.y, r.w, r.h] }));
     const reserved = (v.reserved || []).map((r, i) => ({ name: `reserved.${i + 1}`, idx: i, label: r.label || 'reserved', rect: [r.x, r.y, r.w, r.h] }));
-    return { inst, decaps, reserved, mode: rxMode(v) };
+    return { inst, decaps, reserved, mode: rxMode(v), vmode: vcoMode(v) };
   }
 
   const isTopPad = (tile, n) => tile.pins[n] && tile.pins[n].y0 > 1;
-  function resolveRef(ref, mode) { return ref.startsWith('RX.') ? (mode === 'cells' ? RX_PORT[ref.slice(3)] : 'xrx.' + ref.slice(3)) : ref; }
+  function resolveRef(ref, mode, vmode) {
+    if (ref.startsWith('VCO.')) return vmode === 'parts' ? VCO_PORT[ref.slice(4)] : 'xvco.' + ref.slice(4);
+    return ref.startsWith('RX.') ? (mode === 'cells' ? RX_PORT[ref.slice(3)] : 'xrx.' + ref.slice(3)) : ref;
+  }
   function pinAt(tile, R, ref) {
     if (ref.startsWith('pad:')) {
       const p = tile.pins[ref.slice(4)];
@@ -224,12 +254,12 @@
     return p ? p.at : null;
   }
   const ownerOf = ref => ref.startsWith('pad:') ? null : ref.slice(0, ref.lastIndexOf('.'));
-  function netList(mode) { return mode === 'cells' ? NETS.concat(RX_NETS) : NETS; }
+  function netList(mode, vmode) { return NETS.concat(mode === 'cells' ? RX_NETS : [], vmode === 'parts' ? VCO_NETS : []); }
 
   function routeNets(tile, R) {
     const out = [];
-    for (const [name, cls, a0, b0] of netList(R.mode)) {
-      const a = resolveRef(a0, R.mode), b = resolveRef(b0, R.mode);
+    for (const [name, cls, a0, b0] of netList(R.mode, R.vmode)) {
+      const a = resolveRef(a0, R.mode, R.vmode), b = resolveRef(b0, R.mode, R.vmode);
       const pa = pinAt(tile, R, a), pb = pinAt(tile, R, b);
       if (!pa || !pb) { out.push({ name, cls, a, b, missing: true }); continue; }
       const ownA = ownerOf(a), ownB = ownerOf(b);
@@ -290,7 +320,7 @@
     const lvl = (x, pass, warn, higher) => higher ? (x >= pass ? 'pass' : x >= warn ? 'warn' : 'fail') : (x <= pass ? 'pass' : x <= warn ? 'warn' : 'fail');
     const chanSh = channelShapes(tile, nets, s);
     const missing = Object.entries(cat).filter(([n, c]) => inMode(c, v) && !I[n]).map(([n]) => n);
-    const M = I.xmac, V = I.xvco;
+    const M = I.xmac, V = I.xvco || I['vco.core'];
     const rxInst = Object.values(I).filter(i => i.cat.group === 'rx');
     const lna = mode === 'cells' ? (I['rx.lna'] && I['rx.lna'].rect) : (I.xrx && I.xrx.zones.lna);
     const estNote = list => { const e = list.filter(n => ok(n) && n.est).map(n => n.name); return e.length ? ` Estimated pin position: ${e.join(', ')}.` : ''; };
@@ -454,6 +484,19 @@
         issues.length ? issues.join('; ') + '.' : `${(v.straps || []).length} Metal4 stripe(s) (y ${y0}–${y1}), every lane clear; over the macro only on its own straps.` + (miss.length ? ` No stripe for ${miss.join(', ')}.` : ''));
     }
 
+    // 11. vco_top split: its bias wires (vbnf: the filtered DAC-gate bias; vctrl: the fine-tune node) are short and
+    // away from the macro and the clocks. Inside vco_top they are abutments, with no wire.
+    if (R.vmode === 'parts') {
+      const vb = netBy('vbnf ref'), vc = netBy('vctrl ring');
+      if (ok(vb) && ok(vc)) {
+        const m = Math.max(vb.len, vc.len), aggr = nets.filter(n => ok(n) && AGGR.includes(n.cls));
+        const d = Math.min(minGapShapes(segsOf([vb, vc]), segsOf(aggr)), M ? minGapShapes(segsOf([vb, vc]), [M.halo]) : Infinity);
+        const st = lvl(m, s.r11, 3 * s.r11);
+        add(11, 'VCO bias wires (vco_top split)', st === 'pass' && d < s.r11d ? 'warn' : st, `${fmt(m)} µm`,
+          `cgm_ref → ring: vbnf ${fmt(vb.len)} µm, vctrl ${fmt(vc.len)} µm (want ≤ ${s.r11}); closest macro / clock / DAC wire ${fmt(d)} µm (want ≥ ${s.r11d}). Inside vco_top both are abutments with no wire; noise on them is FM.` + estNote([vc]));
+      } else add(11, 'VCO bias wires (vco_top split)', 'info', '-', 'Place the ring + lsdiv unit and cgm_ref.');
+    }
+
     // decap (info: no target set yet)
     for (const [n, d] of Object.entries(DECAPS)) {
       const ds = R.decaps.filter(x => x.base === n), a = ds.reduce((t, x) => t + area(x.rect), 0);
@@ -469,6 +512,61 @@
     return { checks: res, nets, R, area: areaInfo, settings: s, channelShapes: chanSh, crossings: cross };
   }
 
+  // Pin fitting (ported from the OOK page's pinfit.js): move a block's signal pins to the point of its edge facing
+  // what they connect to, spread them >= 1 um apart along each edge, and order each edge like the pins at the other
+  // end, so the flylines don't cross. Returns a new v.pins for the named blocks (others keep theirs). Floorplanning
+  // only: a moved pin needs the block re-laid out (the macro: a new pin_order.cfg).
+  function fitPins(data, cat, v, names) {
+    const tile = data.tile, out = JSON.parse(JSON.stringify(v.pins || {})), vv = Object.assign({}, v, { pins: out });
+    const R0 = resolve(cat, v), sel = new Set(names.filter(n => R0.inst[n]));
+    for (const n of sel) out[n] = {};
+    const split = ref => { const i = ref.lastIndexOf('.'); return [ref.slice(0, i), ref.slice(i + 1)]; };
+    const peers = {};
+    for (const [, , a0, b0] of netList(R0.mode, R0.vmode)) {
+      const a = resolveRef(a0, R0.mode, R0.vmode), b = resolveRef(b0, R0.mode, R0.vmode);
+      (peers[a] = peers[a] || []).push(b); (peers[b] = peers[b] || []).push(a);
+    }
+    const pos = (R, ref) => { if (ref.startsWith('pad:')) { const p = tile.pins[ref.slice(4)]; return p ? [(p.x0 + p.x1) / 2, p.y0 < 1 ? 0 : tile.h] : null; }
+      const [n, p] = split(ref), i = R.inst[n]; return i && i.pins[p] ? i.pins[p].at : null; };
+    const toLocal = (ins, pt) => {
+      const o = mapPt(ins.pl, ins.w, ins.h, 0, 0), ex = mapPt(ins.pl, ins.w, ins.h, 1, 0), ey = mapPt(ins.pl, ins.w, ins.h, 0, 1);
+      const a = ex[0] - o[0], b = ey[0] - o[0], c = ex[1] - o[1], d = ey[1] - o[1], det = a * d - b * c, dx = pt[0] - o[0], dy = pt[1] - o[1];
+      return [(d * dx - b * dy) / det, (-c * dx + a * dy) / det];
+    };
+    const refs = Object.keys(peers).filter(r => !r.startsWith('pad:') && sel.has(split(r)[0]) && !PWR_PIN.test(split(r)[1]));
+    for (let pass = 0; pass < 4; pass++) for (const ref of refs) {
+      const R = resolve(cat, vv), [n, p] = split(ref), ins = R.inst[n];
+      const ts = peers[ref].map(q => pos(R, q)).filter(Boolean);
+      if (!ts.length) continue;
+      const t = [ts.reduce((s, q) => s + q[0], 0) / ts.length, ts.reduce((s, q) => s + q[1], 0) / ts.length];
+      const [lx, ly] = toLocal(ins, t), w = ins.w, h = ins.h, in_ = 0.25, cm = 1.0;
+      const ox = lx < 0 ? -lx : lx > w ? lx - w : 0, oy = ly < 0 ? -ly : ly > h ? ly - h : 0;
+      let x = Math.min(w - cm, Math.max(cm, lx)), y = Math.min(h - cm, Math.max(cm, ly));
+      if (oy > 0 && oy >= ox) y = ly < 0 ? in_ : h - in_;
+      else if (ox > 0) x = lx < 0 ? in_ : w - in_;
+      else { const m = Math.min(lx, w - lx, ly, h - ly); if (m === lx) x = in_; else if (m === w - lx) x = w - in_; else if (m === ly) y = in_; else y = h - in_; }
+      out[n][p] = { x, y };
+    }
+    const R = resolve(cat, vv);
+    for (const n of sel) {
+      const ins = R.inst[n], ps = out[n], groups = {};
+      for (const [p, q] of Object.entries(ps)) { const e = q.y <= 0.3 ? 'S' : q.y >= ins.h - 0.3 ? 'N' : q.x <= 0.3 ? 'W' : 'E'; (groups[e] = groups[e] || []).push(p); }
+      for (const [e, arr] of Object.entries(groups)) {
+        const k = e === 'W' || e === 'E' ? 'y' : 'x', ki = k === 'x' ? 0 : 1, L = k === 'x' ? ins.w : ins.h;
+        // order along the edge like the far ends, then spread >= 1 um apart and keep inside the edge
+        const key = p => { const ts = (peers[`${n}.${p}`] || []).map(q => pos(R, q)).filter(Boolean).map(q => toLocal(ins, q)[ki]); return ts.length ? ts.reduce((a, b) => a + b, 0) / ts.length : ps[p][k]; };
+        const slots = arr.map(p => ps[p][k]).sort((a, b) => a - b), order = arr.slice().sort((a, b) => key(a) - key(b));
+        order.forEach((p, i) => { ps[p][k] = slots[i]; });
+        for (let i = 1; i < order.length; i++) if (ps[order[i]][k] < ps[order[i - 1]][k] + 1) ps[order[i]][k] = ps[order[i - 1]][k] + 1;
+        const over = order.length ? ps[order[order.length - 1]][k] - (L - 1) : 0;
+        if (over > 0) for (const p of order) ps[p][k] -= over;
+        for (const p of order) { ps[p].x = +ps[p].x.toFixed(2); ps[p].y = +ps[p].y.toFixed(2); }
+      }
+    }
+    return out;
+  }
+  const PWR_PIN = /^(VDD|VSS|VDD_LS|VAPWR|VDPWR|VGND)$/;
+
   // floorplan.json
   function exportJSON(data, cat, v, settings) {
     const ev = evaluate(data, cat, v, settings), R = ev.R, blocks = [];
@@ -477,12 +575,12 @@
       const b = { inst: i.name, cell: i.cat.cell, x: +i.rect[0].toFixed(3), y: +i.rect[1].toFixed(3), orient: i.pl.orient,
         rot: k * 90, mirror: m, w: +i.rect[2].toFixed(3), h: +i.rect[3].toFixed(3), supply: i.supply };
       if (i.cat.glue) b.note = i.cat.note;
-      if (i.cat.reshape && (Math.abs(i.w - i.cat.w) > 1e-6 || Math.abs(i.h - i.cat.h) > 1e-6)) b.note = `re-harden at ${i.w.toFixed(2)} x ${i.h.toFixed(2)} um (hardened ${i.cat.w} x ${i.cat.h})`;
+      if (i.reshaped) { b.own_w = +i.w.toFixed(3); b.own_h = +i.h.toFixed(3); b.note = `${i.cat.reshape ? 're-harden' : 're-layout'} at ${i.w.toFixed(2)} x ${i.h.toFixed(2)} um (now ${i.cat.w} x ${i.cat.h})`; }
       blocks.push(b);
     }
     for (const d of R.decaps) blocks.push({ inst: d.base, part: d.idx + 1, cell: d.def.cell, x: d.rect[0], y: d.rect[1], w: d.rect[2], h: d.rect[3], orient: 'R0', rot: 0, mirror: false, estimate: true, supply: d.def.net });
     return {
-      variant: v.name, note: v.note || '', tile: { w: data.tile.w, h: data.tile.h, source: data.tile.source }, rx: R.mode, blocks,
+      variant: v.name, note: v.note || '', tile: { w: data.tile.w, h: data.tile.h, source: data.tile.source }, rx: R.mode, vco: R.vmode, blocks,
       reserved: (v.reserved || []).map(r => Object.assign({}, r)),
       pins_moved: Object.fromEntries(Object.entries(v.pins || {}).filter(([, ps]) => Object.keys(ps).length).map(([i, ps]) => [i, Object.fromEntries(Object.entries(ps).map(([p, q]) => [p, [+q.x.toFixed(2), +q.y.toFixed(2)]]))])),
       straps: (v.straps || []).map(s => ({ net: s.net, x: s.x, w: s.w })),
@@ -491,7 +589,7 @@
     };
   }
   function importJSON(cat, j) {
-    const v = { name: j.variant || 'Imported', note: j.note || '', rx: j.rx === 'cells' ? 'cells' : 'block', place: {}, decaps: {}, est: {},
+    const v = { name: j.variant || 'Imported', note: j.note || '', rx: j.rx === 'cells' ? 'cells' : 'block', vco: j.vco === 'parts' ? 'parts' : 'block', place: {}, decaps: {}, est: {},
       straps: (j.straps || []).map(s => ({ net: s.net, x: +s.x, w: +s.w })), reserved: (j.reserved || []).map(r => Object.assign({}, r)) };
     if (j.pins_moved) { v.pins = {}; for (const [i, ps] of Object.entries(j.pins_moved)) { if (!cat[i]) continue; v.pins[i] = {}; for (const [p, xy] of Object.entries(ps)) v.pins[i][p] = { x: +xy[0], y: +xy[1] }; } }
     for (const b of j.blocks || []) {
@@ -499,7 +597,7 @@
       const n = b.inst, c = cat[n];
       if (!c) continue;
       v.place[n] = { x: +b.x, y: +b.y, orient: ORIENTS[b.orient] ? b.orient : 'R0' };
-      if (c.reshape && b.w && b.h) {
+      if (!c.glue && b.w && b.h) {
         const [w, h] = ORIENTS[v.place[n].orient][0] % 2 ? [+b.h, +b.w] : [+b.w, +b.h];
         if (Math.abs(w - c.w) > 1e-3 || Math.abs(h - c.h) > 1e-3) { v.est[n] = { w }; if (Math.abs(w * h - c.w * c.h) > 1) v.est[n].area = w * h; }
       }
@@ -508,5 +606,5 @@
   }
 
   root.FP = { ORIENTS, placedSize, mapPt, mapRect, compose, buildCatalog, DECAPS, DECAP_FF, NETS, RX_NETS, NET_CLASSES, DEFAULT_SETTINGS,
-    resolve, routeNets, evaluate, exportJSON, importJSON, rectGap, overlap, channelShapes, rxMode, inMode, resolveRef, RX_CELLS };
+    resolve, routeNets, evaluate, exportJSON, importJSON, rectGap, overlap, channelShapes, rxMode, vcoMode, inMode, resolveRef, RX_CELLS, VCO_NETS, fitPins };
 })(typeof window !== 'undefined' ? window : globalThis);

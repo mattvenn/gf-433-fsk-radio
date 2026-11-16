@@ -198,7 +198,7 @@ function parked(v) {
 }
 function estWH(v, n) {             // a block's own (unrotated) size, after a macro reshape
   const c = CAT[n], e = v.est && v.est[n];
-  if (!c.reshape || !e) return [c.w, c.h];
+  if (c.glue || !e) return [c.w, c.h];
   return [e.w, (e.area || c.w * c.h) / e.w];
 }
 function viewVariant(v) {           // the variant with parked blocks filled in, for drawing only
@@ -402,7 +402,7 @@ function draw() {
     const g = [`<g data-inst="${ins.name}" style="cursor:move;color:${col}" opacity="${isParked ? .55 : 1}">`];
     if (ins.halo) g.push(rectEl(ins.halo, `fill="none" stroke="${col}" stroke-dasharray="${2 * scale} ${2 * scale}" stroke-width="${0.8 * scale}"`));
     g.push(rectEl(ins.rect, `fill="${col}" fill-opacity="${c.group === 'dig' ? .1 : .15}" stroke="${sel ? 'var(--sel)' : col}" stroke-width="${(sel ? 2 : 1) * scale}"`));
-    if (c.glue || (c.reshape && (Math.abs(ins.w - c.w) > 1e-6))) g.push(rectEl(ins.rect, 'fill="url(#hatchE)"'));
+    if (c.glue || ins.reshaped) g.push(rectEl(ins.rect, 'fill="url(#hatchE)"'));
     if (S.layers.zones) for (const [zn, z] of Object.entries(ins.zones)) {
       g.push(rectEl(z, `fill="none" stroke="${col}" stroke-opacity=".7" stroke-dasharray="${1.2 * scale} ${1.2 * scale}" stroke-width="${0.6 * scale}"`));
       if (S.layers.labels && z[2] > 18 && z[3] > 6) g.push(text(z[0] + 1, z[1] + 1.2, zn, Math.min(4, Math.max(2, z[3] / 6)), `fill="${col}" font-family="var(--mono)"`));
@@ -424,6 +424,7 @@ function draw() {
       const fs = Math.max(2.4, Math.min(9, Math.min(w / (nm.length * 0.62 + 1), h / 2.6)));
       g.push(text(x + w / 2, y + h / 2 + fs * 0.1, nm, fs, `text-anchor="middle" fill="var(--ink)" font-weight="600"`));
       if (h > fs * 2.4) g.push(text(x + w / 2, y + h / 2 - fs * 0.95, `${ins.name} · ${c.cell} · ${ins.pl.orient} · ${ins.supply}`, fs * 0.5, `text-anchor="middle" fill="var(--muted)" font-family="var(--mono)"`));
+      if (ins.reshaped && !c.reshape && h > fs * 3.4) g.push(text(x + w / 2, y + h / 2 - fs * 1.9, `${f1(ins.w)} × ${f1(ins.h)}: needs a re-layout`, Math.min(3.4, fs * 0.5), 'text-anchor="middle" fill="var(--muted)" font-family="var(--mono)"'));
       if (c.reshape) g.push(text(x + w / 2, y + h / 2 - fs * 1.9, (Math.abs(ins.w - c.w) > 1e-6 ? `${f1(ins.w)} × ${f1(ins.h)}: needs a re-harden` : `as hardened, ${c.w} × ${c.h}`) + ' · rx_en pin estimated', 3.4, 'text-anchor="middle" fill="var(--muted)" font-family="var(--mono)"'));
     }
     g.push('</g>');
@@ -504,7 +505,7 @@ function drawDiagram() {
     const pad = id.startsWith('pad:'), c = CAT[id];
     const col = pad ? 'var(--ink)' : SUPPLY_COLOR[c ? c.supply : ''] || 'var(--dig)';
     const placed = !pad && cur() && cur().place && (cur().place[id] || (c && c.rx === 'cells' && mode === 'block' && cur().place.xrx));
-    o.push(`<g ${pad ? '' : `data-dinst="${mode === 'block' && c && c.rx === 'cells' ? 'xrx' : id}"`}><title>${esc(pad ? id.slice(4) : id + ' (' + name + ')' + (placed ? '' : ' — not placed in this variant'))}</title>`);
+    o.push(`<g ${pad ? '' : `data-dinst="${mode === 'block' && c && c.rx === 'cells' ? 'xrx' : id === 'xvco' && cur() && FP.vcoMode(cur()) === 'parts' ? 'vco.core' : id}"`}><title>${esc(pad ? id.slice(4) : id + ' (' + name + ')' + (placed ? '' : ' — not placed in this variant'))}</title>`);
     o.push(`<rect class="blk" x="${x}" y="${y}" width="${w}" height="${h}" rx="${pad ? 0 : 3}" fill="${col}" fill-opacity="${pad ? .9 : .12}" stroke="${col}" stroke-width="1.4" ${placed || pad ? '' : 'stroke-dasharray="4 3"'}/>`);
     if (pad) o.push(`<text x="${x + w / 2}" y="${y + 15}" font-size="10" text-anchor="middle" fill="var(--die)" font-family="var(--mono)">${esc(name)}</text><text x="${x + w / 2}" y="${y - 4}" font-size="9" text-anchor="middle" fill="var(--muted)" font-family="var(--mono)">${esc(sub)}</text>`);
     else if (id === 'xmac') o.push(`<text x="${x + w / 2}" y="${y + h / 2}" font-size="14" font-weight="600" text-anchor="middle" fill="var(--ink)" transform="rotate(-90 ${x + w / 2} ${y + h / 2})">tx_fine (digital macro, 25 MHz + ck domain) · VDPWR</text>`);
@@ -571,11 +572,16 @@ function renderVariantBox() {
   const who = v.updatedBy ? (v.updatedBy === S.uid ? 'you' : (S.names[v.updatedBy] || 'someone')) : '';
   el.innerHTML = `<h2>${esc(v.name)} <span class="meta">${v.updatedAt ? new Date(v.updatedAt).toLocaleString() : ''}${who ? ' · ' + esc(who) : ''}</span></h2>
     <div class="row"><span class="sync">receiver as</span><div class="seg" role="group" aria-label="Receiver"><button data-rx="block" aria-pressed="${FP.rxMode(v) === 'block'}">rx_top (one block)</button><button data-rx="cells" aria-pressed="${FP.rxMode(v) === 'cells'}">its 12 cells</button></div></div>
+    <div class="row"><span class="sync">vco_top as</span><div class="seg" role="group" aria-label="vco_top"><button data-vco="block" aria-pressed="${FP.vcoMode(v) === 'block'}">one block</button><button data-vco="parts" aria-pressed="${FP.vcoMode(v) === 'parts'}">ring + lsdiv · cgm_ref · decap</button></div></div>
+    <div class="row edit-only"><button class="btn" id="bFitAll" title="Move every placed block's signal pins to the edge facing what they connect to">Fit all pins to this floorplan</button><button class="btn" id="bPinsAll">Put all pins back</button></div>
     <div class="note${S.noteOpen ? ' open' : ''}" id="noteView">${esc(v.note || '')}</div>
     <div class="row"><button class="linkbtn" id="noteMore">${S.noteOpen ? 'less' : 'more'}</button>
     <details class="edit-only"><summary>Edit the note</summary><textarea id="noteEd" rows="6">${esc(v.note || '')}</textarea></details></div>`;
   $('#noteMore').onclick = () => { S.noteOpen = !S.noteOpen; renderVariantBox(); };
   el.querySelectorAll('[data-rx]').forEach(b => b.onclick = () => { if (S.canWrite) setRxMode(v, b.dataset.rx); });
+  el.querySelectorAll('[data-vco]').forEach(b => b.onclick = () => { if (S.canWrite) setVcoMode(v, b.dataset.vco); });
+  const fa = $('#bFitAll'); if (fa) fa.onclick = () => { const R0 = FP.resolve(CAT, v); v.pins = FP.fitPins(DATA, CAT, v, Object.keys(R0.inst)); touch(); };
+  const pa = $('#bPinsAll'); if (pa) pa.onclick = () => { v.pins = {}; touch(); };
   const ne = $('#noteEd'); if (ne) ne.oninput = () => { v.note = ne.value; $('#noteView').textContent = ne.value; touchQuiet(); };
 }
 let quietT = null;
@@ -587,6 +593,21 @@ function setRxMode(v, mode) {
   const p = v.place.xrx;
   if (mode === 'cells' && p && p.orient === 'R0') {
     for (const [n, c] of Object.entries(CAT)) if (c.rx === 'cells' && !v.place[n] && c.inRxTop) v.place[n] = { x: +(p.x + c.inRxTop[0]).toFixed(3), y: +(p.y + c.inRxTop[1]).toFixed(3), orient: 'R0' };
+  }
+  S.sel = null; touch();
+}
+// Switch vco_top between one block and its parts. Parts not yet placed start where vco_top has them, in
+// vco_top's orientation; vco_top keeps its own placement while the parts are in use.
+function setVcoMode(v, mode) {
+  if (FP.vcoMode(v) === mode) return;
+  v.vco = mode;
+  const p = v.place.xvco, c0 = CAT.xvco;
+  if (mode === 'parts' && p) {
+    const pl = { x: p.x, y: p.y, orient: p.orient || 'R0' };
+    for (const [n, c] of Object.entries(CAT)) if (c.vco === 'parts' && !v.place[n] && c.inVco) {
+      const r = FP.mapRect(pl, c0.w, c0.h, [c.inVco[0], c.inVco[1], c.w, c.h]);
+      v.place[n] = { x: +r[0].toFixed(3), y: +r[1].toFixed(3), orient: pl.orient };
+    }
   }
   S.sel = null; touch();
 }
@@ -616,20 +637,21 @@ function renderSel() {
     el.innerHTML = `<h2>${esc(c.label || n)} <span class="meta">${esc(n)} · ${esc(c.cell)} · ${esc(c.supply || '')}</span></h2>
       <div class="row"><label class="f">x<input type="number" step="0.5" id="sx" value="${f1(p.x)}"></label><label class="f">y<input type="number" step="0.5" id="sy" value="${f1(p.y)}"></label></div>
       <div class="orients edit-only">${Object.keys(FP.ORIENTS).map(o => `<button class="btn" data-or="${o}" aria-pressed="${p.orient === o}">${o}</button>`).join('')}</div>
-      ${c.reshape ? `<label class="f">width (height follows, at the area below)<input type="range" id="mwR" min="${Math.ceil(A / 318)}" max="685" step="0.5" value="${f1(ew)}"></label>
+      ${!c.glue ? `<label class="f">width (height follows, at the area below)<input type="range" id="mwR" min="${Math.max(4, Math.ceil(A / 318))}" max="${Math.min(685, Math.floor(A / 4))}" step="0.5" value="${f1(ew)}"></label>
       <div class="row edit-only"><label class="f">w<input type="number" step="0.5" id="mw" value="${f1(ew)}"></label><label class="f">h<input type="number" id="mh" value="${(A / ew).toFixed(2)}" disabled></label>
-      <label class="f">area, µm²<input type="number" step="500" id="mA" value="${Math.round(A)}"></label><span class="sync">${A >= A0 ? '+' : ''}${(100 * (A / A0 - 1)).toFixed(1)} % vs hardened</span></div>
+      <label class="f">area, µm²<input type="number" step="500" id="mA" value="${Math.round(A)}"></label><span class="sync">${A >= A0 ? '+' : ''}${(100 * (A / A0 - 1)).toFixed(1)} % vs ${c.reshape ? 'hardened' : 'the GDS'}</span></div>
       <div class="row edit-only"><button class="btn" id="mReset">Back to ${c.w} × ${c.h}</button></div>` : ''}
-      <dl class="kv"><dt>placed size</dt><dd>${ins ? `${f1(ins.rect[2])} × ${f1(ins.rect[3])} µm` : '-'}</dd><dt>area</dt><dd>${f1(c.reshape ? A : c.w * c.h)} µm²</dd>
-      <dt>status</dt><dd>${c.glue ? 'standard cells, outline from tt_wrapper.py (hatched)' : c.reshape && Math.abs(ew - c.w) > 1e-6 ? 'reshaped: needs a re-harden (hatched)' : p.parked ? 'parked, not placed' : 'GDS outline'}</dd>
+      <dl class="kv"><dt>placed size</dt><dd>${ins ? `${f1(ins.rect[2])} × ${f1(ins.rect[3])} µm` : '-'}</dd><dt>area</dt><dd>${f1(c.glue ? c.w * c.h : A)} µm²</dd>
+      <dt>status</dt><dd>${c.glue ? 'standard cells, outline from tt_wrapper.py (hatched)' : ins && ins.reshaped ? `reshaped: needs a ${c.reshape ? 're-harden' : 're-layout'} (hatched)` : p.parked ? 'parked, not placed' : c.inVco ? 'part of vco_top (its GDS outline)' : 'GDS outline'}</dd>
+      ${ins && Object.values(ins.pins).some(q => q.moved) ? `<dt>pins moved</dt><dd>${esc(Object.entries(ins.pins).filter(([, q]) => q.moved).map(([k]) => k).join(', '))} (orange rings): ${c.reshape ? 'a new pin_order.cfg' : 'a re-layout'}</dd>` : ''}
       ${ins && Object.values(ins.pins).some(q => q.est) ? `<dt>estimated pins</dt><dd>${esc(Object.entries(ins.pins).filter(([, q]) => q.est).map(([k]) => k).join(', '))} (orange rings)</dd>` : ''}
       ${c.inRxTop ? `<dt>in rx_top</dt><dd>at (${f1(c.inRxTop[0])}, ${f1(c.inRxTop[1])})</dd>` : ''}</dl>
-      ${p.parked ? '' : `<div class="row edit-only"><button class="btn" id="bPark">Park it (unplace)</button></div>`}`;
+      ${p.parked ? '' : `<div class="row edit-only"><button class="btn" id="bFit">Fit its pins to this floorplan</button>${ins && Object.values(ins.pins).some(q => q.moved) ? '<button class="btn" id="bPinReset">Put its pins back</button>' : ''}<button class="btn" id="bPark">Park it (unplace)</button></div>`}`;
     const setXY = () => { const x = +$('#sx').value, y = +$('#sy').value; if (isFinite(x) && isFinite(y)) { v.place[n] = Object.assign({}, p, { x, y }); delete v.place[n].parked; touch(); } };
     $('#sx').onchange = setXY; $('#sy').onchange = setXY;
-    if (c.reshape) {
-      const setWA = (w, A, live) => {   // keep the top-right corner while the macro changes shape
-        A = Math.min(150000, Math.max(20000, +A)); w = Math.min(685, Math.max(Math.ceil(A / 318), snap(+w)));
+    if (!c.glue) {
+      const setWA = (w, A, live) => {   // keep the top-right corner while the block changes shape (moved pins stay in its frame)
+        A = Math.min(150000, Math.max(50, +A)); w = Math.min(685, Math.floor(A / 4), Math.max(4, Math.ceil(A / 318), snap(+w)));
         if (!isFinite(w) || !isFinite(A)) return;
         const o = viewVariant(v).place[n], [ow, oh] = estWH(v, n);
         const [pw0, ph0] = FP.placedSize(o.orient, ow, oh), [pw1, ph1] = FP.placedSize(o.orient, w, A / w);
@@ -648,6 +670,8 @@ function renderSel() {
     }
     el.querySelectorAll('[data-or]').forEach(b => b.onclick = () => setOrient(n, b.dataset.or));
     const bp = $('#bPark'); if (bp) bp.onclick = () => { delete v.place[n]; S.sel = null; touch(); };
+    const bf = $('#bFit'); if (bf) bf.onclick = () => { v.pins = FP.fitPins(DATA, CAT, v, [n]); touch(); };
+    const br = $('#bPinReset'); if (br) br.onclick = () => { if (v.pins) delete v.pins[n]; touch(); };
   } else if (S.sel.kind === 'decap') {
     const [base, i] = S.sel.id.split('.'), d = decapRef(v, S.sel.id), res = base === 'reserved';
     if (!d) { S.sel = null; return renderSel(); }
@@ -685,6 +709,7 @@ const WHY = {
   'Macro near the top edge': 'The TT digital pins are on the top edge (x 15–321); the macro talks to them (clk, rst_n, SPI, fsk, ck_o and the dividers), and the code and enable pins go to vco_top and tx_drv. Their wires run in a channel along the top, as tall as the number of wires side by side at each x. The macro should sit close under it.',
   'Fit and spacing': 'Everything inside 693.28 × 325.36 µm, 2–3 µm between blocks for guard rings (the keep-out setting), nothing in the macro\'s halo, nothing on a reserved area.',
   'Power stripes': 'Power reaches the TT grid through vertical Metal4 stripes (≥ 0.8 µm wide, y 5–320.36); Metal5 is not allowed. A stripe can\'t cross Metal4 inside a block: the macro routes on Metal4, so over the macro a stripe may only run on one of its own strap pairs (VDD → VDPWR, VSS → VGND). The analog blocks use no Metal4.',
+  'VCO bias wires (vco_top split)': 'Inside vco_top, cgm_ref abuts the ring: vbnf (the filtered bias on the coarse DAC gates) and vctrl (the fine-tune node) have no wire at all. Split apart, both become wires, and the reference path already dominates the VCO\'s FM noise (7.3–8.3 kHz rms against a 15 kHz limit): keep them short and away from the macro, the clocks and the DAC lines. Only scored when vco_top is placed as its parts.',
   'Decap VAPWR': 'Fill decap on VAPWR, at ~2.4 fF/µm² (nfet gate cap at ~60 % fill). No target yet; vco_top carries 10 pF on VDD_LS and the receiver its own rx_decap.',
   'Decap VDPWR': 'Fill decap on VDPWR, at ~2.4 fF/µm². No target yet: the TX driver\'s 12.6 mA edges are the main load.',
   'Unplaced blocks': 'Blocks still in the parking row under the tile are left out of every check. Place them to have them scored.',
@@ -769,7 +794,7 @@ function renderIO() {
 function renderSettings() {
   const el = $('#secSettings'), s = S.settings;
   const fields = [['keepout', 'keep-out between blocks, µm'], ['track', 'top channel track pitch, µm'], ['r1', '1. RX input ↔ macro / clocks ≥'], ['r2a', '2. a2 wire ≤'], ['r2b', '2. ls → rx ≤'], ['r2m', '2. |I load − Q load| ≤'],
-    ['lsq', '2. lsq wire inside rx_top, µm'], ['r3', '3. ua[4] / ua[5] → LNA ≤'], ['r4', '4. tx_drv → ua[2] / ua[3] ≤'], ['r7', '7. longest DAC line ≤'], ['r7b', '7. mdac.vg → vco_top.vg ≤'], ['r8', '8. macro top ↔ tile top ≤']];
+    ['lsq', '2. lsq wire inside rx_top, µm'], ['r3', '3. ua[4] / ua[5] → LNA ≤'], ['r4', '4. tx_drv → ua[2] / ua[3] ≤'], ['r7', '7. longest DAC line ≤'], ['r7b', '7. mdac.vg → vco_top.vg ≤'], ['r8', '8. macro top ↔ tile top ≤'], ['r11', '11. cgm_ref → ring vbnf / vctrl ≤'], ['r11d', '11. their gap to clock / DAC wires ≥']];
   el.innerHTML = `<h2>Thresholds <span class="meta">shared with everyone</span></h2>
     <div class="row">${fields.map(([k, l]) => `<label class="f">${l}<input type="number" step="0.5" data-set="${k}" value="${s[k]}"></label>`).join('')}</div>
     <div class="row edit-only"><button class="btn" id="bReset">Reset to defaults</button></div>`;

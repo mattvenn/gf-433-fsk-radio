@@ -36,13 +36,14 @@ function geom(n, est, moved) {               // per orientation: placed size and
 const WEIGHT = {
   rx_inp: 8, rx_inn: 8, a2: 25, 'ls rx': 6, 'ls tx': 3, lsq: 4, tx_out_n: 3, tx_out_p: 3, vctrl: 0.6, 'vctrl pd': 1.5, vbn: 0.3,
   vg: 4, vbnf: 2, ck: 1, ck_o: 0.3, div16: 0.3, div64: 0.3, div1024: 0.3, rx_en: 0.2, 'rx_en lo_i': 0.1, 'rx_en lo_q': 0.1,
+  'vbnf ref': 6, 'vctrl ring': 3, 'VDD_LS decap': 1,
   code: 0.3, bits: 2, en_p: 0.2, en_n: 0.2, q_i: 0.4, q_q: 0.4,
   ri_p: 3, ri_n: 3, rq_p: 3, rq_n: 3, lo_i: 5, lob_i: 5, lo_q: 5, lob_q: 5, bi_p: 2, bi_n: 2, bq_p: 2, bq_n: 2, oi_p: 1, oi_n: 1, oq_p: 1, oq_n: 1,
 };
 for (let i = 0; i < 37; i++) WEIGHT[i < 31 ? `dac_tn[${i}]` : i < 36 ? `dac_bn[${i - 31}]` : 'dac_sdn'] = 0.12;
 
 function solve(spec, iters) {
-  const v0 = { rx: spec.rx };
+  const v0 = { rx: spec.rx, vco: spec.vco };
   const names = Object.keys(CAT).filter(n => FP.inMode(CAT[n], v0) && (spec.fixed[n] || spec.movable.includes(n)));
   const G = {};
   for (const n of names) G[n] = geom(n, (spec.est || {})[n], (spec.pins || {})[n]);
@@ -57,8 +58,8 @@ function solve(spec, iters) {
   };
   const own = r => r.startsWith('pad:') ? null : r.slice(0, r.lastIndexOf('.'));
   const placed = r => r.startsWith('pad:') || own(r) in st;
-  const list = spec.rx === 'cells' ? FP.NETS.concat(FP.RX_NETS) : FP.NETS;
-  const nets = list.map(([nm, cls, a, b]) => [nm, cls, FP.resolveRef(a, spec.rx), FP.resolveRef(b, spec.rx)])
+  const list = FP.NETS.concat(spec.rx === 'cells' ? FP.RX_NETS : [], spec.vco === 'parts' ? FP.VCO_NETS : []);
+  const nets = list.map(([nm, cls, a, b]) => [nm, cls, FP.resolveRef(a, spec.rx, spec.vco), FP.resolveRef(b, spec.rx, spec.vco)])
     .filter(([nm, , a, b]) => placed(a) && placed(b) && (mov.includes(own(a)) || mov.includes(own(b))));
   const inter = (r, a) => Math.max(0, Math.min(r[0] + r[2], a[0] + a[2]) - Math.max(r[0], a[0])) * Math.max(0, Math.min(r[1] + r[3], a[1] + a[3]) - Math.max(r[1], a[1]));
   const gap = (a, b) => Math.hypot(Math.max(0, b[0] - a[0] - a[2], a[0] - b[0] - b[2]), Math.max(0, b[1] - a[1] - a[3], a[1] - b[1] - b[3]));
@@ -237,6 +238,12 @@ const SPECS = [
     orients: { xvco: ['R0', 'MY', 'MX', 'R180'] },
     keepouts: [],
   },
+  {
+    id: 'P4', name: 'P4: P3 with vco_top split (ring + lsdiv, cgm_ref, decap)', rx: 'cells', vco: 'parts', runs: 5, iters: 200000,
+    est: { xmac: { w: 345 } }, pins: { xmac: dacSouth(345) },
+    fixed: { xmac: { x: 343, y: 185, orient: 'MY' }, 'rx.lna': { x: 76.5, y: 3, orient: 'R90' } },
+    movable: RXC.filter(n => n !== 'rx.lna').concat(['vco.core', 'vco.ref', 'vco.decap', 'xmdac', 'xvpd', 'xtxd', 'xbits']),
+  },
 ];
 
 function current() {
@@ -255,6 +262,7 @@ function current() {
 }
 
 const NOTES = {
+ "P4": "P3 with vco_top cut into its parts: the ring and lsdiv as one unit (their a0 abutment kept), cgm_ref (238.8 × 69.2 µm, the bias reference and its 1 MΩ / 20 pF filter) and the 10 pF VDD_LS decap. It starts where P3 has them, so the checklist matches P3, plus rule 11 for the two wires the split creates (vbnf and vctrl from cgm_ref to the ring).\nTo explore: drag cgm_ref out of the 387 µm band (rotate it with R), keep vbnf short and away from the macro and the clocks, and use the space it frees for the receiver or mdac. Then try Fit all pins.",
  "P1": "vco_top along the top (MX: its ck / ls / bit pins face down), with lsdiv and the ring over the receiver's LO column, so a2 → aq is 39 µm. The receiver as cells in two rows below it, the LNA on ua[4] / ua[5] (25 µm), tx_drv on ua[2] / ua[3] (74 µm). The macro re-hardened at 220 × 201 µm in the top-right corner, its 37 DAC pins moved to its south edge over mdac (longest DAC line 161 µm).\nCosts: mdac ends up far from vco_top's vg (400 µm, fails rule 7); ls drives 417 µm (rx 172 + tx_drv 245) against 28 µm of lsq, so the I / Q loads are far apart; the RX input is 140 µm from the ck wire (rule 1 warns). Needs a macro re-harden (size and DAC pin edge).",
  "P2": "No re-harden: the macro as it is (170 × 260 µm), mirrored onto the right edge so its DAC pins face west, with mdac right beside it (longest DAC line 169 µm). vco_top along the top, the receiver as cells below, LNA on ua[4] / ua[5].\nCosts: tx_drv sits top left, 435 / 319 µm from ua[2] / ua[3] (fails rule 4), and its out_n flyline crosses the LNA; ls → rx 161 µm; the TT pins' wires run ~200-370 µm along the top to the macro.",
  "P3": "The best of the three on the checklist: rules 1-4 and 8-10 pass. The receiver as cells on the left: the LNA on ua[4] / ua[5], the mixer column and LO buffers beside it, the two baseband arms in a row above, the limiters to their right. vco_top along the bottom right (R0), its LO end next to the receiver's LO column: a2 → aq 32 µm, ls → rx 62 µm. tx_drv between the LNA and vco_top on ua[2] / ua[3] (54 µm). The macro re-hardened flat (345 × 128 µm) across the top right, 151 µm of clearance from the LNA; its DAC pins moved to its south edge over mdac.\nOpen: the DAC lines (longest 286 µm) and mdac.vg → vco_top.vg (114 µm) are long (rule 7 warns); en_p / en_n from ui_in[5:6] cross baseband I (rule 6: route them round); several blocks' nearest supply stripe is the other rail (rule 5: move the stripes). Needs a macro re-harden (345 µm wide, DAC pins on its south edge) and an rx_top re-layout to this shape."
@@ -282,7 +290,7 @@ for (const spec of SPECS) {
     if (!best || r.cost < best.cost) best = r;
     console.error(spec.id, 'run', run, r.cost.toFixed(0));
   }
-  const v = { id: spec.id, name: spec.name, note: NOTES[spec.id] || '', rx: spec.rx, order: out.length, place: best.place, est: spec.est || {}, pins: spec.pins || {}, decaps: {}, straps: [], reserved: [] };
+  const v = { id: spec.id, name: spec.name, note: NOTES[spec.id] || '', rx: spec.rx, vco: spec.vco || 'block', order: out.length, place: best.place, est: spec.est || {}, pins: spec.pins || {}, decaps: {}, straps: [], reserved: [] };
   v.straps = stripes(v, autoStripes(v));
   v.decaps = fillDecap(v);
   out.push(v);

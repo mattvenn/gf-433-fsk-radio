@@ -35,6 +35,7 @@ throughout** (Matt, 2026-11-16). `tt_wrapper.py` and `docs/top_layout.md` still 
 | Instance | Cell | Size (µm) | Supply | Notes |
 |---|---|---|---|---|
 | xvco | `vco_top` | 386.56 × 70.80 | VAPWR | ring, `cgm_ref`, `lsdiv` and its VDD_LS decap; zones drawn for each. **a2 is not a pin yet:** the page uses the ring's a2 node (ring_core_v3 label, own x 89.89, y 41.17) as an estimate |
+| vco.core, vco.ref, vco.decap | vco_top's parts | 110.58 × 69.76, 238.75 × 69.20, 37.23 × 59.96 | VAPWR | vco_top cut along its own sub-cells (instance boxes in `vco_top.gds`): the ring and lsdiv as one unit (their a0 abutment kept), `cgm_ref`, and the left part of the VDD_LS decap (its short fingers under lsdiv stay with the unit). Pins from the cells' own labels |
 | xmdac | `mdac` | 156.83 × 104.24 | VAPWR | the 37 control lines on its west edge, vg / vbnf on its east edge |
 | xvpd | `vctrl_pd` | 32.49 × 12.00 | VAPWR | 200 kΩ pull-down on vctrl |
 | xbits | (standard cells) | 20.16 × 7.84 | VAPWR | the five coarse-code inverters and their antenna diodes, as `tt_wrapper.py` draws them (hatched: no GDS of its own) |
@@ -46,7 +47,9 @@ throughout** (Matt, 2026-11-16). `tt_wrapper.py` and `docs/top_layout.md` still 
 
 `rx_top`'s GDS is 299.38 × 370.62 µm; `docs/rx_layout.md` Table S1 gives 299.4 × 376.0 µm. The page uses the GDS.
 
-A variant holds the receiver either as `rx_top` (one block) or as its cells (the switch is in the variant box). Cells
+A variant holds the receiver either as `rx_top` (one block) or as its cells, and vco_top either as one block or as
+its parts (two switches in the variant box). Splitting vco_top creates two wires that are abutments inside it: vbnf
+(cgm_ref's filtered bias into the ring's coarse DAC gates) and vctrl (through cgm_ref to the ring), scored by rule 11. Cells
 not yet placed start where `rx_top` has them. A variant that places the cells is the brief for an `rx_top` re-layout.
 
 ## Nets
@@ -84,6 +87,7 @@ and so does the macro's 25 MHz clock.
 | 8 | The macro near the top edge | the gap from the macro's top to the tile's; fails if a block sits in the top channel or the gap is less than the channel needs over the macro | ≤ 40 µm |
 | 9 | Fit and spacing | overlaps (the macro's halo counts, and reserved areas), blocks outside the tile, gaps under the keep-out | keep-out 2.5 µm |
 | 10 | Power stripes | each Metal4 stripe's lane (y 5 … 320.36) against every block's Metal4; over the macro only on its own straps of the same net; width ≥ 0.8 µm; VDPWR, VAPWR and VGND all present | – |
+| 11 | VCO bias wires (vco_top split only) | cgm_ref → ring vbnf and vctrl, and their gap to the macro and every clock / DAC flyline | ≤ 40 µm, gap ≥ 50 µm |
 
 Every threshold is a page setting (shared through the database). The checklist shows each rule's number and, on
 hover, why it exists.
@@ -103,13 +107,20 @@ block pin's x; at each x the channel is as tall as the number of wires there tim
   their pins, zones (vco_top's ring / lsdiv / cgm_ref / decap, rx_top's cells) and, on the Metal4 layer, the macro's
   Metal4 and its straps. Estimated pins (a2, rx_en) have orange rings and dotted flylines.
 - **Editing:** drag, rotate (R), flip (X, Y), nudge with the arrows, group select (shift-drag), park a block, reshape
-  the macro at constant area, add and edit stripes, decap and reserved areas, switch the receiver between `rx_top`
-  and its cells.
+  any block at constant area (its pins scale with it; the macro is a re-harden, the rest a re-layout), add and edit
+  stripes, decap and reserved areas, switch the receiver between `rx_top` and its cells and vco_top between one
+  block and its parts.
+- **Pin fitting** (ported from the OOK page's `pinfit.js`, now in the engine as `FP.fitPins`): "Fit its pins to this
+  floorplan" (one block) or "Fit all pins" moves each signal pin to the point of the block's edge facing what it
+  connects to, spreads pins ≥ 1 µm apart and orders each edge like the far ends so the flylines don't cross. Moved pins
+  have orange rings; "Put its pins back" undoes it. Reshaped sizes and moved pins go into `floorplan.json`
+  (`own_w` / `own_h`, `pins_moved`) and `pins.md`: the brief for the block re-layouts once a floorplan is agreed.
+  On P3, fitting every block's pins takes a2 → aq from 32 to 3 µm and the longest DAC line from 286 to 45 µm, but
+  rule 6 gets worse (7 flylines over the receiver against 2): the fit chooses edges by distance only.
 - **Panels:** the checklist (live), area, nets (lengths, hover to highlight), supply crossings, stripes, the export /
   import of `floorplan.json`, and the thresholds.
 - **Block diagram view:** the tile's blocks and how they join, with the open variant's wire lengths.
-- **Not ported:** the OOK page's `refine.js` (decap refill after edits) and `pinfit.js` (automatic pin moves): their
-  rules were the OOK chain's. Decap and stripes come from `place.js` here, moved pins only from a spec.
+- **Not ported:** the OOK page's `refine.js` (decap refill after edits). Decap and stripes come from `place.js`.
 - **Command line:** `node layout/floorplan/page/check.js [variants.json | floorplan.json] [--current]` prints the
   same checklist; `--current` also checks the "current" variant against `current.json`.
   `node layout/floorplan/page/mutate.js` runs the mutation tests below. `node tools/floorplan_dump.js` with
@@ -121,7 +132,7 @@ block pin's x; at each x the channel is as tall as the number of wires there tim
   `db.Trans.M0` for tx_drv), plus the shift onto the VAPWR tile. All six blocks agree to 0.000 µm: in the wrapper
   vco_top MY at x 296.0, y 10.0; tx_drv MX at 597.15, 120.0; mdac 335, 118; vctrl_pd 252, 13.2; tx_fine 0.6, 45; the
   code inverters 554.04, 90.16. On the page every x but the macro's is 17.92 µm less.
-- **Mutation tests** (`mutate.js`): each breaks a copy of a variant in which its rule does not already fail; all 11
+- **Mutation tests** (`mutate.js`): each breaks a copy of a variant in which its rule does not already fail; all 12
   are caught.
 
 **Table I.** Mutations and the rule that catches them.
@@ -139,6 +150,7 @@ block pin's x; at each x the channel is as tall as the number of wires there tim
 | mdac in the far corner from the macro | 7 | warn 169 µm → fail 793 µm |
 | the macro dropped to the bottom edge | 8 | pass 12.5 µm → warn 121.5 µm |
 | ck routed straight through a baseband arm | 6 | fail must name ck over the receiver: yes (1 → 41 crossings) |
+| vco_top split: cgm_ref moved 200 µm from the ring | 11 | pass 3 µm → fail 197 µm |
 
 - **Block mode:** `rx_top` placed as one block scores rules 1, 2, 3, 6 and 9 from its own pins and its LNA zone
   (checked by hand: placed over the pads it fails on fit, as it must at 370.6 µm tall).
@@ -154,12 +166,13 @@ optimised layouts.
 
 **Table II.** The variants on the checklist (P pass, W warn, F fail).
 
-| Variant | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
-|---|---|---|---|---|---|---|---|---|---|---|
-| current | – | – | – | F | W | – | W | P | P | P |
-| P1: VCO along the top, RX below it, macro top right | W | W | P | P | W | F | F | P | P | P |
-| P2: macro as hardened on the right edge, VCO along the top | W | W | P | F | W | F | W | P | P | P |
-| P3: RX left in two rows, VCO along the bottom, flat macro top right | P | P | P | P | W | F | W | P | P | P |
+| Variant | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| current | – | – | – | F | W | – | W | P | P | P | – |
+| P1: VCO along the top, RX below it, macro top right | W | W | P | P | W | F | F | P | P | P | – |
+| P2: macro as hardened on the right edge, VCO along the top | W | W | P | F | W | F | W | P | P | P | – |
+| P3: RX left in two rows, VCO along the bottom, flat macro top right | P | P | P | P | W | F | W | P | P | P | – |
+| P4: P3 with vco_top split (ring + lsdiv, cgm_ref, decap) | W | P | P | P | W | F | W | P | P | P | P |
 
 ![current](img/floorplan/current.png)
 
@@ -188,9 +201,15 @@ tx_drv ends up top left, 435 µm from ua[2] (rule 4 fails).
 the RX input. Left open: the longest DAC line (286 µm) and vg (114 µm) warn; en_p / en_n cross baseband I (rule 6);
 several stripes sit next to the other rail (rule 5).
 
+![P4](img/floorplan/P4.png)
+
+**Fig. 5.** P4: P3 with vco_top cut into its parts (ring + lsdiv, cgm_ref, the VDD_LS decap). The placer only
+polished it from P3, so cgm_ref still sits beside the ring (vbnf and vctrl 3 µm, rule 11 passes): it is the starting
+point for moving the 239 µm-wide reference out of the 387 µm band by hand.
+
 ![block diagram](img/floorplan/block_diagram.png)
 
-**Fig. 5.** The page's block diagram view for P3: every block, its supply, and the open variant's wire lengths.
+**Fig. 6.** The page's block diagram view for P3: every block, its supply, and the open variant's wire lengths.
 
 **The receiver fits only as cells.** `rx_top` (299.4 × 370.6 µm) is 45 µm taller than the tile in any orientation
 that keeps it under 325 µm wide; every proposal places the 12 cells, so the chosen one is the brief for the `rx_top`
