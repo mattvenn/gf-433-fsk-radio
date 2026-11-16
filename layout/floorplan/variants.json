@@ -2,27 +2,27 @@
  "variants": [
   {
    "id": "current",
-   "name": "current (tt_wrapper.py, receiver area reserved)",
+   "name": "current (tt_wrapper.py on the VAPWR tile, receiver area reserved)",
    "rx": "block",
    "order": 0,
    "place": {
     "xvco": {
-     "x": 296,
+     "x": 278.08,
      "y": 10,
      "orient": "MY"
     },
     "xtxd": {
-     "x": 597.15,
+     "x": 579.23,
      "y": 120,
      "orient": "MX"
     },
     "xmdac": {
-     "x": 335,
+     "x": 317.08,
      "y": 118,
      "orient": "R0"
     },
     "xvpd": {
-     "x": 252,
+     "x": 234.08,
      "y": 13.2,
      "orient": "R0"
     },
@@ -32,7 +32,7 @@
      "orient": "R0"
     },
     "xbits": {
-     "x": 554.04,
+     "x": 536.12,
      "y": 90.16,
      "orient": "R0"
     }
@@ -61,56 +61,56 @@
      "w": 1.6
     },
     {
-     "net": "VDPWR",
-     "x": 420,
+     "net": "VAPWR",
+     "x": 402.08,
      "w": 2
     },
     {
      "net": "VGND",
-     "x": 426,
+     "x": 408.08,
      "w": 2
     },
     {
-     "net": "VDPWR",
-     "x": 540,
-     "w": 2
-    },
-    {
-     "net": "VGND",
-     "x": 590,
-     "w": 2
-    },
-    {
-     "net": "VDPWR",
-     "x": 649.14,
+     "net": "VAPWR",
+     "x": 522.08,
      "w": 2
     },
     {
      "net": "VGND",
-     "x": 659.65,
+     "x": 572.08,
+     "w": 2
+    },
+    {
+     "net": "VAPWR",
+     "x": 631.22,
+     "w": 2
+    },
+    {
+     "net": "VGND",
+     "x": 641.73,
      "w": 2
     },
     {
      "net": "VDPWR",
-     "x": 663.65,
+     "x": 645.73,
      "w": 2
     }
    ],
    "reserved": [
     {
-     "x": 340,
+     "x": 176,
      "y": 256,
-     "w": 353,
-     "h": 66,
-     "label": "receiver (reserved, 353 x 66 \u00b5m)"
+     "w": 517,
+     "h": 46,
+     "label": "receiver (reserved, 517 x 46 µm)"
     }
    ],
-   "note": "Today's tile from layout/gen/tt_wrapper.py (positions to 0.01 \u00b5m; node layout/floorplan/page/check.js --current), with the largest free rectangle that stays off its routes reserved for the receiver: 353 \u00d7 66 \u00b5m at (340, 256).\nThe wrapper was drawn in the 711.20 \u00b5m tile (tt_analog_2x2.def); this page uses the _pgvaa template, 693.28 \u00b5m wide with every pin 17.92 \u00b5m further left, so its pad wires no longer land. Its stripes are VDPWR / VGND only (no VAPWR yet), so the supply rule fails on purpose. The receiver (rx_top, 299.4 \u00d7 370.6 \u00b5m) is parked under the tile: it fits nowhere as drawn."
+   "note": "Today's tile from layout/gen/tt_wrapper.py, moved onto the VAPWR template (tt_analog_2x2_pgvaa.def, 693.28 µm wide, every pin 17.92 µm further left than in the wrapper's 711.20 µm tile): every block and stripe shifted 17.92 µm left with the pins, except the macro, which stays at x 0.6 (it would leave the tile). The stripes that fed vco_top, mdac and the code inverters are VAPWR now; tx_drv's and the macro's stay VDPWR. Positions: node layout/floorplan/page/check.js --current.\nThe largest free rectangle off the wrapper's routes is reserved for the receiver: 517 × 46 µm at (176, 256). The receiver (rx_top, 299.4 × 370.6 µm, or 70.4k µm² of cells) fits nowhere in this tile as it is."
   },
   {
    "id": "P1",
    "name": "P1: VCO along the top, RX below it, macro top right",
-   "note": "vco_top along the top (MX: its ck / ls / bit pins face down), with lsdiv and the ring over the receiver's LO column, so a2 \u2192 aq is 39 \u00b5m. The receiver as cells in two rows below it, the LNA on ua[4] / ua[5] (25 \u00b5m), tx_drv on ua[2] / ua[3] (74 \u00b5m). The macro re-hardened at 220 \u00d7 201 \u00b5m in the top-right corner, its 37 DAC pins moved to its south edge over mdac (longest DAC line 161 \u00b5m).\nCosts: mdac ends up far from vco_top's vg (400 \u00b5m, fails rule 7); ls drives 417 \u00b5m (rx 172 + tx_drv 245) against 28 \u00b5m of lsq, so the I / Q loads are far apart; the RX input is 140 \u00b5m from the ck wire (rule 1 warns). Needs a macro re-harden (size and DAC pin edge).",
+   "note": "vco_top along the top (MX: its ck / ls / bit pins face down), with lsdiv and the ring over the receiver's LO column, so a2 → aq is 39 µm. The receiver as cells in two rows below it, the LNA on ua[4] / ua[5] (25 µm), tx_drv on ua[2] / ua[3] (74 µm). The macro re-hardened at 220 × 201 µm in the top-right corner, its 37 DAC pins moved to its south edge over mdac (longest DAC line 161 µm).\nCosts: mdac ends up far from vco_top's vg (400 µm, fails rule 7); ls drives 417 µm (rx 172 + tx_drv 245) against 28 µm of lsq, so the I / Q loads are far apart; the RX input is 140 µm from the ck wire (rule 1 warns). Needs a macro re-harden (size and DAC pin edge).",
    "rx": "cells",
    "order": 1,
    "place": {
@@ -538,7 +538,7 @@
   {
    "id": "P2",
    "name": "P2: macro as hardened on the right edge, VCO along the top",
-   "note": "No re-harden: the macro as it is (170 \u00d7 260 \u00b5m), mirrored onto the right edge so its DAC pins face west, with mdac right beside it (longest DAC line 169 \u00b5m). vco_top along the top, the receiver as cells below, LNA on ua[4] / ua[5].\nCosts: tx_drv sits top left, 435 / 319 \u00b5m from ua[2] / ua[3] (fails rule 4), and its out_n flyline crosses the LNA; ls \u2192 rx 161 \u00b5m; the TT pins' wires run ~200-370 \u00b5m along the top to the macro.",
+   "note": "No re-harden: the macro as it is (170 × 260 µm), mirrored onto the right edge so its DAC pins face west, with mdac right beside it (longest DAC line 169 µm). vco_top along the top, the receiver as cells below, LNA on ua[4] / ua[5].\nCosts: tx_drv sits top left, 435 / 319 µm from ua[2] / ua[3] (fails rule 4), and its out_n flyline crosses the LNA; ls → rx 161 µm; the TT pins' wires run ~200-370 µm along the top to the macro.",
    "rx": "cells",
    "order": 2,
    "place": {
@@ -811,7 +811,7 @@
   {
    "id": "P3",
    "name": "P3: RX left in two rows, VCO along the bottom, flat macro top right",
-   "note": "The best of the three on the checklist: rules 1-4 and 8-10 pass. The receiver as cells on the left: the LNA on ua[4] / ua[5], the mixer column and LO buffers beside it, the two baseband arms in a row above, the limiters to their right. vco_top along the bottom right (R0), its LO end next to the receiver's LO column: a2 \u2192 aq 32 \u00b5m, ls \u2192 rx 62 \u00b5m. tx_drv between the LNA and vco_top on ua[2] / ua[3] (54 \u00b5m). The macro re-hardened flat (345 \u00d7 128 \u00b5m) across the top right, 151 \u00b5m of clearance from the LNA; its DAC pins moved to its south edge over mdac.\nOpen: the DAC lines (longest 286 \u00b5m) and mdac.vg \u2192 vco_top.vg (114 \u00b5m) are long (rule 7 warns); en_p / en_n from ui_in[5:6] cross baseband I (rule 6: route them round); several blocks' nearest supply stripe is the other rail (rule 5: move the stripes). Needs a macro re-harden (345 \u00b5m wide, DAC pins on its south edge) and an rx_top re-layout to this shape.",
+   "note": "The best of the three on the checklist: rules 1-4 and 8-10 pass. The receiver as cells on the left: the LNA on ua[4] / ua[5], the mixer column and LO buffers beside it, the two baseband arms in a row above, the limiters to their right. vco_top along the bottom right (R0), its LO end next to the receiver's LO column: a2 → aq 32 µm, ls → rx 62 µm. tx_drv between the LNA and vco_top on ua[2] / ua[3] (54 µm). The macro re-hardened flat (345 × 128 µm) across the top right, 151 µm of clearance from the LNA; its DAC pins moved to its south edge over mdac.\nOpen: the DAC lines (longest 286 µm) and mdac.vg → vco_top.vg (114 µm) are long (rule 7 warns); en_p / en_n from ui_in[5:6] cross baseband I (rule 6: route them round); several blocks' nearest supply stripe is the other rail (rule 5: move the stripes). Needs a macro re-harden (345 µm wide, DAC pins on its south edge) and an rx_top re-layout to this shape.",
    "rx": "cells",
    "order": 3,
    "place": {

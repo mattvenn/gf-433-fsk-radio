@@ -19,16 +19,16 @@ with this tile's blocks, pins, nets, supply domains and rules. The brief was `do
 |---|---|---|
 | `layout/floorplan/tile.json` | The tile outline (693.28 × 325.36 µm) and its 51 signal pins | `tools/floorplan_tile.py` from tt-support-tools `tech/gf180mcuD/def/analog/tt_analog_2x2_pgvaa.def` |
 | `layout/floorplan/blocks.json` | Every block's bbox, its pin labels (own frame, origin at the bbox's lower-left) and its Metal4 boxes; `rx_top` also lists where each of its cells sits; `tx_fine` lists its Metal4 power straps | `tools/floorplan_blocks.py` (needs `pip install klayout`) |
-| `layout/floorplan/current.json` | Today's tile (`layout/gen/tt_wrapper.py`): each block's placed bbox, computed with KLayout from the wrapper's own transformations | `tools/floorplan_current.py` |
+| `layout/floorplan/current.json` | Today's tile (`layout/gen/tt_wrapper.py`) moved onto the VAPWR template: each block's bbox as the wrapper places it (computed with KLayout from its own transformations) and the x shift applied | `tools/floorplan_current.py` |
 | `layout/floorplan/variants.json` | The variants seeded into the page (mirrors the page's store) | `layout/floorplan/page/place.js` |
 | `layout/floorplan/floorplan.json`, `pins.md` | The chosen variant, for the tile generator and the re-layouts | the page's export, or `layout/floorplan/page/pinreport.js` |
 
 **The template has changed size.** The VAPWR template `tt_analog_2x2_pgvaa.def` is **693.28 µm wide, not 711.20 µm**
 (the plain `tt_analog_2x2.def`), and every pin sits 17.92 µm further left: ua[0] … ua[7] at x 309.40, 265.72, 222.04,
 178.36, 134.68, 91.00, 47.32, 3.64 µm (pad centres), the digital pins between x 14.69 and 320.75 µm. The height
-(325.36 µm), the pin sizes and the stripe span (y 5 … 320.36 µm) are the same. `tt_wrapper.py` and
-`docs/top_layout.md` use the 711.20 µm tile and its pin positions, so the move to `_pgvaa` (integration prep, part C)
-must shift every pad route.
+(325.36 µm), the pin sizes and the stripe span (y 5 … 320.36 µm) are the same. **The tool uses the VAPWR template
+throughout** (Matt, 2026-11-16). `tt_wrapper.py` and `docs/top_layout.md` still use the 711.20 µm tile, so the page's
+"current" variant is today's tile moved onto the VAPWR one (below).
 
 ## What goes in the tile
 
@@ -118,8 +118,9 @@ block pin's x; at each x the channel is as tall as the number of wires there tim
 ## Checks of the tool
 - **"current" against `tt_wrapper.py`:** `check.js --current` compares the engine's placed rectangles with the bboxes
   KLayout computes from each block's GDS and the wrapper's own transformation (`db.Trans.M90` for vco_top,
-  `db.Trans.M0` for tx_drv). All six blocks agree to 0.000 µm (vco_top MY at x 296.0, y 10.0; tx_drv MX at 597.15,
-  120.0; mdac 335, 118; vctrl_pd 252, 13.2; tx_fine 0.6, 45; the code inverters 554.04, 90.16).
+  `db.Trans.M0` for tx_drv), plus the shift onto the VAPWR tile. All six blocks agree to 0.000 µm: in the wrapper
+  vco_top MY at x 296.0, y 10.0; tx_drv MX at 597.15, 120.0; mdac 335, 118; vctrl_pd 252, 13.2; tx_fine 0.6, 45; the
+  code inverters 554.04, 90.16. On the page every x but the macro's is 17.92 µm less.
 - **Mutation tests** (`mutate.js`): each breaks a copy of a variant in which its rule does not already fail; all 11
   are caught.
 
@@ -155,16 +156,19 @@ optimised layouts.
 
 | Variant | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
 |---|---|---|---|---|---|---|---|---|---|---|
-| current | – | – | – | F | F | – | W | P | P | W |
+| current | – | – | – | F | W | – | W | P | P | P |
 | P1: VCO along the top, RX below it, macro top right | W | W | P | P | W | F | F | P | P | P |
 | P2: macro as hardened on the right edge, VCO along the top | W | W | P | F | W | F | W | P | P | P |
 | P3: RX left in two rows, VCO along the bottom, flat macro top right | P | P | P | P | W | F | W | P | P | P |
 
 ![current](img/floorplan/current.png)
 
-**Fig. 1.** "current": today's tile from `tt_wrapper.py`, with the largest free rectangle off its routes reserved
-for the receiver: 353 × 66 µm, far too small for the receiver's 70.4k µm² of cells. Its pad routes were drawn for
-the 711.20 µm tile, its stripes are VDPWR / VGND only (rules 5 and 10), and tx_drv's outputs run 520 / 636 µm.
+**Fig. 1.** "current": today's tile from `tt_wrapper.py` moved onto the VAPWR template. Every block and stripe is
+shifted 17.92 µm left with the pins, so each keeps its place against the pads and the digital pins. The macro is the
+exception: it stays at x 0.6, as it would otherwise leave the tile. The stripes on vco_top (VDD and VDD_LS), mdac and the
+code inverters are VAPWR, tx_drv's stays VDPWR. Rule 5 warns twice: vctrl_pd's nearest stripe is the macro's VDPWR, and
+tx_drv's nearest is the VDD_LS stripe, now VAPWR. tx_drv's outputs run 503 / 618 µm (rule 4). The largest free rectangle
+off the wrapper's routes, reserved for the receiver, is 517 × 46 µm: the receiver (70.4k µm² of cells) does not fit.
 
 ![P1](img/floorplan/P1.png)
 
@@ -206,7 +210,8 @@ re-layout. In P3 the tile is 88 % blocks and decap (26.6k µm² left, before rou
 5. **vctrl and vbn wires.** In every proposal that keeps the LO end of vco_top near the receiver, vctrl (the VCO's
    fine-tune node) runs a long way to ua[0]; a long vctrl wire picks up coupling as FM. Not a ranked rule yet.
 6. **Decap targets.** No tile-level target for VAPWR or VDPWR yet; the fill is reported in pF only.
-7. **The tile change to `_pgvaa`** moves every pin 17.92 µm left; `tt_wrapper.py` needs to follow.
+7. **`tt_wrapper.py` is still on the 711.20 µm template.** The page's "current" is a shifted copy; the wrapper
+   itself follows when the chosen floorplan goes into the tile generator.
 8. **The integration prep** (`rx-option-b`) had not started when this was written: when it reports Done, merge
    `rx-option-b` into `floorplan` and regenerate `blocks.json` (macro size, rx_en and a2 pins, VAPWR stripes).
 9. `layout/floorplan/floorplan.json` and `pins.md` are written when Matt picks a variant (page export, or

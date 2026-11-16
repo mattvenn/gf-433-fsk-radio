@@ -241,15 +241,16 @@ const SPECS = [
 
 function current() {
   const c = JSON.parse(fs.readFileSync(path.join(dir, 'current.json')));
-  const v = { id: 'current', name: 'current (tt_wrapper.py, receiver area reserved)', rx: 'block', order: 0, place: {}, decaps: {}, est: {}, straps: c.straps, reserved: [] };
+  const v = { id: 'current', name: 'current (tt_wrapper.py on the VAPWR tile, receiver area reserved)', rx: 'block', order: 0, place: {}, decaps: {}, est: {}, straps: c.straps, reserved: [] };
   for (const [n, p] of Object.entries(c.place)) v.place[n] = Object.assign({}, p);
   // the routes tt_wrapper draws, so the reserved area stays off them (out_n / out_p bars, the ua[0..3] drops, the
-  // bit / ck / top-pin tracks): rough keep-out boxes
-  const routes = [[178, 228, 520, 28], [178, 0, 15, 260], [233, 0, 15, 245], [250, 0, 60, 16], [170, 98, 450, 16], [170, 302, 160, 23]];
+  // bit / ck / top-pin tracks): rough keep-out boxes, in the wrapper's tile, moved with the blocks
+  const routes = [[178, 228, 520, 28], [178, 0, 15, 260], [233, 0, 15, 245], [250, 0, 60, 16], [170, 98, 450, 16], [170, 302, 160, 23]]
+    .map(r => [r[0] - 17.92, r[1], r[2], r[3]]);
   const r = freeRects(v, routes, 2000)[0];
   v.reserved.push({ x: r[0], y: r[1], w: r[2], h: r[3], label: `receiver (reserved, ${r[2]} x ${r[3]} µm)` });
-  v.note = `Today's tile from layout/gen/tt_wrapper.py (positions to 0.01 µm; node layout/floorplan/page/check.js --current), with the largest free rectangle that stays off its routes reserved for the receiver: ${r[2]} × ${r[3]} µm at (${r[0]}, ${r[1]}).\n` +
-    `The wrapper was drawn in the 711.20 µm tile (tt_analog_2x2.def); this page uses the _pgvaa template, 693.28 µm wide with every pin 17.92 µm further left, so its pad wires no longer land. Its stripes are VDPWR / VGND only (no VAPWR yet), so the supply rule fails on purpose. The receiver (rx_top, 299.4 × 370.6 µm) is parked under the tile: it fits nowhere as drawn.`;
+  v.note = `Today's tile from layout/gen/tt_wrapper.py, moved onto the VAPWR template (tt_analog_2x2_pgvaa.def, 693.28 µm wide, every pin 17.92 µm further left than in the wrapper's 711.20 µm tile): every block and stripe shifted 17.92 µm left with the pins, except the macro, which stays at x 0.6 (it would leave the tile). The stripes that fed vco_top, mdac and the code inverters are VAPWR now; tx_drv's and the macro's stay VDPWR. Positions: node layout/floorplan/page/check.js --current.\n` +
+    `The largest free rectangle off the wrapper's routes is reserved for the receiver: ${r[2]} × ${r[3]} µm at (${r[0]}, ${r[1]}). The receiver (rx_top, 299.4 × 370.6 µm, or 70.4k µm² of cells) fits nowhere in this tile as it is.`;
   return v;
 }
 
