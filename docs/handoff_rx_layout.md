@@ -1,4 +1,4 @@
-> Done (2026-11-16): see docs/rx_layout.md. Second pass: rx_top 299 x 376 um (112,573 um^2; first pass 131,434), all cells DRC/antenna/LVS clean; extracted: LO I/Q 75-78 deg, LNA 24.5 dB / NF 7.54 dB; FSK through the real LO 0 errors of 4 at -70 dBm (first pass; not re-run on the second).
+> Done (2026-11-16): see docs/rx_layout.md. Second pass: rx_top 299 x 376 um (112,573 um^2; first pass 131,434), all cells DRC/antenna/LVS clean; extracted: LO I/Q 75-78 deg, LNA 24.5 dB / NF 7.54 dB; FSK through the real LO 0 errors of 4 at -70 dBm on both passes (second pass steps -8/+8/-8/+8, 1 glitch).
 
 # Handoff: first-pass layout of the receiver (rx_*), DRC / LVS / antenna / extraction (sim server)
 

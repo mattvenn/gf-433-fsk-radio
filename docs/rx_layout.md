@@ -18,7 +18,7 @@ to within 0.8 dB, and the comparator hysteresis is ±36.3 mV (schematic ±36.1 m
 (in-phase and quadrature) phase is 75.5-78.0° against 72.0-72.7° in the schematic, inside the 72 ± 25° stop rule,
 and the ring's frequency shift from the receiver's load matches the schematic to 0.02 %. The FSK (frequency-shift
 keying) decode through the real ring LO on the first-pass rx_top gave 0 bit errors of 4 at −70 dBm, with the same
-steps per bit as the schematic; it was not re-run on the second pass (below). rx_top is still taller (376 µm) than
+steps per bit as the schematic; on the second-pass rx_top it also gave 0 of 4, with steps −8, +8, −8, +8 (below). rx_top is still taller (376 µm) than
 the tile (325.36 µm).
 
 Brief: `docs/handoff_rx_layout.md`. Generators: `layout/gen/rx_*.py`. Bench results (JSON):
@@ -80,12 +80,20 @@ Table S2. Benches on the extraction, first pass / second pass (R + C, tt unless 
 | LO path current, tt (mA) | 1.16 | 1.7 | 1.71 |
 | Start-up: mode, frequency vs no Q tap | | fundamental, −2.2 % | fundamental, −2.2 % |
 | rx_bias at power-up, nb (V) | 0.979 | 0.978 | 0.978 |
-| FSK decode, −70 dBm, tt | 0 of 4 errors | 0 of 4 errors | not re-run |
+| FSK decode, −70 dBm, tt | 0 of 4 errors | 0 of 4 errors | 0 of 4 errors |
+| FSK steps per bit | −8, +7, −7, +7 | −8, +7, −7, +7 | −8, +8, −8, +8 |
+| FSK glitches (< 1 µs) | 0 | 0 | 1 |
+| LO I/Q phase at the mixer switches, chain run (°) | 73.0 | 76.5 | 72.8 |
+| Supply current, chain run (mA) | 6.7 | 7.36 | 7.36 |
+| Ring drift, chain run (kHz) | within 1.4 | within 1.2 (pre-run −306 Hz) | within 1.4 (pre-run −325 Hz) |
 
 The second pass changes none of the results by more than 0.3 dB, 0.2° or 0.2 kHz; the LNA gains 0.27 dB and its
-−3 dB point 5 MHz from the shorter stage-1 wiring. The FSK chain run (8.7 h) was stopped on the second pass to free
-the machine; with no device size changed and the LO bench as before, the decode is expected to be the same, but that
-is not checked. The first-pass figures are in `docs/img/rx_layout/first_pass/`, the first-pass bench results in
+−3 dB point 5 MHz from the shorter stage-1 wiring. The FSK chain through the real ring LO (6.6 h on the sim server,
+34 min of it the pre-run) decodes 0 of 4 bits wrong on the second pass too, with steps −8, +8, −8, +8: each step
+is within one count of the first pass's −8, +7, −7, +7. It also shows one comparator pulse shorter than 1 µs, where
+the first pass showed none; the bit decisions are unaffected. The LO I/Q phase measured in the chain run is 72.8°,
+3.7° narrower than the first pass's 76.5° and close to the schematic's 73.0°, while the LO bench gives 77.0°; the
+reason for that difference has not been looked into. Result: `docs/rx_layout_results/second_pass/chain.json`. The first-pass figures are in `docs/img/rx_layout/first_pass/`, the first-pass bench results in
 `docs/rx_layout_results/` (the second-pass ones are in `docs/rx_layout_results/second_pass/`).
 
 The tables and figures below are the first pass, except Figs. 1-8, which now show the second-pass layouts.

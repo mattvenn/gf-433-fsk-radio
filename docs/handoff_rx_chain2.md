@@ -1,4 +1,4 @@
-> Running: step 3/3 (output checks) since 19:42, ETA 19:43
+> Done (2026-11-16): see docs/rx_layout.md, Table S2. Second-pass FSK through the real LO at -70 dBm, tt: 0 errors of 4, steps -8/+8/-8/+8 (first pass -8/+7/-7/+7), 1 glitch < 1 us, LO I/Q 72.8 deg, 7.36 mA, 6.6 h.
 
 # Handoff: FSK decode on the second-pass receiver layout (sim server)
 
