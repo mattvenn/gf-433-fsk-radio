@@ -17,7 +17,7 @@ Metal4 rectangle: ua[0..7] 3 x 1 um on the bottom edge, the digital pins 0.3 x 1
 --def is downloaded from tt-support-tools main into build/tt/ if it is not there.
 
 Floorplan (um, tile coordinates):
-  - vco_top mirrored left-right (x -> -x) at origin (602.94, 14.0): bbox x 296.0 ... 703.68, y 10.0 ... 80.795.
+  - vco_top mirrored left-right (x -> -x) at origin (602.94, 14.0): bbox x 296.0 ... 682.56, y 10.0 ... 80.795.
     The mirror puts vctrl / vbn (the reference's edge, originally the right edge) on the left edge, next to the
     analog pads ua[1] (x 283.64) and ua[0] (x 327.32).
   - ua[0] <- vctrl: M2 stub from the macro edge, via2, M3 down to y 5, M3 under the macro to the pad, via3s, Metal4
@@ -64,7 +64,8 @@ PITCH = 660                      # via array pitch (0.40 space)
 X0, Y0 = 602940, 14000
 CORE_DX = 1000                   # vco_top.CORE_DX (2026-11-12, the PMOS vg decap): every vco_top x from the core's DAC
                                  # rightwards (bit / vg / vbnf risers, VDD / VSS straps, cgm_ref) moved +1.0 um; lsdiv's did not
-VT = dict(xl=-100740, xr=305940 + CORE_DX, yb=-4000, yt=66795)   # vco_top bbox (own coordinates)
+VT = dict(xl=-79620, xr=305940 + CORE_DX, yb=-4000, yt=66795)    # vco_top bbox (own coordinates); xl -100.74 until
+                                                                 # 2026-11-16 (VDD_LS decap redrawn, 21.12 um narrower)
 
 
 def mx(x):
@@ -81,7 +82,7 @@ CK = (-44390, -44010)            # ck M3 riser at the top edge
 LS_PIN = (-21600, -21220)        # ls M3 riser at the top edge (lsdiv's ls port, layout/gen/vco_top.py)
 VDDLS = (-47800, -46600, 64395, 66795)   # VDD_LS M3 pad
 VDD_STRAP = (56500 + CORE_DX, VT["xr"], 62880, 66795)  # VDD M3 strap
-VSS_STRAP = [(-100740, 28400 + CORE_DX), (29980 + CORE_DX, VT["xr"])]  # VSS M3 strap x ranges, y -2400 ... 0
+VSS_STRAP = [(VT["xl"], 28400 + CORE_DX), (29980 + CORE_DX, VT["xr"])]  # VSS M3 strap x ranges, y -2400 ... 0
 VCTRL_M2 = (300000 + CORE_DX, VT["xr"], 12745, 13125)
 VBN_M2 = (302880 + CORE_DX, VT["xr"], 44190, 47085)
 

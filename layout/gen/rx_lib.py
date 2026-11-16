@@ -19,8 +19,10 @@ layout with sim/rx/*.py device by device.
 
 Elements of a row (dicts):
   mos : dict(k='mos', W=um, L=um, seq=[region, gate, region, ...], bulk=net)   (W, L in um, as the netlisters)
-  res : dict(k='res', model='rpp'|'hires', w=um, l=um, a=net, b=net, n=strips)   N row only; even n: both ends on
-        the channel side; n=1: a at the top, b at the bottom (b must be VSS: an M1 drop to the rail)
+  res : dict(k='res', model='rpp'|'hires', w=um, l=um, a=net, b=net, n=strips)   N row; even n: both ends on
+        the channel side; n=1: a at the top, b at the bottom (b must be VSS: an M1 drop to the rail).
+        Also in a P row (n > 1, mirrored, heads on the channel side, on the substrate: no n-well under it; both
+        ends, VDD included, on channel tracks) and in an NN band's top row.
 No Metal4 / Metal5.
 """
 import importlib.util
@@ -292,6 +294,8 @@ def draw_res(c, x0, ntop, e):
 
 DUMSP = 300                            # dummy poly to the diffusion end
 TAPREACH = 14000                       # a diffusion further than this from its row's rail tap moves next to it
+OVCLR = 640 + 400 + LL.ENDCAP          # overlay: under-element gate pad (above its diffusion) + gap + overlay endcap
+OVPAD = 700                            # overlay pad x to any under-element stub (M1 190 + 230 + 190, + margin)
 ISLTAP = 14000                         # n-well islands: an n+ tap at least this often (DF.13: 20 um)
 
 
@@ -311,7 +315,7 @@ def draw_elem(c, x0, row, Y, e, chan, topn=False):
     if e['k'] == 'res':
         if row == 'N':
             return draw_res(c, x0, Y['n_top'], e)
-        assert topn and e['n'] > 1, e
+        assert e['n'] > 1, e
         f = Frame(c, y0=2 * Y['p_bot'], flip=True)      # the N-row drawing mirrored about the row's bottom edge
         x1, t, g = draw_res(f, x0, Y['p_bot'], e)
         return x1, [(net, xx, f.Y(yy), k) for (net, xx, yy, k) in t], dict(cb=f.Y(g['ct']), ct=f.Y(g['cb']))
@@ -319,7 +323,9 @@ def draw_elem(c, x0, row, Y, e, chan, topn=False):
     dx = (L + DUMSP) if e.get('dummy') else 0
     yb = Y['n_top'] - W if row == 'N' else Y['p_bot']
     # DF.14 (an n diffusion within 20 um of a p+ tap): a short strip in a tall row sits next to its rail instead
-    if row == 'N' and yb - 600 > TAPREACH:
+    if row == 'N' and e.get('yb') is not None:          # an overlay: just above the elements under it
+        yb = e['yb']
+    elif row == 'N' and (e.get('rail') or yb - 600 > TAPREACH):
         yb = 600
     if row == 'P' and topn and 'p_top' in Y and Y['p_top'] - (yb + W) > TAPREACH:
         yb = Y['p_top'] - W
@@ -353,15 +359,20 @@ class Band:
     top='N': an NN band: the top row holds n devices too (pads facing down onto the channel) and the top rail is a
     second VSS rail (for the nfet caps, tails and other VSS-side parts; no VDD terminal allowed)."""
 
-    def __init__(self, name, cols, ports=(), pins=(), x0=900, search=True, nmin=0, top='P'):
+    def __init__(self, name, cols, ports=(), pins=(), x0=900, search=True, nmin=0, top='P', overlay=()):
         self.name, self.cols, self.x0 = name, [list(c) for c in cols], x0
+        # overlay: long thin N devices (e.g. a 0.42 / 50 um sink) drawn along the channel edge of the N row, over
+        # short N elements that then sit on the VSS rail; their stubs cross the overlay's gate poly / diffusion (M1
+        # over poly is legal), and the overlay's own pads sit in lanes clear of those stubs (place_overlay)
+        self.overlay = [dict(e) for e in overlay]
+        self.ovl = []
         self.top, self.top_rail = top, ('VDD' if top == 'P' else 'VSS')
         self.ports = set(ports) | set(pins)   # nets that leave the band
         self.pins = set(pins)                 # cell ports among them (labelled as ports at the band edge)
         self.nmin = nmin                     # minimum N row height (nm)
         self.search = search
         cnt, gates = {}, set()
-        for _, P, N in self.cols:
+        for _, P, N in self.cols + [('OVL', [], self.overlay)]:
             for row, lst in (('P', P), ('N', N)):
                 for e in lst:
                     if e['k'] == 'res':
@@ -377,7 +388,7 @@ class Band:
         # channel nets: every net with more than one terminal, every gate, every port; VDD / VSS where they show up
         # off their own rail's side (decided per terminal when drawing; here: whether a VDD / VSS track is needed)
         chan = {n for n in cnt if n not in ('VDD', 'VSS') and (cnt[n] > 1 or n in gates or n in self.ports)}
-        for _, P, N in self.cols:
+        for _, P, N in self.cols + [('OVL', [], self.overlay)]:
             for e in P:
                 if top == 'N':
                     assert not ('VDD' in (e.get('seq') or []) or 'VDD' in (e.get('a'), e.get('b'))), \
@@ -386,6 +397,9 @@ class Band:
                         chan.add('VSS')
                     if e['k'] == 'mos' and 'VSS' in e['seq'][1::2]:
                         chan.add('VSS')
+                    continue
+                if e['k'] == 'res':
+                    chan |= {'VDD', 'VSS'} & {e['a'], e['b']}
                     continue
                 if e['k'] == 'mos' and ('VSS' in e['seq']):
                     chan.add('VSS')
@@ -422,6 +436,13 @@ class Band:
                     xp += elem_w(e, self.chan) + DGAP
                     prevb = e['k']
                     continue
+                if e['k'] == 'res':               # a resistor on the substrate: clear of wells and resistors
+                    if prevb is not None:
+                        xp += (RGAP if prevb == 'res' else WELLGAP) - DGAP
+                    cp.append(xp)
+                    xp += elem_w(e, self.chan) + DGAP
+                    prevb = 'res'
+                    continue
                 b = e['bulk']
                 if prevb is not None and b != prevb:
                     xp += WELLGAP - DGAP
@@ -453,7 +474,51 @@ class Band:
             for e, x0 in zip(N, cn):
                 _, t, g = draw_elem(c, x0, 'N', Y, e, self.chan)
                 out += [(net, xx, yy, k, 'N', g, e) for (net, xx, yy, k) in t]
+        for e, x0 in self.ovl:
+            _, t, g = draw_elem(c, x0, 'N', Y, e, self.chan)
+            out += [(net, xx, yy, k, 'N', g, e) for (net, xx, yy, k) in t]
         return out
+
+    def place_overlay(self):
+        """x of each overlay element: the narrowest band, then the lowest N row. Under it only MOS (no resistor:
+        PRES.4), its pads >= OVPAD from every stub of the elements under it, and its VSS pads (an M1 drop to the
+        rail) over no element at all."""
+        Yd = dict(n_top=20000, p_bot=40000)
+        hgt = lambda e: um(e['W']) if e['k'] == 'mos' else res_height(e)
+        for eo in self.overlay:
+            Ns = [(e, x0, x0 + elem_w(e, self.chan)) for *_, N, cp, cn, taps in self.pl for e, x0 in zip(N, cn)]
+            Ns += [(e, x0, x0 + elem_w(e, self.chan)) for e, x0 in self.ovl]
+            stubs = [xx for (net, xx, yy, k, side, g, e) in self.terms(Null(), self.pl, Yd)
+                     if side == 'N' and self.is_chan((net, xx, yy, k, side, g, e))]
+            maxw = max([hgt(e) for e, a, b in Ns] + [1000])
+            wo, Wo = elem_w(eo, self.chan), um(eo['W'])
+            best = None
+            for eo_, x in [(dict(eo, seq=sq), x) for sq in (eo['seq'], eo['seq'][::-1])     # either orientation
+                           for x in range(snap(self.x0), self.xend + 1, 85)]:
+                _, to, _ = draw_elem(Null(), 0, 'N', Yd, eo_, self.chan)
+                under = [e for e, a, b in Ns if a < x + wo + OVPAD and b > x - OVPAD]
+                if any(e['k'] != 'mos' for e in under):
+                    continue
+                if any(abs(x + tx - sx) < OVPAD for (net, tx, ty, k) in to for sx in stubs):
+                    continue
+                if any(a - OVPAD <= x + tx <= b + OVPAD for (net, tx, ty, k) in to if net == 'VSS' and k == 'sd'
+                       for e, a, b in Ns):
+                    continue
+                need = max([hgt(e) for e in under] + [0]) + OVCLR + Wo
+                score = (max(self.xend, x + wo), max(maxw, need), x)
+                if best is None or score < best[0]:
+                    best = (score, x, under, need, eo_)
+            if best is None:
+                raise SystemExit(f'{self.name}: no place for the overlay {eo["seq"]}')
+            _, x, under, need, eo = best
+            for e in under:
+                e['rail'] = True
+            # its diffusion just above the elements under it (not at the channel edge: DF.14, a p+ tap within
+            # 20 um; and in a tall row the elements under it sit on the rail anyway)
+            eo['yb'] = 600 + need - Wo
+            self.ovl.append((eo, x))
+            self.xend = max(self.xend, x + wo + 200)
+            self.nmin = max(self.nmin, need)
 
     def is_chan(self, t):
         net, xx, yy, kind, side, g, e = t
@@ -462,7 +527,7 @@ class Band:
         if net == 'VSS':
             return (side == 'P') or kind in ('g', 'r')
         if net == 'VDD':
-            return (side == 'N') or kind == 'g'
+            return (side == 'N') or kind in ('g', 'r')
         return net in self.chan
 
     def stubs(self, terms):
@@ -500,6 +565,8 @@ class Band:
             cols[i] = (name, best[2], best[3])
         self.offs = offs
         self.pl, self.xend = self.placement(cols, offs)
+        if self.overlay:
+            self.place_overlay()
         t = self.terms(Null(), self.pl, Yd)
         span = {}
         for net, xx, side in self.stubs(t):
@@ -518,6 +585,7 @@ class Band:
         Y = dict(vss_b=-RAIL, vss_t=0)
         hn = [um(e['W']) for _, _, N, *_ in self.pl for e in N if e['k'] == 'mos']
         hn += [res_height(e) for _, _, N, *_ in self.pl for e in N if e['k'] == 'res']
+        hn += [um(e['W']) for e, _ in self.ovl]
         Y['n_top'] = 600 + max(hn + [self.nmin, 1000])
         t0 = self.terms(Null(), self.pl, dict(Y, p_bot=10 ** 7))
         npad = max([yy for (net, xx, yy, k, side, g, e) in t0 if side == 'N'] + [Y['n_top']])
@@ -581,7 +649,10 @@ class Band:
         trk, span = LL.assign_tracks(stubs, extra)
         ntrk = (max(trk.values()) + 1) if trk else 1
         ty = {n: Y['t0'] + k * TPITCH for n, k in trk.items()}
-        ppad = max([635] + [res_top(e) for _, P, *_ in self.pl for e in P if e['k'] == 'res'])
+        # a resistor in an NN band's top row also has its channel-side bends (w tall) facing the channel: PRES.4
+        # (0.6 um to unrelated poly, e.g. the bottom row's gate pads)
+        ppad = max([635] + [max(res_top(e), um(e['w']) if e['n'] > 2 else 0) for _, P, *_ in self.pl for e in P
+                            if e['k'] == 'res'])
         Y['p_bot'] = snap(Y['t0'] + (ntrk - 1) * TPITCH + 190 + 230 + ppad + 80)
         hp = [um(e['W']) if e['k'] == 'mos' else res_height(e) for _, P, *_ in self.pl for e in P] or [1000]
         islands = any(b for *_, taps in self.pl for b in taps)
@@ -630,7 +701,7 @@ class Band:
         hp_isl = {}
         for name, P, N, cp, cn, taps in self.pl:
             for (x0, b) in taps:
-                hi = max(um(e['W']) for e in P if e['bulk'] == b)
+                hi = max(um(e['W']) for e in P if e.get('bulk') == b)
                 hp_isl.setdefault(b, []).append(hi)
                 c.r('nsd', x0, Y['p_bot'], x0 + TAPW, Y['p_bot'] + max(hi, 1000))       # NP.8a: >= 0.35 um2
                 c.r('nsc', x0 + 75, Y['p_bot'] + 75, x0 + TAPW - 75, Y['p_bot'] + max(hi, 1000) - 75)
@@ -638,7 +709,7 @@ class Band:
         # wells: VDD runs (to the rail's n-well strip) and islands
         items = []                           # (x0, x1, bulk) of every P element and island tap
         for name, P, N, cp, cn, taps in (self.pl if self.top == 'P' else []):
-            items += [(x0, x0 + elem_w(e, self.chan), e['bulk']) for e, x0 in zip(P, cp)]
+            items += [(x0, x0 + elem_w(e, self.chan), e['bulk']) for e, x0 in zip(P, cp) if e['k'] == 'mos']
             items += [(x0, x0 + TAPW, b) for (x0, b) in taps]
         runs = []                            # (x0, x1, bulk)
         for xa, x1, b in sorted(items):
@@ -651,7 +722,7 @@ class Band:
             if b == 'VDD':
                 c.r('nwell', xa - 600, Y['nw_b'], x1 + 600, Y['vdd_b'] + 1900)
             else:
-                hi = max(um(e['W']) for _, P, *_ in self.pl for e in P if e['bulk'] == b)
+                hi = max(um(e['W']) for _, P, *_ in self.pl for e in P if e.get('bulk') == b)
                 c.r('nwell', xa - 450, Y['nw_b'], x1 + 450, Y['p_bot'] + max(hi, 1000) + 450)
         # rails (M3 windows where an M3 vertical crosses), the rail n-well strip and taps
         skip_t = [(x - 700, x + 700) for x in list(m3_used) + [x for n, x, e in verts if e in ('top', 'through', 'throughb')]

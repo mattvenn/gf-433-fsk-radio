@@ -4,7 +4,10 @@
     python3 layout/gen/rx_bias.py [--out build/rx_layout/gen/rx_bias] [--gds layout/rx_bias.gds]
 
 Circuit and sizes: sim/rx/rx_bias.py block() (= xschem/rx_bias.sch), read through rx_lib.sim_cells().
-Two bands (layout/gen/rx_lib.py; the second mirrored onto the first's VDD rail), columns left to right:
+One band (layout/gen/rx_lib.py), columns left to right (2026-11-16: was two bands, 62.6 x 35.7 um, the second
+with an empty P row; now 84.2 x 24.8 um, flat, to fit over the LNA in rx_top under the mixer column's top. A
+two-band version with Rb and Cnb in an NN band is 36.6 x 42.5 um, but in rx_top it is the tallest block over the LNA
+and raises row A by 12.8 um.)
   INV  : Ie (en -> enb)
   SW   : Msw (VDD -> vh, gate enb) over Moff / Moff2 (nb, x to VSS)
   MIR  : MP1 / MP2 as one diffusion, fingers A B B A with the shared source vh in the middle of each pair (common
@@ -55,16 +58,8 @@ def cols():
 def build():
     cell = Cell('rx_bias')
     c = cols()
-    b0 = R.Band('bias_mir', c[:3], ports=RISE, pins=PINS[2:], search=True)
-    b1 = R.Band('bias_su', c[3:], ports=RISE, search=True)
-
-    def exits(bands, xr):
-        x = R.risers(bands, [n for n in RISE if all(n in b.span0 for b in bands)], xr)
-        e0 = {n: [('top', v)] for n, v in x.items()}
-        for n, e in EXITS.items():
-            e0[n] = e0.get(n, []) + [e]
-        return [e0, {n: ('top', v) for n, v in x.items()}]
-    metas, bb = R.stack(cell, [b0, b1], exits)
+    band = R.Band('bias', c, ports=RISE, pins=PINS[2:], search=True)
+    metas, bb = R.stack(cell, [band], [EXITS])
     return [cell], dict(bbox=bb, bands=metas)
 
 

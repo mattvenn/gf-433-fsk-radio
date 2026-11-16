@@ -68,7 +68,7 @@ def hres(d, n):
 def bands(D):
     nf_t1 = 2
     # NN band: R.Band's P list is its top row
-    A = [('CAPS', [cap(D['C2a'], 24.57), cap(D['C3a'], 24.57), one(D['Mvbsnk'])],
+    A = [('CAPS', [cap(D['C2a'], 24.57), cap(D['C3a'], 24.57)],
           [cap(D['C2b'], 24.57), cap(D['C3b'], 24.57), cap(D['Cvb'], 24.57), hres(D['Rvb2'], 6)])]
     B = [('S1', [one(D['Mvbs'], ['VDD', 'enb', 'vbt']), cap(D['Cc2a'], 12.285), cap(D['Cc2b'], 12.285)],
           [abba(D['M1a'], D['M1b']), R.from_dev(D['Mt1'], nf=nf_t1)]),
@@ -85,7 +85,7 @@ def bands(D):
     return A, B, C
 
 
-RISE_AB = ['o2p', 'o2n', 'outp', 'outn', 'vb', 'vgr', 'nb']
+RISE_AB = ['o2p', 'o2n', 'outp', 'outn', 'vb', 'nb']
 RISE_BC = ['o1p', 'o1n', 'o2p', 'o2n', 'outp', 'outn', 'g2p', 'g2n', 'g3p', 'g3n', 'vb', 'vgr', 'vbt']
 
 
@@ -94,7 +94,8 @@ def build(cell_name=CELL):
     A, B, C = bands(D)
     cell = Cell(cell_name)
     bA = R.Band('bb_caps', A, ports=RISE_AB, pins=['nb', 'inp', 'inn', 'enb'], top='N', search=False)
-    bB = R.Band('bb_sig', B, ports=RISE_AB + RISE_BC + ['inp', 'inn', 'enb'], search=False)
+    bB = R.Band('bb_sig', B, ports=RISE_AB + RISE_BC + ['inp', 'inn', 'enb'], search=False,
+                overlay=[one(D['Mvbsnk'])])
     bC = R.Band('bb_bias', C, ports=RISE_BC, pins=['outp', 'outn'], search=False)
     risers = sorted(set(RISE_AB) | set(RISE_BC))
 

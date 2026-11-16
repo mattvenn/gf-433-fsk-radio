@@ -38,6 +38,12 @@ REPO = HERE.parents[1]
 COX = 4.07e-3                      # nfet_03v3 gate C per area incl. overlap (F/m2), as ring_core_v3.py
 DCLS = dict(nf=5, w=49.14, l=10.0)  # VDD_LS decap fingers: the CF finger of cgm_ref, 5 of them
 DCLS["c_pf"] = DCLS["nf"] * DCLS["w"] * DCLS["l"] * 1e-12 * COX * 1e12
+# 2026-11-16: drawn as two groups of the same total W (netgen adds parallel W, so the sheet keeps DCLS): 3 tall
+# fingers left of lsdiv and 3 short ones under lsdiv (where two p+ tap columns stood only for DCF.1a): the macro is
+# 21.2 um narrower. DCLS (the schematic / simulation value) is unchanged.
+DRAW = dict(main=dict(nf=3, w=55.9), under=dict(nf=3, w=26.0))
+assert abs(sum(g["nf"] * g["w"] for g in DRAW.values()) - DCLS["nf"] * DCLS["w"]) < 1e-9
+UND_X0 = -43400                    # left edge of the under-lsdiv group (vco_top x); lsdiv spans -42.39 ... -1.9
 
 # placements (nm): block origins in vco_top
 CORE_DX = 1000                     # 2026-11-12: the core's PMOS vg decap (own n-well) moved its DAC, switches and right
@@ -69,35 +75,48 @@ def um(v):
     return int(round(v * 1000 / 5.0)) * 5
 
 
-def decap_cell(rail_to=None, taps=()):
+def decap_cell(rail_to=None, taps=(), under_x0=None):
     """decap_ls: nf fingers W x L (nfet_03v3), gate = VDD_LS strap (M1 + M2) on top, S/D/B VSS, rail at the bottom.
     rail_to: extend the VSS rail (M1 + M2 + p+ tap) to this local x (under lsdiv, to the core's left edge);
     taps: local x of p+ tap columns (M1 + contacts) standing on the rail up to TAP_TOP, which break up the empty
     area under lsdiv (KLayout DCF.1a: no gap of >= 20 um between COMP shapes without dummy COMP)."""
     c = Cell("decap_ls")
-    x0, yb = 1000, 600
-    W, L, n = um(DCLS["w"]), um(DCLS["l"]), DCLS["nf"]
-    cf = fet_row(c, x0, yb, W, [(L, "VDD_LS")] * n, "n")
-    yt = yb + W
-    s_b = yt + 255
-    s_t = s_b + 800
-    pcy = s_b + 190
-    for (ga, gb) in cf["gx"]:
-        c.r("poly", ga, yt, gb, pcy + 185)
-        gcx = (ga + gb) // 2
-        for o in range(-3600, 3601, 1200):
-            c.r("pc", gcx + o - 115, pcy - 115, gcx + o + 115, pcy + 115)
-    for cx in cf["rx"]:                      # S/D columns down into the VSS rail
-        c.r("m1", cx - 190, VSS_T - 300, cx + 190, cf["cb"])
-    x1 = cf["x1"]
+    yb = 600
+    L = um(DCLS["l"])
+
+    def group(x0, W, n):
+        """n fingers W x L from x0, gate strap M1 + M2 (VDD_LS) on top, S/D columns into the VSS rail."""
+        cf = fet_row(c, x0, yb, W, [(L, "VDD_LS")] * n, "n")
+        yt = yb + W
+        s_b = yt + 255
+        s_t = s_b + 800
+        pcy = s_b + 190
+        for (ga, gb) in cf["gx"]:
+            c.r("poly", ga, yt, gb, pcy + 185)
+            gcx = (ga + gb) // 2
+            for o in range(-3600, 3601, 1200):
+                c.r("pc", gcx + o - 115, pcy - 115, gcx + o + 115, pcy + 115)
+        for cx in cf["rx"]:                      # S/D columns down into the VSS rail
+            c.r("m1", cx - 190, VSS_T - 300, cx + 190, cf["cb"])
+        x1 = cf["x1"]
+        c.r("m1", x0 - 400, s_b, x1, s_t)       # gate strap M1 + M2 (VDD_LS)
+        c.r("m2", x0 - 400, s_b, x1, s_t)
+        x = x0
+        while x + 400 < x1:
+            c.r("v1", x - 130, s_b + 270, x + 130, s_t - 270)
+            x += 2000
+        return x1, s_b, s_t
+
+    g = DRAW["main"]
+    x1, s_b, s_t = group(1000, um(g["w"]), g["nf"])
     xr = x1 + 1000
     xe = rail_to if rail_to is not None else xr
-    c.r("m1", 600, s_b, x1, s_t)             # gate strap M1 + M2 (VDD_LS)
-    c.r("m2", 600, s_b, x1, s_t)
-    x = 1000
-    while x + 400 < x1:
-        c.r("v1", x - 130, s_b + 270, x + 130, s_t - 270)
-        x += 2000
+    under = None
+    if under_x0 is not None:
+        g = DRAW["under"]
+        u1, ub, ut = group(under_x0, um(g["w"]), g["nf"])
+        assert ut < TAP_TOP, ut              # below lsdiv
+        under = (under_x0 - 400, ub, u1, ut)
     # VSS rail (M1 + M2, p+ tap), as cgm_ref's rail()
     c.r("m1", 0, VSS_B, xe, VSS_T)
     c.r("m2", 0, VSS_B, xe, VSS_T)
@@ -114,13 +133,14 @@ def decap_cell(rail_to=None, taps=()):
         c.r("m1", tx - 190, VSS_B, tx + 190, TAP_TOP)
     c.label("VSS", "m2", 1000, (VSS_B + VSS_T) // 2, port=True)
     c.label("VDD_LS", "m2", 1000, (s_b + s_t) // 2, port=True)
-    return c, dict(xr=xr, xe=xe, x1=x1, strap=(600, s_b, x1, s_t), top=s_t, gate_area_um2=n * DCLS["w"] * DCLS["l"])
+    return c, dict(xr=xr, xe=xe, x1=x1, strap=(600, s_b, x1, s_t), top=s_t, under=under,
+                   gate_area_um2=sum(g["nf"] * g["w"] for g in DRAW.values()) * DCLS["l"])
 
 
 def build_decap_gds(out):
     c0, i0 = decap_cell()
     dx = DC_R - i0["xr"]                     # decap_ls origin in vco_top
-    c, info = decap_cell(rail_to=RAIL_END - dx, taps=[x - dx for x in TAP_X])
+    c, info = decap_cell(rail_to=RAIL_END - dx, under_x0=UND_X0 - dx)      # (no tap columns: the under group)
     gds = out / "decap_ls.gds"
     tcl = "drc off\nsnap internal\n" + c.tcl() + f"load decap_ls\nselect top cell\nexpand\ngds write {gds}\nquit -noprompt\n"
     (out / "decap_ls.tcl").write_text(tcl)
@@ -197,6 +217,10 @@ def assemble(decap_gds, info, dst):
     r("m2", spine[0], LS_VDD[0], spine[1], YTOP)               # spine: gate strap -> top edge, down to lsdiv's rail
     r("m2", spine[0], LS_VDD[0], LS[0] + 800, LS_VDD[1])       # -> lsdiv VDD rail (M2 from lsdiv x 0.3)
     r("m3", spine[0], YTOP - 2400, spine[1], YTOP)
+    if info["under"]:                          # the under-lsdiv group's strap: M2 over to the spine, spine down to it
+        ua, ub, u1, ut = info["under"]
+        r("m2", spine[0], ub, DC[0] + ua + 1000, ut)
+        r("m2", spine[0], ub, spine[1], LS_VDD[1])
     via2s(spine[0], spine[1], YTOP - 2400, YTOP)
     lab("VDD_LS", "m3", (spine[0] + spine[1]) // 2, YTOP - 1200)
     # ---- ck: lsdiv's left-edge M2 -> M3 riser to the top edge ----

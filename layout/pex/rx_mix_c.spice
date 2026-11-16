@@ -1,46 +1,50 @@
 * rx_mix: magic R+C extraction of layout/rx_mix.gds (layout/gen/pex.sh)
-* extracted 2026-11-15T23:54:28+01:00 with magic 8.3.642, mode c, from rx_mix.gds
+* extracted 2026-11-16T12:08:57+01:00 with magic 8.3.642, mode c, from rx_mix.gds
 .subckt rx_mix VDD VSS rfp rfn bbp bbn lo lob
 X0 VSS bbp VSS VSS nfet_03v3 ad=2.2932p pd=8.75u as=33.0876p ps=0.13912m w=8.19u l=5u
-X1 rfp lob bbn VSS nfet_03v3 ad=8p pd=18u as=4p ps=9u w=8u l=0.28u
-X2 bbp lo rfp VSS nfet_03v3 ad=4p pd=9u as=8p ps=18u w=8u l=0.28u
-X3 VSS bbn VSS VSS nfet_03v3 ad=3.6855p pd=17.28u as=0 ps=0 w=8.19u l=5u
-X4 VSS bbp VSS VSS nfet_03v3 ad=2.2932p pd=8.75u as=0 ps=0 w=8.19u l=5u
-X5 rfn lo bbp VDD pfet_03v3 ad=8p pd=17u as=8p ps=17u w=16u l=0.28u
-X6 rfn lob bbp VSS nfet_03v3 ad=4p pd=9u as=4p ps=9u w=8u l=0.28u
-X7 VSS bbn VSS VSS nfet_03v3 ad=2.2932p pd=8.75u as=0 ps=0 w=8.19u l=5u
-X8 VSS bbp VSS VSS nfet_03v3 ad=3.6855p pd=17.28u as=0 ps=0 w=8.19u l=5u
-X9 bbn lo rfn VSS nfet_03v3 ad=4p pd=9u as=4p ps=9u w=8u l=0.28u
-X10 bbp lob rfp VDD pfet_03v3 ad=8p pd=17u as=16p ps=34u w=16u l=0.28u
-X11 rfp lo bbn VDD pfet_03v3 ad=16p pd=34u as=8p ps=17u w=16u l=0.28u
-X12 VSS bbn VSS VSS nfet_03v3 ad=2.2932p pd=8.75u as=0 ps=0 w=8.19u l=5u
-X13 bbn lob rfn VDD pfet_03v3 ad=8p pd=17u as=8p ps=17u w=16u l=0.28u
-C0 bbp rfn 3.73332f
-C1 rfn VDD 0.10587f
-C2 bbp rfp 2.18678f
-C3 lob bbn 1.95104f
-C4 VDD rfp 0.44704f
-C5 lo lob 2.09599f
-C6 bbp bbn 0.95565f
-C7 lo bbp 2.22567f
-C8 bbn VDD 0.14198f
-C9 lo VDD 0.6759f
-C10 lob bbp 1.24465f
-C11 lob VDD 0.65003f
-C12 bbp VDD 0.10032f
-C13 rfn rfp 2.58231f
-C14 rfn bbn 1.44397f
-C15 lo rfn 1.14054f
-C16 bbn rfp 1.5904f
-C17 lo rfp 1.12024f
-C18 lo bbn 1.23007f
-C19 lob rfn 1.05507f
-C20 lob rfp 1.13241f
-C21 bbn VSS 8.874f
-C22 rfn VSS 0.6515f
-C23 bbp VSS 8.72756f
-C24 rfp VSS 3.21945f
-C25 lo VSS 1.49987f
-C26 lob VSS 1.18284f
-C27 VDD VSS 35.4429f
+X1 rfp lob bbp VDD pfet_03v3 ad=8p pd=18u as=4p ps=9u w=8u l=0.28u
+X2 rfp lob bbn VSS nfet_03v3 ad=8p pd=18u as=4p ps=9u w=8u l=0.28u
+X3 VSS bbn VSS VSS nfet_03v3 ad=2.2932p pd=8.75u as=0 ps=0 w=8.19u l=5u
+X4 bbp lo rfn VDD pfet_03v3 ad=4p pd=9u as=4p ps=9u w=8u l=0.28u
+X5 bbn lo rfp VDD pfet_03v3 ad=4p pd=9u as=4p ps=9u w=8u l=0.28u
+X6 bbp lo rfp VSS nfet_03v3 ad=4p pd=9u as=8p ps=18u w=8u l=0.28u
+X7 VSS bbp VSS VSS nfet_03v3 ad=2.2932p pd=8.75u as=0 ps=0 w=8.19u l=5u
+X8 rfn lo bbp VDD pfet_03v3 ad=4p pd=9u as=4p ps=9u w=8u l=0.28u
+X9 rfn lob bbp VSS nfet_03v3 ad=4p pd=9u as=4p ps=9u w=8u l=0.28u
+X10 rfn lob bbn VDD pfet_03v3 ad=4p pd=9u as=4p ps=9u w=8u l=0.28u
+X11 VSS bbp VSS VSS nfet_03v3 ad=3.6855p pd=17.28u as=0 ps=0 w=8.19u l=5u
+X12 VSS bbn VSS VSS nfet_03v3 ad=3.6855p pd=17.28u as=0 ps=0 w=8.19u l=5u
+X13 bbn lo rfn VSS nfet_03v3 ad=4p pd=9u as=4p ps=9u w=8u l=0.28u
+X14 VSS bbn VSS VSS nfet_03v3 ad=2.2932p pd=8.75u as=0 ps=0 w=8.19u l=5u
+X15 bbp lob rfp VDD pfet_03v3 ad=4p pd=9u as=8p ps=18u w=8u l=0.28u
+X16 rfp lo bbn VDD pfet_03v3 ad=4p pd=9u as=4p ps=9u w=8u l=0.28u
+X17 bbn lob rfn VDD pfet_03v3 ad=4p pd=9u as=4p ps=9u w=8u l=0.28u
+C0 rfn rfp 0.17104f
+C1 rfn bbn 2.45457f
+C2 lo rfn 2.83249f
+C3 bbn rfp 2.1618f
+C4 lo rfp 1.10179f
+C5 lo bbn 1.39957f
+C6 lob rfn 1.70994f
+C7 lob rfp 1.89273f
+C8 bbp rfn 1.93204f
+C9 rfn VDD 0.19111f
+C10 bbp rfp 4.92845f
+C11 lob bbn 3.31244f
+C12 VDD rfp 0.44635f
+C13 lo lob 0.95116f
+C14 bbp bbn 0.87336f
+C15 bbn VDD 0.23335f
+C16 lo bbp 1.20493f
+C17 lo VDD 0.89717f
+C18 lob bbp 3.22561f
+C19 lob VDD 0.86817f
+C20 bbp VDD 0.19111f
+C21 bbn VSS 7.72334f
+C22 rfn VSS 1.38167f
+C23 bbp VSS 7.85813f
+C24 rfp VSS 3.06601f
+C25 lo VSS 1.55929f
+C26 lob VSS 1.21563f
+C27 VDD VSS 30.7971f
 .ends

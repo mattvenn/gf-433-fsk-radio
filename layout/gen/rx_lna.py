@@ -8,7 +8,7 @@ Three bands (layout/gen/rx_lib.py), bottom to top:
   band 0  stage 2, Q copy (x2q): RLp | M1 / M2 | tail | RLn, then the vcm divider (Mvs, Rv1, Rv2) and 2 of
           Cvcm's 5 fingers
   band 1  stage 1 (mirrored, shares the VDD rail with band 0 and the VSS rail with band 2):
-          Rgp Rgn | M1 / M2 | tail | RLp RLn
+          N row: M1 / M2 | tail; P row (over the pair, poly on the substrate, no n-well): Rgp RLp RLn Rgn
   band 2  stage 2, I copy (x2i): drawn exactly as band 0 (same columns, same orientation), then 3 of Cvcm's fingers
   (the divider and Cvcm sit in the outer bands so that all three bands are about as wide as stage 1)
   Pairs: one diffusion per pair, fingers A B B A (common source tail between each A-B pair, a shared drain between
@@ -84,10 +84,10 @@ def cvcm(D, nf, of=5):
 
 
 def stage1(D):
-    return [('RG', [], [hr(D, 'Rgp', 4), hr(D, 'Rgn', 4)]),
-            ('PAIR', [], [pair(D['M1'], D['M2'])]),
-            ('TAIL', [], [tail(D['Mt'])]),
-            ('RL', [], [load(D['RLp']), load(D['RLn'])])]
+    # 2026-11-16: the four resistors in the (otherwise empty) P row over the pair, on the substrate (no n-well),
+    # symmetric: Rgp RLp RLn Rgn; the N row holds only the pair and the tail (the band was 134 um wide, now 98)
+    return [('PAIR', [hr(D, 'Rgp', 4), load(D['RLp']), load(D['RLn']), hr(D, 'Rgn', 4)], [pair(D['M1'], D['M2'])]),
+            ('TAIL', [], [tail(D['Mt'])])]
 
 
 def build():

@@ -200,7 +200,6 @@ def build():
     place = {}
     place['lna'] = at('rx_lna', 0, 0)
     place['b'] = at('rx_bias', 0, place['lna'][2] + H('rx_lna') + STACK)
-    place['dc'] = at('rx_decap', W('rx_bias') + 16000, place['b'][2])
     xc = place['lna'][1] + W('rx_lna') + GV                   # mixer column (the LO buffers' left edge)
     lna_oq = [y for (n, x, y, s) in pins_of('rx_lna', meta['rx_lna']) if n == 'oqp'][0] - bb['rx_lna'][1]
     mix_rf = [y for (n, x, y, s) in pins_of('rx_mix', meta['rx_mix']) if n == 'rfp'][0] - bb['rx_mix'][1]
@@ -213,10 +212,25 @@ def build():
     assert place['lo_bi'][2] - (place['mi'][2] + H('rx_mix')) >= 1500
     lsq = meta['rx_lsq']
     place['lo_lq'] = at('rx_lsq', xc + W('rx_lobuf') + GV, 0, rx=-lsq['ls_x'] % P, ry=-R.LL.A0_Y % P)
+    # the supply decap above rx_lsq (2026-11-16: was beside rx_bias over the LNA, which is narrower now), right of
+    # rx_lsq's qenb tie (M3 up to the VSS bus) and lsq pin, with room for its own strap pair on its left
+    xdc = place['lo_lq'][1] + max(lsq['xq'], lsq['ls_x']) - bb['rx_lsq'][0] + 2000 + 2000 + 2 * STRAPW
+    place['dc'] = at('rx_decap', xdc, place['lo_lq'][2] + H('rx_lsq') + STACK)
     topA = max(y + H(c) for (c, x, y) in place.values())
     yB = topA + GH
     place['bbi'] = at('rx_bb', 0, yB)
     place['bbq'] = at('rx_bb', W('rx_bb') + GV, yB)
+    # row A's strap columns run up to the bus under row B: a row-B bottom pin right over a strap is boxed in (block
+    # above, strap below, bus M2 beside) and the router went through the strap (2026-11-16: bq_p / bq_n shorted to
+    # VSS through rx_lsq's strap). Nudge the rx_lsq column (and the decap above it) right until its straps and the
+    # decap's are clear of every row-B bottom pin.
+    pinx = [x - bb[c][0] + px for n in ('bbi', 'bbq') for (c, x, y) in [place[n]]
+            for (net, px, py, sd) in pins_of(c, meta[c]) if sd == 'bottom']
+    hit = lambda xl: any(xl - 2000 - 2 * STRAPW - 700 <= px <= xl - 1000 + 700 for px in pinx)
+    while hit(place['lo_lq'][1]) or hit(place['dc'][1]):
+        for n in ('lo_lq', 'dc'):
+            c, x, y = place[n]
+            place[n] = (c, x + P, y)
     yC = max(place[n][2] for n in ('bbi', 'bbq')) + H('rx_bb') + GH
     place['li'] = at('rx_lim', 0, yC)
     place['lq'] = at('rx_lim', W('rx_lim') + GV, yC)

@@ -106,8 +106,10 @@ def build():
     D = {d['name']: d for d in R.flat_devs(R.sim_cells(), 'rx_lsq')}
     hq, cq = D['Hq'], D['Cq']
     assert hq['nets'] == ['vq', 'qenb', 'VDD', 'VDD'] and hq['m'] == 2
-    cols = [('HQ', [R.mos(hq['w'], hq['l'], ['VDD', 'qenb', 'vq', 'qenb', 'VDD'], 'VDD')], []),
-            ('CQ', [], [R.from_dev(cq, nf=3)])]
+    # Hq: 6 fingers of W / 3 (= m 2 x W), not 2 of W, over Cq: the header band's P row is a third as tall
+    # (2026-11-16)
+    cols = [('HQ', [R.mos(hq['w'] / 3, hq['l'], ['VDD'] + ['qenb', 'vq', 'qenb', 'VDD'] * 3, 'VDD')],
+             [R.from_dev(cq, nf=3)])]                 # Hq over Cq, one column
     band = R.Band('lsq_hdr', cols, ports=['vq', 'qenb'], pins=['qenb'], x0=2900, search=True)
     band.place()
     assert band.xend <= xr - 500, (band.xend, xr)
