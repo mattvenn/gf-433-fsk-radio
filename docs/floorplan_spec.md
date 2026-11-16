@@ -54,8 +54,8 @@ not yet placed start where `rx_top` has them. A variant that places the cells is
 
 ## Nets
 Flylines are drawn as L routes (the one crossing fewer blocks) and measured as Manhattan lengths.
-- **Pads:** ua[4] → RX inp, ua[5] → RX inn; tx_drv out_n → ua[2], out_p → ua[3]; ua[0] → vco_top vctrl, with
-  vctrl_pd; ua[1] → vco_top vbn.
+- **Pads:** ua[4] → RX inp, ua[5] → RX inn; tx_drv out_n → ua[2], out_p → ua[3]; ua[0] is the debug pin (below);
+  ua[1] is unused (it was vbn, the VCO bias monitor; the debug mux covers it).
 - **LO:** vco_top ls → the receiver's ls (rx_top's port, or `rx_lobuf` I's input) and → tx_drv ls; vco_top a2 → the
   receiver's aq (`rx_lsq`).
 - **Fine tuning:** tx_fine's 37 DAC lines → mdac (dac_tn[i] → ns(i+1), dac_bn[b] → nb(b), dac_sdn → nsd); mdac vg →
@@ -70,6 +70,24 @@ Flylines are drawn as L routes (the one crossing fewer blocks) and measured as M
 
 Net classes (colours on the page): RX input, RX signal, RX outputs, LO, ring-derived clock, 25 MHz / SPI, fine-tune
 bus, enable / code (static), TX output, analog DC.
+
+## Debug mux (ua[0])
+Matt, 2026-11-16: no dedicated vctrl / vbn pins; one debug pin with a mux instead. Six analog pins in all (ua[0],
+ua[2]–ua[5], and ua[1] spare).
+- **Sources,** most useful first: baseband I and baseband Q (rx_bb outp, the limiter inputs: the only view of the
+  analog receive chain), the receiver bias nb (did rx_bias start), and vctrl (as an output, or with its switch on, the
+  bench override of the VCO's fine-tune node). Not needed: the VCO frequency (ck and the dividers on uo[0:3]), the
+  receiver end to end (q_i / q_q on uo[4:5]), the RF / LO nodes (434 MHz can't leave the chip unbuffered).
+- **Switches:** one per source, next to it (inside its block if there is no room: drawn in its re-layout), so a
+  sensitive node only sees a short stub and the off capacitance. Selected by SPI bits in tx_fine (`dbg_sel[0:3]`,
+  estimated pins; all off after reset). The bus to ua[0] is routed round the receiver (rule 6).
+- **The switch cell:** the default is our own 3.3 V transmission gate (nfet_03v3 + pfet_03v3 and an inverter; no
+  level shifter, since the select bit and the switch are both 3.3 V), estimated at 15 × 12 µm and drawn hatched.
+  Small devices are enough: the sources are DC or slow (≤ 143 kHz), and a few kΩ into a few pF of pad and probe is
+  nanoseconds. The page can switch to Tiny Tapeout's `tt_asw_5v0` (tt-multiplexer, `asw/gf180mcuD`; 40.32 × 30.25 µm,
+  5 V devices and a level shifter, VDPWR + VAPWR + VGND on its own Metal4 straps): in B it does not fit (rule 9 fails).
+- **When all are off** the bus floats on the pad and reaches the sources only through the fF off capacitances; a fifth
+  switch tying the bus to VGND would cut that further (optional).
 
 ## Rules, ranked
 The radio is half-duplex: while receiving, the TX driver's arms are off. The ring, lsdiv and its ck run all the time,
@@ -88,6 +106,7 @@ and so does the macro's 25 MHz clock.
 | 9 | Fit and spacing | overlaps (the macro's halo counts, and reserved areas), blocks outside the tile, gaps under the keep-out | keep-out 2.5 µm |
 | 10 | Power stripes | each Metal4 stripe's lane (y 5 … 320.36) against every block's Metal4; over the macro only on its own straps of the same net; width ≥ 0.8 µm; VDPWR, VAPWR and VGND all present | – |
 | 11 | VCO bias wires (vco_top split only) | cgm_ref → ring vbnf and vctrl, and their gap to the macro and every clock / DAC flyline | ≤ 40 µm, gap ≥ 50 µm |
+| 12 | Debug mux next to its sources | source → its switch (the longest of the four), the bus length and its gap to the LNA | ≤ 20 µm |
 
 Every threshold is a page setting (shared through the database). The checklist shows each rule's number and, on
 hover, why it exists.
@@ -132,26 +151,28 @@ block pin's x; at each x the channel is as tall as the number of wires there tim
   `db.Trans.M0` for tx_drv), plus the shift onto the VAPWR tile. All six blocks agree to 0.000 µm: in the wrapper
   vco_top MY at x 296.0, y 10.0; tx_drv MX at 597.15, 120.0; mdac 335, 118; vctrl_pd 252, 13.2; tx_fine 0.6, 45; the
   code inverters 554.04, 90.16. On the page every x but the macro's is 17.92 µm less.
-- **Mutation tests** (`mutate.js`): each breaks a copy of a variant in which its rule does not already fail; all 12
+- **Mutation tests** (`mutate.js`): each breaks a copy of a variant in which its rule does not already fail; all 14
   are caught.
 
-**Table I.** Mutations and the rule that catches them (each on the first preset in which its rule does not already
-fail).
+**Table I.** Mutations and the rule that catches them (each on the first preset in which its rule passes; the ck
+mutation is caught when rule 6 names ck as rerouted, since one detour alone stays under the total).
 
 | Mutation | Rule | Before → after (preset) |
 |---|---|---|
-| LNA moved away from ua[4] / ua[5] (+300 µm in x)  | 3 | pass 3 µm → fail 303 µm (A) |
-| a2 the long way: the Q level shifter (or rx_top) moved 250 µm away  | 2 | warn a2 3 µm → fail a2 403 µm (A) |
-| two blocks overlapped (mdac onto vco_top / the ring unit)  | 9 | pass none → fail 4 overlaps (A) |
-| a block pushed outside the tile  | 9 | pass none → fail 1 overlap (A) |
-| the macro next to the LNA  | 1 | pass 212 µm → fail 1 µm (A) |
-| a VAPWR stripe moved onto the macro, off its straps  | 10 | pass 16 clear → fail 1 blocked (A) |
-| every VAPWR stripe renamed VDPWR  | 5 | warn 45 crossings → fail 45 crossings (A) |
-| tx_drv moved 300 µm from ua[2] / ua[3]  | 4 | pass 1 µm → fail 623 µm (A) |
-| mdac moved to the far corner from the macro  | 7 | pass 196 µm → fail 706 µm (A) |
-| the macro dropped to the bottom (far from the top edge)  | 8 | pass 12.4 µm → warn 62.4 µm (A) |
-| ck: its straight route through the largest receiver block (macro above it, vco_top below it) | 6 | pass 6 round, +259 µm → fail 5 blocked, ck among them (A) |
-| vco_top split: cgm_ref moved 200 µm from the ring  | 11 | warn 52 µm → fail 152 µm (A) |
+| LNA moved away from ua[4] / ua[5] (+300 µm in x) | 3 | pass 3 µm -> fail 303 µm (A) |
+| a2 the long way: the Q level shifter (or rx_top) moved 250 µm away | 2 | pass a2 3 µm -> fail a2 403 µm (C) |
+| two blocks overlapped (mdac onto vco_top / the ring unit) | 9 | pass none -> fail 4 overlaps (A) |
+| a block pushed outside the tile | 9 | pass none -> fail 1 overlap (A) |
+| the macro next to the LNA | 1 | pass 212 µm -> fail 1 µm (A) |
+| a VAPWR stripe moved onto the macro, off its straps | 10 | pass 16 clear -> fail 1 blocked (A) |
+| every VAPWR stripe renamed VDPWR | 5 | warn 47 crossings -> fail 47 crossings (A) |
+| tx_drv moved 300 µm from ua[2] / ua[3] | 4 | pass 1 µm -> fail 623 µm (A) |
+| mdac moved to the far corner from the macro | 7 | pass 196 µm -> fail 706 µm (A) |
+| the macro dropped to the bottom (far from the top edge) | 8 | pass 12.4 µm -> warn 62.4 µm (A) |
+| ck: its straight route through the largest receiver block (macro above it, vco_top below it): it must go round | 6 | pass 6 round, +117 µm -> pass 6 round, +193 µm (B) |
+| a baseband arm pushed up under the top channel (the TT wires then run over it) | 6 | pass 6 round, +117 µm -> fail 3 blocked (B) |
+| debug switch (baseband I) moved 100 µm from its source | 12 | pass 1 µm -> fail 100 µm (A) |
+| vco_top split: cgm_ref moved 200 µm from the ring | 11 | warn 52 µm -> fail 152 µm (A) |
 
 - **Block mode:** `rx_top` placed as one block scores rules 1, 2, 3, 6 and 9 from its own pins and its LNA zone
   (checked by hand: placed over the pads it fails on fit, as it must at 370.6 µm tall).
@@ -169,26 +190,26 @@ layouts. A first try with a 560 × 79 µm macro strip under the TT pins was drop
 
 **Table II.** The variants on the checklist (P pass, W warn, F fail).
 
-| Variant | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 |
-|---|---|---|---|---|---|---|---|---|---|---|---|
-| current | – | – | – | F | W | – | W | P | P | P | – |
-| A: no re-harden: macro as it is on the right edge, vco_top split | P | W | P | P | W | P | P | P | P | P | W |
-| B: squarish macro top right (250 × 177), vco_top split, every pin fitted | P | W | P | P | W | P | P | P | P | P | W |
-| C: macro as hardened but turned 90° (260 × 170) top right, pins re-ordered | P | P | P | P | W | W | W | P | P | P | W |
-| P3 (first set, as Matt left it on the page) | W | P | P | P | W | W | W | P | W | P | – |
+| Variant | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| current | – | – | – | F | W | – | W | P | P | P | – | – |
+| A: no re-harden: macro as it is on the right edge, vco_top split | P | W | P | P | W | W | P | P | P | P | W | P |
+| B: squarish macro top right (250 × 177), vco_top split, every pin fitted | P | W | P | P | W | P | P | P | W | P | W | P |
+| C: macro as hardened but turned 90° (260 × 170) top right, pins re-ordered | P | P | P | P | W | W | W | P | P | P | W | P |
+| P3 (first set, as Matt left it on the page; no debug switches placed) | W | P | P | P | W | W | W | P | W | P | – | – |
 
 **Table III.** Key wires in the presets (µm, Manhattan).
 
 | Wire | A | B | C |
 |---|---|---|---|
 | RX input ↔ macro and clocks (rule 1) | 212 | 210 | 210 |
-| a2 → aq / ls → receiver (routed round it where needed) | 3 / 121 | 10 / 121 | 3 / 64 |
+| a2 → aq / ls → receiver (routed round it where needed) | 3 / 176 | 10 / 121 | 3 / 64 |
 | ua[4] → LNA inp; tx_drv → ua[2] / ua[3] | 3; 0 / 1 | 3; 0 / 0 | 3; 0 / 1 |
 | longest DAC line; mdac vg → ring | 196; 18 | 16; 3 | 16; 134 |
-| wires routed round the receiver (rule 6) | 6, +259 | 4, +108 | 5, +757 |
+| wires routed round the receiver (rule 6) | 11, +464 | 6, +117 | 11, +1136 |
 | cgm_ref → ring vbnf / vctrl | 51 / 52 | 47 / 12 | 11 / 5 |
-| vctrl → ua[0] | 268 | 149 | 154 |
-| q_i / q_q → uo[4] / uo[5] | 146 / 215 | 389 / 334 | 669 / 268 |
+| debug bus to ua[0], four switches (each ≤ 4 µm from its source) | 1434 | 1093 | 971 |
+| q_i / q_q → uo[4] / uo[5] (length not scored) | 146 / 215 | 387 / 333 | 669 / 269 |
 
 ![current](img/floorplan/current.png)
 
@@ -235,8 +256,8 @@ re-layout. In the presets the tile is 87–88 % blocks and decap (26–29k µm²
 4. **The I / Q LO load match.** ls drives the TX tap and the I buffer; lsq only the Q buffer. In P3 they are close:
    ls 236 µm (62 to the receiver, 174 to tx_drv) against lsq 203 µm. The flyline lengths stand in for the wire C; the
    extracted loads decide (`docs/rx_layout.md`, LO section).
-5. **vctrl and vbn wires.** In every proposal that keeps the LO end of vco_top near the receiver, vctrl (the VCO's
-   fine-tune node) runs a long way to ua[0]; a long vctrl wire picks up coupling as FM. Not a ranked rule yet.
+5. **The debug mux** (decided: ua[0], four sources). Open: our own tgate's real size once drawn, the select bits'
+   place in tx_fine's register map, and whether to add a fifth switch that grounds the bus when nothing is selected.
 6. **Decap targets.** No tile-level target for VAPWR or VDPWR yet; the fill is reported in pF only.
 7. **`tt_wrapper.py` is still on the 711.20 µm template.** The page's "current" is a shifted copy; the wrapper
    itself follows when the chosen floorplan goes into the tile generator.

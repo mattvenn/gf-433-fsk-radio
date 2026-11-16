@@ -39,7 +39,7 @@ for n, i in d['inst'].items():
         ax.add_patch(Rectangle((z[0], z[1]), z[2], z[3], fill=False, ec=ec, lw=.4, ls='--'))
         ax.text(z[0] + 1, z[1] + 1, zn, fontsize=5, color=ec)
     ax.text(x + w / 2, y + h / 2, f"{i['label']}\n{i['orient']}", ha='center', va='center', fontsize=7.5 if w > 60 else 6, color='#222', weight='bold')
-col = {'rfin': 'red', 'rx': 'teal', 'rxout': 'darkcyan', 'lo': 'magenta', 'clk': 'orange', 'dig': 'gray', 'fine': 'purple', 'en': 'olive', 'tx': 'brown', 'ana': 'green'}
+col = {'rfin': 'red', 'rx': 'teal', 'rxout': 'darkcyan', 'lo': 'magenta', 'clk': 'orange', 'dig': 'gray', 'fine': 'purple', 'en': 'olive', 'tx': 'brown', 'ana': 'green', 'dbg': 'deeppink'}
 for nt in d['nets']:
     a, b = nt['pa'], nt['pb']
     xs = [nt['segs'][0][0]] + [q[2] for q in nt['segs']]

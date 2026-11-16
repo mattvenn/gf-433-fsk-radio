@@ -110,7 +110,7 @@
   {
    "id": "A",
    "name": "A: no re-harden: macro as it is on the right edge, vco_top split",
-   "note": "No re-harden: the macro as it is (170 × 260 µm), mirrored onto the right edge so its DAC pins face west. vco_top split: cgm_ref stands on end (MXR90) between mdac and the macro, the ring + lsdiv unit at the bottom next to the receiver's Q level shifter (a2 → aq 3 µm). The analog blocks' pins are fitted to this placement (a re-layout each); the macro's are not.\nNumbers: RX input 212 µm from the macro and clocks; LNA inputs 3 µm; tx_drv on its pads; longest DAC line 196 µm; vg 18 µm.\nOpen: vbnf / vctrl from cgm_ref 51 / 52 µm and close to the DAC lines (rule 11); ls → rx 121 µm; vctrl → ua[0] 268 µm; ls, ck and the enables cross the receiver's LO end (rule 6).",
+   "note": "No re-harden: the macro as it is (170 × 260 µm), mirrored onto the right edge so its DAC pins face west. vco_top split: cgm_ref stands on end (MXR90) between mdac and the macro, the ring + lsdiv unit at the bottom next to the receiver's Q level shifter (a2 → aq 3 µm). The analog blocks' pins are fitted to this placement (a re-layout each); the macro's are not.\nNumbers: RX input 212 µm from the macro and clocks; LNA inputs 3 µm; tx_drv on its pads; longest DAC line 196 µm; vg 18 µm.\nOpen: vbnf / vctrl from cgm_ref 51 / 52 µm and close to the DAC lines (rule 11); ls → rx 121 µm; vctrl → ua[0] 268 µm; ls, ck and the enables cross the receiver's LO end (rule 6).\nDebug mux on ua[0]: four own 3.3 V tgates (estimated 15 × 12 µm, hatched) for baseband I, baseband Q, nb and vctrl, 1 µm at most from their sources (xdbg_bbi, xdbg_bbq, xdbg_nb, xdbg_vctrl drawn inside the source block); the bus to ua[0] is 1434 µm in all, routed round the receiver.",
    "rx": "cells",
    "vco": "parts",
    "order": 1,
@@ -214,6 +214,26 @@
      "x": 258.5,
      "y": 112,
      "orient": "R0"
+    },
+    "xdbg_bbi": {
+     "x": 133,
+     "y": 278,
+     "orient": "R270"
+    },
+    "xdbg_bbq": {
+     "x": 266,
+     "y": 278,
+     "orient": "R270"
+    },
+    "xdbg_nb": {
+     "x": 66,
+     "y": 137,
+     "orient": "R0"
+    },
+    "xdbg_vctrl": {
+     "x": 441,
+     "y": 129,
+     "orient": "R90"
     }
    },
    "est": {},
@@ -705,7 +725,63 @@
       "y": 0.25
      }
     },
-    "rx.decap": {}
+    "rx.decap": {},
+    "xdbg_bbi": {
+     "mod": {
+      "x": 7.04,
+      "y": 11.75
+     },
+     "bus": {
+      "x": 14.75,
+      "y": 11
+     },
+     "ctrl": {
+      "x": 14,
+      "y": 11.75
+     }
+    },
+    "xdbg_bbq": {
+     "mod": {
+      "x": 7.02,
+      "y": 11.75
+     },
+     "bus": {
+      "x": 14.75,
+      "y": 11
+     },
+     "ctrl": {
+      "x": 14,
+      "y": 11.75
+     }
+    },
+    "xdbg_nb": {
+     "mod": {
+      "x": 7.75,
+      "y": 11.75
+     },
+     "bus": {
+      "x": 14.75,
+      "y": 1
+     },
+     "ctrl": {
+      "x": 14.75,
+      "y": 2
+     }
+    },
+    "xdbg_vctrl": {
+     "mod": {
+      "x": 7.88,
+      "y": 11.75
+     },
+     "bus": {
+      "x": 1,
+      "y": 11.75
+     },
+     "ctrl": {
+      "x": 1,
+      "y": 0.25
+     }
+    }
    },
    "decaps": {
     "deca": [
@@ -740,9 +816,9 @@
       "h": 76
      },
      {
-      "x": 77,
+      "x": 84,
       "y": 104,
-      "w": 44,
+      "w": 37,
       "h": 48
      },
      {
@@ -903,12 +979,13 @@
      "w": 2
     }
    ],
-   "reserved": []
+   "reserved": [],
+   "updatedAt": "2026-11-16T15:16:30.375Z"
   },
   {
    "id": "B",
    "name": "B: squarish macro top right (250 × 177), vco_top split, every pin fitted",
-   "note": "A squarish re-harden (250 × 177 µm, 1.4:1, against 1.5:1 as hardened) in the top-right corner, its DAC pins on the west edge right against mdac (longest DAC line 16 µm). vco_top split: the ring + lsdiv unit in the middle, cgm_ref flat under the macro. Every pin fitted (the macro's: a new pin_order.cfg).\nNumbers: RX input 210 µm from the macro and clocks; a2 → aq 10 µm, ls → rx 63 µm; LNA inputs 3 µm; tx_drv on its pads; vg 3 µm.\nOpen: rx_bias ended up at the far right (nb / enb run across the tile) and q_i / q_q are 389 / 334 µm to uo[4] / uo[5]: drag the bias and the limiters back; vbnf 47 µm (rule 11); en_p / en_n and rx_en cross the receiver (rule 6).",
+   "note": "A squarish re-harden (250 × 177 µm, 1.4:1, against 1.5:1 as hardened) in the top-right corner, its DAC pins on the west edge right against mdac (longest DAC line 16 µm). vco_top split: the ring + lsdiv unit in the middle, cgm_ref flat under the macro. Every pin fitted (the macro's: a new pin_order.cfg).\nNumbers: RX input 210 µm from the macro and clocks; a2 → aq 10 µm, ls → rx 63 µm; LNA inputs 3 µm; tx_drv on its pads; vg 3 µm.\nOpen: rx_bias ended up at the far right (nb / enb run across the tile) and q_i / q_q are 389 / 334 µm to uo[4] / uo[5]: drag the bias and the limiters back; vbnf 47 µm (rule 11); en_p / en_n and rx_en cross the receiver (rule 6).\nDebug mux on ua[0]: four own 3.3 V tgates (estimated 15 × 12 µm, hatched) for baseband I, baseband Q, nb and vctrl, 4 µm at most from their sources (xdbg_bbi, xdbg_vctrl drawn inside the source block); the bus to ua[0] is 1093 µm in all, routed round the receiver. Limiter I was lifted off the ua[0] pad (it sat on it), leaving limiter Q 1.4 µm from the ring unit (rule 9).",
    "rx": "cells",
    "vco": "parts",
    "order": 2,
@@ -965,12 +1042,12 @@
     },
     "rx.lim_i": {
      "x": 276.2683021281394,
-     "y": 1.9051400090348414,
+     "y": 3,
      "orient": "MX"
     },
     "rx.lim_q": {
      "x": 276.0102176909104,
-     "y": 63.71201104051341,
+     "y": 64.807,
      "orient": "MX"
     },
     "rx.decap": {
@@ -1011,6 +1088,26 @@
     "xbits": {
      "x": 385.20878478881747,
      "y": 133.53144316118056,
+     "orient": "R90"
+    },
+    "xdbg_bbi": {
+     "x": 255,
+     "y": 160,
+     "orient": "R270"
+    },
+    "xdbg_bbq": {
+     "x": 127,
+     "y": 150,
+     "orient": "R0"
+    },
+    "xdbg_nb": {
+     "x": 636,
+     "y": 94,
+     "orient": "R180"
+    },
+    "xdbg_vctrl": {
+     "x": 395,
+     "y": 62,
      "orient": "R90"
     }
    },
@@ -1268,7 +1365,7 @@
     "xmac": {
      "ck": {
       "x": 249.75,
-      "y": -8
+      "y": -9
      },
      "ck_o": {
       "x": 249.75,
@@ -1315,8 +1412,8 @@
       "y": 175.8
      },
      "rx_en": {
-      "x": 249.75,
-      "y": -9
+      "x": 51.8,
+      "y": 0.25
      },
      "dac_tn[0]": {
       "x": 249.75,
@@ -1465,6 +1562,22 @@
      "dac_sdn": {
       "x": 249.75,
       "y": 108.15
+     },
+     "dbg_sel[0]": {
+      "x": 249.75,
+      "y": 28
+     },
+     "dbg_sel[1]": {
+      "x": 249.75,
+      "y": 10
+     },
+     "dbg_sel[2]": {
+      "x": 38,
+      "y": 0.25
+     },
+     "dbg_sel[3]": {
+      "x": 249,
+      "y": 0.25
      }
     },
     "rx.lna": {
@@ -1709,7 +1822,63 @@
       "y": 31.38
      }
     },
-    "rx.decap": {}
+    "rx.decap": {},
+    "xdbg_bbi": {
+     "mod": {
+      "x": 10.25,
+      "y": 11.75
+     },
+     "bus": {
+      "x": 14.75,
+      "y": 11
+     },
+     "ctrl": {
+      "x": 1,
+      "y": 11.75
+     }
+    },
+    "xdbg_bbq": {
+     "mod": {
+      "x": 7.46,
+      "y": 11.75
+     },
+     "bus": {
+      "x": 14.75,
+      "y": 1
+     },
+     "ctrl": {
+      "x": 14.75,
+      "y": 6
+     }
+    },
+    "xdbg_nb": {
+     "mod": {
+      "x": 14,
+      "y": 11.75
+     },
+     "bus": {
+      "x": 14.75,
+      "y": 11
+     },
+     "ctrl": {
+      "x": 1,
+      "y": 0.25
+     }
+    },
+    "xdbg_vctrl": {
+     "mod": {
+      "x": 2,
+      "y": 11.75
+     },
+     "bus": {
+      "x": 1,
+      "y": 11.75
+     },
+     "ctrl": {
+      "x": 14.75,
+      "y": 1
+     }
+    }
    },
    "decaps": {
     "deca": [
@@ -1720,16 +1889,16 @@
       "h": 56
      },
      {
-      "x": 77,
-      "y": 104,
-      "w": 80,
-      "h": 56
-     },
-     {
       "x": 664,
       "y": 3,
       "w": 29,
       "h": 128
+     },
+     {
+      "x": 77,
+      "y": 104,
+      "w": 80,
+      "h": 43
      },
      {
       "x": 396,
@@ -1762,22 +1931,28 @@
       "h": 41
      },
      {
-      "x": 636,
-      "y": 97,
-      "w": 25,
-      "h": 34
-     },
-     {
       "x": 160,
       "y": 138,
       "w": 27,
       "h": 24
      },
      {
+      "x": 636,
+      "y": 109,
+      "w": 25,
+      "h": 22
+     },
+     {
       "x": 213,
       "y": 91,
       "w": 60,
       "h": 8
+     },
+     {
+      "x": 77,
+      "y": 150,
+      "w": 47,
+      "h": 10
      }
     ],
     "decd": [
@@ -1866,12 +2041,13 @@
      "w": 2
     }
    ],
-   "reserved": []
+   "reserved": [],
+   "updatedAt": "2026-11-16T15:16:30.399Z"
   },
   {
    "id": "C",
    "name": "C: macro as hardened but turned 90° (260 × 170) top right, pins re-ordered",
-   "note": "The macro at its hardened size but turned 90° (260 × 170 µm) in the top-right corner: only the pin order changes at the re-harden, not the shape. DAC pins against mdac (16 µm). vco_top split with cgm_ref abutting the ring unit again (vbnf 11 µm, vctrl 5 µm). Every pin fitted.\nNumbers: RX input 210 µm from the macro and clocks; a2 → aq 3 µm, ls → rx 64 µm; LNA inputs 3 µm; tx_drv on its pads.\nOpen: limiter I ended up at the far right edge (q_i 669 µm to uo[4]): drag it back next to baseband I; mdac.vg → ring 134 µm (rule 7); the enables cross the receiver (rule 6).",
+   "note": "The macro at its hardened size but turned 90° (260 × 170 µm) in the top-right corner: only the pin order changes at the re-harden, not the shape. DAC pins against mdac (16 µm). vco_top split with cgm_ref abutting the ring unit again (vbnf 11 µm, vctrl 5 µm). Every pin fitted.\nNumbers: RX input 210 µm from the macro and clocks; a2 → aq 3 µm, ls → rx 64 µm; LNA inputs 3 µm; tx_drv on its pads.\nOpen: limiter I ended up at the far right edge (q_i 669 µm to uo[4]): drag it back next to baseband I; mdac.vg → ring 134 µm (rule 7); the enables cross the receiver (rule 6).\nDebug mux on ua[0]: four own 3.3 V tgates (estimated 15 × 12 µm, hatched) for baseband I, baseband Q, nb and vctrl, 4 µm at most from their sources (xdbg_bbi, xdbg_bbq, xdbg_nb drawn inside the source block); the bus to ua[0] is 971 µm in all, routed round the receiver.",
    "rx": "cells",
    "vco": "parts",
    "order": 3,
@@ -1975,6 +2151,26 @@
      "x": 355,
      "y": 72.5,
      "orient": "R0"
+    },
+    "xdbg_bbi": {
+     "x": 251,
+     "y": 160,
+     "orient": "R270"
+    },
+    "xdbg_bbq": {
+     "x": 118,
+     "y": 192,
+     "orient": "R270"
+    },
+    "xdbg_nb": {
+     "x": 271,
+     "y": 112,
+     "orient": "R0"
+    },
+    "xdbg_vctrl": {
+     "x": 380,
+     "y": 73,
+     "orient": "R270"
     }
    },
    "est": {},
@@ -2274,7 +2470,7 @@
       "y": 259.75
      },
      "rx_en": {
-      "x": -9,
+      "x": -8,
       "y": 259.75
      },
      "dac_tn[0]": {
@@ -2424,6 +2620,22 @@
      "dac_sdn": {
       "x": 106.78,
       "y": 259.75
+     },
+     "dbg_sel[0]": {
+      "x": 21,
+      "y": 259.75
+     },
+     "dbg_sel[1]": {
+      "x": 53,
+      "y": 259.75
+     },
+     "dbg_sel[2]": {
+      "x": -9,
+      "y": 259.75
+     },
+     "dbg_sel[3]": {
+      "x": 0.25,
+      "y": 258
      }
     },
     "rx.lna": {
@@ -2668,7 +2880,63 @@
       "y": 59.05
      }
     },
-    "rx.decap": {}
+    "rx.decap": {},
+    "xdbg_bbi": {
+     "mod": {
+      "x": 13.88,
+      "y": 11.75
+     },
+     "bus": {
+      "x": 14.75,
+      "y": 11
+     },
+     "ctrl": {
+      "x": 1,
+      "y": 11.75
+     }
+    },
+    "xdbg_bbq": {
+     "mod": {
+      "x": 7.2,
+      "y": 11.75
+     },
+     "bus": {
+      "x": 14.75,
+      "y": 11
+     },
+     "ctrl": {
+      "x": 1,
+      "y": 11.75
+     }
+    },
+    "xdbg_nb": {
+     "mod": {
+      "x": 7.2,
+      "y": 11.75
+     },
+     "bus": {
+      "x": 14,
+      "y": 0.25
+     },
+     "ctrl": {
+      "x": 14.75,
+      "y": 11
+     }
+    },
+    "xdbg_vctrl": {
+     "mod": {
+      "x": 14.75,
+      "y": 11
+     },
+     "bus": {
+      "x": 14.75,
+      "y": 1
+     },
+     "ctrl": {
+      "x": 0.25,
+      "y": 11
+     }
+    }
    },
    "decaps": {
     "deca": [
@@ -2679,15 +2947,15 @@
       "h": 63
      },
      {
-      "x": 336,
-      "y": 83,
-      "w": 54,
-      "h": 56
-     },
-     {
       "x": 66,
       "y": 104,
       "w": 55,
+      "h": 48
+     },
+     {
+      "x": 336,
+      "y": 91,
+      "w": 54,
       "h": 48
      },
      {
@@ -2745,22 +3013,22 @@
       "h": 37
      },
      {
-      "x": 281,
-      "y": 73,
-      "w": 9,
-      "h": 57
-     },
-     {
       "x": 0,
       "y": 28,
       "w": 11,
       "h": 37
      },
      {
-      "x": 293,
+      "x": 289,
       "y": 130,
-      "w": 40,
+      "w": 44,
       "h": 9
+     },
+     {
+      "x": 281,
+      "y": 73,
+      "w": 9,
+      "h": 36
      }
     ],
     "decd": [
@@ -2814,7 +3082,8 @@
      "w": 2
     }
    ],
-   "reserved": []
+   "reserved": [],
+   "updatedAt": "2026-11-16T15:16:30.455Z"
   },
   {
    "decaps": {

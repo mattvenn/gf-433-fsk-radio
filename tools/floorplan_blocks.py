@@ -27,6 +27,10 @@ GDS = {
     'rx_lobuf': 'layout/rx_lobuf.gds', 'rx_mix': 'layout/rx_mix.gds', 'rx_bb': 'layout/rx_bb.gds',
     'rx_lim': 'layout/rx_lim.gds', 'rx_decap': ('layout/rx_top.gds', 'rx_decap'),
 }
+# Tiny Tapeout's 5 V analog switch (github.com/TinyTapeout/tt-multiplexer, asw/gf180mcuD/tt_asw_5v0), for the debug
+# mux: read from a clone next to this repo (TT_MUX=<path> to point elsewhere); skipped when it is not there.
+TT_MUX = os.environ.get('TT_MUX', os.path.join(ROOT, '..', 'tt-multiplexer'))
+ASW = os.path.join(TT_MUX, 'asw', 'gf180mcuD', 'tt_asw_5v0', 'gds', 'tt_asw_5v0.gds')
 
 
 def block(path, cellname=None):
@@ -66,6 +70,14 @@ def main():
     out = {}
     for k, g in GDS.items():
         out[k] = block(*g) if isinstance(g, tuple) else block(g)
+    if os.path.exists(ASW):
+        a = block(os.path.relpath(ASW, ROOT))
+        # its pins from the LEF (the GDS labels are on its subcells): mod / bus Metal4, ctrl Metal3, all on the top half
+        a['pins'] = {'mod': {'layer': 'Metal4', 'x': 20.16, 'y': 28.75}, 'bus': {'layer': 'Metal4', 'x': 20.16, 'y': 14.25},
+                     'ctrl': {'layer': 'Metal3', 'x': 3.79, 'y': 29.75}}
+        a['straps'] = [{'net': 'VDPWR', 'x': 1.5, 'w': 0.8}, {'net': 'VGND', 'x': 2.6, 'w': 0.8}, {'net': 'VAPWR', 'x': 3.7, 'w': 0.8}]
+        a['gds'] = 'tt-multiplexer: asw/gf180mcuD/tt_asw_5v0/gds/tt_asw_5v0.gds'
+        out['tt_asw_5v0'] = a
     # the digital macro's Metal4 power straps (the only Metal4 a tile stripe may run on over the macro)
     t = out['tx_fine']
     t['straps'] = [{'net': 'VDD' if (r[0] % 40) < 17 else 'VSS', 'x': r[0], 'w': r[2]}

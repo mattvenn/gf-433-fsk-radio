@@ -37,6 +37,7 @@ const WEIGHT = {
   rx_inp: 8, rx_inn: 8, a2: 25, 'ls rx': 6, 'ls tx': 3, lsq: 4, tx_out_n: 3, tx_out_p: 3, vctrl: 0.6, 'vctrl pd': 1.5, vbn: 0.3,
   vg: 4, vbnf: 2, ck: 1, ck_o: 0.3, div16: 0.3, div64: 0.3, div1024: 0.3, rx_en: 0.2, 'rx_en lo_i': 0.1, 'rx_en lo_q': 0.1,
   'vbnf ref': 6, 'vctrl ring': 3, 'VDD_LS decap': 1,
+  'bbi src': 6, 'bbq src': 6, 'nb src': 6, 'vctrl src': 6, 'bbi bus': 0.3, 'bbq bus': 0.3, 'nb bus': 0.3, 'vctrl bus': 0.3,
   code: 0.3, bits: 2, en_p: 0.2, en_n: 0.2, q_i: 0.4, q_q: 0.4,
   ri_p: 3, ri_n: 3, rq_p: 3, rq_n: 3, lo_i: 5, lob_i: 5, lo_q: 5, lob_q: 5, bi_p: 2, bi_n: 2, bq_p: 2, bq_n: 2, oi_p: 1, oi_n: 1, oq_p: 1, oq_n: 1,
 };
@@ -275,6 +276,58 @@ if (process.argv.includes('--merge')) {
 if (process.argv.includes('--restripe')) {        // new stripes and decap fill for the seeded variants, placements kept
   const f = path.join(dir, 'variants.json'), j = JSON.parse(fs.readFileSync(f));
   for (const v of j.variants) if (v.id !== 'current') { v.straps = stripes(v, autoStripes(v)); v.decaps = fillDecap(v); }
+  fs.writeFileSync(f, JSON.stringify(j, null, 1) + '\n');
+  process.exit(0);
+}
+// --add-dbg <id> ...: place the four debug switches in existing variants (everything else fixed), fit their pins
+// (and the macro's select pins where the variant re-hardens it), then redo decap and stripes
+if (process.argv.includes('--add-dbg')) {
+  const ids = process.argv.slice(process.argv.indexOf('--add-dbg') + 1), f = path.join(dir, 'variants.json'), j = JSON.parse(fs.readFileSync(f));
+  for (const v of j.variants.filter(q => ids.includes(q.id))) {
+    if (v.id === 'B' && v.place['rx.lim_i'] && v.place['rx.lim_i'].y < 3) {   // it sat on the ua[0] pad: lift it, and limiter Q above it
+      const d = 3 - v.place['rx.lim_i'].y; v.place['rx.lim_i'].y = 3; v.place['rx.lim_q'].y = +(v.place['rx.lim_q'].y + d).toFixed(3);
+    }
+    // greedy: for each switch, every orientation and every free spot (1 um steps) within 100 um of its source;
+    // keep the one with the shortest source -> mod stub (then the shortest bus to ua[0])
+    const sw = FP.DBG.map(q => q[0]);
+    for (const n of sw) delete v.place[n];
+    const pad = data.tile.pins['ua[0]'], padP = [(pad.x0 + pad.x1) / 2, 0];
+    for (const [n, , srcRef, k] of FP.DBG) {
+      const R = FP.resolve(CAT, v), ref = FP.resolveRef(srcRef, v.rx, v.vco), o = ref.slice(0, ref.lastIndexOf('.'));
+      if (!R.inst[o]) continue;
+      const src = R.inst[o].pins[ref.slice(o.length + 1)].at;
+      const busy = Object.values(R.inst).filter(i => i.name !== o).map(i => { const r = i.halo || i.rect, k = i.halo ? 0 : K; return [r[0] - k, r[1] - k, r[2] + 2 * k, r[3] + 2 * k]; })
+        .concat(R.reserved.map(q => q.rect), [TT_CHAN, [0, 0, W, 3]]);
+      const G = geom(n), inter = (r, q) => r[0] < q[0] + q[2] && q[0] < r[0] + r[2] && r[1] < q[1] + q[3] && q[1] < r[1] + r[3];
+      const cands = [];
+      for (const or of ORS) {
+        const g = G[or], m = g.pins.mod, bpin = g.pins.bus;
+        for (let dx = -60; dx <= 60; dx++) for (let dy = -60; dy <= 60; dy++) {
+          const x = Math.round(src[0] - m[0] + dx), y = Math.round(src[1] - m[1] + dy), r = [x, y, g.w, g.h];
+          if (x < 0 || y < 0 || x + g.w > W || y + g.h > H || busy.some(q => inter(r, q))) continue;
+          const inHost = inter(r, R.inst[o].rect) ? 12 : 0;      // inside its source block: allowed (drawn in its re-layout), outside preferred
+          const c = Math.abs(x + m[0] - src[0]) + Math.abs(y + m[1] - src[1]) + inHost + 0.02 * (Math.abs(x + bpin[0] - padP[0]) + y + bpin[1]);
+          cands.push({ c, r, bus: [x + bpin[0], y + bpin[1]], p: { x, y, orient: or } });
+        }
+      }
+      // the cheapest spot from which the bus can still get out of the receiver to ua[0]
+      cands.sort((p, q) => p.c - q.c);
+      const rxR = Object.values(R.inst).filter(i => i.cat.group === 'rx');
+      let best = null;
+      const mac = R.inst.xmac, sel = mac && mac.pins[`dbg_sel[${k}]`] ? mac.pins[`dbg_sel[${k}]`].at : null;
+      for (const cd of cands.slice(0, 600)) {
+        // as the engine routes: a wire may leave through a receiver block its switch overlaps (drawn inside it)
+        const obst = rxR.filter(i => !inter(cd.r, i.rect)).map(i => i.rect);
+        const ctl = [cd.p.x + G[cd.p.orient].pins.ctrl[0], cd.p.y + G[cd.p.orient].pins.ctrl[1]];
+        if (FP.mazeRoute(data.tile, cd.bus, padP, obst) && (!sel || FP.mazeRoute(data.tile, sel, ctl, obst))) { best = cd; break; }
+      }
+      if (best) v.place[n] = best.p;
+      console.error(v.id, n, best ? `at ${best.p.x}, ${best.p.y} ${best.p.orient}, stub ~${best.c.toFixed(0)}` : 'no room');
+    }
+    const reharden = v.pins && v.pins.xmac && Object.keys(v.pins.xmac).length > 0;
+    v.pins = FP.fitPins(data, CAT, v, sw.concat(reharden ? ['xmac'] : []));
+    v.straps = stripes(v, autoStripes(v)); v.decaps = fillDecap(v);
+  }
   fs.writeFileSync(f, JSON.stringify(j, null, 1) + '\n');
   process.exit(0);
 }

@@ -9,7 +9,7 @@ const dir = path.join(__dirname, '..');
 const data = { tile: JSON.parse(fs.readFileSync(path.join(dir, 'tile.json'))), cells: JSON.parse(fs.readFileSync(path.join(dir, 'blocks.json'))) };
 const cat = FP.buildCatalog(data);
 const j = JSON.parse(fs.readFileSync(process.argv[2] || path.join(dir, 'variants.json')));
-// each mutation starts from the first variant (the named one first) in which its rule does not already fail
+// each mutation starts from the first variant (the named one first) in which its rule passes (else: does not fail)
 const named = j.variants.find(v => v.id === process.argv[3]);
 const pool = (named ? [named] : []).concat(j.variants.filter(v => v !== named && v.rx === 'cells'));
 const clone = o => JSON.parse(JSON.stringify(o));
@@ -34,17 +34,20 @@ const MUT = [
     if (v.pins) { delete v.pins.xmac; delete v.pins[vn]; }
     v.est = {}; v.place.xmac = { x: cx - mck.x, y: big[1] + big[3] + 10, orient: 'R0' };   // ck on its south edge
     v.place[vn] = { x: cx - vck.x, y: big[1] - 80, orient: 'R0' };                          // ck on its edge, below the block
-  }, 'ck'],
+  }, 'ck +', 'seen'],
+  ['a baseband arm pushed up under the top channel (the TT wires then run over it)', 6, v => { v.place['rx.bb_i'].y = data.tile.h - FP.placedSize(v.place['rx.bb_i'].orient, cat['rx.bb_i'].w, cat['rx.bb_i'].h)[1] - 1; }, 'channel'],
+  ['debug switch (baseband I) moved 100 µm from its source', 12, v => { v.place.xdbg_bbi.x += v.place.xdbg_bbi.x > 300 ? -100 : 100; }],
   ['vco_top split: cgm_ref moved 200 µm from the ring', 11, v => { v.place['vco.ref'].y += 150; v.place['vco.ref'].x -= 50; }],
 ];
 let bad = 0;
-for (const [what, rule, f, expect] of MUT) {
-  const base = pool.find(b => !['fail', '-'].includes(st(b, rule)[0])) || pool[0];
-  const v = clone(base), [s0, v0] = st(base, rule);
+for (const [what, rule, f, expect, how] of MUT) {
+  const base = pool.find(b => st(b, rule)[0] === 'pass') || pool.find(b => !['fail', '-'].includes(st(b, rule)[0])) || pool[0];
+  const v = clone(base), [s0, v0, d0] = st(base, rule);
   f(v);
   const [s1, v1, d1] = st(v, rule);
-  const caught = RANK[s1] > RANK[s0] && (!expect || d1.includes(expect));
-  console.log(`${caught ? 'caught ' : 'MISSED '} rule ${String(rule).padEnd(2)} ${s0.padEnd(4)} ${String(v0).padEnd(14)} -> ${s1.padEnd(4)} ${String(v1).padEnd(14)} ${what}  [on ${base.id}]`);
+  // 'seen': the rule has to name the broken wire (ck rerouted round the receiver); otherwise it has to get worse
+  const caught = how === 'seen' ? d1.includes(expect) && !d0.includes(expect) : RANK[s1] > RANK[s0] && (!expect || d1.includes(expect));
+  console.log(`${caught ? 'caught ' : 'MISSED '} rule ${String(rule).padEnd(2)} | ${s0} ${v0} -> ${s1} ${v1} | ${what} | on ${base.id}`);
   if (!caught) bad++;
 }
 process.exitCode = bad ? 1 : 0;

@@ -70,6 +70,10 @@
       pins: { VDD_LS: { layer: 'Metal2', x: 18.6, y: 59.9, est: true } } },
   };
   const MAC_RXEN = { layer: 'Metal3', x: 170, y: 256.7, est: true };      // tx_fine rx_en: not hardened yet (integration prep)
+  // the debug mux: one switch per source onto ua[0] (Matt 2026-11-16), selected by SPI bits in tx_fine (not hardened
+  // yet: estimated on its south edge). [inst, label, source (a net endpoint), select pin]
+  const DBG = [['xdbg_bbi', 'debug: baseband I', 'rx.bb_i.outp', 0], ['xdbg_bbq', 'debug: baseband Q', 'rx.bb_q.outp', 1],
+    ['xdbg_nb', 'debug: RX bias nb', 'rx.bias.nb', 2], ['xdbg_vctrl', 'debug: vctrl', 'VCO.vctrl', 3]];
 
   function buildCatalog(data) {
     const C = data.cells, cat = {};
@@ -80,6 +84,14 @@
     // lsdiv stay one unit: their a0 pins abut with no wire (a0 is 5.83 fF in all). Own frames: lower-left = 0, 0.
     for (const [n, p] of Object.entries(VCO_PARTS)) cat[n] = Object.assign({ inst: n, supply: 'VAPWR', group: 'vco', vco: 'parts', m4: [] }, p);
     cat.xvco.vco = 'block';
+    // the debug switches: our own 3.3 V transmission gate (an estimate: nfet + pfet 03v3 and an inverter for the
+    // complement, ~15 x 12 um with its guard ring; VAPWR, no level shifter since its control is 3.3 V too), or Tiny
+    // Tapeout's tt_asw_5v0 (40.32 x 30.25 um, 5 V devices and a level shifter; VDPWR + VAPWR): v.dbgCell = 'asw'
+    for (const [inst, label] of DBG) {
+      cat[inst] = { inst, cell: 'dbg_tg', label, w: 15, h: 12, supply: 'VAPWR', group: 'dbg', estimate: true, m4: [],
+        pins: { mod: { layer: 'Metal2', x: 7.5, y: 12 }, bus: { layer: 'Metal2', x: 7.5, y: 0 }, ctrl: { layer: 'Metal2', x: 0, y: 6 } } };
+      if (C.tt_asw_5v0) cat[inst].alt = { asw: { cell: 'tt_asw_5v0', w: C.tt_asw_5v0.w, h: C.tt_asw_5v0.h, pins: C.tt_asw_5v0.pins, m4: C.tt_asw_5v0.m4, straps: C.tt_asw_5v0.straps, estimate: false } };
+    }
     cat.xmdac = real('xmdac', 'mdac', { supply: 'VAPWR', group: 'fine', label: 'mdac' });
     cat.xvpd = real('xvpd', 'vctrl_pd', { supply: 'VAPWR', group: 'vco', label: 'vctrl_pd' });
     cat.xbits = { inst: 'xbits', cell: 'bits_inv', w: 20.16, h: 7.84, supply: 'VAPWR', group: 'vco', label: 'code inverters', glue: true,
@@ -87,7 +99,8 @@
       note: 'tt_wrapper.py: five inv_1 (bitb = not ui_in) and five antenna diodes, two std-cell rows (20.16 x 7.84 um)' };
     cat.xtxd = real('xtxd', 'tx_drv', { supply: 'VDPWR', group: 'tx', label: 'tx_drv' });
     cat.xmac = real('xmac', 'tx_fine', { supply: 'VDPWR', group: 'dig', label: 'tx_fine (macro)', halo: 5, reshape: true,
-      pins: Object.assign({}, C.tx_fine.pins, C.tx_fine.pins.rx_en ? {} : { rx_en: MAC_RXEN }),
+      pins: Object.assign({}, C.tx_fine.pins, C.tx_fine.pins.rx_en ? {} : { rx_en: MAC_RXEN },
+        Object.fromEntries(DBG.map(([, , , k]) => [`dbg_sel[${k}]`, { layer: 'Metal2', x: 100 + 4 * k, y: 0, est: true }]))),
       m4: [[0, 0, C.tx_fine.w, C.tx_fine.h]], straps: C.tx_fine.straps || [] });
     // the receiver as one block, with its cells' outlines as zones (rx_top's own placement)
     const rinst = {}, seen = {};
@@ -127,7 +140,7 @@
   const NETS = [
     ['rx_inp', 'rfin', 'pad:ua[4]', 'RX.inp'], ['rx_inn', 'rfin', 'pad:ua[5]', 'RX.inn'],
     ['tx_out_n', 'tx', 'xtxd.out_n', 'pad:ua[2]'], ['tx_out_p', 'tx', 'xtxd.out_p', 'pad:ua[3]'],
-    ['vctrl', 'ana', 'pad:ua[0]', 'VCO.vctrl'], ['vctrl pd', 'ana', 'xvpd.a', 'VCO.vctrl'], ['vbn', 'ana', 'pad:ua[1]', 'VCO.vbn'],
+    ['vctrl pd', 'ana', 'xvpd.a', 'VCO.vctrl'],
     ['ls rx', 'lo', 'VCO.ls', 'RX.ls'], ['ls tx', 'lo', 'VCO.ls', 'xtxd.ls'], ['a2', 'lo', 'VCO.a2', 'RX.aq'],
     ['vg', 'ana', 'xmdac.vg', 'VCO.vg'], ['vbnf', 'ana', 'VCO.vbnf', 'xmdac.vbnf'],
     ['ck', 'clk', 'VCO.ck', 'xmac.ck'],
@@ -140,7 +153,8 @@
     ['code', 'en', 'pad:ui_in[2]', 'xbits.in'], ['bits', 'en', 'xbits.out', 'VCO.bit2'],
     ['en_p', 'en', 'pad:ui_in[5]', 'xtxd.en_p'], ['en_n', 'en', 'pad:ui_in[6]', 'xtxd.en_n'],
     ['q_i', 'rxout', 'RX.q_i', 'pad:uo_out[4]'], ['q_q', 'rxout', 'RX.q_q', 'pad:uo_out[5]'],
-  ].concat(DACN);
+  ].concat(DACN, DBG.flatMap(([inst, , src, k]) => [[`${inst.slice(5)} src`, 'ana', src, `${inst}.mod`], [`${inst.slice(5)} bus`, 'dbg', `${inst}.bus`, 'pad:ua[0]'],
+    [`dbg_sel[${k}]`, 'en', `xmac.dbg_sel[${k}]`, `${inst}.ctrl`]]));
   // inside the receiver, only when it is placed as cells (layout/gen/rx_top.py, its `nets`)
   const RX_NETS = [
     ['ri_p', 'rx', 'rx.lna.oip', 'rx.mix_i.rfp'], ['ri_n', 'rx', 'rx.lna.oin', 'rx.mix_i.rfn'],
@@ -156,11 +170,11 @@
   ].concat(['lna', 'bb_i', 'bb_q', 'lim_i', 'lim_q'].flatMap(c => [[`nb ${c}`, 'ana', 'rx.bias.nb', `rx.${c}.nb`], [`enb ${c}`, 'en', 'rx.bias.enb', `rx.${c}.enb`]]));
   const NET_CLASSES = {
     rfin: 'RX input', rx: 'RX signal', rxout: 'RX outputs', lo: 'LO', clk: 'ring-derived clock', dig: '25 MHz / SPI', fine: 'fine-tune bus',
-    en: 'enable / code (static)', tx: 'TX output', ana: 'analog DC',
+    en: 'enable / code (static)', tx: 'TX output', ana: 'analog DC', dbg: 'debug bus (ua[0])',
   };
   // aggressors for the RX input (rule 1), and what may not run over the receiver (rule 6)
   const AGGR = ['clk', 'dig', 'fine'];
-  const NOT_OVER_RX = ['clk', 'dig', 'fine', 'lo', 'en', 'tx', 'rxout'];   // rxout: q_i / q_q, full-swing edges at the baseband rate (in band)
+  const NOT_OVER_RX = ['clk', 'dig', 'fine', 'lo', 'en', 'tx', 'rxout', 'dbg'];   // rxout: q_i / q_q, full-swing edges at the baseband rate (in band)
 
   const DEFAULT_SETTINGS = {
     keepout: 2.5,          // um between blocks (guard rings)
@@ -172,7 +186,8 @@
     r4: 80,                // 4. tx_drv -> ua[2] / ua[3] <=
     r7: 200, r7b: 60,      // 7. DAC line (longest) <=, mdac.vg -> vco_top.vg <=
     r8: 40,                // 8. macro top <-> tile top <=
-    r11: 40, r11d: 50,     // 11. (vco_top split) cgm_ref -> ring vbnf / vctrl <=, and their distance from aggressor wires >=
+    r11: 40, r11d: 50,
+    r12: 20,               // 12. debug source -> its switch <=     // 11. (vco_top split) cgm_ref -> ring vbnf / vctrl <=, and their distance from aggressor wires >=
     lsq: 43.5,             // um: rx_top's lsq wire (the Q LO level shifter output, rx_layout.md), used in block mode
   };
 
@@ -209,9 +224,10 @@
   //   reserved: [{x, y, w, h, label}]}
   function resolve(cat, v) {
     const inst = {};
-    for (const [n, c] of Object.entries(cat)) {
+    for (const [n, c0] of Object.entries(cat)) {
       const p = (v.place || {})[n];
-      if (!p || !inMode(c, v)) continue;
+      if (!p || !inMode(c0, v)) continue;
+      const c = c0.alt && v.dbgCell && c0.alt[v.dbgCell] ? Object.assign({}, c0, c0.alt[v.dbgCell]) : c0;
       let w = c.w, h = c.h;
       if (!c.glue && v.est && v.est[n]) { w = v.est[n].w; h = (v.est[n].area || c.w * c.h) / w; }   // reshaped (a re-layout / re-harden)
       const pl = { x: p.x, y: p.y, orient: p.orient || 'R0' };
@@ -224,7 +240,7 @@
         pins[pn] = Object.assign({}, pp, m ? { x: m.x, y: m.y, moved: true, at: mapPt(pl, w, h, m.x, m.y) } : { at: mapPt(pl, w, h, pp.x * sx, pp.y * sy) });
       }
       const m4 = (c.m4 || []).map(r => c.reshape ? [0, 0, w, h] : r).map(r => mapRect(pl, w, h, r));
-      const straps = (c.straps || []).map(s => ({ net: s.net === 'VDD' ? 'VDPWR' : 'VGND', r: mapRect(pl, w, h, [s.x * sx, 0, s.w, h]) }));
+      const straps = (c.straps || []).map(s => ({ net: s.net === 'VDD' ? 'VDPWR' : s.net === 'VSS' ? 'VGND' : s.net, r: mapRect(pl, w, h, [s.x * sx, 0, s.w, h]) }));
       const zones = {};
       for (const [zn, z] of Object.entries(c.zones || {})) zones[zn] = mapRect(pl, w, h, [z[0] * sx, z[1] * sy, z[2] * sx, z[3] * sy]);
       const reshaped = Math.abs(w - c.w) > 1e-6 || Math.abs(h - c.h) > 1e-6;
@@ -271,7 +287,8 @@
       // ends; wires with both ends in the receiver are its own routing) is routed round the receiver on a grid
       const rxOwn = [ownA, ownB].map(o => o && R.inst[o] && R.inst[o].cat.group === 'rx');
       if (NOT_OVER_RX.includes(cls) && !(rxOwn[0] && rxOwn[1])) {
-        const rx = Object.values(R.inst).filter(i => i.cat.group === 'rx' && i.name !== ownA && i.name !== ownB).map(i => i.rect);
+        const ends = [ownA, ownB].filter(o => o && R.inst[o]).map(o => R.inst[o].rect);
+        const rx = Object.values(R.inst).filter(i => i.cat.group === 'rx' && i.name !== ownA && i.name !== ownB && !ends.some(e => overlap(e, i.rect) > 0)).map(i => i.rect);
         if (n.segs.some(sg => rx.some(r => segCrosses(sg, r, 0.6)))) {
           const segs = mazeRoute(tile, pa, pb, rx);
           if (segs) { n.segs = segs; n.len = segs.reduce((t, q) => t + Math.abs(q[2] - q[0]) + Math.abs(q[3] - q[1]), 0); n.detour = n.len - manhattan(pa, pb); }
@@ -511,6 +528,9 @@
 
     // 9. fit and spacing
     {
+      const host = {};
+      for (const [inst, , src] of DBG) { const ref = resolveRef(src, R.mode, R.vmode); host[inst] = ref ? ownerOf(ref) : null; }
+      const embedded = [];
       const boxes = Object.values(I).map(i => ({ n: i.name, r: i.rect, halo: i.halo }))
         .concat(R.decaps.map(d => ({ n: d.name, r: d.rect, decap: true })), R.reserved.map(d => ({ n: d.label, r: d.rect, res: true })));
       const over = [], tight = [], outside = [];
@@ -521,6 +541,7 @@
           const b = boxes[j];
           if (a.res && b.res) continue;
           const ra = a.halo || r, rb = b.halo || b.r;
+          if (host[a.n] === b.n || host[b.n] === a.n) { if (overlap(ra, rb) > 0.01) embedded.push(host[a.n] === b.n ? `${a.n} in ${b.n}` : `${b.n} in ${a.n}`); continue; }
           if (overlap(ra, rb) > 0.01) over.push(`${a.n} / ${b.n}`);
           else if (!a.halo && !b.halo && !a.res && !b.res && !(a.n.startsWith('vco.') && b.n.startsWith('vco.')) && rectGap(r, b.r) < s.keepout - 1e-3) tight.push(`${a.n} / ${b.n} ${fmt(rectGap(r, b.r), 1)}`);
         }
@@ -529,7 +550,8 @@
         over.length ? `${over.length} overlap${over.length > 1 ? 's' : ''}` : outside.length ? `${outside.length} outside` : tight.length ? `${tight.length} tight` : 'none',
         (over.length ? `Overlapping (macro halo counts): ${over.join(', ')}. ` : 'Overlaps: none. ') +
         (outside.length ? `Outside the tile: ${outside.join(', ')}. ` : '') +
-        (tight.length ? `Closer than ${s.keepout} µm: ${tight.join(', ')}.` : `All gaps ≥ ${s.keepout} µm.`));
+        (tight.length ? `Closer than ${s.keepout} µm: ${tight.join(', ')}.` : `All gaps ≥ ${s.keepout} µm.`) +
+        (embedded.length ? ` Debug switches drawn inside their source block (its re-layout): ${embedded.join(', ')}.` : ''));
     }
 
     // 10. power stripes: clear Metal4 lanes; over the macro only on its own straps
@@ -564,6 +586,19 @@
         add(11, 'VCO bias wires (vco_top split)', st === 'pass' && d < s.r11d ? 'warn' : st, `${fmt(m)} µm`,
           `cgm_ref → ring: vbnf ${fmt(vb.len)} µm, vctrl ${fmt(vc.len)} µm (want ≤ ${s.r11}); closest macro / clock / DAC wire ${fmt(d)} µm (want ≥ ${s.r11d}). Inside vco_top both are abutments with no wire; noise on them is FM.` + estNote([vc]));
       } else add(11, 'VCO bias wires (vco_top split)', 'info', '-', 'Place the ring + lsdiv unit and cgm_ref.');
+    }
+
+    // 12. debug mux: each switch next to its source (the stub from the source is the only part a sensitive node sees
+    // while its switch is off); the bus to ua[0] goes round the receiver (rule 6)
+    {
+      const src = DBG.map(([inst]) => netBy(`${inst.slice(5)} src`)).filter(ok), bus = DBG.map(([inst]) => netBy(`${inst.slice(5)} bus`)).filter(ok);
+      if (src.length) {
+        const m = Math.max(...src.map(n => n.len)), lna = mode === 'cells' ? (I['rx.lna'] && I['rx.lna'].rect) : (I.xrx && I.xrx.zones.lna);
+        const dL = lna ? minGapShapes(segsOf(bus), [lna]) : Infinity;
+        add(12, 'Debug mux next to its sources', lvl(m, s.r12, 3 * s.r12), `${fmt(m)} µm`,
+          `source → switch: ${src.map(n => `${n.name.replace(' src', '')} ${fmt(n.len)}`).join(', ')} µm (want ≤ ${s.r12}); bus to ua[0] ${fmt(bus.reduce((t, n) => t + n.len, 0))} µm in all, ${fmt(dL)} µm from the LNA.` +
+          (src.length < DBG.length ? ` ${DBG.length - src.length} switch(es) without a source here (the receiver as rx_top has no baseband / nb pins).` : ''));
+      } else add(12, 'Debug mux next to its sources', 'info', '-', 'Place the debug switches (tt_asw_5v0) next to baseband I / Q, rx_bias and vctrl.');
     }
 
     // decap (info: no target set yet)
@@ -649,7 +684,7 @@
     }
     for (const d of R.decaps) blocks.push({ inst: d.base, part: d.idx + 1, cell: d.def.cell, x: d.rect[0], y: d.rect[1], w: d.rect[2], h: d.rect[3], orient: 'R0', rot: 0, mirror: false, estimate: true, supply: d.def.net });
     return {
-      variant: v.name, note: v.note || '', tile: { w: data.tile.w, h: data.tile.h, source: data.tile.source }, rx: R.mode, vco: R.vmode, blocks,
+      variant: v.name, note: v.note || '', tile: { w: data.tile.w, h: data.tile.h, source: data.tile.source }, rx: R.mode, vco: R.vmode, dbgCell: v.dbgCell || 'tg', blocks,
       reserved: (v.reserved || []).map(r => Object.assign({}, r)),
       pins_moved: Object.fromEntries(Object.entries(v.pins || {}).filter(([, ps]) => Object.keys(ps).length).map(([i, ps]) => [i, Object.fromEntries(Object.entries(ps).map(([p, q]) => [p, [+q.x.toFixed(2), +q.y.toFixed(2)]]))])),
       straps: (v.straps || []).map(s => ({ net: s.net, x: s.x, w: s.w })),
@@ -658,7 +693,7 @@
     };
   }
   function importJSON(cat, j) {
-    const v = { name: j.variant || 'Imported', note: j.note || '', rx: j.rx === 'cells' ? 'cells' : 'block', vco: j.vco === 'parts' ? 'parts' : 'block', place: {}, decaps: {}, est: {},
+    const v = { name: j.variant || 'Imported', note: j.note || '', rx: j.rx === 'cells' ? 'cells' : 'block', vco: j.vco === 'parts' ? 'parts' : 'block', dbgCell: j.dbgCell === 'asw' ? 'asw' : 'tg', place: {}, decaps: {}, est: {},
       straps: (j.straps || []).map(s => ({ net: s.net, x: +s.x, w: +s.w })), reserved: (j.reserved || []).map(r => Object.assign({}, r)) };
     if (j.pins_moved) { v.pins = {}; for (const [i, ps] of Object.entries(j.pins_moved)) { if (!cat[i]) continue; v.pins[i] = {}; for (const [p, xy] of Object.entries(ps)) v.pins[i][p] = { x: +xy[0], y: +xy[1] }; } }
     for (const b of j.blocks || []) {
@@ -675,5 +710,5 @@
   }
 
   root.FP = { ORIENTS, placedSize, mapPt, mapRect, compose, buildCatalog, DECAPS, DECAP_FF, NETS, RX_NETS, NET_CLASSES, DEFAULT_SETTINGS,
-    resolve, routeNets, evaluate, exportJSON, importJSON, rectGap, overlap, channelShapes, rxMode, vcoMode, inMode, resolveRef, RX_CELLS, VCO_NETS, fitPins };
+    resolve, routeNets, evaluate, exportJSON, importJSON, rectGap, overlap, channelShapes, rxMode, vcoMode, inMode, resolveRef, RX_CELLS, VCO_NETS, fitPins, DBG, mazeRoute };
 })(typeof window !== 'undefined' ? window : globalThis);
