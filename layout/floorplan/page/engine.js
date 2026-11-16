@@ -160,7 +160,7 @@
   };
   // aggressors for the RX input (rule 1), and what may not run over the receiver (rule 6)
   const AGGR = ['clk', 'dig', 'fine'];
-  const NOT_OVER_RX = ['clk', 'dig', 'fine', 'lo', 'en', 'tx'];
+  const NOT_OVER_RX = ['clk', 'dig', 'fine', 'lo', 'en', 'tx', 'rxout'];   // rxout: q_i / q_q, full-swing edges at the baseband rate (in band)
 
   const DEFAULT_SETTINGS = {
     keepout: 2.5,          // um between blocks (guard rings)

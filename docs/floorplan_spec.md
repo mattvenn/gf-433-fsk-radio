@@ -82,7 +82,7 @@ and so does the macro's 25 MHz clock.
 | 3 | LNA at ua[4] / ua[5] | the longer of the two input flylines, and their difference | ≤ 40 µm, Δ ≤ 10 µm |
 | 4 | TX driver at ua[2] / ua[3] | the longer output flyline (and, reported, its gap to the RX input) | ≤ 80 µm (warn ≤ 200) |
 | 5 | Supply domains | fails if a rail with blocks has no stripe; warns if a block's nearest supply stripe is the other rail; lists every VAPWR ↔ VDPWR crossing | – |
-| 6 | No digital or LO wire over the receiver | a clock, digital, DAC, enable, TX or LO wire whose L route would cross a receiver block (not one of its own ends; the receiver's internal wiring excepted) is routed round the receiver on a 2 µm grid; scored on the total detour, fails if a wire has no way round or the top channel runs over the receiver | detours ≤ 300 µm |
+| 6 | No digital or LO wire over the receiver | a clock, digital, DAC, enable, TX or LO wire, or q_i / q_q (full-swing limiter outputs with in-band edges; their length is not scored), whose L route would cross a receiver block (not one of its own ends; the receiver's internal wiring excepted) is routed round the receiver on a 2 µm grid; scored on the total detour, fails if a wire has no way round or the top channel runs over the receiver | detours ≤ 300 µm |
 | 7 | Short fine-tune bus | the longest of the 37 DAC lines; mdac vg → vco_top vg | ≤ 200 µm; vg ≤ 60 µm |
 | 8 | The macro near the top edge | the gap from the macro's top to the tile's; fails if a block sits in the top channel or the gap is less than the channel needs over the macro | ≤ 40 µm |
 | 9 | Fit and spacing | overlaps (the macro's halo counts, and reserved areas), blocks outside the tile, gaps under the keep-out | keep-out 2.5 µm |
@@ -185,7 +185,7 @@ layouts. A first try with a 560 × 79 µm macro strip under the TT pins was drop
 | a2 → aq / ls → receiver (routed round it where needed) | 3 / 121 | 10 / 121 | 3 / 64 |
 | ua[4] → LNA inp; tx_drv → ua[2] / ua[3] | 3; 0 / 1 | 3; 0 / 0 | 3; 0 / 1 |
 | longest DAC line; mdac vg → ring | 196; 18 | 16; 3 | 16; 134 |
-| wires routed round the receiver (rule 6) | 6, +259 | 3, +108 | 4, +757 |
+| wires routed round the receiver (rule 6) | 6, +259 | 4, +108 | 5, +757 |
 | cgm_ref → ring vbnf / vctrl | 51 / 52 | 47 / 12 | 11 / 5 |
 | vctrl → ua[0] | 268 | 149 | 154 |
 | q_i / q_q → uo[4] / uo[5] | 146 / 215 | 389 / 334 | 669 / 268 |
