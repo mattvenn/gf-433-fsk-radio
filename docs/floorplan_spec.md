@@ -140,6 +140,11 @@ block pin's x; at each x the channel is as tall as the number of wires there tim
   import of `floorplan.json`, and the thresholds.
 - **Block diagram view:** the tile's blocks and how they join, with the open variant's wire lengths.
 - **Not ported:** the OOK page's `refine.js` (decap refill after edits). Decap and stripes come from `place.js`.
+- **Pin study** (`node layout/floorplan/page/pinstudy.js <variant> [--min µm] [--out id]`): starts from the
+  variant with every pin where its GDS has it, fits one block's pins at a time, and ranks the blocks by the wire
+  each block's pin moves would save (weighted: LO, RF and bias wires most). It also lists wires that run back across
+  their own block. `--out` writes a variant with the moves of the blocks above the threshold only, so every other
+  block keeps its layout.
 - **Command line:** `node layout/floorplan/page/check.js [variants.json | floorplan.json] [--current]` prints the
   same checklist; `--current` also checks the "current" variant against `current.json`.
   `node layout/floorplan/page/mutate.js` runs the mutation tests below. `node tools/floorplan_dump.js` with
