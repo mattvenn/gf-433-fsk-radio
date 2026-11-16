@@ -16,10 +16,11 @@ const clone = o => JSON.parse(JSON.stringify(o));
 const RANK = { pass: 0, info: 0, warn: 1, fail: 2 };
 const st = (v, rule) => { const c = FP.evaluate(data, cat, v).checks.find(q => q.rule === rule); return c ? [c.status, c.value, c.detail] : ['-', '-', '']; };
 const lna = v => (v.rx === 'cells' ? 'rx.lna' : 'xrx');
+const vco = v => (v.vco === 'parts' ? 'vco.core' : 'xvco');
 const MUT = [
   ['LNA moved away from ua[4] / ua[5] (+300 µm in x)', 3, v => { v.place[lna(v)].x += 300; }],
   ['a2 the long way: the Q level shifter (or rx_top) moved 250 µm away', 2, v => { if (v.rx === 'cells') { v.place['rx.lsq'].x += 250; v.place['rx.lsq'].y += 150; } else v.place.xrx.x += 250; }],
-  ['two blocks overlapped (mdac onto vco_top)', 9, v => { v.place.xmdac = Object.assign({}, v.place.xvco); }],
+  ['two blocks overlapped (mdac onto vco_top / the ring unit)', 9, v => { v.place.xmdac = Object.assign({}, v.place[vco(v)]); }],
   ['a block pushed outside the tile', 9, v => { v.place.xvpd.x = data.tile.w - 5; }],
   ['the macro next to the LNA', 1, v => { const l = FP.resolve(cat, v).inst[lna(v)].rect; v.place.xmac = { x: l[0] + l[2] + 6, y: 3, orient: 'R0' }; }],
   ['a VAPWR stripe moved onto the macro, off its straps', 10, v => { const m = FP.resolve(cat, v).inst.xmac.rect; v.straps.push({ net: 'VAPWR', x: m[0] + m[2] / 2 + 7.3, w: 2 }); }],
@@ -29,9 +30,10 @@ const MUT = [
   ['the macro dropped to the bottom (far from the top edge)', 8, v => { v.place.xmac.y = 3; }],
   ['ck routed straight through the largest receiver block (macro above it, vco_top below it)', 6, v => {
     const R = FP.resolve(cat, v), big = Object.values(R.inst).filter(i => i.cat.group === 'rx').sort((a, b) => b.rect[2] * b.rect[3] - a.rect[2] * a.rect[3])[0].rect;
-    const cx = big[0] + big[2] / 2, mck = cat.xmac.pins.ck, vck = cat.xvco.pins.ck;
+    const cx = big[0] + big[2] / 2, mck = cat.xmac.pins.ck, vn = vco(v), vck = cat[vn].pins.ck;
+    if (v.pins) { delete v.pins.xmac; delete v.pins[vn]; }
     v.est = {}; v.place.xmac = { x: cx - mck.x, y: big[1] + big[3] + 10, orient: 'R0' };   // ck on its south edge
-    v.place.xvco = { x: cx - vck.x, y: big[1] - 80, orient: 'R0' };                         // ck on its north edge
+    v.place[vn] = { x: cx - vck.x, y: big[1] - 80, orient: 'R0' };                          // ck on its edge, below the block
   }, 'ck over'],
   ['vco_top split: cgm_ref moved 200 µm from the ring', 11, v => { v.place['vco.ref'].y += 150; v.place['vco.ref'].x -= 50; }],
 ];

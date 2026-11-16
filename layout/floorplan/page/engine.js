@@ -453,7 +453,7 @@
           if (a.res && b.res) continue;
           const ra = a.halo || r, rb = b.halo || b.r;
           if (overlap(ra, rb) > 0.01) over.push(`${a.n} / ${b.n}`);
-          else if (!a.halo && !b.halo && !a.res && !b.res && rectGap(r, b.r) < s.keepout - 1e-3) tight.push(`${a.n} / ${b.n} ${fmt(rectGap(r, b.r), 1)}`);
+          else if (!a.halo && !b.halo && !a.res && !b.res && !(a.n.startsWith('vco.') && b.n.startsWith('vco.')) && rectGap(r, b.r) < s.keepout - 1e-3) tight.push(`${a.n} / ${b.n} ${fmt(rectGap(r, b.r), 1)}`);
         }
       }
       add(9, 'Fit and spacing', over.length || outside.length ? 'fail' : tight.length ? 'warn' : 'pass',

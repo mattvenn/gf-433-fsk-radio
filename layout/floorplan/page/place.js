@@ -40,7 +40,7 @@ const WEIGHT = {
   code: 0.3, bits: 2, en_p: 0.2, en_n: 0.2, q_i: 0.4, q_q: 0.4,
   ri_p: 3, ri_n: 3, rq_p: 3, rq_n: 3, lo_i: 5, lob_i: 5, lo_q: 5, lob_q: 5, bi_p: 2, bi_n: 2, bq_p: 2, bq_n: 2, oi_p: 1, oi_n: 1, oq_p: 1, oq_n: 1,
 };
-for (let i = 0; i < 37; i++) WEIGHT[i < 31 ? `dac_tn[${i}]` : i < 36 ? `dac_bn[${i - 31}]` : 'dac_sdn'] = 0.12;
+for (let i = 0; i < 37; i++) WEIGHT[i < 31 ? `dac_tn[${i}]` : i < 36 ? `dac_bn[${i - 31}]` : 'dac_sdn'] = 0.4;
 
 function solve(spec, iters) {
   const v0 = { rx: spec.rx, vco: spec.vco };
@@ -92,7 +92,7 @@ function solve(spec, iters) {
       if (['clk', 'dig', 'fine', 'lo', 'en', 'tx'].includes(cls) && rxNames.length) {
         const s1 = [[pa[0], pa[1], pb[0], pa[1]], [pb[0], pa[1], pb[0], pb[1]]], s2 = [[pa[0], pa[1], pa[0], pb[1]], [pa[0], pb[1], pb[0], pb[1]]];
         const hit = segs => rxNames.filter(m => m !== own(a) && m !== own(b)).filter(m => segs.some(s => crosses(s, R[m]))).length;
-        c += (cls === 'fine' ? 25 : 150) * Math.min(hit(s1), hit(s2));
+        c += (cls === 'fine' ? 60 : 150) * Math.min(hit(s1), hit(s2));
       }
     }
     if (mac && rxNames.length) { const d = gap(lnaOf(), R.xmac); c += 40 * Math.max(0, S.r1 + 50 - d); }
@@ -101,7 +101,7 @@ function solve(spec, iters) {
   }
   let cur = cost(), best = Infinity, bestSt = JSON.parse(JSON.stringify(st));
   // polish: start from spec.start, cooler and with smaller steps, no random jumps
-  const T0 = spec.start ? 60 : 2000, T1 = 0.05, S0 = spec.start ? 12 : 80;
+  const T0 = spec.start ? (spec.T0 || 60) : 2000, T1 = 0.05, S0 = spec.start ? (spec.sigma || 12) : 80;
   for (let it = 0; it < iters; it++) {
     const t = it / iters, T = T0 * Math.pow(T1 / T0, t), sig = S0 * Math.pow(0.5 / S0, t);
     const n = mov[(rnd() * mov.length) | 0], old = Object.assign({}, st[n]);
@@ -193,6 +193,11 @@ function autoStripes(v) {
     if (used.some(u => Math.abs(u - x) < 60)) continue;
     used.push(x); want.push([i.supply, +(x - 2.5).toFixed(2)], ['VGND', +(x + 0.5).toFixed(2)]);
   }
+  for (const net of ['VAPWR', 'VDPWR']) {         // every rail in use gets at least one stripe, over its largest block
+    if (want.some(q => q[0] === net)) continue;
+    const i = blocks.find(q => q.supply === net) || Object.values(R.inst).find(q => q.supply === net);
+    if (i) want.push([net, +(i.rect[0] + i.rect[2] / 2 - 4).toFixed(2)]);
+  }
   return want;
 }
 // The macro's own strap pairs as tile stripes (VDD -> VDPWR, VSS -> VGND), when it is placed upright
@@ -216,33 +221,25 @@ function startFrom(file) {
   return out;
 }
 const START = process.argv.includes('--start') ? startFrom(process.argv[process.argv.indexOf('--start') + 1]) : null;
+// Each spec: anneal from scratch, then (fit) move the listed blocks' pins to the edges facing what they connect to
+// and polish with those pins, twice. fit: 'analog' = every block but the macro (no re-harden), 'all' = the macro too.
+const ALLMOV = RXC.filter(n => n !== 'rx.lna').concat(['vco.core', 'vco.ref', 'vco.decap', 'xmdac', 'xvpd', 'xtxd', 'xbits']);
 const SPECS = [
   {
-    id: 'P1', name: 'P1: VCO along the top, RX below it, macro top right', rx: 'cells', runs: 5, iters: 200000,
-    est: { xmac: { w: 220 } }, pins: { xmac: dacSouth(220) },
-    fixed: { xmac: { x: 469.5, y: 112, orient: 'MY' }, 'rx.lna': { x: 76.5, y: 3, orient: 'R90' } },
-    movable: RXC.filter(n => n !== 'rx.lna').concat(['xvco', 'xmdac', 'xvpd', 'xtxd', 'xbits']),
-    orients: { xvco: ['R0', 'MX'], 'rx.bb_i': ['R0', 'MY', 'R90', 'R270'], 'rx.bb_q': ['R0', 'MY', 'R90', 'R270'] },
-  },
-  {
-    id: 'P2', name: 'P2: macro as hardened on the right edge, VCO along the top', rx: 'cells', runs: 6, iters: 200000,
+    id: 'A', name: 'A: no re-harden: macro as it is on the right edge, vco_top split', rx: 'cells', vco: 'parts', runs: 5, iters: 200000, fit: 'analog', base: 'seeds/P4.json',
     fixed: { xmac: { x: 517.5, y: 53, orient: 'MY' }, 'rx.lna': { x: 76.5, y: 3, orient: 'R90' } },
-    movable: RXC.filter(n => n !== 'rx.lna').concat(['xvco', 'xmdac', 'xvpd', 'xtxd', 'xbits']),
-    orients: { xvco: ['R0', 'MY', 'MX', 'R180'] },
+    movable: ALLMOV,
   },
   {
-    id: 'P3', name: 'P3: RX left in two rows, VCO along the bottom, flat macro top right', rx: 'cells', runs: 6, iters: 200000,
-    est: { xmac: { w: 345 } }, pins: { xmac: dacSouth(345) },
-    fixed: { xmac: { x: 343, y: 185, orient: 'MY' }, 'rx.lna': { x: 76.5, y: 3, orient: 'R90' } },
-    movable: RXC.filter(n => n !== 'rx.lna').concat(['xvco', 'xmdac', 'xvpd', 'xtxd', 'xbits']),
-    orients: { xvco: ['R0', 'MY', 'MX', 'R180'] },
-    keepouts: [],
+    id: 'B', name: 'B: squarish macro top right (250 × 177), vco_top split, every pin fitted', rx: 'cells', vco: 'parts', runs: 5, iters: 200000, fit: 'all', base: 'seeds/P4.json',
+    est: { xmac: { w: 250 } },
+    fixed: { xmac: { x: 438, y: 136, orient: 'MY' }, 'rx.lna': { x: 76.5, y: 3, orient: 'R90' } },
+    movable: ALLMOV,
   },
   {
-    id: 'P4', name: 'P4: P3 with vco_top split (ring + lsdiv, cgm_ref, decap)', rx: 'cells', vco: 'parts', runs: 5, iters: 200000,
-    est: { xmac: { w: 345 } }, pins: { xmac: dacSouth(345) },
-    fixed: { xmac: { x: 343, y: 185, orient: 'MY' }, 'rx.lna': { x: 76.5, y: 3, orient: 'R90' } },
-    movable: RXC.filter(n => n !== 'rx.lna').concat(['vco.core', 'vco.ref', 'vco.decap', 'xmdac', 'xvpd', 'xtxd', 'xbits']),
+    id: 'C', name: 'C: macro as hardened but turned 90° (260 × 170) top right, pins re-ordered', rx: 'cells', vco: 'parts', runs: 5, iters: 200000, fit: 'all', base: 'seeds/P4.json',
+    fixed: { xmac: { x: 428.3, y: 143, orient: 'R90' }, 'rx.lna': { x: 76.5, y: 3, orient: 'R90' } },
+    movable: ALLMOV,
   },
 ];
 
@@ -262,10 +259,9 @@ function current() {
 }
 
 const NOTES = {
- "P4": "P3 with vco_top cut into its parts: the ring and lsdiv as one unit (their a0 abutment kept), cgm_ref (238.8 × 69.2 µm, the bias reference and its 1 MΩ / 20 pF filter) and the 10 pF VDD_LS decap. It starts where P3 has them, so the checklist matches P3, plus rule 11 for the two wires the split creates (vbnf and vctrl from cgm_ref to the ring).\nTo explore: drag cgm_ref out of the 387 µm band (rotate it with R), keep vbnf short and away from the macro and the clocks, and use the space it frees for the receiver or mdac. Then try Fit all pins.",
- "P1": "vco_top along the top (MX: its ck / ls / bit pins face down), with lsdiv and the ring over the receiver's LO column, so a2 → aq is 39 µm. The receiver as cells in two rows below it, the LNA on ua[4] / ua[5] (25 µm), tx_drv on ua[2] / ua[3] (74 µm). The macro re-hardened at 220 × 201 µm in the top-right corner, its 37 DAC pins moved to its south edge over mdac (longest DAC line 161 µm).\nCosts: mdac ends up far from vco_top's vg (400 µm, fails rule 7); ls drives 417 µm (rx 172 + tx_drv 245) against 28 µm of lsq, so the I / Q loads are far apart; the RX input is 140 µm from the ck wire (rule 1 warns). Needs a macro re-harden (size and DAC pin edge).",
- "P2": "No re-harden: the macro as it is (170 × 260 µm), mirrored onto the right edge so its DAC pins face west, with mdac right beside it (longest DAC line 169 µm). vco_top along the top, the receiver as cells below, LNA on ua[4] / ua[5].\nCosts: tx_drv sits top left, 435 / 319 µm from ua[2] / ua[3] (fails rule 4), and its out_n flyline crosses the LNA; ls → rx 161 µm; the TT pins' wires run ~200-370 µm along the top to the macro.",
- "P3": "The best of the three on the checklist: rules 1-4 and 8-10 pass. The receiver as cells on the left: the LNA on ua[4] / ua[5], the mixer column and LO buffers beside it, the two baseband arms in a row above, the limiters to their right. vco_top along the bottom right (R0), its LO end next to the receiver's LO column: a2 → aq 32 µm, ls → rx 62 µm. tx_drv between the LNA and vco_top on ua[2] / ua[3] (54 µm). The macro re-hardened flat (345 × 128 µm) across the top right, 151 µm of clearance from the LNA; its DAC pins moved to its south edge over mdac.\nOpen: the DAC lines (longest 286 µm) and mdac.vg → vco_top.vg (114 µm) are long (rule 7 warns); en_p / en_n from ui_in[5:6] cross baseband I (rule 6: route them round); several blocks' nearest supply stripe is the other rail (rule 5: move the stripes). Needs a macro re-harden (345 µm wide, DAC pins on its south edge) and an rx_top re-layout to this shape."
+ "A": "No re-harden: the macro as it is (170 × 260 µm), mirrored onto the right edge so its DAC pins face west. vco_top split: cgm_ref stands on end (MXR90) between mdac and the macro, the ring + lsdiv unit at the bottom next to the receiver's Q level shifter (a2 → aq 3 µm). The analog blocks' pins are fitted to this placement (a re-layout each); the macro's are not.\nNumbers: RX input 212 µm from the macro and clocks; LNA inputs 3 µm; tx_drv on its pads; longest DAC line 196 µm; vg 18 µm.\nOpen: vbnf / vctrl from cgm_ref 51 / 52 µm and close to the DAC lines (rule 11); ls → rx 121 µm; vctrl → ua[0] 268 µm; ls, ck and the enables cross the receiver's LO end (rule 6).",
+ "B": "A squarish re-harden (250 × 177 µm, 1.4:1, against 1.5:1 as hardened) in the top-right corner, its DAC pins on the west edge right against mdac (longest DAC line 16 µm). vco_top split: the ring + lsdiv unit in the middle, cgm_ref flat under the macro. Every pin fitted (the macro's: a new pin_order.cfg).\nNumbers: RX input 210 µm from the macro and clocks; a2 → aq 10 µm, ls → rx 63 µm; LNA inputs 3 µm; tx_drv on its pads; vg 3 µm.\nOpen: rx_bias ended up at the far right (nb / enb run across the tile) and q_i / q_q are 389 / 334 µm to uo[4] / uo[5]: drag the bias and the limiters back; vbnf 47 µm (rule 11); en_p / en_n and rx_en cross the receiver (rule 6).",
+ "C": "The macro at its hardened size but turned 90° (260 × 170 µm) in the top-right corner: only the pin order changes at the re-harden, not the shape. DAC pins against mdac (16 µm). vco_top split with cgm_ref abutting the ring unit again (vbnf 11 µm, vctrl 5 µm). Every pin fitted.\nNumbers: RX input 210 µm from the macro and clocks; a2 → aq 3 µm, ls → rx 64 µm; LNA inputs 3 µm; tx_drv on its pads.\nOpen: limiter I ended up at the far right edge (q_i 669 µm to uo[4]): drag it back next to baseband I; mdac.vg → ring 134 µm (rule 7); the enables cross the receiver (rule 6)."
 };
 
 const outArg = process.argv.includes('--out') ? process.argv[process.argv.indexOf('--out') + 1] : null;
@@ -274,6 +270,12 @@ if (process.argv.includes('--merge')) {
   const cur = current();
   vs.forEach((v, i) => { v.order = i + 1; });
   fs.writeFileSync(path.join(dir, 'variants.json'), JSON.stringify({ variants: [cur].concat(vs) }, null, 1) + '\n');
+  process.exit(0);
+}
+if (process.argv.includes('--restripe')) {        // new stripes and decap fill for the seeded variants, placements kept
+  const f = path.join(dir, 'variants.json'), j = JSON.parse(fs.readFileSync(f));
+  for (const v of j.variants) if (v.id !== 'current') { v.straps = stripes(v, autoStripes(v)); v.decaps = fillDecap(v); }
+  fs.writeFileSync(f, JSON.stringify(j, null, 1) + '\n');
   process.exit(0);
 }
 const only = process.argv.includes('--only') ? process.argv[process.argv.indexOf('--only') + 1] : null;
@@ -286,11 +288,25 @@ for (const spec of SPECS) {
   let best = null;
   for (let run = 0; run < (spec.runs || 4); run++) {
     seed = 1000 + run * 7919 + spec.id.charCodeAt(1);
-    const r = solve(START ? Object.assign({}, spec, { start: START }) : spec, START ? 120000 : spec.iters || 60000);
+    const base = spec.base ? JSON.parse(fs.readFileSync(path.join(dir, spec.base))).place : null;
+    const r = solve(START ? Object.assign({}, spec, { start: START }) : base ? Object.assign({}, spec, { start: base, sigma: 40, T0: 400 }) : spec, START ? 120000 : spec.iters || 60000);
     if (!best || r.cost < best.cost) best = r;
     console.error(spec.id, 'run', run, r.cost.toFixed(0));
   }
-  const v = { id: spec.id, name: spec.name, note: NOTES[spec.id] || '', rx: spec.rx, vco: spec.vco || 'block', order: out.length, place: best.place, est: spec.est || {}, pins: spec.pins || {}, decaps: {}, straps: [], reserved: [] };
+  let v = { id: spec.id, name: spec.name, note: NOTES[spec.id] || '', rx: spec.rx, vco: spec.vco || 'block', order: out.length, place: best.place, est: spec.est || {}, pins: spec.pins || {}, decaps: {}, straps: [], reserved: [] };
+  for (let k = 0; spec.fit && k < 2; k++) {        // fit the pins to this placement, then polish with them
+    const names = Object.keys(FP.resolve(CAT, v).inst).filter(n => spec.fit === 'all' || n !== 'xmac');
+    v.pins = FP.fitPins(data, CAT, v, names);
+    let pol = null;
+    for (let run = 0; run < 3; run++) {
+      seed = 5000 + run * 131 + k;
+      const r = solve(Object.assign({}, spec, { pins: v.pins, start: v.place }), 100000);
+      if (!pol || r.cost < pol.cost) pol = r;
+    }
+    console.error(spec.id, 'fit + polish', k, pol.cost.toFixed(0));
+    v.place = pol.place;
+  }
+  if (spec.fit) v.pins = FP.fitPins(data, CAT, v, Object.keys(FP.resolve(CAT, v).inst).filter(n => spec.fit === 'all' || n !== 'xmac'));
   v.straps = stripes(v, autoStripes(v));
   v.decaps = fillDecap(v);
   out.push(v);

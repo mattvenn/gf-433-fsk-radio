@@ -135,22 +135,23 @@ block pin's x; at each x the channel is as tall as the number of wires there tim
 - **Mutation tests** (`mutate.js`): each breaks a copy of a variant in which its rule does not already fail; all 12
   are caught.
 
-**Table I.** Mutations and the rule that catches them.
+**Table I.** Mutations and the rule that catches them (each on the first preset in which its rule does not already
+fail).
 
-| Mutation | Rule | Before → after |
+| Mutation | Rule | Before → after (preset) |
 |---|---|---|
-| LNA moved 300 µm from ua[4] / ua[5] | 3 | pass 25 µm → fail 324 µm |
-| a2 the long way (rx_lsq moved 250 µm away) | 2 | warn 39 µm → fail 361 µm |
-| mdac placed on vco_top | 9 | pass → fail, 1 overlap |
-| a block pushed outside the tile | 9 | pass → fail |
-| the macro next to the LNA | 1 | warn 140 µm → fail 1 µm |
-| a VAPWR stripe across the macro, off its straps | 10 | pass → fail, 1 blocked |
-| every VAPWR stripe renamed VDPWR | 5 | warn → fail (no VAPWR stripe) |
-| tx_drv moved 300 µm from ua[2] / ua[3] | 4 | pass 74 µm → fail 719 µm |
-| mdac in the far corner from the macro | 7 | warn 169 µm → fail 793 µm |
-| the macro dropped to the bottom edge | 8 | pass 12.5 µm → warn 121.5 µm |
-| ck routed straight through a baseband arm | 6 | fail must name ck over the receiver: yes (1 → 41 crossings) |
-| vco_top split: cgm_ref moved 200 µm from the ring | 11 | pass 3 µm → fail 197 µm |
+| LNA moved away from ua[4] / ua[5] (+300 µm in x)  | 3 | pass 3 µm → fail 303 µm (A) |
+| a2 the long way: the Q level shifter (or rx_top) moved 250 µm away  | 2 | warn a2 3 µm → fail a2 403 µm (A) |
+| two blocks overlapped (mdac onto vco_top / the ring unit)  | 9 | pass none → fail 4 overlaps (A) |
+| a block pushed outside the tile  | 9 | pass none → fail 1 overlap (A) |
+| the macro next to the LNA  | 1 | pass 212 µm → fail 1 µm (A) |
+| a VAPWR stripe moved onto the macro, off its straps  | 10 | pass 16 clear → fail 1 blocked (A) |
+| every VAPWR stripe renamed VDPWR  | 5 | warn 45 crossings → fail 45 crossings (A) |
+| tx_drv moved 300 µm from ua[2] / ua[3]  | 4 | pass 1 µm → fail 623 µm (A) |
+| mdac moved to the far corner from the macro  | 7 | pass 196 µm → fail 706 µm (A) |
+| the macro dropped to the bottom (far from the top edge)  | 8 | pass 12.4 µm → warn 62.4 µm (A) |
+| ck routed straight through the largest receiver block (macro above it, vco_top below it)  | 6 | fail 6 → fail 11 (A) |
+| vco_top split: cgm_ref moved 200 µm from the ring  | 11 | warn 52 µm → fail 152 µm (A) |
 
 - **Block mode:** `rx_top` placed as one block scores rules 1, 2, 3, 6 and 9 from its own pins and its LNA zone
   (checked by hand: placed over the pads it fails on fit, as it must at 370.6 µm tall).
@@ -158,21 +159,35 @@ block pin's x; at each x the channel is as tall as the number of wires there tim
   diagram views.
 
 ## Variants
-Seeded by `place.js`: an annealer moves the free blocks around fixed anchors (the LNA on the pads, the macro), then
-fills the free space with decap (each piece takes the supply of its nearest block) and puts a supply stripe plus a
-VGND beside it over every large block, and the macro's own strap pairs over the macro. P1 and P3 were then polished
-from their first annealed placement with the macro lowered to clear the top channel. They are starting points, not
-optimised layouts.
+The second set (2026-11-16, replacing P1, P2 and P4) uses the flexibility the tool now has: vco_top split into its
+parts, and pins fitted to the placement. Each preset was built by `place.js` in three steps: an anneal starting from
+the first set's best arrangement (P3 with vco_top split, `layout/floorplan/seeds/P4.json`) with the macro in its new
+spot; pin fitting (`FP.fitPins`); and two rounds of polishing with the fitted pins. Decap fills the free space and a
+supply stripe plus a VGND goes over every large block. Thin macros route badly (Matt), so the macro stays near
+square: as hardened (1.5:1), turned 90°, or 250 × 177 µm (1.4:1). They are starting points to drag, not optimised
+layouts. A first try with a 560 × 79 µm macro strip under the TT pins was dropped for that reason.
 
 **Table II.** The variants on the checklist (P pass, W warn, F fail).
 
 | Variant | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | current | – | – | – | F | W | – | W | P | P | P | – |
-| P1: VCO along the top, RX below it, macro top right | W | W | P | P | W | F | F | P | P | P | – |
-| P2: macro as hardened on the right edge, VCO along the top | W | W | P | F | W | F | W | P | P | P | – |
-| P3: RX left in two rows, VCO along the bottom, flat macro top right | P | P | P | P | W | F | W | P | P | P | – |
-| P4: P3 with vco_top split (ring + lsdiv, cgm_ref, decap) | W | P | P | P | W | F | W | P | P | P | P |
+| A: no re-harden: macro as it is on the right edge, vco_top split | P | W | P | P | W | F | P | P | P | P | W |
+| B: squarish macro top right (250 × 177), vco_top split, every pin fitted | P | P | P | P | W | F | P | P | P | P | W |
+| C: macro as hardened but turned 90° (260 × 170) top right, pins re-ordered | P | P | P | P | W | F | W | P | P | P | W |
+| P3 (first set, as Matt left it on the page) | W | P | P | P | W | F | W | P | W | P | – |
+
+**Table III.** Key wires in the presets (µm, Manhattan).
+
+| Wire | A | B | C |
+|---|---|---|---|
+| RX input ↔ macro and clocks (rule 1) | 212 | 210 | 210 |
+| a2 → aq / ls → receiver | 3 / 121 | 10 / 63 | 3 / 64 |
+| ua[4] → LNA inp; tx_drv → ua[2] / ua[3] | 3; 0 / 1 | 3; 0 / 0 | 3; 0 / 1 |
+| longest DAC line; mdac vg → ring | 196; 18 | 16; 3 | 16; 134 |
+| cgm_ref → ring vbnf / vctrl | 51 / 52 | 47 / 12 | 11 / 5 |
+| vctrl → ua[0] | 268 | 149 | 154 |
+| q_i / q_q → uo[4] / uo[5] | 146 / 215 | 389 / 334 | 669 / 268 |
 
 ![current](img/floorplan/current.png)
 
@@ -183,43 +198,36 @@ code inverters are VAPWR, tx_drv's stays VDPWR. Rule 5 warns twice: vctrl_pd's n
 tx_drv's nearest is the VDD_LS stripe, now VAPWR. tx_drv's outputs run 503 / 618 µm (rule 4). The largest free rectangle
 off the wrapper's routes, reserved for the receiver, is 517 × 46 µm: the receiver (70.4k µm² of cells) does not fit.
 
-![P1](img/floorplan/P1.png)
+![A](img/floorplan/A.png)
 
-**Fig. 2.** P1: vco_top along the top (MX, pins down) with lsdiv and the ring over the receiver's LO column (a2 →
-aq 39 µm); the macro re-hardened at 220 × 201 µm with its DAC pins on its south edge (longest DAC line 161 µm).
-mdac lands 400 µm from vco_top's vg (rule 7 fails), and ls drives 417 µm against lsq's 28 µm.
+**Fig. 2.** A, no re-harden: the macro as hardened on the right edge with mdac and cgm_ref (on end) beside it, the
+ring + lsdiv unit at the bottom next to the receiver's Q level shifter. Only the analog blocks' pins are fitted.
+Rule 11 warns: vbnf / vctrl are 51 / 52 µm and pass close to the DAC lines.
 
-![P2](img/floorplan/P2.png)
+![B](img/floorplan/B.png)
 
-**Fig. 3.** P2: the macro as hardened (no re-harden) on the right edge, mdac beside it (longest DAC line 169 µm).
-tx_drv ends up top left, 435 µm from ua[2] (rule 4 fails).
+**Fig. 3.** B: a squarish macro (250 × 177 µm) in the top-right corner with mdac against its DAC edge (16 µm),
+cgm_ref flat under it, every pin fitted. The placer left rx_bias at the far right and the limiters far from
+uo[4] / uo[5]: both are for dragging back.
 
-![P3](img/floorplan/P3.png)
+![C](img/floorplan/C.png)
 
-**Fig. 4.** P3, the strongest seed: rules 1–4 and 8–10 pass. LNA on ua[4] / ua[5] (25 µm), a2 → aq 32 µm, ls → RX
-62 µm, tx_drv on ua[2] / ua[3] (54 µm), the macro (re-hardened 345 × 128 µm, DAC pins on its south edge) 151 µm from
-the RX input. Left open: the longest DAC line (286 µm) and vg (114 µm) warn; en_p / en_n cross baseband I (rule 6);
-several stripes sit next to the other rail (rule 5).
-
-![P4](img/floorplan/P4.png)
-
-**Fig. 5.** P4: P3 with vco_top cut into its parts (ring + lsdiv, cgm_ref, the VDD_LS decap). The placer only
-polished it from P3, so cgm_ref still sits beside the ring (vbnf and vctrl 3 µm, rule 11 passes): it is the starting
-point for moving the 239 µm-wide reference out of the 387 µm band by hand.
+**Fig. 4.** C: the macro at its hardened size turned 90° (a new pin order only), mdac against it, cgm_ref abutting the
+ring unit (vbnf 11 µm). Limiter I ended up at the far right (q_i 669 µm), and mdac's vg is 134 µm from the ring.
 
 ![block diagram](img/floorplan/block_diagram.png)
 
-**Fig. 6.** The page's block diagram view for P3: every block, its supply, and the open variant's wire lengths.
+**Fig. 5.** The page's block diagram view for P3 (first set): every block, its supply, and the open variant's wire lengths.
 
 **The receiver fits only as cells.** `rx_top` (299.4 × 370.6 µm) is 45 µm taller than the tile in any orientation
 that keeps it under 325 µm wide; every proposal places the 12 cells, so the chosen one is the brief for the `rx_top`
-re-layout. In P3 the tile is 88 % blocks and decap (26.6k µm² left, before routing).
+re-layout. In the presets the tile is 87–88 % blocks and decap (26–29k µm² left, before routing).
 
 ## Open questions
 1. **Gate ck and the dividers during RX, and when.** A step in a ring-locked signal blanks the receiver for ~1 ms;
    switch CK_EN and the divider outputs before rx_en's settling window, not during a packet (rule 1).
-2. **The macro re-harden.** P1 and P3 need a new size (220 × 201 or 345 × 128 µm) and the 37 DAC pins on the south
-   edge (`pins_moved` in the export); P2 keeps it as hardened but loses the TX pad routes. rx_en's side is still to be
+2. **The macro re-harden.** A needs none; C keeps the hardened size and changes only the pin order (turned 90°); B
+   re-hardens at 250 × 177 µm. B and C put the DAC pins on the edge facing mdac (`pins_moved` in the export). rx_en's side is still to be
    chosen (integration prep).
 3. **The a2 pin.** Its position here is the ring node; the integration prep brings it to a vco_top edge. The edge
    should face the receiver's rx_lsq (in P3: the top edge, near the ring).
