@@ -16,8 +16,8 @@ the LNA (low-noise amplifier) loses 1.8 dB of gain and 0.4 dB of NF (noise figur
 baseband matches its schematic to within 0.8 dB, and the comparator hysteresis is ±36.3 mV (schematic ±36.1 mV).
 The LO (local oscillator) I/Q (in-phase and quadrature) phase is 75.7-78.2° against 72.0-72.7° in the schematic,
 inside the 72 ± 25° stop rule, and the ring's frequency shift from the receiver's load matches the schematic to
-0.02 %. The FSK (frequency-shift keying) decode through the real ring LO on the extracted rx_top was still running
-at the time of writing.
+0.02 %. The FSK (frequency-shift keying) decode through the real ring LO on the extracted rx_top gives 0 bit errors
+of 4 at −70 dBm, with the same steps per bit as the schematic (−8, +7, −7, +7).
 
 Brief: `docs/handoff_rx_layout.md`. Generators: `layout/gen/rx_*.py`. Bench results (JSON):
 `docs/rx_layout_results/`; check logs and run directories (not committed): `build/rx_layout/`.
@@ -308,19 +308,23 @@ The extracted rx_bias powers up with VDD and en ramped: nb 0.978 V (schematic 0.
 ### FSK decode through the real LO
 
 The chain run (`rx_chain.py realfsk` flow, −70 dBm, tt) uses the extracted rx_top (C only) and the extracted lsdiv.
-It takes about 9 h and was still running at the time of writing. The schematic result is from
+It took 8.7 h at nice 19 (53 min of it the pre-run that checks the ring has settled). The schematic result is from
 `docs/rx_design.md`, "Decode through the real LO".
 
-Table IX. FSK decode through the real ring LO, −70 dBm, tt.
+Table IX. FSK decode through the real ring LO, −70 dBm, tt (`docs/rx_layout_results/chain.json`).
 
 | Quantity | Schematic | Extracted |
 |---|---|---|
-| bit errors | 0 of 4 | PENDING_CHAIN |
-| steps per bit | −8, +7, −7, +7 | PENDING_CHAIN |
-| glitches (< 1 µs) | 0 | PENDING_CHAIN |
-| LO I/Q phase at the mixer switches | 73.0° | PENDING_CHAIN |
-| supply current | 6.7 mA | PENDING_CHAIN |
-| ring drift | within 1.4 kHz | PENDING_CHAIN |
+| bit errors | 0 of 4 | 0 of 4 |
+| steps per bit | −8, +7, −7, +7 | −8, +7, −7, +7 |
+| glitches (< 1 µs) | 0 | 0 |
+| LO I/Q phase at the mixer switches | 73.0° | 76.5° |
+| supply current | 6.7 mA | 7.36 mA |
+| ring drift | within 1.4 kHz | within 1.2 kHz (pre-run −306 Hz) |
+
+The decode is the same as the schematic's, step for step, and matches the model's counts with the expected sign
+flip. The I/Q phase is 3.5° wider, as in the LO bench (Table VIII). The 0.66 mA of extra current is mostly the LO
+path charging the wiring C (Table VIII: 1.7-1.8 mA against 1.2 mA in the schematic).
 
 ## Problems found and fixed
 
@@ -378,7 +382,7 @@ extracted one by one there), and EM (electromigration) or current-density checks
 
 ## Reproduce
 
-Everything (generate, check, extract, benches; about 9 h, most of it the chain):
+Everything (generate, check, extract, benches; 8.7 h at nice 19, most of it the chain):
 
 ```
 bash layout/gen/rx_layout_driver.sh

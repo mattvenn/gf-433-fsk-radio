@@ -22,7 +22,7 @@ step() {   # step <n> <text> <eta minutes>
   echo "== $(date +%T) step $1/$N: $2" | tee -a $B/driver.log
   sed -i "1s|.*|> Running: step $1/$N ($2) since $(date +%H:%M), ETA $(date -d "+$3 min" +%H:%M)|" docs/handoff_rx_layout.md
   ( git add docs/handoff_rx_layout.md && git commit -q -m "handoff rx_layout: step $1/$N ($2)" \
-    && git pull -q --rebase && git push -q origin rx-option-b ) >> $B/driver.log 2>&1 || echo "status push failed" >> $B/driver.log
+    && git pull -q --rebase --autostash && git push -q origin rx-option-b ) >> $B/driver.log 2>&1 || echo "status push failed" >> $B/driver.log
 }
 fail() {
   echo "FAILED at $(cat $B/status.txt): $*" | tee $B/FAILED | tee -a $B/driver.log

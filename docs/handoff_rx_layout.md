@@ -1,4 +1,4 @@
-> Running: step 6/6 (FSK chain through the real ring LO, extracted rx_top, tt, -70 dBm) since 00:09, ETA 10:09
+> Done (2026-11-16): see docs/rx_layout.md. rx_top 328 x 400 um (131,434 um^2), all cells DRC/antenna/LVS clean; extracted: LO I/Q 76-78 deg, LNA 24.2 dB / NF 7.58 dB, FSK through the real LO 0 errors of 4 at -70 dBm.
 
 # Handoff: first-pass layout of the receiver (rx_*), DRC / LVS / antenna / extraction (sim server)
 
