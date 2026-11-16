@@ -76,11 +76,22 @@ everything else is compared against it.
 ## Rules, ranked (this project's; refine them with Matt on the page)
 The radio is half-duplex: while receiving, the TX driver's arms are off. But **the ring, lsdiv and its ck run all the
 time**, and so does the macro's 25 MHz clock.
-1. **RX input far from the digital macro and from everything the ring clocks.** Note the arithmetic: 433.92 MHz is
-   exactly 4 × ck, 16 × the ÷16 output and 64 × the ÷64 output, so every ring-derived digital signal (ck, the ÷16 / ÷64 /
-   ÷1024 outputs on uo[0:3], the macro's ck domain) has a harmonic **exactly on the carrier**, and the 25 MHz clock's
-   harmonics at 425 and 450 MHz pass the LNA. Maximise the distance from these wires and the macro to ua[4] / ua[5]
-   and the LNA input. (Whether ck and the dividers should also be gated off during RX is an open question: list it.)
+1. **RX input far from the digital macro and from everything the ring clocks.** Three different mechanisms:
+   - **Ring-derived signals** (ck = f / 4, the ÷16 / ÷64 / ÷1024 outputs on uo[0:3], the macro's ck domain) are
+     phase-locked to the LO, so their harmonic at 433.92 MHz lands **exactly at 0 Hz** after the mixer: a DC offset,
+     which the AC couplings remove while it is steady (the ÷1024's neighbours at ±424 kHz fall outside the
+     8.5–143 kHz pass band). The hazard is a **step**: switching CK_EN or the divider outputs on or off, or a big
+     change in their load, during RX gives an offset step that blanks the receiver for about 1 ms
+     (`docs/rx_design.md`, "Offsets"). Firmware should set them before `rx_en`'s settling window, not during a packet.
+   - **The 25 MHz clock** (from the RP2350) is not locked to the LO: its harmonics at 425 and 450 MHz land 8.9 and
+     16 MHz away after mixing, outside the pass band, but they pass the LNA (−3 dB at about 200 MHz either side) and
+     add to its load. Crossings between the 25 MHz and the ck domains in the macro make beat products at frequencies
+     that are not locked to the LO; one that lands within ±143 kHz of it is in band. This is the one that can't be
+     filtered.
+   - **Supply and substrate coupling into the ring itself** (the LO) puts spurs on the LO, and a strong interferer
+     mixed by an LO spur lands in band (reciprocal mixing). The VAPWR split is the main defence.
+   So: maximise the distance from the macro and from the ring-derived digital wires to ua[4] / ua[5] and the LNA
+   input, and list "gate ck and the dividers during RX (and when)" as an open question.
 2. **The LO wires.** `a2` → rx `aq` as short as possible: every fF on a2 slows the ring and shifts the I/Q phase.
    `ls` → rx `ls` short, and the two LO wires' loads matched (`docs/rx_layout.md`: matching them should bring the
    extracted I/Q phase from 77° back towards 72°). So the receiver's LO end sits next to lsdiv and the ring's a2 pin.
