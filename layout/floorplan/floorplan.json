@@ -1,0 +1,1516 @@
+{
+ "variant": "B - Matt's edit, tidied: pins moved on 13 blocks",
+ "note": "B - Matt's edit, tidied with the pins where the GDS has them, except on the blocks where moving them saves ≥ 50 µm of wire (layout/floorplan/page/pinstudy.js): vco.ref, vco.core, rx.bb_q, rx.bb_i, rx.lna, xmdac, xtxd, rx.lim_q, rx.lsq, rx.lim_i, rx.lobuf_q, rx.bias, rx.mix_i. Every other block keeps its layout.",
+ "tile": {
+  "w": 693.28,
+  "h": 325.36,
+  "source": "tt-support-tools main: tech/gf180mcuD/def/analog/tt_analog_2x2_pgvaa.def"
+ },
+ "rx": "cells",
+ "vco": "parts",
+ "dbgCell": "tg",
+ "blocks": [
+  {
+   "inst": "vco.core",
+   "cell": "ring_core_v3 + lsdiv",
+   "x": 272.011,
+   "y": 125.513,
+   "orient": "MX",
+   "rot": 0,
+   "mirror": true,
+   "w": 110.58,
+   "h": 69.76,
+   "supply": "VAPWR"
+  },
+  {
+   "inst": "vco.ref",
+   "cell": "cgm_ref",
+   "x": 426,
+   "y": 3.5,
+   "orient": "R0",
+   "rot": 0,
+   "mirror": false,
+   "w": 238.75,
+   "h": 69.195,
+   "supply": "VAPWR"
+  },
+  {
+   "inst": "vco.decap",
+   "cell": "decap_ls",
+   "x": 13.914,
+   "y": 56.954,
+   "orient": "R270",
+   "rot": 270,
+   "mirror": false,
+   "w": 59.955,
+   "h": 37.23,
+   "supply": "VAPWR"
+  },
+  {
+   "inst": "xdbg_bbi",
+   "cell": "dbg_tg",
+   "x": 255,
+   "y": 160,
+   "orient": "R270",
+   "rot": 270,
+   "mirror": false,
+   "w": 12,
+   "h": 15,
+   "supply": "VAPWR"
+  },
+  {
+   "inst": "xdbg_bbq",
+   "cell": "dbg_tg",
+   "x": 127,
+   "y": 150,
+   "orient": "R0",
+   "rot": 0,
+   "mirror": false,
+   "w": 15,
+   "h": 12,
+   "supply": "VAPWR"
+  },
+  {
+   "inst": "xdbg_nb",
+   "cell": "dbg_tg",
+   "x": 395,
+   "y": 72,
+   "orient": "R0",
+   "rot": 0,
+   "mirror": false,
+   "w": 15,
+   "h": 12,
+   "supply": "VAPWR"
+  },
+  {
+   "inst": "xdbg_vctrl",
+   "cell": "dbg_tg",
+   "x": 426,
+   "y": 73,
+   "orient": "R180",
+   "rot": 180,
+   "mirror": false,
+   "w": 15,
+   "h": 12,
+   "supply": "VAPWR"
+  },
+  {
+   "inst": "xmdac",
+   "cell": "mdac",
+   "x": 276.079,
+   "y": 197.793,
+   "orient": "MY",
+   "rot": 180,
+   "mirror": true,
+   "w": 156.83,
+   "h": 104.24,
+   "supply": "VAPWR"
+  },
+  {
+   "inst": "xvpd",
+   "cell": "vctrl_pd",
+   "x": 400,
+   "y": 90,
+   "orient": "R0",
+   "rot": 0,
+   "mirror": false,
+   "w": 32.49,
+   "h": 12,
+   "supply": "VAPWR"
+  },
+  {
+   "inst": "xbits",
+   "cell": "bits_inv",
+   "x": 385.209,
+   "y": 133.531,
+   "orient": "R90",
+   "rot": 90,
+   "mirror": false,
+   "w": 7.84,
+   "h": 20.16,
+   "supply": "VAPWR",
+   "note": "tt_wrapper.py: five inv_1 (bitb = not ui_in) and five antenna diodes, two std-cell rows (20.16 x 7.84 um)"
+  },
+  {
+   "inst": "xtxd",
+   "cell": "tx_drv",
+   "x": 167.529,
+   "y": 0.047,
+   "orient": "R270",
+   "rot": 270,
+   "mirror": false,
+   "w": 105.915,
+   "h": 72.97,
+   "supply": "VDPWR"
+  },
+  {
+   "inst": "xmac",
+   "cell": "tx_fine",
+   "x": 438,
+   "y": 136,
+   "orient": "MY",
+   "rot": 180,
+   "mirror": true,
+   "w": 250,
+   "h": 176.8,
+   "supply": "VDPWR",
+   "own_w": 250,
+   "own_h": 176.8,
+   "note": "re-harden at 250.00 x 176.80 um (now 170 x 260)"
+  },
+  {
+   "inst": "rx.lna",
+   "cell": "rx_lna",
+   "x": 76.5,
+   "y": 3,
+   "orient": "R90",
+   "rot": 90,
+   "mirror": false,
+   "w": 75.535,
+   "h": 98.06,
+   "supply": "VAPWR"
+  },
+  {
+   "inst": "rx.bias",
+   "cell": "rx_bias",
+   "x": 398,
+   "y": 3,
+   "orient": "R90",
+   "rot": 90,
+   "mirror": false,
+   "w": 24.815,
+   "h": 84.19,
+   "supply": "VAPWR"
+  },
+  {
+   "inst": "rx.lsq",
+   "cell": "rx_lsq",
+   "x": 222.453,
+   "y": 102.165,
+   "orient": "MX",
+   "rot": 0,
+   "mirror": true,
+   "w": 40.49,
+   "h": 54.75,
+   "supply": "VAPWR"
+  },
+  {
+   "inst": "rx.lobuf_q",
+   "cell": "rx_lobuf",
+   "x": 54.342,
+   "y": 96.974,
+   "orient": "MXR90",
+   "rot": 90,
+   "mirror": true,
+   "w": 19.54,
+   "h": 63.6,
+   "supply": "VAPWR"
+  },
+  {
+   "inst": "rx.mix_q",
+   "cell": "rx_mix",
+   "x": 23.69,
+   "y": 106.125,
+   "orient": "MXR90",
+   "rot": 90,
+   "mirror": true,
+   "w": 28.135,
+   "h": 44.36,
+   "supply": "VAPWR"
+  },
+  {
+   "inst": "rx.lobuf_i",
+   "cell": "rx_lobuf",
+   "x": 190.17,
+   "y": 91.489,
+   "orient": "R270",
+   "rot": 270,
+   "mirror": false,
+   "w": 19.54,
+   "h": 63.6,
+   "supply": "VAPWR"
+  },
+  {
+   "inst": "rx.mix_i",
+   "cell": "rx_mix",
+   "x": 159.531,
+   "y": 91.062,
+   "orient": "MXR90",
+   "rot": 90,
+   "mirror": true,
+   "w": 28.135,
+   "h": 44.36,
+   "supply": "VAPWR"
+  },
+  {
+   "inst": "rx.bb_i",
+   "cell": "rx_bb",
+   "x": 138.5,
+   "y": 164.5,
+   "orient": "R0",
+   "rot": 0,
+   "mirror": false,
+   "w": 130.66,
+   "h": 144.185,
+   "supply": "VAPWR"
+  },
+  {
+   "inst": "rx.bb_q",
+   "cell": "rx_bb",
+   "x": 4.046,
+   "y": 163.09,
+   "orient": "R0",
+   "rot": 0,
+   "mirror": false,
+   "w": 130.66,
+   "h": 144.185,
+   "supply": "VAPWR"
+  },
+  {
+   "inst": "rx.lim_i",
+   "cell": "rx_lim",
+   "x": 276.268,
+   "y": 3,
+   "orient": "MX",
+   "rot": 0,
+   "mirror": true,
+   "w": 115.74,
+   "h": 59.3,
+   "supply": "VAPWR"
+  },
+  {
+   "inst": "rx.lim_q",
+   "cell": "rx_lim",
+   "x": 276.01,
+   "y": 64.807,
+   "orient": "MX",
+   "rot": 0,
+   "mirror": true,
+   "w": 115.74,
+   "h": 59.3,
+   "supply": "VAPWR"
+  },
+  {
+   "inst": "rx.decap",
+   "cell": "rx_decap",
+   "x": 17,
+   "y": 12,
+   "orient": "MX",
+   "rot": 0,
+   "mirror": true,
+   "w": 55.74,
+   "h": 40.9,
+   "supply": "VAPWR"
+  },
+  {
+   "inst": "deca",
+   "part": 1,
+   "cell": "decap_vapwr",
+   "x": 444,
+   "y": 76,
+   "w": 249,
+   "h": 55,
+   "orient": "R0",
+   "rot": 0,
+   "mirror": false,
+   "estimate": true,
+   "supply": "VAPWR"
+  },
+  {
+   "inst": "deca",
+   "part": 2,
+   "cell": "decap_vapwr",
+   "x": 77,
+   "y": 104,
+   "w": 80,
+   "h": 43,
+   "orient": "R0",
+   "rot": 0,
+   "mirror": false,
+   "estimate": true,
+   "supply": "VAPWR"
+  },
+  {
+   "inst": "deca",
+   "part": 3,
+   "cell": "decap_vapwr",
+   "x": 396,
+   "y": 105,
+   "w": 37,
+   "h": 90,
+   "orient": "R0",
+   "rot": 0,
+   "mirror": false,
+   "estimate": true,
+   "supply": "VAPWR"
+  },
+  {
+   "inst": "deca",
+   "part": 4,
+   "cell": "decap_vapwr",
+   "x": 668,
+   "y": 3,
+   "w": 25,
+   "h": 70,
+   "orient": "R0",
+   "rot": 0,
+   "mirror": false,
+   "estimate": true,
+   "supply": "VAPWR"
+  },
+  {
+   "inst": "deca",
+   "part": 5,
+   "cell": "decap_vapwr",
+   "x": 0,
+   "y": 3,
+   "w": 11,
+   "h": 157,
+   "orient": "R0",
+   "rot": 0,
+   "mirror": false,
+   "estimate": true,
+   "supply": "VAPWR"
+  },
+  {
+   "inst": "deca",
+   "part": 6,
+   "cell": "decap_vapwr",
+   "x": 340,
+   "y": 305,
+   "w": 93,
+   "h": 17,
+   "orient": "R0",
+   "rot": 0,
+   "mirror": false,
+   "estimate": true,
+   "supply": "VAPWR"
+  },
+  {
+   "inst": "deca",
+   "part": 7,
+   "cell": "decap_vapwr",
+   "x": 155,
+   "y": 76,
+   "w": 118,
+   "h": 12,
+   "orient": "R0",
+   "rot": 0,
+   "mirror": false,
+   "estimate": true,
+   "supply": "VAPWR"
+  },
+  {
+   "inst": "deca",
+   "part": 8,
+   "cell": "decap_vapwr",
+   "x": 160,
+   "y": 138,
+   "w": 27,
+   "h": 24,
+   "orient": "R0",
+   "rot": 0,
+   "mirror": false,
+   "estimate": true,
+   "supply": "VAPWR"
+  },
+  {
+   "inst": "deca",
+   "part": 9,
+   "cell": "decap_vapwr",
+   "x": 213,
+   "y": 91,
+   "w": 60,
+   "h": 8,
+   "orient": "R0",
+   "rot": 0,
+   "mirror": false,
+   "estimate": true,
+   "supply": "VAPWR"
+  },
+  {
+   "inst": "deca",
+   "part": 10,
+   "cell": "decap_vapwr",
+   "x": 77,
+   "y": 150,
+   "w": 47,
+   "h": 10,
+   "orient": "R0",
+   "rot": 0,
+   "mirror": false,
+   "estimate": true,
+   "supply": "VAPWR"
+  },
+  {
+   "inst": "decd",
+   "part": 1,
+   "cell": "decap_vdpwr",
+   "x": 155,
+   "y": 3,
+   "w": 10,
+   "h": 70,
+   "orient": "R0",
+   "rot": 0,
+   "mirror": false,
+   "estimate": true,
+   "supply": "VDPWR"
+  }
+ ],
+ "reserved": [],
+ "pins_moved": {
+  "xdbg_bbi": {
+   "mod": [
+    10.25,
+    11.75
+   ],
+   "bus": [
+    14.75,
+    11
+   ],
+   "ctrl": [
+    1,
+    11.75
+   ]
+  },
+  "xdbg_bbq": {
+   "mod": [
+    7.46,
+    11.75
+   ],
+   "bus": [
+    14.75,
+    1
+   ],
+   "ctrl": [
+    14.75,
+    6
+   ]
+  },
+  "xdbg_nb": {
+   "mod": [
+    3.25,
+    11.75
+   ],
+   "bus": [
+    0.25,
+    1
+   ],
+   "ctrl": [
+    14,
+    11.75
+   ]
+  },
+  "xdbg_vctrl": {
+   "mod": [
+    12,
+    11.75
+   ],
+   "bus": [
+    14.75,
+    11
+   ],
+   "ctrl": [
+    1,
+    0.25
+   ]
+  },
+  "xmac": {
+   "ck": [
+    249.75,
+    -9
+   ],
+   "ck_o": [
+    249.75,
+    165.8
+   ],
+   "div16": [
+    249.75,
+    166.8
+   ],
+   "div64": [
+    249.75,
+    167.8
+   ],
+   "div1024": [
+    249.75,
+    168.8
+   ],
+   "clk": [
+    249.75,
+    169.8
+   ],
+   "rst_n": [
+    249.75,
+    170.8
+   ],
+   "sclk": [
+    249.75,
+    171.8
+   ],
+   "mosi": [
+    249.75,
+    172.8
+   ],
+   "cs_n": [
+    249.75,
+    173.8
+   ],
+   "miso": [
+    249.75,
+    174.8
+   ],
+   "fsk": [
+    249.75,
+    175.8
+   ],
+   "rx_en": [
+    249,
+    0.25
+   ],
+   "dac_tn[0]": [
+    249.75,
+    116.31
+   ],
+   "dac_tn[1]": [
+    249.75,
+    98.99
+   ],
+   "dac_tn[2]": [
+    249.75,
+    117.31
+   ],
+   "dac_tn[3]": [
+    249.75,
+    97.99
+   ],
+   "dac_tn[4]": [
+    249.75,
+    120.89
+   ],
+   "dac_tn[5]": [
+    249.75,
+    94.41
+   ],
+   "dac_tn[6]": [
+    249.75,
+    121.89
+   ],
+   "dac_tn[7]": [
+    249.75,
+    93.41
+   ],
+   "dac_tn[8]": [
+    249.75,
+    125.47
+   ],
+   "dac_tn[9]": [
+    249.75,
+    89.83
+   ],
+   "dac_tn[10]": [
+    249.75,
+    126.47
+   ],
+   "dac_tn[11]": [
+    249.75,
+    88.83
+   ],
+   "dac_tn[12]": [
+    249.75,
+    130.05
+   ],
+   "dac_tn[13]": [
+    249.75,
+    85.25
+   ],
+   "dac_tn[14]": [
+    249.75,
+    131.05
+   ],
+   "dac_tn[15]": [
+    249.75,
+    84.25
+   ],
+   "dac_tn[16]": [
+    249.75,
+    134.63
+   ],
+   "dac_tn[17]": [
+    249.75,
+    80.67
+   ],
+   "dac_tn[18]": [
+    249.75,
+    135.63
+   ],
+   "dac_tn[19]": [
+    249.75,
+    79.67
+   ],
+   "dac_tn[20]": [
+    249.75,
+    139.21
+   ],
+   "dac_tn[21]": [
+    249.75,
+    76.09
+   ],
+   "dac_tn[22]": [
+    249.75,
+    140.21
+   ],
+   "dac_tn[23]": [
+    249.75,
+    75.09
+   ],
+   "dac_tn[24]": [
+    249.75,
+    143.79
+   ],
+   "dac_tn[25]": [
+    249.75,
+    71.51
+   ],
+   "dac_tn[26]": [
+    249.75,
+    144.79
+   ],
+   "dac_tn[27]": [
+    249.75,
+    70.51
+   ],
+   "dac_tn[28]": [
+    249.75,
+    148.37
+   ],
+   "dac_tn[29]": [
+    249.75,
+    66.61
+   ],
+   "dac_tn[30]": [
+    249.75,
+    149.37
+   ],
+   "dac_bn[0]": [
+    249.75,
+    107.15
+   ],
+   "dac_bn[1]": [
+    249.75,
+    111.73
+   ],
+   "dac_bn[2]": [
+    249.75,
+    103.57
+   ],
+   "dac_bn[3]": [
+    249.75,
+    112.73
+   ],
+   "dac_bn[4]": [
+    249.75,
+    102.57
+   ],
+   "dac_sdn": [
+    249.75,
+    108.15
+   ],
+   "dbg_sel[0]": [
+    249.75,
+    28
+   ],
+   "dbg_sel[1]": [
+    249.75,
+    10
+   ],
+   "dbg_sel[2]": [
+    248,
+    0.25
+   ],
+   "dbg_sel[3]": [
+    247,
+    0.25
+   ]
+  },
+  "vco.ref": {
+   "vctrl": [
+    4.46,
+    68.94
+   ],
+   "vbnf": [
+    2,
+    68.94
+   ],
+   "vctrl_l": [
+    1,
+    68.94
+   ]
+  },
+  "vco.core": {
+   "ls": [
+    1,
+    69.51
+   ],
+   "a2": [
+    0.25,
+    45.48
+   ],
+   "vg": [
+    72.58,
+    0.25
+   ],
+   "vbnf": [
+    110.33,
+    60.03
+   ],
+   "ck": [
+    110.33,
+    68.27
+   ],
+   "bit2": [
+    110.33,
+    51.66
+   ],
+   "vctrl": [
+    109.58,
+    69.51
+   ]
+  },
+  "rx.bb_q": {
+   "outp": [
+    130.41,
+    4
+   ],
+   "inp": [
+    32.92,
+    0.25
+   ],
+   "inn": [
+    34.28,
+    0.25
+   ],
+   "outn": [
+    130.41,
+    3
+   ],
+   "nb": [
+    130.41,
+    1
+   ],
+   "enb": [
+    130.41,
+    2
+   ]
+  },
+  "rx.bb_i": {
+   "outp": [
+    128.66,
+    0.25
+   ],
+   "inp": [
+    35.72,
+    0.25
+   ],
+   "inn": [
+    37.08,
+    0.25
+   ],
+   "outn": [
+    129.66,
+    0.25
+   ],
+   "nb": [
+    130.41,
+    1
+   ],
+   "enb": [
+    130.41,
+    2
+   ]
+  },
+  "rx.lna": {
+   "inp": [
+    0.25,
+    17.35
+   ],
+   "inn": [
+    0.25,
+    61.03
+   ],
+   "oip": [
+    89.06,
+    0.25
+   ],
+   "oin": [
+    90.06,
+    0.25
+   ],
+   "oqp": [
+    96.06,
+    75.28
+   ],
+   "oqn": [
+    97.06,
+    75.28
+   ],
+   "nb": [
+    83.19,
+    0.25
+   ],
+   "enb": [
+    84.19,
+    0.25
+   ]
+  },
+  "xmdac": {
+   "vg": [
+    88.32,
+    0.25
+   ],
+   "vbnf": [
+    50.57,
+    0.25
+   ],
+   "ns1": [
+    0.25,
+    54.52
+   ],
+   "ns2": [
+    0.25,
+    37.2
+   ],
+   "ns3": [
+    0.25,
+    55.52
+   ],
+   "ns4": [
+    0.25,
+    36.2
+   ],
+   "ns5": [
+    0.25,
+    59.1
+   ],
+   "ns6": [
+    0.25,
+    32.62
+   ],
+   "ns7": [
+    0.25,
+    60.1
+   ],
+   "ns8": [
+    0.25,
+    31.62
+   ],
+   "ns9": [
+    0.25,
+    63.68
+   ],
+   "ns10": [
+    0.25,
+    28.04
+   ],
+   "ns11": [
+    0.25,
+    64.68
+   ],
+   "ns12": [
+    0.25,
+    27.04
+   ],
+   "ns13": [
+    0.25,
+    68.26
+   ],
+   "ns14": [
+    0.25,
+    23.46
+   ],
+   "ns15": [
+    0.25,
+    69.26
+   ],
+   "ns16": [
+    0.25,
+    22.46
+   ],
+   "ns17": [
+    0.25,
+    72.84
+   ],
+   "ns18": [
+    0.25,
+    18.88
+   ],
+   "ns19": [
+    0.25,
+    73.84
+   ],
+   "ns20": [
+    0.25,
+    17.88
+   ],
+   "ns21": [
+    0.25,
+    77.42
+   ],
+   "ns22": [
+    0.25,
+    14.3
+   ],
+   "ns23": [
+    0.25,
+    78.42
+   ],
+   "ns24": [
+    0.25,
+    13.3
+   ],
+   "ns25": [
+    0.25,
+    82
+   ],
+   "ns26": [
+    0.25,
+    9.72
+   ],
+   "ns27": [
+    0.25,
+    83
+   ],
+   "ns28": [
+    0.25,
+    8.72
+   ],
+   "ns29": [
+    0.25,
+    86.58
+   ],
+   "ns30": [
+    0.25,
+    4.82
+   ],
+   "ns31": [
+    0.25,
+    87.58
+   ],
+   "nb0": [
+    0.25,
+    45.36
+   ],
+   "nb1": [
+    0.25,
+    49.94
+   ],
+   "nb2": [
+    0.25,
+    41.78
+   ],
+   "nb3": [
+    0.25,
+    50.94
+   ],
+   "nb4": [
+    0.25,
+    40.78
+   ],
+   "nsd": [
+    0.25,
+    46.36
+   ]
+  },
+  "xtxd": {
+   "out_n": [
+    72.72,
+    54.51
+   ],
+   "out_p": [
+    72.72,
+    10.83
+   ],
+   "ls": [
+    0.25,
+    104.92
+   ],
+   "en_p": [
+    0.25,
+    94.83
+   ],
+   "en_n": [
+    0.25,
+    87.55
+   ]
+  },
+  "rx.lim_q": {
+   "q": [
+    1,
+    0.25
+   ],
+   "inp": [
+    0.25,
+    1
+   ],
+   "inn": [
+    0.25,
+    2
+   ],
+   "nb": [
+    115.49,
+    37.92
+   ],
+   "enb": [
+    115.49,
+    38.92
+   ]
+  },
+  "rx.lsq": {
+   "aq": [
+    40.24,
+    7.12
+   ],
+   "lsq": [
+    0.25,
+    1
+   ]
+  },
+  "rx.lim_i": {
+   "q": [
+    0,
+    0.25
+   ],
+   "inp": [
+    1,
+    0.25
+   ],
+   "inn": [
+    2,
+    0.25
+   ],
+   "nb": [
+    113.74,
+    0.25
+   ],
+   "enb": [
+    114.74,
+    0.25
+   ]
+  },
+  "rx.lobuf_q": {
+   "in": [
+    58.94,
+    19.29
+   ],
+   "lo": [
+    36.35,
+    0.25
+   ],
+   "lob": [
+    37.71,
+    0.25
+   ],
+   "en": [
+    1,
+    19.29
+   ]
+  },
+  "rx.bias": {
+   "en": [
+    82.19,
+    24.57
+   ],
+   "nb": [
+    81.19,
+    24.57
+   ],
+   "enb": [
+    83.19,
+    24.57
+   ]
+  },
+  "rx.mix_i": {
+   "rfp": [
+    1,
+    0.25
+   ],
+   "rfn": [
+    2,
+    0.25
+   ],
+   "lo": [
+    27.21,
+    27.89
+   ],
+   "lob": [
+    25.85,
+    27.89
+   ],
+   "bbp": [
+    44.11,
+    15.69
+   ],
+   "bbn": [
+    44.11,
+    17.05
+   ]
+  }
+ },
+ "straps": [
+  {
+   "net": "VDPWR",
+   "x": 662.99,
+   "w": 1.6
+  },
+  {
+   "net": "VGND",
+   "x": 659.17,
+   "w": 1.6
+  },
+  {
+   "net": "VDPWR",
+   "x": 604.17,
+   "w": 1.6
+  },
+  {
+   "net": "VGND",
+   "x": 600.34,
+   "w": 1.6
+  },
+  {
+   "net": "VDPWR",
+   "x": 545.34,
+   "w": 1.6
+  },
+  {
+   "net": "VGND",
+   "x": 541.52,
+   "w": 1.6
+  },
+  {
+   "net": "VDPWR",
+   "x": 486.52,
+   "w": 1.6
+  },
+  {
+   "net": "VGND",
+   "x": 482.69,
+   "w": 1.6
+  },
+  {
+   "net": "VAPWR",
+   "x": 201.33,
+   "w": 2
+  },
+  {
+   "net": "VGND",
+   "x": 204.33,
+   "w": 2
+  },
+  {
+   "net": "VAPWR",
+   "x": 66.88,
+   "w": 2
+  },
+  {
+   "net": "VGND",
+   "x": 69.88,
+   "w": 2
+  },
+  {
+   "net": "VAPWR",
+   "x": 351.99,
+   "w": 2
+  },
+  {
+   "net": "VGND",
+   "x": 354.99,
+   "w": 2
+  }
+ ],
+ "crossings": [
+  {
+   "net": "ls tx",
+   "cls": "lo",
+   "from": "vco.core.ls (VAPWR)",
+   "to": "xtxd.ls (VDPWR)"
+  },
+  {
+   "net": "ck",
+   "cls": "clk",
+   "from": "vco.core.ck (VAPWR)",
+   "to": "xmac.ck (VDPWR)"
+  },
+  {
+   "net": "rx_en",
+   "cls": "en",
+   "from": "xmac.rx_en (VDPWR)",
+   "to": "rx.bias.en (VAPWR)"
+  },
+  {
+   "net": "code",
+   "cls": "en",
+   "from": "ui_in[2] (VDPWR)",
+   "to": "xbits.in (VAPWR)"
+  },
+  {
+   "net": "q_i",
+   "cls": "rxout",
+   "from": "rx.lim_i.q (VAPWR)",
+   "to": "uo_out[4] (VDPWR)"
+  },
+  {
+   "net": "q_q",
+   "cls": "rxout",
+   "from": "rx.lim_q.q (VAPWR)",
+   "to": "uo_out[5] (VDPWR)"
+  },
+  {
+   "net": "dac_tn[0]",
+   "cls": "fine",
+   "from": "xmac.dac_tn[0] (VDPWR)",
+   "to": "xmdac.ns1 (VAPWR)"
+  },
+  {
+   "net": "dac_tn[1]",
+   "cls": "fine",
+   "from": "xmac.dac_tn[1] (VDPWR)",
+   "to": "xmdac.ns2 (VAPWR)"
+  },
+  {
+   "net": "dac_tn[2]",
+   "cls": "fine",
+   "from": "xmac.dac_tn[2] (VDPWR)",
+   "to": "xmdac.ns3 (VAPWR)"
+  },
+  {
+   "net": "dac_tn[3]",
+   "cls": "fine",
+   "from": "xmac.dac_tn[3] (VDPWR)",
+   "to": "xmdac.ns4 (VAPWR)"
+  },
+  {
+   "net": "dac_tn[4]",
+   "cls": "fine",
+   "from": "xmac.dac_tn[4] (VDPWR)",
+   "to": "xmdac.ns5 (VAPWR)"
+  },
+  {
+   "net": "dac_tn[5]",
+   "cls": "fine",
+   "from": "xmac.dac_tn[5] (VDPWR)",
+   "to": "xmdac.ns6 (VAPWR)"
+  },
+  {
+   "net": "dac_tn[6]",
+   "cls": "fine",
+   "from": "xmac.dac_tn[6] (VDPWR)",
+   "to": "xmdac.ns7 (VAPWR)"
+  },
+  {
+   "net": "dac_tn[7]",
+   "cls": "fine",
+   "from": "xmac.dac_tn[7] (VDPWR)",
+   "to": "xmdac.ns8 (VAPWR)"
+  },
+  {
+   "net": "dac_tn[8]",
+   "cls": "fine",
+   "from": "xmac.dac_tn[8] (VDPWR)",
+   "to": "xmdac.ns9 (VAPWR)"
+  },
+  {
+   "net": "dac_tn[9]",
+   "cls": "fine",
+   "from": "xmac.dac_tn[9] (VDPWR)",
+   "to": "xmdac.ns10 (VAPWR)"
+  },
+  {
+   "net": "dac_tn[10]",
+   "cls": "fine",
+   "from": "xmac.dac_tn[10] (VDPWR)",
+   "to": "xmdac.ns11 (VAPWR)"
+  },
+  {
+   "net": "dac_tn[11]",
+   "cls": "fine",
+   "from": "xmac.dac_tn[11] (VDPWR)",
+   "to": "xmdac.ns12 (VAPWR)"
+  },
+  {
+   "net": "dac_tn[12]",
+   "cls": "fine",
+   "from": "xmac.dac_tn[12] (VDPWR)",
+   "to": "xmdac.ns13 (VAPWR)"
+  },
+  {
+   "net": "dac_tn[13]",
+   "cls": "fine",
+   "from": "xmac.dac_tn[13] (VDPWR)",
+   "to": "xmdac.ns14 (VAPWR)"
+  },
+  {
+   "net": "dac_tn[14]",
+   "cls": "fine",
+   "from": "xmac.dac_tn[14] (VDPWR)",
+   "to": "xmdac.ns15 (VAPWR)"
+  },
+  {
+   "net": "dac_tn[15]",
+   "cls": "fine",
+   "from": "xmac.dac_tn[15] (VDPWR)",
+   "to": "xmdac.ns16 (VAPWR)"
+  },
+  {
+   "net": "dac_tn[16]",
+   "cls": "fine",
+   "from": "xmac.dac_tn[16] (VDPWR)",
+   "to": "xmdac.ns17 (VAPWR)"
+  },
+  {
+   "net": "dac_tn[17]",
+   "cls": "fine",
+   "from": "xmac.dac_tn[17] (VDPWR)",
+   "to": "xmdac.ns18 (VAPWR)"
+  },
+  {
+   "net": "dac_tn[18]",
+   "cls": "fine",
+   "from": "xmac.dac_tn[18] (VDPWR)",
+   "to": "xmdac.ns19 (VAPWR)"
+  },
+  {
+   "net": "dac_tn[19]",
+   "cls": "fine",
+   "from": "xmac.dac_tn[19] (VDPWR)",
+   "to": "xmdac.ns20 (VAPWR)"
+  },
+  {
+   "net": "dac_tn[20]",
+   "cls": "fine",
+   "from": "xmac.dac_tn[20] (VDPWR)",
+   "to": "xmdac.ns21 (VAPWR)"
+  },
+  {
+   "net": "dac_tn[21]",
+   "cls": "fine",
+   "from": "xmac.dac_tn[21] (VDPWR)",
+   "to": "xmdac.ns22 (VAPWR)"
+  },
+  {
+   "net": "dac_tn[22]",
+   "cls": "fine",
+   "from": "xmac.dac_tn[22] (VDPWR)",
+   "to": "xmdac.ns23 (VAPWR)"
+  },
+  {
+   "net": "dac_tn[23]",
+   "cls": "fine",
+   "from": "xmac.dac_tn[23] (VDPWR)",
+   "to": "xmdac.ns24 (VAPWR)"
+  },
+  {
+   "net": "dac_tn[24]",
+   "cls": "fine",
+   "from": "xmac.dac_tn[24] (VDPWR)",
+   "to": "xmdac.ns25 (VAPWR)"
+  },
+  {
+   "net": "dac_tn[25]",
+   "cls": "fine",
+   "from": "xmac.dac_tn[25] (VDPWR)",
+   "to": "xmdac.ns26 (VAPWR)"
+  },
+  {
+   "net": "dac_tn[26]",
+   "cls": "fine",
+   "from": "xmac.dac_tn[26] (VDPWR)",
+   "to": "xmdac.ns27 (VAPWR)"
+  },
+  {
+   "net": "dac_tn[27]",
+   "cls": "fine",
+   "from": "xmac.dac_tn[27] (VDPWR)",
+   "to": "xmdac.ns28 (VAPWR)"
+  },
+  {
+   "net": "dac_tn[28]",
+   "cls": "fine",
+   "from": "xmac.dac_tn[28] (VDPWR)",
+   "to": "xmdac.ns29 (VAPWR)"
+  },
+  {
+   "net": "dac_tn[29]",
+   "cls": "fine",
+   "from": "xmac.dac_tn[29] (VDPWR)",
+   "to": "xmdac.ns30 (VAPWR)"
+  },
+  {
+   "net": "dac_tn[30]",
+   "cls": "fine",
+   "from": "xmac.dac_tn[30] (VDPWR)",
+   "to": "xmdac.ns31 (VAPWR)"
+  },
+  {
+   "net": "dac_bn[0]",
+   "cls": "fine",
+   "from": "xmac.dac_bn[0] (VDPWR)",
+   "to": "xmdac.nb0 (VAPWR)"
+  },
+  {
+   "net": "dac_bn[1]",
+   "cls": "fine",
+   "from": "xmac.dac_bn[1] (VDPWR)",
+   "to": "xmdac.nb1 (VAPWR)"
+  },
+  {
+   "net": "dac_bn[2]",
+   "cls": "fine",
+   "from": "xmac.dac_bn[2] (VDPWR)",
+   "to": "xmdac.nb2 (VAPWR)"
+  },
+  {
+   "net": "dac_bn[3]",
+   "cls": "fine",
+   "from": "xmac.dac_bn[3] (VDPWR)",
+   "to": "xmdac.nb3 (VAPWR)"
+  },
+  {
+   "net": "dac_bn[4]",
+   "cls": "fine",
+   "from": "xmac.dac_bn[4] (VDPWR)",
+   "to": "xmdac.nb4 (VAPWR)"
+  },
+  {
+   "net": "dac_sdn",
+   "cls": "fine",
+   "from": "xmac.dac_sdn (VDPWR)",
+   "to": "xmdac.nsd (VAPWR)"
+  },
+  {
+   "net": "dbg_sel[0]",
+   "cls": "en",
+   "from": "xmac.dbg_sel[0] (VDPWR)",
+   "to": "xdbg_bbi.ctrl (VAPWR)"
+  },
+  {
+   "net": "dbg_sel[1]",
+   "cls": "en",
+   "from": "xmac.dbg_sel[1] (VDPWR)",
+   "to": "xdbg_bbq.ctrl (VAPWR)"
+  },
+  {
+   "net": "dbg_sel[2]",
+   "cls": "en",
+   "from": "xmac.dbg_sel[2] (VDPWR)",
+   "to": "xdbg_nb.ctrl (VAPWR)"
+  },
+  {
+   "net": "dbg_sel[3]",
+   "cls": "en",
+   "from": "xmac.dbg_sel[3] (VDPWR)",
+   "to": "xdbg_vctrl.ctrl (VAPWR)"
+  }
+ ],
+ "transform": "x, y = lower-left of the placed bbox. KLayout: t = DCplxTrans(1, rot, mirror, 0, 0); bb = cell.dbbox().transformed(t); place with DCplxTrans(1, rot, mirror, x - bb.left, y - bb.bottom)."
+}

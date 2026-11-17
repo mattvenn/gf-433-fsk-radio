@@ -13,6 +13,9 @@ with this tile's blocks, pins, nets, supply domains and rules. The brief was `do
 
 **The page:** https://claude.ai/artifact/942zW17HYnwDF8qCuYhQk3 (private; seeded with the four variants below).
 
+**Chosen (Matt, 2026-11-17):** "B - Matt's edit, tidied: pins moved on 13 blocks" (`layout/floorplan/floorplan.json`,
+`pins.md`). Next: `docs/handoff_tile_layout.md` (pin moves, re-layouts, the tile, DRC / LVS).
+
 ## Data
 
 | File | What | Made by |

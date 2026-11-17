@@ -1,4 +1,4 @@
-> Not started.
+> Superseded (2026-11-17) by docs/handoff_tile_layout.md, which folds in parts A-C. Not to be started.
 
 # Handoff: prepare the tile for the receiver (rx_en SPI bit, pins, VAPWR split, a2 pin) (sim server)
 

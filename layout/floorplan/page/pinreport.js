@@ -43,12 +43,17 @@ for (const ins of Object.values(R.inst)) {
   out.push(`- Placement: x ${f(ins.rect[0])}, y ${f(ins.rect[1])}, ${ins.pl.orient} (rot ${k * 90}, mirror ${m})`);
   out.push('');
   const groups = {};
-  for (const [pn, p] of Object.entries(ins.pins)) {
+  const nMoved = Object.values(ins.pins).filter(q => q.moved).length;
+  out.push(`- Pins moved: ${nMoved ? nMoved + ' (marked; a re-layout' + (c.reshape ? ', for the macro a new pin_order.cfg' : '') + ')' : 'none: keeps its layout'}`);
+  out.push('');
+  for (const [pn, p] of Object.entries(c.pins)) {
     if (n === 'xmac' && /^dac_/.test(pn)) continue;
-    const x = p.x * ins.w / c.w, y = p.y * ins.h / c.h, e = edgeOf(x, y, ins.w, ins.h);
-    (groups[e] = groups[e] || []).push([pn, x, y, p.est]);
+    if (/^(VDD|VSS|VDD_LS)$/.test(pn)) continue;
+    const q = ins.pins[pn], x = q.moved ? q.x : p.x * ins.w / c.w, y = q.moved ? q.y : p.y * ins.h / c.h, e = edgeOf(x, y, ins.w, ins.h);
+    const gx = c.pins[pn].x * ins.w / c.w, gy = c.pins[pn].y * ins.h / c.h;
+    (groups[e] = groups[e] || []).push([pn, x, y, p.est, q.moved, edgeOf(gx, gy, ins.w, ins.h)]);
   }
-  if (n === 'xmac') out.push('The 37 DAC lines (dac_tn[0:30], dac_bn[0:4], dac_sdn) are on its own east edge, y 8.1 … 250.0 (as hardened).\n');
+  if (n === 'xmac') { const dm = Object.entries(ins.pins).filter(([k, q]) => /^dac_/.test(k) && q.moved).map(([, q]) => q); out.push(dm.length ? `The 37 DAC lines (dac_sdn, dac_bn[0:4], dac_tn[0:30], in that order) **moved**: ${edgeOf(dm[0].x, dm[0].y, ins.w, ins.h)} edge of its own frame, ${f(Math.min(...dm.map(q => edgeOf(q.x, q.y, ins.w, ins.h) === 'E' || edgeOf(q.x, q.y, ins.w, ins.h) === 'W' ? q.y : q.x)))} … ${f(Math.max(...dm.map(q => edgeOf(q.x, q.y, ins.w, ins.h) === 'E' || edgeOf(q.x, q.y, ins.w, ins.h) === 'W' ? q.y : q.x)))} µm along it (the full list is in floorplan.json, pins_moved).\n` : 'The 37 DAC lines (dac_tn[0:30], dac_bn[0:4], dac_sdn) are on its own east edge, y 8.1 … 250.0 (as hardened).\n'); }
   for (const e of ['N', 'S', 'W', 'E']) {
     if (!groups[e]) continue;
     const along = e === 'N' || e === 'S' ? 1 : 2;
@@ -56,7 +61,7 @@ for (const ins of Object.values(R.inst)) {
     out.push(`**${e} edge** (faces ${SIDE_IN_TILE(ins, e)} in the tile; ${along === 1 ? 'left → right, x' : 'bottom → top, y'}):`);
     out.push('');
     out.push('| pin | x | y | |'); out.push('|---|---|---|---|');
-    for (const [pn, x, y, est] of groups[e]) out.push(`| ${pn} | ${f(x)} | ${f(y)} | ${est ? 'est.' : ''} |`);
+    for (const [pn, x, y, est, mv, e0] of groups[e]) out.push(`| ${pn} | ${f(x)} | ${f(y)} | ${mv ? `**moved**${e0 !== e ? ` (was ${e0} edge)` : ''}` : est ? 'est. (not in the GDS yet)' : ''} |`);
     out.push('');
   }
 }
