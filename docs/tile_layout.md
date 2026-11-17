@@ -173,7 +173,9 @@ the first full run had 384 KLayout errors; the causes and fixes:
 `lvs/tt_um_mattvenn_gf433_vco.spice` (`lvs/make_source.py`: every block its own subcircuit, from xschem, the
 generators and the macro netlist): circuits match uniquely, 10 536 devices and 5711 nets. Two shorts were found and
 fixed on the way, both with a metal-only connectivity check of the GDS (a via patch over a neighbouring pin's stub;
-a tie row's rail via on an output's riser). Thirteen mutations of the source must fail (Table V); all 13 do.
+a tie row's rail via on an output's riser). Fourteen mutations of the source must fail (Table V); all 14 do.
+ua[1] is tied to VGND (see Precheck below): the extraction keeps it as its own port joined to VGND by a 0 Ω resistor
+(`ext2spice short resistor`), and the source has the same resistor (`Rshort_ua1`).
 
 **Table V.** LVS mutations.
 
@@ -192,6 +194,7 @@ a tie row's rail via on an output's riser). Thirteen mutations of the source mus
 | a2 ↔ ls at the receiver | pin matching, netlists differ |
 | mixer Q on VDPWR instead of VAPWR | pin matching, netlists differ |
 | vbnf ↔ vctrl at cgm_ref | pin matching, netlists differ |
+| ua[1] not strapped to VGND | pin matching |
 
 **LVS can't tell a2 from the other ring nodes.** With lsdiv's coupling capacitor out of the LVS source, the 5-stage
 ring is rotation-symmetric, so netgen matches with a2 on any of its nodes. `check_core.sh` checks the ports of the
@@ -203,6 +206,15 @@ least 1.2 µm wide reaching within 10 µm of both edges, no Metal5, `analog_pins
 `src/project.v`. The real precheck (tt-support-tools) was not run here: this session's permissions blocked running
 the cloned tool. CI runs it on every push (`.github/workflows/gds.yaml`).
 
+**The first CI precheck failed one check** (2026-11-17): every check passed except the analog pin check, "Analog pin
+`ua[1]` is not connected to any adjacent metal but `analog_pins` is set to 6". The template numbers the analog pins
+from ua[0], and `analog_pins: 6` claims ua[0]–ua[5], but the floorplan left ua[1] spare. Moving the used pins down
+would have meant re-routing the TX and RX pads, so ua[1] is now an on-chip ground sense: a Metal4 strap (1.74 × 5.5 µm)
+from the pin up into the VGND stripe that starts above it (`tile_nets.SUPPLY_PINS`, `tile.py` `supply_pins`), with
+the pinout entry "on-chip ground sense (VGND)", a Kelvin reference for readings on ua[0]. The local precheck now
+repeats the TT check (metal touching a ring 0.1–0.5 µm around each analog pin, or Via3 inside it, must match
+`analog_pins` and the pinout description): it fails on the GDS that CI rejected and passes on the new one.
+
 ## Open items, at the time of writing
 
 - **Decap: about 7.4 pF placed** (38 units, mostly VDPWR under the macro), against about 61 pF the floorplan estimated.
@@ -213,8 +225,9 @@ the cloned tool. CI runs it on every push (`.github/workflows/gds.yaml`).
 - **ls / lsq: 184 / 148 µm** (the I LO load against the Q), 36 µm apart; the floorplan had 163 / 149. The extracted
   loads decide (`docs/rx_layout.md`, LO section).
 - **vbnf 188 µm** from cgm_ref to the ring and mdac (the floorplan's flyline was 108 µm), shielded on 85 % of both sides.
-- **Extraction**: magic 8.3.642 isn't installed here (8.3.684 drops substrate C), so a2's added C is an estimate. The
-  next step, outside this handoff: the VCO on the extracted tile (a2, vbnf, vctrl wires) and the receiver chain on it.
+- **Extraction**: magic 8.3.642 is now built on the sim server (`~/.local/magic642`), and `layout/gen/pex_tile.sh`
+  extracts the tile without the macro (`layout/pex/tile_c.spice`, `tile_rcx.spice`): 126 ports, the TT pins and
+  every net between blocks by name. The simulations on it are in `sim/top/tile_results.md`.
 - Three small blocks are not in the floorplan: the antenna-diode rows (6.7, 4.5 and 11.2 µm wide), placed by
   `tile.py` (`EXTRA`).
 - `tt_wrapper.py` (the old tile) is kept as it was, for reference; it no longer builds against the new blocks.

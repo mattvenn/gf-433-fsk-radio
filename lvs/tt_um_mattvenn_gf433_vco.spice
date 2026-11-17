@@ -84,6 +84,7 @@ xtie_uio_oe_5 uio_oe[5] VAPWR VAPWR VGND VGND gf180mcu_fd_sc_mcu7t5v0__tiel
 xtie_uio_oe_6 uio_oe[6] VAPWR VAPWR VGND VGND gf180mcu_fd_sc_mcu7t5v0__tiel
 xtie_uio_oe_7 uio_oe[7] VAPWR VAPWR VGND VGND gf180mcu_fd_sc_mcu7t5v0__tiel
 xtie_uio_oe_3 uio_oe[3] VAPWR VAPWR VGND VGND gf180mcu_fd_sc_mcu7t5v0__tieh
+Rshort_ua1 VGND ua[1] 0
 .ends
 
 .subckt ant_row1 VDD VSS a0

@@ -77,6 +77,22 @@ if info.get('uses_vapwr'):
     chk(re.search(r'PIN VAPWR.*?USE POWER', lt, re.S) is not None, "LEF VAPWR")
     chk('input  wire       VAPWR' in (REPO / 'src/project.v').read_text(), "project.v declares VAPWR")
 chk(info.get('analog_pins') == 6, f"analog_pins {info.get('analog_pins')}")
+# the TT precheck's analog pin check (tt-support-tools precheck.py analog_pin_check, gf180mcuD): ua[k] counts as
+# connected when flat Metal4 touches the ring 0.1..0.5 um around its rectangle or Via3 lies inside it; connected must
+# equal k < analog_pins, and a connected pin needs a non-empty pinout description (2026-11-17: CI failed on ua[1])
+m4f = db.Region(top.begin_shapes_rec(ly.find_layer(46, 0))).merged()
+li3 = ly.find_layer(40, 0)
+v3f = db.Region(top.begin_shapes_rec(li3)) if li3 is not None else db.Region()
+pinout = yaml.safe_load((REPO / 'info.yaml').read_text()).get('pinout', {})
+for k in range(8):
+    x1 = round((307.90 - 43.68 * k) * 1000) if info.get('uses_vapwr') else round((325.82 - 43.68 * k) * 1000)
+    rect = db.Box(x1, 0, x1 + 3000, 1000)
+    ring = db.Region(rect).sized(500) - db.Region(rect).sized(100)
+    conn = not (m4f & ring).is_empty() or not (v3f & db.Region(rect)).is_empty()
+    want = k < info.get('analog_pins', 0)
+    desc = bool(pinout.get(f'ua[{k}]', ''))
+    chk(conn == want and conn == desc,
+        f"analog pin ua[{k}]: connected {conn}, analog_pins says {want}, pinout description {desc}")
 for n in ok:
     print('ok  ', n) if not n.startswith('pin ') and not n.startswith('LEF pin') else None
 print(f'ok   {npin} template pins at their DEF rectangles; {sum(n.startswith("LEF pin") for n in ok)} in the LEF')

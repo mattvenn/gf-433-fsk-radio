@@ -1202,6 +1202,22 @@ class Tile:
             self.r('m4t', *p['rect'])
             self.label('m4t', name, (p['rect'][0] + p['rect'][2]) // 2, (p['rect'][1] + p['rect'][3]) // 2)
 
+    def supply_pins(self):
+        """tile_nets.SUPPLY_PINS: a Metal4 strap from the TT pin up into the supply stripe that starts above it."""
+        out = {}
+        for pin, net in TN.SUPPLY_PINS.items():
+            px0, py0, px1, py1 = self.T['pins'][pin]['rect']
+            over = [(sx, w) for n2, sx, w in self.S if n2 == net and sx < px1 and sx + w > px0]
+            assert over, f'{pin}: no {net} stripe above it'
+            sx, w = over[0]
+            x0, x1 = max(px0, sx), min(px1, sx + w)
+            assert x1 - x0 >= 1000, (pin, x0, x1)
+            self.r('m4', x0, py0, x1, STRIPE_Y[0] + 500)
+            self.extra_obst.setdefault(2, []).append((x0, py0, x1, STRIPE_Y[0] + 500))
+            out[pin] = dict(net=net, m4=[v / 1000 for v in (x0, py0, x1, STRIPE_Y[0] + 500)])
+        self.log['supply_pins'] = out
+        return out
+
     def write_lef(self, path):
         """The tile LEF: the template's pins (Metal4), every stripe as a VDPWR / VAPWR / VGND port, obstructions on
         Metal1-3 over the whole tile and on Metal4 for every drawn Metal4 shape that is not a pin or a stripe."""
@@ -1255,6 +1271,7 @@ def build(partial, order=None, quiet=False):
     say('unlanded supplies (wired by the router):', unl)
     say('stripes added:', t.log['stripes_added'])
     t.ties()
+    t.supply_pins()
     if 'xtxd' in t.inst:
         t.tx_outputs()
     t.grid_setup()
@@ -1275,6 +1292,12 @@ def build(partial, order=None, quiet=False):
     t.route_nets(nets, order, unl)
     t.join_stripes()
     t.shields()
+    # one point per block end of every net (layer, x, y um, inst.pin), for the extraction's net labels
+    # (layout/gen/pex_tile.sh): only the top cell's labels name nets after flatten -dotoplabels
+    t.log['net_points'] = {n: [(t.inst[i]['pins'][p][0], t.inst[i]['pins'][p][1] / 1000,
+                                t.inst[i]['pins'][p][2] / 1000, f'{i}.{p}')
+                               for i, p in e if i != 'PIN' and i in t.inst and p in t.inst[i]['pins']]
+                           for n, e in allnets.items()}
     return t
 
 

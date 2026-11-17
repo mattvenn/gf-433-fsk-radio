@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Remove the double-counted coupling C from a magic R+C extraction (pex_*.sh rc).
 
-    python3 layout/gen/rcfix.py <rc.spice> <out.spice> [--check <c-only.spice>]
+    python3 layout/gen/rcfix.py <rc.spice> <out.spice> [--check <c-only.spice>] [--vss <ground net, default VSS>]
 
 Problem (found 2026-11-08, docs/rc_extraction_fix.md): on every labelled net (the ports, e.g. a0..a4, vg, vbn)
 and every net extresist splits into sub-nodes (<net>.t<i> / <net>.n<i>), the C to VSS equals the net's *total* C
@@ -19,6 +19,9 @@ from collections import Counter, defaultdict
 
 SUB = re.compile(r"^(.+)\.[tn]\d+$")
 UNIT = {"": 1, "f": 1e-15, "p": 1e-12, "n": 1e-9, "a": 1e-18}
+
+
+VSS = "VSS"                                              # the ground / substrate net (--vss)
 
 
 def base(n):
@@ -48,7 +51,8 @@ def caps(ls):
             yield i, t[1], t[2], val(t[3])
 
 
-def totals(ls, vss="VSS"):
+def totals(ls, vss=None):
+    vss = vss or VSS
     tot, gnd = Counter(), Counter()
     for _, a, b, c in caps(ls):
         a, b = base(a), base(b)
@@ -64,6 +68,8 @@ def totals(ls, vss="VSS"):
 
 def main():
     src, dst = sys.argv[1], sys.argv[2]
+    global VSS
+    VSS = sys.argv[sys.argv.index("--vss") + 1] if "--vss" in sys.argv else "VSS"
     chk = sys.argv[sys.argv.index("--check") + 1] if "--check" in sys.argv else None
     ls = lines(src)
     split = set()
@@ -73,7 +79,7 @@ def main():
         for tok in ln.split()[1:3]:
             if SUB.match(tok):
                 split.add(base(tok))
-    split.discard("VSS")
+    split.discard(VSS)
     K, S, idx = Counter(), Counter(), defaultdict(list)
     for i, a, b, c in caps(ls):
         A, B = base(a), base(b)
@@ -81,7 +87,7 @@ def main():
             continue
         for n, o in ((A, B), (B, A)):
             if n in split:
-                if o == "VSS":
+                if o == VSS:
                     S[n] += c; idx[n].append(i)
                 else:
                     K[n] += c
@@ -106,7 +112,7 @@ def main():
         t0, g0 = totals(lines(chk))
         worst = []
         for n in sorted(set(t0) & set(t1)):
-            if n == "VSS" or t0[n] < 1e-16:
+            if n == VSS or t0[n] < 1e-16:
                 continue
             worst.append((abs(t1[n] / t0[n] - 1), n))
         worst.sort(reverse=True)

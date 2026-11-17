@@ -96,6 +96,11 @@ def nets():
 
 TIED_VSS = {'qenb'}
 
+# TT pins strapped straight to a supply stripe (tile.py supply_pins): the precheck's analog pin check wants
+# ua[0]..ua[analog_pins - 1] all connected, so the spare ua[1] is an on-chip ground sense (a Kelvin reference for
+# the readings on ua[0]) on the VGND stripe above it
+SUPPLY_PINS = {'ua[1]': 'VGND'}
+
 # nets that may run on Metal4 over the receiver's cells (rule 6 of docs/floorplan_spec.md bans clocks, digital,
 # enables, LO, the debug bus and the limiter outputs there; these are the receiver's own analog nets)
 RX_M4_OK = {'rx_inp', 'rx_inn', 'ri_p', 'ri_n', 'rq_p', 'rq_n', 'bi_p', 'bi_n', 'bq_p', 'bq_n', 'oi_p', 'oi_n', 'oq_p',

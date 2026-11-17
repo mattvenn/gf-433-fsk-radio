@@ -197,6 +197,8 @@ def main():
         tag = re.sub(r'\W', '', n.replace('[', '_'))
         cell = 'tieh' if n in TN.TIE_HI else 'tiel'
         L.append(f'xtie_{tag} {n} VAPWR VAPWR VGND VGND {SC}{cell}')
+    for pin, net in TN.SUPPLY_PINS.items():         # TT pins strapped to a supply (tile.py supply_pins); the
+        L.append(f'Rshort_{re.sub(r"\W", "", pin)} {net} {pin} 0')   # extraction keeps them as 0 ohm (short resistor)
     L.append('.ends')
     sc_used = list(dict.fromkeys(['inv_1', 'tiel', 'tieh', 'antenna'] + [c[len(SC):] for c in used
                                                                        if c.startswith(SC)]))

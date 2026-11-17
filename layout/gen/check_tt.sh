@@ -10,7 +10,7 @@
 #      errors, no pin-matching failure and no "do not match".
 #   3. resistor sizes (netgen black-boxes the PDK resistors): the total drawn length of every nwell / nplus_u /
 #      ppolyf_u_1k per model and width, source against layout (0.5 %); series strips allowed (the receiver cells').
-#   4. mutations, each must FAIL (13, listed at the end of this script): the old tile's seven where they still apply
+#   4. mutations, each must FAIL (14, listed at the end of this script): the old tile's seven where they still apply
 #      (code inverter inputs, macro outputs, SPI pins, a DAC line, the VDD_LS decap size, the TX outputs, its enables)
 #      and six for the new tile (LNA inputs, q_i / q_q, two debug selects, a2 / ls, a receiver cell's supply,
 #      vbnf / vctrl at cgm_ref).
@@ -62,6 +62,7 @@ extract do local
 extract all
 ext2spice lvs
 ext2spice cthresh infinite
+ext2spice short resistor
 ext2spice -o ${T}_lay.spice
 quit -noprompt
 TCL
@@ -196,6 +197,8 @@ mutate a2ls "a2 <-> ls at the receiver (rx_lsq aq, LO buffer I in)" \
   '/^xrx_lsq /s/ a2 / ls /' '/^xrx_lobuf_i /s/ ls / a2 /'
 mutate rxsup "mixer Q on VDPWR instead of VAPWR" '/^xrx_mix_q /s/^xrx_mix_q VAPWR /xrx_mix_q VDPWR /'
 mutate bias "vbnf <-> vctrl at cgm_ref" '/^xvco_ref /s/ vbnf / vctrl /'
+# ua[1] is the VGND sense pin (tile_nets.SUPPLY_PINS): with the strap gone from the source it must fail
+mutate gsense "ua[1] not strapped to VGND" '/^Rshort_ua1 /d'
 
 ok=0; [[ $r == PASS && $rs == PASS* && $mut_ok == 1 ]] && ok=1
 log "CHECK $([ $ok = 1 ] && echo OK || echo FAIL)  (LVS $r, resistor sizes ${rs%% *}, mutations caught $mut_ok)"

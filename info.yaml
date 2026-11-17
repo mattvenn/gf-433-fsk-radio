@@ -56,7 +56,7 @@ pinout:
 
   # Analog pins - make sure to also set "analog_pins" above, else the pins won't be connected
   ua[0]: "debug mux (DBG_SEL, one at a time): [0] RX baseband I, [1] RX baseband Q, [2] RX bias nb, [3] vctrl (also the bench override of the fine leg; 200 kOhm to GND on chip)"
-  ua[1]: ""
+  ua[1]: "on-chip ground sense (VGND): the Kelvin reference for readings on ua[0]; do not drive"
   ua[2]: "TX out_n: 433 MHz dipole arm (antiphase to ua[3])"
   ua[3]: "TX out_p: 433 MHz dipole arm"
   ua[4]: "RX in_p: 433 MHz receive dipole arm"
