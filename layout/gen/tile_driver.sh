@@ -86,7 +86,16 @@ python3 layout/gen/tile.py > $OUT/tile.log 2>&1 || fail 3 tile $OUT/tile.log
 grep -q "UNROUTED" $OUT/tile.log && fail 3 tile $OUT/tile.log
 [ -s gds/$T.gds ] && [ -s lef/$T.lef ] || fail 3 tile $OUT/tile.log
 python3 lvs/make_source.py > $OUT/source.log 2>&1 || fail 3 tile $OUT/source.log
-step 3 tile "done: $(grep '^round' $OUT/tile.log | tail -1); $(tail -1 $OUT/source.log)"
+# supply landing (LVS can't see resistance): every block supply on a stripe with Via3 cuts for its current, only an
+# allow-list of tiny blocks wired by the router (layout/gen/supply_check.py); its mutation: a copy of meta.json with
+# the TX driver's VSS unlanded and its cuts removed must fail
+python3 layout/gen/supply_check.py build/tile/meta.json > $OUT/supply.log 2>&1 || fail 3 tile $OUT/supply.log
+python3 -c "
+import json; m = json.load(open('build/tile/meta.json'))
+m['supply_unlanded'].setdefault('xtxd', []).append('VSS'); m['landing_cuts'].pop('xtxd.VSS', None)
+json.dump(m, open('$OUT/meta_mut.json', 'w'))"
+python3 layout/gen/supply_check.py $OUT/meta_mut.json > $OUT/supply_mut.log 2>&1 && fail 3 tile $OUT/supply_mut.log
+step 3 tile "done: $(grep '^round' $OUT/tile.log | tail -1); $(tail -1 $OUT/source.log); $(tail -1 $OUT/supply.log), mutation caught"
 
 # ---- 4. DRC ----
 step 4 drc started

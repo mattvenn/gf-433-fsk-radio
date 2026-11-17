@@ -412,6 +412,8 @@ class Tile:
                     k = self.via_fill(3, land)
                     nv += k
                     if k:
+                        cuts = self.log.setdefault('landing_cuts', {})
+                        cuts[f'{inst}.{cnet}'] = cuts.get(f'{inst}.{cnet}', 0) + k
                         landed.setdefault(inst, set()).add(cnet)
                         self.stripe_on.setdefault(x0, set()).add(inst)
             self.log['stripes'].append((net, x0 / 1000, w / 1000, nv))

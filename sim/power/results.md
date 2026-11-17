@@ -35,6 +35,35 @@ from Matt's brief, on 2026-11-17.
   sensitivity (-0.021 %/10 mV, `sim/top/tile_results.md`). The frequency servo absorbs it, but a frequency
   calibration made with the RX off will be off by that much with it on.
 
+## After the fix (2026-11-17, layout/floorplan/floorplan.json straps)
+Both high-current blocks are turned in the tile (tx_drv R270, rx_lna R90), so their supply rails are vertical Metal3
+columns, and the floorplan's straps ran beside them, not over them. The straps now sit over the rails:
+- **tx_drv:** VDPWR moved from x 235.03 to 267.5 (6 µm) over the VDD rail; a new 6 µm VGND strap at 228.53 over the
+  VSS rail.
+- **rx_lna:** VAPWR moved from 118.1 to 126.02, plus a new VAPWR strap at 76.7 and new VGND straps at 97.01 and 149.83.
+
+Landing Via3 cuts, before → after: tx_drv VDD 2 → 417, VSS 0 → 206; LNA VDD 10 → 524, VSS 9 → 503. The tile driver now
+gates on this (`layout/gen/supply_check.py`: every block supply on a strap with at least 2 × I / 0.58 mA cuts, with
+router wiring only for an allow-list of tiny blocks; its planted fault is caught). DRC, LVS (14 / 14 mutations),
+antenna and the local precheck all pass on the new GDS.
+
+**Table 0.** Worst drop per block, all modes on, mesh 0.5 µm, case A / B, after the fix.
+
+| Supply, block | Before | After |
+|---|---|---|
+| VGND at tx_drv | +259 mV | **+12.6 mV** |
+| VGND at the LNA | +21 mV | +5.7 mV |
+| VAPWR at the LNA | −48 / −34 mV | −32.7 / −26.8 mV (21.6 mV of it the TT switch) |
+| VAPWR at the ring | −29 mV | −28.9 / −28.2 mV (switch-dominated) |
+| VDPWR at tx_drv (worst point) | −191 / −251 mV | −183 / −205 mV, **but see below** |
+
+The remaining VDPWR hotspot is at tx_drv's decap feed: a 0.6 µm VDD line crossing the VSS rail on an M2 bridge, one
+Via2 at each end (x 231-235, y 72), reported at 27× the LEF via limit. solve.py spreads a block's current over its
+supply contacts by area, so the decap, which draws no DC, gets DC here: this hotspot and the worst-point drop are an
+artefact of the current model. The output stage takes its current from the VDD rail under the new strap. Open:
+weight the sinks onto the output stage's sources and rerun; widen the decap feed anyway, because one via is ESR that
+makes the decap less effective.
+
 ## How TT feeds the tile (GF180)
 
 Sources: tt-multiplexer at commit 885086c (2026-09-16), `ol2/tt_top/odb_route.py` (`ModulePowerStrapper`),

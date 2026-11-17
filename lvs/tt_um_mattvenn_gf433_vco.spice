@@ -67,6 +67,14 @@ xdcu34 VDPWR VGND decap_u
 xdcu35 VDPWR VGND decap_u
 xdcu36 VDPWR VGND decap_u
 xdcu37 VDPWR VGND decap_u
+xdcu38 VDPWR VGND decap_u
+xdcu39 VDPWR VGND decap_u
+xdcu40 VAPWR VGND decap_u
+xdcu41 VAPWR VGND decap_u
+xdcu42 VAPWR VGND decap_u
+xdcu43 VAPWR VGND decap_u
+xdcu44 VAPWR VGND decap_u
+xdcu45 VAPWR VGND decap_u
 xtie_uo_out_6 uo_out[6] VAPWR VAPWR VGND VGND gf180mcu_fd_sc_mcu7t5v0__tiel
 xtie_uo_out_7 uo_out[7] VAPWR VAPWR VGND VGND gf180mcu_fd_sc_mcu7t5v0__tiel
 xtie_uio_out_0 uio_out[0] VAPWR VAPWR VGND VGND gf180mcu_fd_sc_mcu7t5v0__tiel
