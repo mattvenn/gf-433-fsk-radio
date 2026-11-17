@@ -73,6 +73,15 @@ about 0.7 fF but needs at least 55 µm more wire round to `rx_lsq` and crosses c
 **Measured (2026-11-17, `sim/top/tile_results.md`):** 11.6-12.3 % slower at every corner. The a2 net carries
 19.0 fF in the extracted tile against about 3.3 fF on the other ring nodes; 433.92 MHz moves to code 12-13 at tt.
 
+![a2 route](img/a2_route.png)
+
+**Fig. 1a.** The a2 net (red), traced in the tile GDS (`layout/gen/fig/a2_trace.py`, `a2_plot.py`). It carries 19.0 fF
+against about 3.3 fF on the other ring nodes. The longest part is inside `vco_core`: 52 µm of Metal2 from the ring node
+(x 323) to the west-edge pin, beside the VAPWR rail and over its plate. Then come 29 µm of tile route, which crosses
+the baseband pairs, enb and the VAPWR stripes, and `rx_lsq`'s input coupling capacitor (about 2 fF, intended).
+Moving the pin alone doesn't shorten the wire: the ring node is at x 323 and `rx_lsq` at x 256. Only moving `rx_lsq`
+next to the node removes most of it.
+
 **Not on target** (a few µm, set by internal tracks): the LNA inputs are 50.3 µm apart, not 43.68 (each band's channel
 track; the two input wires are the same length inside); `rx_lsq`'s lsq and `rx_lim`'s q are at y 3.1 µm (the bottom
 rail); mdac's vg is 6.5 µm from its target; ls on `vco_core` stays at x 21 µm, where lsdiv's own port reaches the edge.
