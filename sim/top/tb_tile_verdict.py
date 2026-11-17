@@ -16,12 +16,14 @@ Pass criteria (and why):
           pg) and >= +3 dBm, arm phase error < 10 deg, VDPWR ripple < 30 mV (2 x the 13-15 mV of that bench behind the
           same switch); off: < -60 dBm, ua[2] / ua[3] < 50 mV p-p;
           the ring (VAPWR) moves < 0.2 % with the TX on against off.
-  3 RX    q_i and q_q both toggle at the baseband frequency (edges >= 80 % of 2 x f_bb x window, f within 10 %);
-          the baseband tone is |f_tone - f_ring| within 10 % (or 15 kHz); |I/Q phase| 50 ... 110 deg (the taps are 72 deg
+  3 RX    q_i and q_q both toggle at the baseband frequency (rising + falling edges >= 80 % of 2 x f_bb x window, f
+          within 15 %: the 9 us window holds under two baseband periods); the baseband tone (DFT peak, 5 kHz grid) is
+          |f_tone - f_ring| within 15 % (or 15 kHz); |I/Q phase| 50 ... 110 deg (the taps are 72 deg
           apart by design), the limiter phase agrees in sign with the analog baseband phase, and flips sign with the
           sign of the offset.
   4 Power-up  the ring oscillates by the end of the ramp + 5 us, ck = f / 4 at the end, vbnf rising in the last 5 us,
-          no TX output (ua[2] / ua[3] < 50 mV p-p, dipole < 20 mV p-p) with the TX enables low.
+          no TX output with the TX enables low (dipole < 20 mV p-p throughout; ua[2] / ua[3] < 50 mV p-p once the
+          supplies pass 1.5 V: below that both pins follow the ramp together).
   5 Debug each select reads its own node on ua[0] (within 2 mV with the 10 Mohm probe) and not the others (> 5 mV
           away, markers on oi_p / oq_p), no select moves no node (< 1 mV with ua[0] at 0 / 3.3 V), the vctrl
           override within 20 mV of 1.65 V, ua[1] < 1 mV with 1 mA in (the ground-sense pin).
@@ -122,6 +124,8 @@ def check_vco(mut=False):
             okc = False
         if min(rs) < -0.05 or max(rs) > 0.02:
             okm = False
+    if mut and bad(res('mut_vco_code')):
+        okc = None                                    # the mutant hasn't run: nothing to judge yet
     out.append(('1b tile / reference: the same shift at every code and word of a corner (spread < 1 %)', okc,
                 ', '.join(sp)))
     out.append(('1e tile / reference within -5 ... +2 % (docs/tile_layout.md expected about -5 % from a2)', okm,
@@ -154,7 +158,7 @@ def check_vco(mut=False):
 # ------------------------------------------------------------------------------------------------ 2 TX
 def check_tx(mut=False):
     out = []
-    names = [n for n, c in T.cases().items() if c['kind'] == 'tx' and n.startswith('tx_') and n.endswith('_on')]
+    names = [n for n, c in T.cases().items() if c['kind'] == 'tx' and n.startswith('tx_') and '_on' in n]
     if mut:
         names = ['mut_tx_noen', 'mut_tx_rsw10']
     for n in names:
@@ -196,13 +200,13 @@ def rx_one(r):
         return (None if b == 'pending' else False), b
     p = []
     win = T.RX_TSTOP - T.RX_TSKIP
-    need = 0.8 * 2 * r['f_bb_expect'] * win
+    need = 0.8 * 2 * r['f_bb_expect'] * win          # rising + falling edges
     if not (r['qi_edges'] >= need and r['qq_edges'] >= need):
         p.append(f"edges {r['qi_edges']} / {r['qq_edges']} (need {need:.0f})")
     for k in ('f_qi', 'f_qq'):
-        if not abs(r[k] / r['f_bb_expect'] - 1) < 0.10:
+        if not abs(r[k] / r['f_bb_expect'] - 1) < 0.15:
             p.append(f"{k} {r[k] / 1e3:.1f} kHz vs {r['f_bb_expect'] / 1e3:.1f}")
-    if not (abs(r['f_bb'] - r['f_bb_expect']) < max(15e3, 0.1 * r['f_bb_expect'])):
+    if not (abs(r['f_bb'] - r['f_bb_expect']) < max(15e3, 0.15 * r['f_bb_expect'])):
         p.append(f"baseband {r['f_bb'] / 1e3:.1f} kHz vs {r['f_bb_expect'] / 1e3:.1f}")
     q = r['q_iq_phase']
     if not 50 <= abs(q) <= 110:
@@ -259,12 +263,15 @@ def check_pwr(mut=False):
             p.append(f"f / f(ck) at the end {r['f_end'] / r['f_ck_end']:.3f}")
         if not w[-1]['vbnf'] > w[-5]['vbnf'] - 1e-3:
             p.append('vbnf falling at the end')
-        if not (r['ua_tx_pp_max'] < 0.05 and r['dip_pp_max'] < 0.02):
-            p.append(f"TX output {r['ua_tx_pp_max'] * 1e3:.1f} mV p-p at ua[2/3], {r['dip_pp_max'] * 1e3:.1f} mV "
+        # (below about 1.5 V both pins follow the ramp together: common mode, nothing across the dipole)
+        ua_up = max(max(x['ua2_pp'], x['ua3_pp']) for x in w if x['vap'] > 1.5)
+        if not (ua_up < 0.05 and r['dip_pp_max'] < 0.02):
+            p.append(f"TX output {ua_up * 1e3:.1f} mV p-p at ua[2/3] (supplies > 1.5 V), {r['dip_pp_max'] * 1e3:.1f} mV "
                      'on the dipole')
         out.append((f'4 power-up {n}', not p, '; '.join(p) or
                     f"oscillates from {r['t_osc_us']:.0f} us, f at the end {r['f_end'] / 1e6:.1f} MHz, vbnf "
-                    f"{r['vbnf_end']:.3f} V, TX output {r['ua_tx_pp_max'] * 1e3:.2f} mV p-p, I(VAPWR) / I(VDPWR) "
+                    f"{r['vbnf_end']:.3f} V, TX output {ua_up * 1e3:.2f} mV p-p at the pins (supplies > 1.5 V), "
+                    f"{r['dip_pp_max'] * 1e3:.2f} mV on the dipole, I(VAPWR) / I(VDPWR) "
                     f"{r['i_vap_end_ma']:.2f} / {r['i_vdp_end_ma']:.2f} mA (peaks {r['i_vap_peak_ma']:.1f} / "
                     f"{r['i_vdp_peak_ma']:.1f})"))
     return out

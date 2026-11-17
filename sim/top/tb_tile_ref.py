@@ -39,6 +39,11 @@ def cases():
         C[f'ref_tt_k{cd}_w512'] = dict(corner='typical', code=cd, word=512)
     # attribution: the tile's a2 net has 19.0 fF of extracted wiring C against 3.0-3.4 fF on a vco_top ring node; put
     # the difference (15.7 fF) on a0 (a port of vco_top; the ring is symmetric) and see whether f drops as on the tile
+    # sf on the extracted vco_top + extracted DAC runs far below the schematic (Table II of docs/tx_fine_tune.md):
+    # the same deck with the schematic DAC, to tell the DAC from the ring
+    for corner in ('sf', 'typical'):
+        cd = T.CODE[corner]
+        C[f'ref_{T.CN[corner]}_k{cd}_w0_schdac'] = dict(corner=corner, code=cd, word=0, schdac=True)
     for corner in ('typical', 'sf', 'fs', 'ss', 'ff'):
         cd = T.CODE[corner]
         C[f'ref_{T.CN[corner]}_k{cd}_w512_ca16'] = dict(corner=corner, code=cd, word=512, cadd=15.7e-15)
@@ -48,7 +53,9 @@ def cases():
 def deck(c, tstop=0.6e-6):          # as the tile's VCO runs (tb_tile.VCO_TSTOP)
     if c['corner'] not in PC.VBN0:                   # sf / fs: the typical reference value as the .ic hint
         PC.VBN0[c['corner']] = PC.VBN0['typical']
+    MS.PEX = None if c.get('schdac') else 'cm'
     d = PC.pex_deck(c['corner'], c['code'], c['word'], tstop=tstop)
+    MS.PEX = 'cm'
     if c.get('cadd'):
         d = d.replace('Cwire ck 0 20f\n', f"Cwire ck 0 20f\nCadd a0 0 {c['cadd']:.4g}\n")
         assert 'Cadd' in d

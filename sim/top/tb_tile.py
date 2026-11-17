@@ -304,6 +304,8 @@ def cases():
         add(f'tx_c_{CN[corner]}_on', 'tx', 2400, corner=corner, tx=1, supply='pg', save=SAVE['tx'])
     add('tx_c_tt_off', 'tx', 2400, tx=0, supply='pg', save=SAVE['tx'])
     # (tx_rcx_tt_on dropped: ~70 s of CPU per ns; the tx_drv block's rcx / c difference is 0.15 dB, block_pex.txt)
+    # the tile's ring is about 12 % slow, so code 9 runs at 370 MHz; code 13 brings it near 434 MHz
+    add('tx_c_tt_on_k13', 'tx', 4000, tx=1, code=13, supply='pg', save=SAVE['tx'])
     add('tx_c_tt_on_ideal', 'tx', 2400, tx=1, supply='ideal', save=SAVE['tx'])
     # 3. RX: a pre-run with the receiver on (the ring's own f and its settled vg / vbnf), then a CW tone at
     #    f + df at the dipole; the I / Q baseband and the limiter outputs
@@ -548,13 +550,24 @@ def an_rx(pl, c):
     if c.get('swap_out'):                  # analysis mutation: q_i and q_q exchanged
         qi, qq = qq, qi
     ri, rq = xings(tm, qi, th), xings(tm, qq, th)
-    r['qi_edges'], r['qq_edges'] = int(len(ri)), int(len(rq))
-    r['f_qi'] = (len(ri) - 1) / (ri[-1] - ri[0]) if len(ri) > 2 else float('nan')
-    r['f_qq'] = (len(rq) - 1) / (rq[-1] - rq[0]) if len(rq) > 2 else float('nan')
+    ai = np.sort(np.concatenate([ri, xings(tm, qi, th, False)]))      # every edge, rising and falling
+    aq = np.sort(np.concatenate([rq, xings(tm, qq, th, False)]))
+    r['qi_edges'], r['qq_edges'] = int(len(ai)), int(len(aq))
+    r['f_qi'] = (len(ai) - 1) / (2 * (ai[-1] - ai[0])) if len(ai) > 2 else float('nan')
+    r['f_qq'] = (len(aq) - 1) / (2 * (aq[-1] - aq[0])) if len(aq) > 2 else float('nan')
     r['qi_duty'] = duty(tm, qi, th)
-    ph = [((rq[rq > x][0] - x) * fb * 360) % 360 for x in ri[:-1] if (rq > x).any()]
-    ph = [x - 360 if x > 180 else x for x in ph]
+    # Q's lead over I (deg of the baseband period), the same sign convention as bb_iq_phase (angle of cq / ci):
+    # for each rising edge of q_i, the nearest rising edge of q_q
+    ph = []
+    for x in ri:
+        if len(rq):
+            d = rq[np.argmin(abs(rq - x))] - x
+            ph.append(-d * fb * 360)
+    ph = [((v + 180) % 360) - 180 for v in ph]
     r['q_iq_phase'] = float(np.median(ph)) if ph else float('nan')
+    # the baseband's DC offset over the window (the 8.5 kHz high-pass still settling from the LO's start)
+    r['oi_mean'], r['oq_mean'] = mean(tm, oi[m]), mean(tm, oq[m])
+    r['mix_i_mean_mv'] = mean(tm, bi[m]) * 1e3
     r['qi_min'], r['qi_max'] = float(qi.min()), float(qi.max())
     # LO: I / Q phase at the mixers (deg of the LO period), duty
     rli, rlq = xings(tm, p['v(lo_i)'], th), xings(tm, p['v(lo_q)'], th)

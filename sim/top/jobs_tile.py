@@ -27,5 +27,5 @@ for n, c in T.cases().items():
     JOBS.append(j)
 for n in R.cases():
     # tb_tile_ref rewrites build/tx_fine/mdac/mdac_cm_ports.spice when it builds a deck: start them apart
-    JOBS.append(dict(name=n, cmd=f"cd {REPO} && python3 sim/top/tb_tile_ref.py run {n}", threads=1, est=2400 if "ca16" in n else 2000,
+    JOBS.append(dict(name=n, cmd=f"cd {REPO} && python3 sim/top/tb_tile_ref.py run {n}", threads=1, est=2400 if ("ca16" in n or "schdac" in n) else 2000,
                      stagger=("ref", 20)))
