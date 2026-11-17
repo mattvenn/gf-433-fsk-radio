@@ -158,6 +158,13 @@ the VCO and the receiver on the extracted tile.
 7. **Later:** a PLL (on-chip PFD, charge pump and loop filter, reference from the RP2350), and I/Q for the receiver.
 8. **Sign-off:** full PVT (5 corners × 0/27/70 °C × VDD ±4.5 %) plus MC on the extracted tile.
 9. **Estimated tile:** 2x2.
+10. **To consider later: extra debug options** (`docs/bringup.md` section 6; Matt 2026-11-17: not crucial, the
+    design stays as it is for now). Candidates, most diagnostic value first:
+    - a divided Q LO on spare `uo[6]`, to tell a dead Q LO path from a dead Q mixer or limiter (a new divider
+      cell plus layout);
+    - debug switches on `oi_n` / `oq_n`, to separate the baseband offset from the common mode (two `dbg_tg` cells
+      plus two DBG_SEL bits);
+    - the macro keeping only the lowest set DBG_SEL bit, so two switches can't short two nodes (digital only).
 
 ## Done 2026-11-09 (TX driver)
 - Plan steps 1–5: circuit + xschem sheets (`sim/tx/tx_drv.py`, `xschem/gen/tx_drv.py`), block and top-level benches
