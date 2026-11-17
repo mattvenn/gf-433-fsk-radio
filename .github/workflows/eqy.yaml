@@ -1,0 +1,63 @@
+name: eqy
+# Logic equivalence of the tx_fine macro: src/tx_fine.v vs macro/tx_fine/nl/tx_fine.nl.v (eqy), the clock-source
+# check, pnl.v vs nl.v, and the planted-bug self-test (formal/eqy/run.sh, about 15 s).
+# docs/verification_digital.md "Equivalence (eqy)". Tools from YosysHQ's oss-cad-suite (dated build, Yosys 0.69
+# line); the cells' liberty file from the same ciel gf180mcuD PDK as the lvs action.
+on:
+  push:
+  workflow_dispatch:
+
+env:
+  PDK_ROOT: /home/runner/pdk
+  PDK: gf180mcuD
+  PDK_VERSION: e8daeda73ca8f5814dbc0b11d1d05802251a3750
+  OSS_CAD_SUITE: 2026-09-30
+
+jobs:
+  eqy:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v4
+
+      - name: Cache oss-cad-suite
+        id: cache-ocs
+        uses: actions/cache@v4
+        with:
+          path: /home/runner/oss-cad-suite
+          key: oss-cad-suite-${{ env.OSS_CAD_SUITE }}
+
+      - name: Install oss-cad-suite
+        if: steps.cache-ocs.outputs.cache-hit != 'true'
+        shell: bash
+        run: |
+            d=${OSS_CAD_SUITE//-/}
+            curl -sfL https://github.com/YosysHQ/oss-cad-suite-build/releases/download/$OSS_CAD_SUITE/oss-cad-suite-linux-x64-$d.tgz \
+              | tar xz -C /home/runner
+
+      - name: Install gf180mcuD PDK
+        uses: TinyTapeout/ciel-action@v1
+        with:
+          pdk_name: ${{ env.PDK }}
+          pdk_version: ${{ env.PDK_VERSION }}
+          pdk_root: ${{ env.PDK_ROOT }}
+
+      - name: Equivalence check and planted-bug self-test
+        shell: bash
+        run: |
+            export PATH=/home/runner/oss-cad-suite/bin:$PATH
+            yosys -V; eqy --version || true
+            rc=0; bash formal/eqy/run.sh | tee eqy.txt || rc=$?
+            grep -q "^eqy: ALL PASS" eqy.txt || rc=1
+            echo "## eqy" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY; cat eqy.txt >> $GITHUB_STEP_SUMMARY; echo '```' >> $GITHUB_STEP_SUMMARY
+            exit $rc
+
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eqy-logs
+          path: |
+            build/eqy/*.log
+            build/eqy/*.txt
