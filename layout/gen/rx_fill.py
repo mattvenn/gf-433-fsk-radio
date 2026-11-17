@@ -30,8 +30,9 @@ def fill(gds, cell, margin=4.0, out=None):
         li = ly.find_layer(l, d)
         return db.Region(top.begin_shapes_rec(li)).merged() if li is not None else db.Region()
     comp, poly, nwell, resmk = reg(22, 0), reg(30, 0), reg(21, 0), reg(110, 5)
+    old = reg(22, 4)                                          # fill already there (a filled sub-cell): DCF.2b
     keep = comp.sized(um(3.5)) + poly.sized(um(1.5)) + (nwell.sized(um(1.3)) - nwell.sized(um(-1.3))) \
-        + resmk.sized(um(3.5))
+        + resmk.sized(um(3.5)) + old.sized(um(1.9))
     bb = top.bbox()
     area = db.Region(bb).sized(um(-margin))
     free = (area - keep).merged().sized(um(-SQ / 2))          # centres where a whole square fits

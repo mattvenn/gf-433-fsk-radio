@@ -16,6 +16,12 @@ It is to become an **FM radio toolkit**:
 - **Range:** room-temperature operation only.
 
 ## Start here
+**2026-11-17: the tile is laid out from the agreed floorplan (variant B), branch `floorplan`: `docs/tile_layout.md`.**
+The receiver (as its cells), the debug mux on ua[0] and the re-hardened macro (250 × 176.8 µm, RX_EN + DBG_SEL) are
+in; DRC 0 (magic and KLayout), LVS match with 13 / 13 mutations caught, antenna 0. Generator `layout/gen/tile.py`,
+checks `layout/gen/tile_driver.sh`. Open: decap only about 7.4 pF; the real TT precheck runs in CI; next, re-simulate
+the VCO and the receiver on the extracted tile.
+
 **The oscillator topology is chosen: a current-fed ring with a 5-bit current DAC.**
 - It passes every check so far, in schematic and on the extracted v3 layout.
 - **GF silicon factor: about 1.0 at typical** (`docs/gf_silicon_factor.md`, 2026-11-09). On the ttgf0p2 ring #614

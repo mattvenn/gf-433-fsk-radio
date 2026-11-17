@@ -1,4 +1,4 @@
-> Running: step 3/5 (close the floorplan on the real blocks) since 10:40. Steps 1-2 done (every re-laid-out cell CHECK OK).
+> Done (2026-11-17): see docs/tile_layout.md. Macro 250 x 176.8 um (clean); all block pin moves done (13 cells CHECK OK); tile DRC 0 (magic, KLayout 768 rules), LVS match, 13/13 mutations caught, antenna 0, local precheck OK (real TT precheck in CI). Open: decap 7.4 pF.
 
 # Handoff: move the block pins to the agreed floorplan, then lay out the tile with the real blocks (sim server)
 

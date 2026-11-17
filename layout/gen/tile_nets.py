@@ -14,6 +14,7 @@ SUPPLY = {
     'vco.ref': VA, 'vco.decap': {'VDD_LS': 'VAPWR', 'VSS': 'VGND'},
     'xmdac': VA, 'xvpd': {'b': 'VGND'}, 'xbits': VA,
     'xtxd': VD, 'xmac': VD, 'xties': VD,
+    'xant_tx': VA, 'xant_rx': VA, 'xant_dbg': VA,
     'xdbg_bbi': VA, 'xdbg_bbq': VA, 'xdbg_nb': VA, 'xdbg_vctrl': VA,
     'rx.lna': VA, 'rx.bias': VA, 'rx.lsq': dict(VA, qenb='VGND'),   # qenb tied to VSS (open review item)
     'rx.lobuf_i': VA, 'rx.lobuf_q': VA, 'rx.mix_i': VA, 'rx.mix_q': VA,
@@ -57,8 +58,8 @@ def nets():
         'vctrl': [('vco.core', 'vctrl'), ('vco.ref', 'vctrl'), ('xvpd', 'a')],     # cgm_ref: one pin (feed-through)
         'ck': [('vco.core', 'ck'), ('xmac', 'ck')],
         # TX enables
-        'en_p': [('PIN', 'ui_in[5]'), ('xtxd', 'en_p')],
-        'en_n': [('PIN', 'ui_in[6]'), ('xtxd', 'en_n')],
+        'en_p': [('PIN', 'ui_in[5]'), ('xtxd', 'en_p'), ('xant_tx', 'a0')],
+        'en_n': [('PIN', 'ui_in[6]'), ('xtxd', 'en_n'), ('xant_tx', 'a1')],
         # receiver control and outputs
         'rx_en': [('xmac', 'rx_en'), ('rx.bias', 'en'), ('rx.lobuf_i', 'en'), ('rx.lobuf_q', 'en')],
         'q_i': [('rx.lim_i', 'q'), ('PIN', 'uo_out[4]')],
@@ -75,13 +76,13 @@ def nets():
         'nb': [('rx.bias', 'nb'), ('rx.lna', 'nb'), ('rx.bb_i', 'nb'), ('rx.bb_q', 'nb'), ('rx.lim_i', 'nb'),
                ('rx.lim_q', 'nb')],
         'enb': [('rx.bias', 'enb'), ('rx.lna', 'enb'), ('rx.bb_i', 'enb'), ('rx.bb_q', 'enb'), ('rx.lim_i', 'enb'),
-                ('rx.lim_q', 'enb')],
+                ('rx.lim_q', 'enb'), ('xant_rx', 'a0')],
         # debug mux
         'dbg_bus': [(inst, 'bus') for inst, _, _ in DBG] + [('PIN', 'ua[0]')],
     }
     for inst, src, k in DBG:
         n[src].append((inst, 'mod'))
-        n[f'dbg_sel[{k}]'] = [('xmac', f'dbg_sel[{k}]'), (inst, 'ctrl')]
+        n[f'dbg_sel[{k}]'] = [('xmac', f'dbg_sel[{k}]'), (inst, 'ctrl'), ('xant_dbg', f'a{k}')]
     for mp, tp in MAC_TT.items():
         n[f'mac_{mp}'] = [('PIN', tp), ('xmac', mp)]
     for mp, dp in dac_pairs():
@@ -96,9 +97,18 @@ def nets():
 TIED_VSS = {'qenb'}
 
 # nets that may run on Metal4 over the receiver's cells (rule 6 of docs/floorplan_spec.md bans clocks, digital,
-# enables, LO and the limiter outputs there; these are the receiver's own analog nets)
+# enables, LO, the debug bus and the limiter outputs there; these are the receiver's own analog nets)
 RX_M4_OK = {'rx_inp', 'rx_inn', 'ri_p', 'ri_n', 'rq_p', 'rq_n', 'bi_p', 'bi_n', 'bq_p', 'bq_n', 'oi_p', 'oi_n', 'oq_p',
-            'oq_n', 'nb', 'enb', 'dbg_bus'}           # nets tied to VGND in the tile (no other end)
+            'oq_n', 'nb'}
+# guarded nets: VGND shield wires on the free tracks beside them (the handoff: the baseband -> limiter pairs, and
+# vbnf / vctrl from cgm_ref to the ring); KEEP_AWAY: aggressors that pay to come near the guarded ones
+SHIELDED = {'vbnf', 'vctrl', 'oi_p', 'oi_n', 'oq_p', 'oq_n'}
+KEEP_AWAY = {'ck': ['vbnf', 'vctrl'], 'q_i': ['oi_p', 'oi_n', 'oq_p', 'oq_n'], 'q_q': ['oi_p', 'oi_n', 'oq_p', 'oq_n']}
+# nets with an antenna diode (KLayout ANT.16 / ANT.4: long wires into small gates) stay off Metal4, so the diode
+# protects them at every metal level the antenna rules check
+NO_M4_NETS = {'enb'} | {f'dbg_sel[{k}]' for k in range(4)}
+# (enb carries the receiver's antenna diode, xant_rx: it stays on M2 / M3 so the diode protects it at every metal
+# level KLayout's antenna rules check)           # nets tied to VGND in the tile (no other end)
 
 
 def check():

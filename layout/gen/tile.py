@@ -39,12 +39,17 @@ OUT = REPO / 'build' / 'tile'
 FP = REPO / 'layout/floorplan/floorplan.json'
 
 LY = dict(bnd=(0, 0), m1=(34, 0), v1=(35, 0), m2=(36, 0), v2=(38, 0), m3=(42, 0), v3=(40, 0), m4=(46, 0),
-          m4t=(46, 10), m2t=(36, 10), m3t=(42, 10))
+          m4t=(46, 10), m2t=(36, 10), m3t=(42, 10), nwell=(21, 0), comp=(22, 0), pplus=(31, 0), nplus=(32, 0))
 LNUM = {'m1': 34, 'm2': 36, 'm3': 42, 'm4': 46}
 CUT, PAD, PITCH = 260, 380, 660
 STRIPE_Y = (5000, 320360)
 ROW_H = 3920
 DCAP_W, DCAP_L, DCAP_NF = 6.0, 4.0, 2   # decap_u fingers (um): 0.2 pF per unit
+# decap_u's rail strips (its own y; x insets from the unit's ends), bridged across abutted units:
+# (layer, (inset left, inset right), (y0, y1)) for the VDD rail's n-well, n+ tap COMP / implant, the VSS p+ tap
+DCAP_BRIDGE = [('nwell', (150, 150), (11395, 12795)), ('comp', (300, 300), (11905, 12285)),
+               ('nplus', (140, 140), (11745, 12445)), ('comp', (300, 300), (-1390, -1010)),
+               ('pplus', (280, 280), (-1410, -990))]
 TIE_ROW_Y = 313600              # DEF ROW_79 (FS)
 TIE_RISE = 322500               # tie outputs: M3 up to here (above the stripes' ends), via3, Metal4 into the pin
 
@@ -66,6 +71,11 @@ CELLS = {
 MAC_LEF = REPO / 'macro/tx_fine/lef/tx_fine.lef'
 # blocks Metal4 may not cross (signal routes): the receiver, the ring + lsdiv, the reference, the macro
 NO_M4 = ('rx.', 'vco.core', 'vco.ref', 'xmac')
+# blocks the tile adds beyond the floorplan: antenna-diode rows on the long wires into small gates (KLayout ANT.16 /
+# ANT.4): the TX enables (next to tx_drv's pins) and the receiver's enb (between the bias and the pull-down)
+EXTRA = [dict(inst='xant_tx', cell='ant_row2', x=240.0, y=77.4, rot=0, mirror=False, orient='R0'),
+         dict(inst='xant_rx', cell='ant_row1', x=406.0, y=121.0, rot=0, mirror=False, orient='R0'),
+         dict(inst='xant_dbg', cell='ant_row4', x=447.0, y=127.0, rot=0, mirror=False, orient='R0')]
 
 
 def parse_def(path):
@@ -140,6 +150,27 @@ class Tile:
                        x0 + i * PITCH + CUT // 2, y0 + j * PITCH + CUT // 2, cell)
         return nx * ny
 
+    def via_fill(self, n, reg, enc=60):
+        """via<n> cuts on a 0.66 um grid (global, so neighbouring landings never clash) wherever a cut plus `enc` of
+        metal fits inside reg (a Region: the landing area on both metals)."""
+        db = self.db
+        inner = reg.sized(-(CUT // 2 + enc)).merged()
+        k = 0
+        for poly in inner.each():
+            bb = poly.bbox()
+            pr = db.Region(poly)
+            x = bb.left - bb.left % PITCH
+            while x <= bb.right:
+                y = bb.bottom - bb.bottom % PITCH
+                while y <= bb.top:
+                    if not pr.interacting(db.Region(db.Box(x - 1, y - 1, x + 1, y + 1))).is_empty() and \
+                            (db.Region(db.Box(x - 1, y - 1, x + 1, y + 1)) - pr).is_empty():
+                        self.r(f'v{n}', x - CUT // 2, y - CUT // 2, x + CUT // 2, y + CUT // 2)
+                        k += 1
+                    y += PITCH
+                x += PITCH
+        return k
+
     def label(self, layer, text, x, y, cell=None):
         db = self.db
         (cell or self.top).shapes(self.L[layer]).insert(db.Text(text, db.Trans(db.Vector(int(x), int(y)))))
@@ -193,13 +224,16 @@ class Tile:
     def place_blocks(self):
         db = self.db
         mac_pins, mac_pow = lef_pins(MAC_LEF)
-        for b in self.fp['blocks']:
+        for b in self.fp['blocks'] + EXTRA:
             inst = b['inst'] if b['inst'] not in ('deca', 'decd') else f"{b['inst']}{b['part']}"
             if b['inst'] in ('deca', 'decd'):
                 continue
             if b['cell'] == 'bits_inv':
                 gds, name = None, 'bits_inv'
                 cell = self.bits_cell()
+            elif b['cell'].startswith('ant_row'):
+                gds, name = None, b['cell']
+                cell = self.ant_cell(int(b['cell'][7:]))
             else:
                 gds, name = CELLS[b['cell']]
             if gds is not None:
@@ -356,6 +390,11 @@ class Tile:
         for a, b in zip(S, S[1:]):
             assert b[1] - (a[1] + a[2]) >= 1000, ('stripes too close', a, b)
         self.S = S
+        self.stripe_on = {}                      # stripe x0 -> the blocks it lands on
+        if 'xmac' in self.inst:
+            for n, x0, w in S:
+                if self.inst['xmac']['box'][0] <= x0 <= self.inst['xmac']['box'][2]:
+                    self.stripe_on.setdefault(x0, set()).add('xmac')
         landed = {}
         for net, x0, w in S:
             self.r('m4', x0, STRIPE_Y[0], x0 + w, STRIPE_Y[1])
@@ -369,17 +408,12 @@ class Tile:
                 for cnet, reg in self.supply_m3(inst).items():
                     if TN.SUPPLY[inst][cnet] != net:
                         continue
-                    for poly in (reg & lane).each():
-                        bb = poly.bbox()
-                        if bb.width() < CUT + 120 or bb.height() < CUT + 120:
-                            continue
-                        # the largest box inside the polygon is its bbox only when rectangular: use the
-                        # polygon's own boxes (decomposed) so no cut sits off the metal
-                        for bx in db.Region(poly).decompose_trapezoids_to_region().each():
-                            b2 = bx.bbox()
-                            if b2.width() >= CUT + 120 and b2.height() >= CUT + 120:
-                                nv += self.via_array(3, b2.left, b2.right, b2.bottom, b2.top, margin=60)
+                    land = (reg & lane).merged()
+                    k = self.via_fill(3, land)
+                    nv += k
+                    if k:
                         landed.setdefault(inst, set()).add(cnet)
+                        self.stripe_on.setdefault(x0, set()).add(inst)
             self.log['stripes'].append((net, x0 / 1000, w / 1000, nv))
         self.landed = landed
         miss = {inst: sorted(set(TN.SUPPLY.get(inst, {})) - landed.get(inst, set()))
@@ -462,13 +496,19 @@ class Tile:
         x1 = x
         # rails -> the first VAPWR and VGND stripes over the row
         done = set()
+        risers = [px(n) for n in run if n in tied]
         for net, sx, w in self.S:
             if net in done or net not in ('VAPWR', 'VGND') or not (x0 < sx and sx + w < x1):
                 continue
+            # the via stack sits on the stripe, clear of every tie output's M3 riser (0.8 um centre to centre)
+            xs_ = [x for x in range(sx + 300, sx + w - 300 + 1, 10) if all(abs(x - r) >= 800 for r in risers)]
+            if not xs_:
+                continue
+            xv = xs_[len(xs_) // 2]
             yv = yr if net == 'VAPWR' else yr + ROW_H
-            self.via_stack(sx + w // 2, yv, top=3)
+            self.via_stack(xv, yv, top=3)
             for l in (0, 1):
-                obst[l].append((sx + w // 2 - PAD // 2, yv - PAD // 2, sx + w // 2 + PAD // 2, yv + PAD // 2))
+                obst[l].append((xv - PAD // 2, yv - PAD // 2, xv + PAD // 2, yv + PAD // 2))
             done.add(net)
         assert done == {'VAPWR', 'VGND'}, done
         # the row itself (M1 only): routes may cross it on M2 / M3, but keep the router off its via pads
@@ -479,9 +519,9 @@ class Tile:
     def bits_cell(self):
         """bits_inv: bitb_i = not ui_in[i] (five inv_1), with an antenna diode on each input (the ui_in lines are
         long). Row A (N, y 0): filltie, then per bit inv_1 + filltie; row B (FS, y 3.92): filltie, then per bit
-        fill_1 x 3, antenna, fill_1 (the antenna's I pin under the in riser), filltie at the end. Pins on the top
+        fill_1 x 4, antenna (its I pin under the in riser), filltie at the end. Pins on the top
         edge (M2 risers), in the vco_core east edge's order once placed R90 (bitb_i below bit_i): out<i> at
-        x_i + 0.28 (from ZN at x_i + 1.4, y 2.95), in<i> at x_i + 1.96 (to I at x_i + 0.84, y 1.7; the antenna's I
+        x_i + 0.28 (from ZN at x_i + 1.4, y 2.95), in<i> at x_i + 2.52 (to I at x_i + 0.84, y 1.7; the antenna's I
         on it at y 6.02). Rails: M1 (the cells) + an M3 strap on each, via stacks at both ends; VDD / VSS on M3."""
         if self.ly.has_cell('bits_inv'):
             return self.ly.cell('bits_inv')
@@ -494,17 +534,16 @@ class Tile:
             xs.append(x)
             self.put('inv_1', x, 0, cell=c)
             self.put('filltie', x + 2240, 0, cell=c)
-            for k in range(3):
+            for k in range(4):
                 self.put('fill_1', x + 560 * k, ROW_H, flip=True, cell=c)
-            self.put('antenna', x + 1680, ROW_H, flip=True, cell=c)
-            self.put('fill_1', x + 2800, ROW_H, flip=True, cell=c)
+            self.put('antenna', x + 2240, ROW_H, flip=True, cell=c)
             x += 3360
         self.put('filltie', x, 0, cell=c)
         self.put('filltie', x, ROW_H, flip=True, cell=c)
         x += 1120
         W, H = x, 2 * ROW_H
         for i, xi in enumerate(xs):
-            xout, xin = xi + 280, xi + 1960
+            xout, xin = xi + 280, xi + 2520
             self.r('m2', xout - HW, 2950 - HW, xout + HW, H, cell=c)
             self.r('m2', xout - HW, 2950 - HW, xi + 1400 + HW, 2950 + HW, cell=c)
             self.r('v1', xi + 1400 - CUT // 2, 2950 - CUT // 2, xi + 1400 + CUT // 2, 2950 + CUT // 2, cell=c)
@@ -522,6 +561,37 @@ class Tile:
                     self.r(f'v{k}', xe - CUT // 2, y - CUT // 2, xe + CUT // 2, y + CUT // 2, cell=c)
             self.label('m3t', net, 300, y, cell=c)            # at the rail's end: on the cell edge
         self.r('bnd', 0, -600, W, H + 600, cell=c)
+        return c
+
+    # ---- antenna diodes (KLayout ANT.16 / ANT.4 on the long tile wires into small gates) ----
+    def ant_cell(self, n):
+        """ant_row<n>: one row (N): filltie, then n x (antenna + fill_2), filltie. Pins a<k> on the top edge (M2
+        risers from each antenna's I at x + 0.28, y 1.96); rails M1 + an M3 strap each, VDD / VSS labels at the
+        left end."""
+        name = f'ant_row{n}'
+        if self.ly.has_cell(name):
+            return self.ly.cell(name)
+        c = self.ly.create_cell(name)
+        self.put('filltie', 0, 0, cell=c)
+        x = 1120
+        for k in range(n):
+            self.put('antenna', x, 0, cell=c)
+            self.put('fill_2', x + 1120, 0, cell=c)
+            xa = x + 280
+            self.r('m2', xa - HW, 1960 - HW, xa + HW, ROW_H + 1200, cell=c)
+            self.r('v1', xa - CUT // 2, 1960 - CUT // 2, xa + CUT // 2, 1960 + CUT // 2, cell=c)
+            self.label('m2t', f'a{k}', xa, ROW_H + 1100, cell=c)
+            x += 2240
+        self.put('filltie', x, 0, cell=c)
+        W = x + 1120
+        for net, y in (('VSS', 0), ('VDD', ROW_H)):
+            self.r('m3', 0, y - 600, W, y + 600, cell=c)
+            for xe in (560, W - 560):
+                for k, (lo, hi) in enumerate((('m1', 'm2'), ('m2', 'm3')), 1):
+                    self.r(hi, xe - PAD // 2, y - PAD // 2, xe + PAD // 2, y + PAD // 2, cell=c)
+                    self.r(f'v{k}', xe - CUT // 2, y - CUT // 2, xe + CUT // 2, y + CUT // 2, cell=c)
+            self.label('m3t', net, 300, y, cell=c)
+        self.r('bnd', 0, -600, W, ROW_H + 1200, cell=c)
         return c
 
     # ---- signal routing ----
@@ -581,7 +651,7 @@ class Tile:
             o = G.own[n]
             if o == 0:
                 G.own[n] = nid
-            elif o != nid and o != -1:
+            elif o > 0 and o != nid:
                 G.own[n] = -1
         if node is not None:
             G.own[node] = nid
@@ -655,7 +725,7 @@ class Tile:
         self.stubs += [(s_, nid) for s_ in sh]
         return out
 
-    def route_nets(self, nets, order):
+    def route_nets(self, nets, order, unl=None):
         """Route every net (multi-terminal: each further terminal to the tree so far). nets: {name: ends}."""
         G = self.G
         ids = {n: k + 1 for k, n in enumerate(nets)}
@@ -681,19 +751,31 @@ class Tile:
                     except NoAccess as e:
                         print(e, flush=True)
                         self.log['unrouted'].append(f'{n} (access {inst}.{pin})')
-        paths = {}
+        self.paths = paths = {}
+        if unl:                                 # the blocks' own supply wires first: short and local
+            self.log['supply_routes'] = self.supply_routes(unl)
+        self.shield_nodes = {}                  # net -> [(l, i, j)] reserved beside it for its VGND shield
+        sid0 = len(ids) + 1000
         for n in order:
             nid = ids[n]
             T = terms[n]
             if len(T) < len(nets[n]):
                 continue                        # a pin without access (logged)
+            G.pen = None
+            if n in TN.KEEP_AWAY:               # an aggressor: pay to come within 3 tracks of the guarded wires
+                G.pen = np.zeros(G.own.shape, dtype=np.int32)
+                for v in TN.KEEP_AWAY[n]:
+                    for p_ in paths.get(v, []):
+                        for (l, i, j) in p_:
+                            G.pen[:, max(0, i - 3):i + 4, max(0, j - 3):j + 4] = 20
             tree = set(T[0])
             rest = T[1:]
             paths[n] = []
             while rest:
                 rest.sort(key=lambda s: min(abs(a[1] - b[1]) + abs(a[2] - b[2]) for a in s for b in list(tree)[:200]))
                 src = rest.pop(0)
-                path = G.route(src, tree, nid, m4mask_ok=n in TN.RX_M4_OK)
+                path = G.route(src, tree, nid, m4mask_ok=n in TN.RX_M4_OK,
+                               allow=(True, True, n not in TN.NO_M4_NETS))
                 if path is None:
                     self.log['unrouted'].append(n)
                     print('unrouted', n, 'from', [(q[0], G.X(q[1]) / 1000, G.Y(q[2]) / 1000) for q in list(src)[:2]],
@@ -704,8 +786,81 @@ class Tile:
                 tree |= set(path)
                 for nd in path:
                     G.own[nd] = nid
+            if n in TN.SHIELDED and paths[n]:
+                # the free nodes beside the wire on its own layer become its shield (VGND, joined later)
+                sid = sid0 + len(self.shield_nodes)
+                sh_ = []
+                for p_ in paths[n]:
+                    for (l, i, j) in p_:
+                        for (a_, b_) in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                            q = (l, i + a_, j + b_)
+                            if 0 < q[1] < G.nx - 1 and 0 < q[2] < G.ny - 1 and G.own[q] == 0 and \
+                                    not (l == 2 and G.m4mask[q[1], q[2]]):
+                                G.own[q] = sid
+                                sh_.append(q)
+                self.shield_nodes[n] = (sid, sh_)
+        G.pen = None
         self.paths = paths
         return paths
+
+    def shields(self):
+        """Draw each guarded net's shield nodes as wires (connected runs per layer, at least 3 nodes), each run
+        wired to VGND: an M3 node under a VGND stripe (via3), by the router. Runs that can't reach VGND are left
+        out (their nodes freed)."""
+        G = self.G
+        gnd = set()
+        for n2, sx, w in self.S:
+            if n2 == 'VGND':
+                for i in range(G.nx):
+                    if sx + 2 * HW <= G.X(i) <= sx + w - 2 * HW:
+                        for j in range(G.ny):
+                            if STRIPE_Y[0] + 500 < G.Y(j) < STRIPE_Y[1] - 500:
+                                gnd.add((1, i, j))
+        out = {}
+        for n, (sid, nodes) in self.shield_nodes.items():
+            left = set(nodes)
+            runs = []
+            while left:                        # connected components on one layer
+                s0 = left.pop()
+                comp, todo = {s0}, [s0]
+                while todo:
+                    l, i, j = todo.pop()
+                    for q in ((l, i + 1, j), (l, i - 1, j), (l, i, j + 1), (l, i, j - 1)):
+                        if q in left:
+                            left.discard(q); comp.add(q); todo.append(q)
+                runs.append(comp)
+            kept, length = 0, 0
+            for comp in runs:
+                if len(comp) < 3:
+                    for q in comp:
+                        G.own[q] = 0
+                    continue
+                dst = {q for q in gnd if G.own[q] == 0}
+                path = G.route(comp, dst, sid, allow=(True, True, False)) if dst else None
+                if path is None:
+                    for q in comp:
+                        G.own[q] = 0
+                    continue
+                for nd in path:
+                    G.own[nd] = sid
+                e = path[-1]
+                x, y = G.X(e[1]), G.Y(e[2])
+                self.r('v3', x - CUT // 2, y - CUT // 2, x + CUT // 2, y + CUT // 2)
+                for sh in TR.path_shapes(path):
+                    self.r(*sh)
+                lay = TR.LAYERS
+                for (l, i, j) in comp:          # the run itself: node pads joined to their neighbours in the run
+                    x, y = G.X(i), G.Y(j)
+                    self.r(lay[l], x - HW, y - HW, x + HW, y + HW)
+                    for q in ((l, i + 1, j), (l, i, j + 1)):
+                        if q in comp:
+                            self.r(lay[l], x - HW, y - HW, G.X(q[1]) + HW, G.Y(q[2]) + HW)
+                kept += 1
+                length += len(comp) * P / 1000
+            out[n] = dict(runs=kept, of=len(runs), um=round(length, 1))
+        self.log['shields'] = out
+        return out
+
 
     def supply_routes(self, unlanded):
         """Each block supply no stripe lands on: a wire from its supply label to the nearest free Metal3 node under a
@@ -750,11 +905,93 @@ class Tile:
                 out[name] = len(path)
         return out
 
+    def join_stripes(self):
+        """Inside the tile, the stripes of one net meet only through the blocks they land on (on chip, TT's Metal5
+        grid joins them all). For LVS each net must be one net in the tile: the groups of stripes that share no
+        block are joined by a thin router wire between free Metal3 nodes under them (via3 at each end)."""
+        G = self.G
+        out = {}
+        for net in ('VAPWR', 'VDPWR', 'VGND'):
+            st = [(x0, w) for n, x0, w in self.S if n == net]
+            if len(st) < 2:
+                continue
+            # union-find over the stripes: two are joined if they land on a common block
+            par = {x0: x0 for x0, _ in st}
+
+            def f(a):
+                while par[a] != a:
+                    a = par[a]
+                return a
+            for i, (a, _) in enumerate(st):
+                for b, _ in st[i + 1:]:
+                    if self.stripe_on.get(a, set()) & self.stripe_on.get(b, set()):
+                        par[f(a)] = f(b)
+            groups = {}
+            for x0, w in st:
+                groups.setdefault(f(x0), []).append((x0, w))
+            if len(groups) < 2 or net == 'VGND':        # VGND: the substrate joins its taps (extracted)
+                continue
+            name = f'join:{net}'
+            nid = max(self.ids.values()) + 1
+            self.ids[name] = nid
+
+            def nodes(lst):
+                q = set()
+                for x0, w in lst:
+                    for i in range(G.nx):
+                        if x0 + 2 * HW <= G.X(i) <= x0 + w - 2 * HW:
+                            for j in range(G.ny):
+                                if STRIPE_Y[0] + 500 < G.Y(j) < STRIPE_Y[1] - 500 and G.own[1, i, j] == 0:
+                                    q.add((1, i, j))
+                return q
+            gl = sorted(groups.values(), key=lambda l: l[0][0])
+            tree = nodes(gl[0])
+            paths = []
+            for lst in gl[1:]:
+                src = nodes(lst)
+                path = G.route(src, tree, nid, allow=(True, True, False))
+                if path is None:
+                    self.log['unrouted'].append(name)
+                    break
+                for nd in path:
+                    G.own[nd] = nid
+                for e in (path[0], path[-1]):
+                    x, y = G.X(e[1]), G.Y(e[2])
+                    self.stubs.append((('v3', x - CUT // 2, y - CUT // 2, x + CUT // 2, y + CUT // 2), nid))
+                    self.stubs.append((('m3', x - HW, y - HW, x + HW, y + HW), nid))
+                tree |= set(path) | src
+                paths.append(path)
+            self.paths[name] = paths
+            out[net] = dict(groups=len(gl), length_um=round(sum(len(p) for p in paths) * P / 1000, 1))
+        self.log['stripe_joins'] = out
+        return out
+
     def draw_routes(self):
+        # a route via2 / via3 near a via of its own stub (the stub's via sits at the pin's off-grid x or y) would
+        # overlap it (V2.1 / V2.2a): it is left out and both metals are bridged to the stub's via instead
+        sv = {}
+        for (sh, nid) in self.stubs:
+            if sh[0] in ('v2', 'v3'):
+                sv.setdefault((nid, sh[0]), []).append(((sh[1] + sh[3]) // 2, (sh[2] + sh[4]) // 2))
+        self.log['vias_merged'] = 0
         for n, ps in self.paths.items():
             L = 0
+            nid = self.ids[n]
             for path in ps:
                 for sh in TR.path_shapes(path):
+                    if sh[0] in ('v2', 'v3'):
+                        x, y = (sh[1] + sh[3]) // 2, (sh[2] + sh[4]) // 2
+                        # (only a via in line with the stub's: the patch is then a straight strip along the stub;
+                        # a diagonal one would sweep over a neighbouring pin's stub)
+                        near = [q for q in sv.get((nid, sh[0]), []) if abs(q[0] - x) < 700 and abs(q[1] - y) < 700
+                                and (abs(q[0] - x) < 10 or abs(q[1] - y) < 10)]
+                        if near:
+                            qx, qy = near[0]
+                            lo, hi = {'v2': ('m2', 'm3'), 'v3': ('m3', 'm4')}[sh[0]]
+                            for lay in (lo, hi):
+                                self.r(lay, min(x, qx) - HW, min(y, qy) - HW, max(x, qx) + HW, max(y, qy) + HW)
+                            self.log['vias_merged'] += 1
+                            continue
                     self.r(*sh)
                 L += len(path) * P / 1000
             self.log['nets'][n] = round(L, 1)
@@ -853,12 +1090,7 @@ class Tile:
             x0, x1 = min(bb.left, px0), max(bb.right, px1)
             self.r('m4', x0, 0, x1, bb.top)
             obst.append((x0, 0, x1, bb.top))
-            nv = 0
-            for poly in land.each():
-                for bx in db.Region(poly).decompose_trapezoids_to_region().each():
-                    b2 = bx.bbox()
-                    if b2.width() >= CUT + 240 and b2.height() >= CUT + 240:
-                        nv += self.via_array(3, b2.left, b2.right, b2.bottom, b2.top, margin=120)
+            nv = self.via_fill(3, land, enc=120)
             out[pin] = dict(pad=pad, via3=nv, m4=[v / 1000 for v in (x0, 0, x1, bb.top)])
         self.extra_obst.setdefault(2, []).extend(obst)
         self.log['tx_outputs'] = out
@@ -938,6 +1170,10 @@ class Tile:
                             land.setdefault(net, []).append((sx, w))
                     if sup not in land or 'VGND' not in land:
                         continue
+                    # abutted units: bridge the n-well and the tap strips across the joins (NW.2a, NP.2)
+                    for lay, (a0, a1), (yl0, yl1) in DCAP_BRIDGE:
+                        ya, yb2 = sorted((oy - yl0, oy - yl1) if flip else (oy + yl0, oy + yl1))
+                        self.r(lay, rx0 + a0, ya, rx1 - a1, yb2)
                     for x in run:
                         tr = db.Trans(db.Trans.M0, db.Vector(x, oy)) if flip else db.Trans(db.Vector(x, oy))
                         self.top.insert(db.CellInstArray(U['cell'].cell_index(), tr))
@@ -965,6 +1201,44 @@ class Tile:
             self.r('m4', *p['rect'])
             self.r('m4t', *p['rect'])
             self.label('m4t', name, (p['rect'][0] + p['rect'][2]) // 2, (p['rect'][1] + p['rect'][3]) // 2)
+
+    def write_lef(self, path):
+        """The tile LEF: the template's pins (Metal4), every stripe as a VDPWR / VAPWR / VGND port, obstructions on
+        Metal1-3 over the whole tile and on Metal4 for every drawn Metal4 shape that is not a pin or a stripe."""
+        db = self.db
+        f = lambda v: f"{v / 1000:.3f}"
+        W, H = self.W, self.H
+        out = ["VERSION 5.7 ;", "  NOWIREEXTENSIONATPIN ON ;", '  DIVIDERCHAR "/" ;', '  BUSBITCHARS "[]" ;',
+               f"MACRO {TOP}", "  CLASS BLOCK ;", f"  FOREIGN {TOP} ;", "  ORIGIN 0.000 0.000 ;",
+               f"  SIZE {f(W)} BY {f(H)} ;"]
+        for name in sorted(self.T['pins']):
+            p = self.T['pins'][name]
+            out += [f"  PIN {name}", f"    DIRECTION {p['dir']} ;", "    USE SIGNAL ;", "    PORT",
+                    "      LAYER Metal4 ;", "        RECT " + " ".join(f(v) for v in p['rect']) + " ;",
+                    "    END", f"  END {name}"]
+        for net, use in (("VDPWR", "POWER"), ("VAPWR", "POWER"), ("VGND", "GROUND")):
+            out += [f"  PIN {net}", "    DIRECTION INOUT ;", f"    USE {use} ;"]
+            for n, x0, w in self.S:
+                if n == net:
+                    out += ["    PORT", "      LAYER Metal4 ;",
+                            f"        RECT {f(x0)} {f(STRIPE_Y[0])} {f(x0 + w)} {f(STRIPE_Y[1])} ;", "    END"]
+            out.append(f"  END {net}")
+        out += ["  OBS"] + sum([[f"    LAYER Metal{k} ;", f"      RECT 0.000 0.000 {f(W)} {f(H)} ;"]
+                                for k in (1, 2, 3)], [])
+        m4 = db.Region(self.top.begin_shapes_rec(self.L['m4'])).merged()
+        pins = db.Region()
+        for p in self.T['pins'].values():
+            pins.insert(db.Box(*p['rect']))
+        for n, x0, w in self.S:
+            pins.insert(db.Box(x0, STRIPE_Y[0], x0 + w, STRIPE_Y[1]))
+        rest = (m4 - pins.sized(300)).merged()
+        if not rest.is_empty():
+            out.append("    LAYER Metal4 ;")
+            for poly in rest.each():
+                b = poly.bbox()
+                out.append(f"      RECT {f(b.left)} {f(b.bottom)} {f(b.right)} {f(b.top)} ;")
+        out += ["  END", f"END {TOP}", "END LIBRARY", ""]
+        Path(path).write_text("\n".join(out))
 
     def write(self, gds):
         self.ly.write(str(gds))
@@ -998,8 +1272,9 @@ def build(partial, order=None, quiet=False):
                                                          key=lambda n: len(nets[n]))
     order = [n for n in order if n in nets]
     t.order = order
-    t.route_nets(nets, order)
-    t.log['supply_routes'] = t.supply_routes(unl)
+    t.route_nets(nets, order, unl)
+    t.join_stripes()
+    t.shields()
     return t
 
 
@@ -1029,7 +1304,12 @@ def main():
     t.decap()
     print('decap:', t.log['decap'])
     gds = OUT / f'{TOP}_dev.gds' if a.partial else REPO / 'gds' / f'{TOP}.gds'
+    lef = OUT / f'{TOP}_dev.lef' if a.partial else REPO / 'lef' / f'{TOP}.lef'
     t.write(gds)
+    t.write_lef(lef)
+    # DCF.1a (no 20 x 20 um without COMP): dummy COMP squares in the free areas (layout/gen/rx_fill.py)
+    import rx_fill
+    t.log['fill_squares'] = rx_fill.fill(str(gds), TOP, margin=1.0)
     (OUT / 'meta.json').write_text(json.dumps(t.log, indent=1, default=str))
     if t.log['unrouted']:
         print('UNROUTED:', t.log['unrouted'])
