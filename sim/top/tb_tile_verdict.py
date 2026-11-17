@@ -8,11 +8,13 @@ build/tile_sims/<name>/result.json.
 Each check function takes results and returns (ok, detail). Missing results are 'pending', not a pass.
 Pass criteria (and why):
   1 VCO   every run: no log flags, a2 swings from vg up to near VDD (a2_min > 0.8 V, a2_max > 3.0 V), ls rail to rail,
-          f(a2) / f(ck) = 4 (+-0.1 %), ls duty 40-60 %; tile / reference at one corner the same within 1 % across
-          codes and words (a constant wiring shift; a wrong code moves one point by a whole step, about 5 %), and
-          between -10 % and +2 %; at tt: medium DAC range / coarse step >= 1.3 and codes 0 ... 31 bracket 433.92 MHz.
+          f(a2) / f(ck) = 4 (+-0.1 %), ls duty 40-60 %; (1b) tile / reference at one corner the same within 1 % across
+          codes and words (a constant wiring shift; a wrong code moves one point by a whole step, about 5 %); (1e) the
+          shift within -5 ... +2 % (the layout's estimate); at tt: medium DAC range / coarse step >= 1.3 and codes
+          0 ... 31 bracket 433.92 MHz.
   2 TX    on: fundamental into the dipole within 1.5 dB of the extracted-vco_top bench (sim/tx/results/top.md, case
-          pg) and >= +3 dBm, arm phase error < 10 deg, VDPWR ripple < 60 mV; off: < -60 dBm, ua[2] / ua[3] < 50 mV p-p;
+          pg) and >= +3 dBm, arm phase error < 10 deg, VDPWR ripple < 30 mV (2 x the 13-15 mV of that bench behind the
+          same switch); off: < -60 dBm, ua[2] / ua[3] < 50 mV p-p;
           the ring (VAPWR) moves < 0.2 % with the TX on against off.
   3 RX    q_i and q_q both toggle at the baseband frequency (edges >= 80 % of 2 x f_bb x window, f within 10 %);
           the baseband tone is |f_tone - f_ring| within 10 % (or 15 kHz); |I/Q phase| 50 ... 110 deg (the taps are 72 deg
@@ -23,7 +25,8 @@ Pass criteria (and why):
   5 Debug each select reads its own node on ua[0] (within 2 mV with the 10 Mohm probe) and not the others (> 5 mV
           away, markers on oi_p / oq_p), no select moves no node (< 1 mV with ua[0] at 0 / 3.3 V), the vctrl
           override within 20 mV of 1.65 V, ua[1] < 1 mV with 1 mA in (the ground-sense pin).
-  6 Supply  f moves < 0.5 % at VAPWR = VDPWR = 3.15 / 3.45 V; the VAPWR ripple during TX < 20 mV.
+  6 Supply  f moves < 0.5 % at VAPWR = VDPWR = 3.15 / 3.45 V; during TX the VAPWR ripple < 3 mV (3 x the 1.0 mV
+          with the TX off) and the VDPWR ripple < 30 mV.
 """
 import json
 import sys
@@ -85,6 +88,8 @@ def vco_pairs(mut=False):
     for name, c in T.cases().items():
         if c['kind'] != 'ring' or not name.startswith('vco_c_') or name.endswith('_rx') or '_v3' in name:
             continue
+        if name.startswith('vco_c_sf_k') and not name.startswith('vco_c_sf_k9'):
+            continue                                  # code sweep at sf: no block reference
         pairs.append((name, 'ref_' + name[len('vco_c_'):]))
     if mut:
         pairs = [('mut_vco_code', 'ref_tt_k9_w512')] + [p for p in pairs if p[0] != 'vco_c_tt_k9_w512']
@@ -109,12 +114,17 @@ def check_vco(mut=False):
                 '; '.join(f"{x['tile']}: {x['why']}" for x in rows if x['ok'] is False) or f'{len(rows)} runs'))
     sp = []
     okc = True if ratios else None
+    okm = True if ratios else None
     for corner, rs in ratios.items():
         spread = max(rs) - min(rs)
         sp.append(f'{corner} {min(rs) * 100:+.2f} ... {max(rs) * 100:+.2f} %')
-        if spread > 0.01 or min(rs) < -0.10 or max(rs) > 0.02:
+        if spread > 0.01:
             okc = False
-    out.append(('1b tile / reference: a constant wiring shift per corner (spread < 1 %, -10 ... +2 %)', okc,
+        if min(rs) < -0.05 or max(rs) > 0.02:
+            okm = False
+    out.append(('1b tile / reference: the same shift at every code and word of a corner (spread < 1 %)', okc,
+                ', '.join(sp)))
+    out.append(('1e tile / reference within -5 ... +2 % (docs/tile_layout.md expected about -5 % from a2)', okm,
                 ', '.join(sp)))
     # medium DAC range against the coarse step at tt, and 433.92 MHz in reach
     f = {k: (res(k) or {}).get('f_a2') for k in ('vco_c_tt_k9_w0', 'vco_c_tt_k9_w1023', 'vco_c_tt_k8_w512',
@@ -132,6 +142,12 @@ def check_vco(mut=False):
         out.append(('1d codes 0 ... 31 bracket 433.92 MHz at tt',
                     f['vco_c_tt_k0_w512'] < FLO < f['vco_c_tt_k31_w512'],
                     f"{f['vco_c_tt_k0_w512'] / 1e6:.1f} ... {f['vco_c_tt_k31_w512'] / 1e6:.1f} MHz"))
+    fs = {c: (res(f'vco_c_sf_k{c}_w512') or {}).get('f_a2') for c in (9, 15, 23, 31)}
+    if fs[31] is None:
+        out.append(('1f 433.92 MHz in reach at sf (code 31, word 512 above it)', None, 'pending'))
+    else:
+        out.append(('1f 433.92 MHz in reach at sf (code 31, word 512 above it)', fs[31] > FLO,
+                    ', '.join(f'code {c} {v / 1e6:.1f} MHz' for c, v in fs.items() if v)))
     return out, rows
 
 
@@ -155,7 +171,7 @@ def check_tx(mut=False):
             p.append(f'P1 {p1:+.2f} dBm (ref {ref:+.2f})')
         if not abs(r.get('ph_err_deg', 999)) < 10:
             p.append(f"phase error {r.get('ph_err_deg', float('nan')):+.1f} deg")
-        if not r['vdp_ripple_mv'] < 60:
+        if not r['vdp_ripple_mv'] < 30:
             p.append(f"VDPWR ripple {r['vdp_ripple_mv']:.0f} mV")
         out.append((f'2 TX on {n}', not p, '; '.join(p) or
                     f"P1 {p1:+.2f} dBm (ref {ref:+.2f}), P {r['p_dip_dbm']:+.2f} dBm, phase {r['ph_err_deg']:+.2f} deg, "
@@ -229,7 +245,7 @@ def check_rx(mut=False):
 # ------------------------------------------------------------------------------------------------ 4 power-up
 def check_pwr(mut=False):
     out = []
-    for n in (['mut_pwr_txon'] if mut else ['pwr_c_tt']):
+    for n in (['mut_pwrup_txon'] if mut else ['pwrup_c_tt']):
         r = res(n)
         b = bad(r)
         if b:
@@ -257,7 +273,7 @@ def check_pwr(mut=False):
 # ------------------------------------------------------------------------------------------------ 5 debug
 def check_dbg(mut=False):
     out = []
-    for n in (['mut_dbg_swap01', 'mut_dbg_c_rxoff'] if mut else ['dbg_c_tt', 'dbg_rcx_tt']):
+    for n in (['mut_dbg_swap01', 'mut_dbg_c_rxoff'] if mut else ['dbg_c_tt']):
         r = res(n)
         b = bad(r)
         if b:
@@ -302,7 +318,7 @@ def check_supply(mut=False):
         out.append(('6 ring supply during TX', None if 'pending' in (bad(on), bad(off)) else False, bad(on) or bad(off)))
     else:
         d = on['f_a2'] / off['f_a2'] - 1
-        ok = abs(d) < 2e-3 and on['vap_ripple_mv'] < 20 and on['vdp_ripple_mv'] < 60
+        ok = abs(d) < 2e-3 and on['vap_ripple_mv'] < 3 and on['vdp_ripple_mv'] < 30
         out.append(('6 ring supply during TX', ok, f"f on / off {d * 100:+.3f} %, VAPWR ripple {on['vap_ripple_mv']:.1f} "
                     f"mV p-p (off {off['vap_ripple_mv']:.1f}), VDPWR {on['vdp_ripple_mv']:.1f} mV p-p"))
     for s in ('vap', 'vdp'):
@@ -347,5 +363,92 @@ def main():
         (OUT / 'verdict.json').write_text(json.dumps(dict(checks=checks, vco=rows), indent=1, default=str))
 
 
-if __name__ == '__main__':
+if __name__ == '__main__' and '--tables' not in sys.argv:
     main()
+
+
+# ------------------------------------------------------------------------------------------------ tables
+def f6(x, k=1e6, d=2):
+    return '-' if x is None or x != x else f'{x / k:.{d}f}'
+
+
+def tables():
+    """Markdown tables of the numbers (build/tile_sims/tables.md), quoted by sim/top/tile_results.md."""
+    L = ['### VCO', '', '| corner, code, word | block f (MHz) | tile f (MHz) | tile / block | f/f(ck) | ls duty | vg (V) '
+         '| vbnf (V) | I(VAPWR) (mA) | flags |', '|---|---|---|---|---|---|---|---|---|---|']
+    for tn, rn in vco_pairs():
+        t, r = res(tn), res(rn)
+        if not t or 'error' in t:
+            L.append(f'| {tn} | {f6(r and r.get("f_a0"))} | {"pending" if not t else t["error"]} |' + ' |' * 7)
+            continue
+        sh = (t['f_a2'] / r['f_a0'] - 1) * 100 if r and r.get('f_a0') else float('nan')
+        L.append(f"| {tn[6:].replace('_', ' ')} | {f6(r and r.get('f_a0'))} | {f6(t['f_a2'])} | {sh:+.2f} % | "
+                 f"{t['div']:.4f} | {t['ls_duty'] * 100:.1f} % | {t['vg']:.3f} | {t['vbnf']:.4f} | {t['i_vap_ma']:.2f} | "
+                 f"{', '.join(t['flags']) or 'none'} |")
+    for n in ('vco_c_tt_k9_w512_rx', 'vco_rcx_tt_k9_w512', 'vco_c_tt_k9_w512_v3.15', 'vco_c_tt_k9_w512_v3.45',
+              'rxpre_c_tt', 'rxpre_c_ss', 'rxpre_c_ff'):
+        t = res(n)
+        if t and 'error' not in t:
+            L.append(f"| {n} | - | {f6(t['f_a2'])} | - | {t['div']:.4f} | {t['ls_duty'] * 100:.1f} % | {t['vg']:.3f} | "
+                     f"{t['vbnf']:.4f} | {t['i_vap_ma']:.2f} | {', '.join(t['flags']) or 'none'} |")
+    L += ['', '### TX', '', '| run | f(a2) (MHz) | P dipole / fundamental (dBm) | reference fund. (dBm) | phase error (deg) '
+          '| I(VDPWR) avg / rms (mA) | ripple VDPWR / VAPWR (mV p-p) | flags |', '|---|---|---|---|---|---|---|---|']
+    for n in [k for k, c in T.cases().items() if c['kind'] == 'tx']:
+        r = res(n)
+        if not r or 'error' in r:
+            L.append(f'| {n} | {"pending" if not r else r["error"]} |' + ' |' * 6)
+            continue
+        cn = 'tt' if n.startswith('mut') else n.split('_')[2]
+        L.append(f"| {n} | {f6(r['f_a2'])} | {r['p_dip_dbm']:+.2f} / {r.get('p1_dbm', float('nan')):+.2f} | "
+                 f"{TX_REF.get(cn, float('nan')):+.2f} | {r.get('ph_err_deg', float('nan')):+.2f} | {r['i_vdp_ma']:.2f} / "
+                 f"{r['i_vdp_rms_ma']:.2f} | {r['vdp_ripple_mv']:.1f} / {r['vap_ripple_mv']:.1f} | "
+                 f"{', '.join(r['flags']) or 'none'} |")
+    L += ['', '### RX', '', '| run | ring f (MHz) | tone - ring (kHz) | baseband f (kHz) | q_i / q_q f (kHz) | edges i / q '
+          '| I/Q limiter / baseband (deg) | LO I/Q (deg) | baseband I / Q (V) | mixer I (mV) | flags |',
+          '|---|---|---|---|---|---|---|---|---|---|---|']
+    for n in [k for k, c in T.cases().items() if c['kind'] == 'rx']:
+        r = res(n)
+        if not r or 'error' in r:
+            L.append(f'| {n} | {"pending" if not r else r["error"]} |' + ' |' * 9)
+            continue
+        L.append(f"| {n} | {f6(r['f_a2'], 1e6, 3)} | {(r['f_tone'] - r['f_a2']) / 1e3:+.1f} | {r['f_bb'] / 1e3:.0f} | "
+                 f"{f6(r['f_qi'], 1e3, 1)} / {f6(r['f_qq'], 1e3, 1)} | {r['qi_edges']} / {r['qq_edges']} | "
+                 f"{r['q_iq_phase']:+.1f} / {r['bb_iq_phase']:+.1f} | {r['lo_iq_phase']:.1f} | {r['bb_i_v']:.3f} / "
+                 f"{r['bb_q_v']:.3f} | {r['mix_i_v'] * 1e3:.2f} | {', '.join(r['flags']) or 'none'} |")
+    for n in ('pwrup_c_tt', 'mut_pwrup_txon'):
+        r = res(n)
+        if not r or 'windows' not in r:
+            continue
+        L += ['', f'### Power-up {n}', '', '| t (us) | VAPWR (V) | a2 swing (V) | f(a2) (MHz) | f(ck) (MHz) | vg (V) | vbnf (V) '
+              '| nb (V) | ua[2] / ua[3] p-p (mV) | I(VAPWR) / I(VDPWR) (mA) |', '|---|---|---|---|---|---|---|---|---|---|']
+        for w in r['windows']:
+            L.append(f"| {w['t0'] * 1e6:.0f} | {w['vap']:.2f} | {w['a2_swing']:.2f} | {f6(w['f_a2'], 1e6, 1)} | "
+                     f"{f6(w['f_ck'], 1e6, 1)} | {w['vg']:.3f} | {w['vbnf']:.3f} | {w['nb']:.3f} | {w['ua2_pp'] * 1e3:.2f} / "
+                     f"{w['ua3_pp'] * 1e3:.2f} | {w['i_vap_ma']:.2f} / {w['i_vdp_ma']:.2f} |")
+    for n in ('dbg_c_tt', 'dbg_rcx_tt'):
+        r = res(n)
+        if not r or 'sel' not in r:
+            continue
+        L += ['', f'### Debug mux {n}', '', '| select | node (V) | ua[0] pin (V) | error (mV) | probe pulls node (mV) '
+              '| R pin -> node (kohm) | R seen at the pin (kohm) |', '|---|---|---|---|---|---|---|']
+        for k, nd in enumerate(T.DBG_NODES):
+            s = r['sel'].get(nd)
+            if s:
+                L.append(f"| dbg_sel[{k}] -> {nd} | {s['node']:.4f} | {s['pin']:.4f} | {s['err_mv']:+.2f} | "
+                         f"{s.get('probe_shift_mv', float('nan')):+.1f} | {s['r_switch_ohm'] / 1e3:.2f} | {s['r_out_ohm'] / 1e3:.1f} |")
+        L.append(f"\nno select: ua[0] {r.get('none_pin0')} V; nodes moved by ua[0] 0 -> 3.3 V: {r.get('off_shift_mv')} mV; "
+                 f"vctrl with ua[0] forced to 1.65 V: {r.get('vctrl_override')} V; ua[1] with 1 mA in: {r.get('ua1_1ma')} V")
+    for s in ('vap', 'vdp'):
+        r = res(f'zac_c_tt_{s}')
+        if r and 'error' not in r:
+            if s == 'vap':
+                L += ['', '### Supply impedance', '', '| port | 100 kHz | 1 MHz | 10 MHz | 25 MHz | 100 MHz | 434 MHz |',
+                      '|---|---|---|---|---|---|---|']
+            L.append(f"| {s} |" + ' |'.join(f" {r[f'z_{f:g}']:.1f} ohm ({r[f'c_eff_pf_{f:g}']:.0f} pF)"
+                                             for f in (1e5, 1e6, 1e7, 2.5e7, 1e8, 4.34e8)) + ' |')
+    (OUT / 'tables.md').write_text('\n'.join(L) + '\n')
+    return L
+
+
+if __name__ == '__main__' and '--tables' in sys.argv:
+    print('\n'.join(tables()))

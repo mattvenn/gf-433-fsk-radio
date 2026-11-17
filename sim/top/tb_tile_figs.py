@@ -117,7 +117,7 @@ def fig_rx(name='rx_c_tt_-70_p'):
 
 
 def fig_pwr():
-    r = res('pwr_c_tt')
+    r = res('pwrup_c_tt')
     if not r or 'error' in r:
         return None
     w = r['windows']

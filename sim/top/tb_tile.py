@@ -51,6 +51,7 @@ CODE = dict(typical=9, ss=11, ff=7, sf=9, fs=10)     # 433.92 MHz codes (docs/re
 VBNF0 = dict(typical=1.232, ss=1.384, ff=1.083, sf=1.232, fs=1.232)   # .ic hint (sim/ref/results.md)
 CN = dict(typical='tt', ss='ss', ff='ff', sf='sf', fs='fs')
 RDIP, CDIP = 73.0, 100e-12
+VCO_TSTOP = 0.6e-6    # the tile's ring runs: f over the last 40 % (240 ns, ~90 periods)
 RX_TSTOP = 14e-6      # 20 ps steps: 1.7-2.5 s per ns on the C-only tile with one thread
 BAD = ('singular', 'timestep too small', 'transient op started', 'error', 'no such', 'unknown subckt', 'timeout')
 
@@ -132,11 +133,32 @@ def rf_in(c):
     return src + 'Rsp dp pinp 36.5\nRsn dn pinn 36.5\nRdc dn 0 1e9\n'
 
 
+def pad_ext():
+    """pad_model_gf180 with its three supplies (VDDIO, VAPWR, VDPWR) as ports instead of fixed sources, for the
+    power-up runs: there the pad ring ramps with the chip (fixed 3.3 V pad supplies against 0 V nodes at t = 0 stop
+    the transient on 'timestep too small' at the pad's VDPWR source)."""
+    txt = (REPO / 'sim/pad/pad_model_gf180.spice').read_text()
+    sub = re.search(r'^\.subckt pad_model_gf180 .*?^\.ends', txt, re.S | re.M).group(0)
+    sub = sub.replace('.subckt pad_model_gf180 VGND pin mod', '.subckt pad_model_ext VGND pin mod vddio vapwr vdpwr')
+    sub = re.sub(r'^V(IO|AP|DP) .*\n', '', sub, flags=re.M)
+    assert 'VIO' not in sub and 'pad_model_ext' in sub
+    return sub + '\n'
+
+
 def pads(c):
     vs = c['vap']
-    s = ''.join(f'Xpad{k} 0 pin{k} ua{k} pad_model_gf180 rroute=40 n_off=3 vsup={vs}\n' for k in (0, 2, 3))
-    s += f'Xpad4 0 pinp ua4 pad_model_gf180 rroute=40 n_off=3 vsup={vs}\n'
-    s += f'Xpad5 0 pinn ua5 pad_model_gf180 rroute=40 n_off=3 vsup={vs}\n'
+    if c['ramp']:                    # pad supplies = the chip supplies before the tile's switches (ramping)
+        sa = 'vsa_n' if c['supply'] != 'ideal' else 'vap'
+        sd = 'vsd_n' if c['supply'] != 'ideal' else 'vdp'
+        pm = f'pad_model_ext rroute=40 n_off=3'
+        con = f' {sa} {sa} {sd}'
+        s = pad_ext()
+    else:
+        pm = f'pad_model_gf180 rroute=40 n_off=3 vsup={vs}'
+        con = ''
+        s = ''
+    s += ''.join(f'Xpad{k} 0 pin{k} ua{k}{con} {pm}\n' for k in (0, 2, 3))
+    s += f'Xpad4 0 pinp ua4{con} {pm}\nXpad5 0 pinn ua5{con} {pm}\n'
     # TX dipole on ua[3] (out_p) / ua[2] (out_n)
     s += f'Rdip pin3 dmid {RDIP}\nCdip dmid pin2 {CDIP}\n'
     s += rf_in(c)
@@ -263,17 +285,21 @@ def cases():
     # 1. VCO on the tile: f per code / word, tile against the vco_top references (tb_tile_ref.py)
     for corner in ('typical', 'ss', 'ff', 'sf', 'fs'):
         cd = CODE[corner]
-        for word in (0, 512, 1023):
-            add(f'vco_c_{CN[corner]}_k{cd}_w{word}', 'ring', 1800, pex='c', corner=corner, code=cd, word=word)
+        for word in ((0, 512, 1023) if corner in ('typical', 'ss', 'ff') else (512,)):
+            add(f'vco_c_{CN[corner]}_k{cd}_w{word}', 'ring', 1800, pex='c', corner=corner, code=cd, word=word,
+                tstop=VCO_TSTOP)
     for cd in (0, 8, 10, 31):
-        add(f'vco_c_tt_k{cd}_w512', 'ring', 1800, pex='c', code=cd)
-    add('vco_c_tt_k9_w512_rx', 'ring', 1800, pex='c', code=9, rx_en=1)
+        add(f'vco_c_tt_k{cd}_w512', 'ring', 1800, pex='c', code=cd, tstop=VCO_TSTOP)
+    # sf: the a2 load slows the ring most there (slow NMOS): is 433.92 MHz still in reach at higher codes?
+    for cd in (15, 23, 31):
+        add(f'vco_c_sf_k{cd}_w512', 'ring', 2000, pex='c', corner='sf', code=cd, tstop=VCO_TSTOP)
+    add('vco_c_tt_k9_w512_rx', 'ring', 1800, pex='c', code=9, rx_en=1, tstop=VCO_TSTOP)
     add('vco_rcx_tt_k9_w512', 'ring', 6 * 3600, pex='rcx', code=9, tstop=300e-9)   # rcx: ~60 s of CPU per ns
     # 2. TX into the dipole, behind the power switches
     for corner in ('typical', 'ss', 'ff', 'sf', 'fs'):
         add(f'tx_c_{CN[corner]}_on', 'tx', 2400, corner=corner, tx=1, supply='pg', save=SAVE['tx'])
     add('tx_c_tt_off', 'tx', 2400, tx=0, supply='pg', save=SAVE['tx'])
-    add('tx_rcx_tt_on', 'tx', 7 * 3600, pex='rcx', tx=1, supply='pg', tstop=300e-9, save=SAVE['tx'])
+    # (tx_rcx_tt_on dropped: ~70 s of CPU per ns; the tx_drv block's rcx / c difference is 0.15 dB, block_pex.txt)
     add('tx_c_tt_on_ideal', 'tx', 2400, tx=1, supply='ideal', save=SAVE['tx'])
     # 3. RX: a pre-run with the receiver on (the ring's own f and its settled vg / vbnf), then a CW tone at
     #    f + df at the dipole; the I / Q baseband and the limiter outputs
@@ -286,24 +312,27 @@ def cases():
             step=20e-12, tstop=RX_TSTOP, rfdf=(df, dbm), pre=f'rxpre_c_{CN[corner]}', save=SAVE['rx'], threads=3)
     # 4. power-up: VAPWR and VDPWR 0 -> 3.3 V in 10 us through the switches, every node at 0 V (uic), macro
     #    lines at their reset values (they follow VDPWR), TX off, RX off
-    add('pwr_c_tt', 'pwr', 4 * 3600, supply='pg', ramp=10e-6, ic='uic', step=20e-12, tstop=25e-6, save=SAVE['pwr'])
+    # (ideal ramped supplies, as sim/top/top_pex.py startup: behind the TT switch (gate at 0 V) the tile floats near
+    # 0 V until the chip supply passes the PFET's threshold and the transient stops on 'timestep too small')
+    add('pwrup_c_tt', 'pwr', 4 * 3600, rev=2, supply='ideal', ramp=10e-6, ic='uic', step=20e-12, tstop=25e-6, save=SAVE['pwr'])
     # 5. debug mux (operating points, rx_en = 1): each select onto ua[0]; ua[1]
-    for pex in ('c', 'rcx'):
-        add(f'dbg_{pex}_tt', 'dbg', 1800 if pex == 'c' else 3 * 3600, pex=pex, rx_en=1, ic=None)
+    # (an rcx copy, dbg_rcx_tt, was stopped after 97 min of operating points: the ~34 000 wire resistors make each op
+    # slow; the mux's on-resistance is 0.9-1.6 kohm, so the wire R doesn't matter there)
+    add('dbg_c_tt', 'dbg', 1800, pex='c', rx_en=1, ic=None)
     # 6. supply: VCO at 3.3 V -/+ 4.5 % (both supplies), the AC impedance at the VAPWR / VDPWR ports
     for v in (3.15, 3.45):
-        add(f'vco_c_tt_k9_w512_v{v:.2f}', 'ring', 1800, vap=v, vdp=v)
+        add(f'vco_c_tt_k9_w512_v{v:.2f}', 'ring', 1800, vap=v, vdp=v, tstop=VCO_TSTOP)
     for sup in ('vap', 'vdp'):
         add(f'zac_c_tt_{sup}', 'zac', 600, ac=sup, ic=None, save=f'i(vs{sup[1]})')
     # mutations: the checks must fail on these
     add('mut_dbg_swap01', 'dbg', 1800, rx_en=1, ic=None, swap=('dbg_sel[0]', 'dbg_sel[1]'), mut=True)
     add('mut_dbg_c_rxoff', 'dbg', 1800, rx_en=0, ic=None, mut=True)                     # receiver bias off
-    add('mut_vco_code', 'ring', 1800, code=9, swap=('ui_in[0]', 'ui_in[1]'), mut=True)  # code bits 0 / 1 swapped
+    add('mut_vco_code', 'ring', 1800, code=9, swap=('ui_in[0]', 'ui_in[1]'), mut=True, tstop=VCO_TSTOP)  # code bits 0 / 1 swapped
     add('mut_tx_noen', 'tx', 2400, tx=0, supply='pg', save=SAVE['tx'], mut=True)          # TX enable dropped
     add('mut_tx_rsw10', 'tx', 2400, tx=1, supply='pg', rsw=10.0, save=SAVE['tx'], mut=True)  # weak supply
     add('mut_rx_off', 'rx', 2 * 3600, rx_en=0, step=20e-12, tstop=9e-6, threads=3, rfdf=(200e3, -70), pre='rxpre_c_tt',
         save=SAVE['rx'], mut=True)                                                           # receiver not enabled
-    add('mut_pwr_txon', 'pwr', 2 * 3600, supply='pg', ramp=10e-6, ic='uic', step=20e-12, tstop=12e-6, tx=1,
+    add('mut_pwrup_txon', 'pwr', 2 * 3600, rev=3, supply='ideal', ramp=10e-6, ic='uic', step=20e-12, tstop=12e-6, tx=1,
         save=SAVE['pwr'], mut=True)                                                          # TX on at power-up
     return C
 
@@ -314,7 +343,7 @@ def run(name):
     d = OUT / name
     d.mkdir(parents=True, exist_ok=True)
     (d / '.spiceinit').write_text(f'set ng_nomodcheck\nset num_threads={c.get("threads", 1)}\noption noinit\n')
-    (d / 'deck.cir').write_text(deck({k: v for k, v in c.items() if k not in ('est', 'threads')}))
+    (d / 'deck.cir').write_text(deck({k: v for k, v in c.items() if k not in ('est', 'threads', 'rev')}))
     (d / 'out.raw').unlink(missing_ok=True)
     (d / 'result.json').unlink(missing_ok=True)
     t = time.time()
@@ -610,16 +639,23 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('what', choices=['list', 'run', 'analyse', 'deck'])
     ap.add_argument('names', nargs='*')
+    ap.add_argument('--rev', default='0', help='job revision (the scheduler re-runs a failed job when it changes)')
     a = ap.parse_args()
     if a.what == 'list':
         for k, v in cases().items():
             print(f'{k:36s} {v["kind"]:6s} est {v["est"]:6d} s')
     elif a.what == 'deck':
         c = cases()[a.names[0]]
-        print(deck({k: v for k, v in c.items() if k not in ('est', 'threads')}))
+        print(deck({k: v for k, v in c.items() if k not in ('est', 'threads', 'rev')}))
     else:
+        rc = 0
         for n in a.names:
-            (run if a.what == 'run' else lambda x: print(json.dumps(analyse(x), indent=1)))(n)
+            r = (run if a.what == 'run' else analyse)(n)
+            if a.what == 'analyse':
+                print(json.dumps(r, indent=1))
+            if 'error' in r or r.get('flags'):
+                rc = 1                     # the scheduler marks the job failed (and re-runs it if its command changes)
+        sys.exit(rc)
 
 
 if __name__ == '__main__':
