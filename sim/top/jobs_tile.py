@@ -22,8 +22,8 @@ for n, c in T.cases().items():
     j = dict(name=n, cmd=f"cd {REPO} && python3 sim/top/tb_tile.py run {n}" + (f" --rev {c['rev']}" if c.get("rev") else ""), threads=c.get("threads", 1), est=c["est"])
     if c.get("pre"):
         j["deps"] = [c["pre"]]
-    if c["kind"] == "rx" and n not in ("rx_c_tt_-70_p", "rx_c_tt_-70_n", "rx_c_tt_-95_p"):
-        j["deps"] = j.get("deps", []) + ["rx_c_tt_-70_p"]    # queue behind tt: no thread reservation meanwhile
+    if c["kind"] == "rx" and n not in ("rx_c_tt_-70_p", "rxh_c_tt_-70_p", "rxh_c_tt_-70_n", "rxh_c_tt_-95_p"):
+        j["deps"] = j.get("deps", []) + ["rxh_c_tt_-70_p"]   # queue behind tt: no thread reservation meanwhile
     JOBS.append(j)
 for n in R.cases():
     # tb_tile_ref rewrites build/tx_fine/mdac/mdac_cm_ports.spice when it builds a deck: start them apart

@@ -81,18 +81,18 @@ def fig_tx():
     ax[0].plot(tn, pl['v(ua3)'][m], color=C1, label='ua[3] (out_p, tile side of the pad)')
     ax[0].plot(tn, pl['v(ua2)'][m], color=C2, label='ua[2] (out_n)')
     ax[0].set_ylabel('V')
-    ax[0].legend(loc='upper right', fontsize=7, ncol=2)
+    ax[0].legend(loc='lower center', bbox_to_anchor=(0.5, 1.0), fontsize=7, ncol=2)
     ax[1].plot(tn, (pl['v(pin3)'] - pl['v(dmid)'])[m], color=C3, label='across the 73 ohm')
     ax[1].set_ylabel('V')
     ax[1].set_xlabel('time (ns, last 12 ns of the run)')
-    ax[1].legend(loc='upper right', fontsize=7)
+    ax[1].legend(loc='lower center', bbox_to_anchor=(0.5, 1.0), fontsize=7)
     fig.tight_layout()
     fig.savefig(IMG / 'tx_tt.png')
     plt.close(fig)
     return r['p1_dbm']
 
 
-def fig_rx(name='rx_c_tt_-70_p'):
+def fig_rx(name='rxh_c_tt_-70_p'):
     r = res(name)
     if not r or 'error' in r:
         return None
@@ -104,12 +104,12 @@ def fig_rx(name='rx_c_tt_-70_p'):
     ax[0].plot(tu, (pl['v(oi_p)'] - pl['v(oi_n)'])[m], color=C1, label='baseband I (oi_p - oi_n)')
     ax[0].plot(tu, (pl['v(oq_p)'] - pl['v(oq_n)'])[m], color=C2, label='baseband Q (oq_p - oq_n)')
     ax[0].set_ylabel('V')
-    ax[0].legend(loc='upper right', fontsize=7, ncol=2)
+    ax[0].legend(loc='lower center', bbox_to_anchor=(0.5, 1.0), fontsize=7, ncol=2)
     ax[1].plot(tu, pl['v(uo_out4)'][m], color=C1, label='q_i (uo_out[4])')
     ax[1].plot(tu, pl['v(uo_out5)'][m] + 0.0, color=C2, ls='--', label='q_q (uo_out[5])')
     ax[1].set_ylabel('V')
     ax[1].set_xlabel('time (us)')
-    ax[1].legend(loc='upper right', fontsize=7, ncol=2)
+    ax[1].legend(loc='lower center', bbox_to_anchor=(0.5, 1.0), fontsize=7, ncol=2)
     fig.tight_layout()
     fig.savefig(IMG / 'rx_tt.png')
     plt.close(fig)

@@ -51,6 +51,7 @@ CODE = dict(typical=9, ss=11, ff=7, sf=9, fs=10)     # 433.92 MHz codes (docs/re
 VBNF0 = dict(typical=1.232, ss=1.384, ff=1.083, sf=1.232, fs=1.232)   # .ic hint (sim/ref/results.md)
 CN = dict(typical='tt', ss='ss', ff='ff', sf='sf', fs='fs')
 RDIP, CDIP = 73.0, 100e-12
+VBNF_RX = dict(typical=1.23479, ss=1.38751, ff=1.08568)   # vbnf means of rxpre_c_* (free vbnf, 1.2-2 us)
 VCO_TSTOP = 0.6e-6    # the tile's ring runs: f over the last 40 % (240 ns, ~90 periods)
 RX_TSTOP = 14e-6      # 20 ps steps: 1.7-2.5 s per ns on the C-only tile with one thread
 BAD = ('singular', 'timestep too small', 'transient op started', 'error', 'no such', 'unknown subckt', 'timeout')
@@ -70,7 +71,7 @@ def ports(pex):
 # ------------------------------------------------------------------------------------------------ deck
 DEF = dict(pex='c', corner='typical', temp=27, code=None, word=512, sd=0, rx_en=0, dbg=0, tx=0, supply='ideal',
            vap=VDD, vdp=VDD, tstop=1.2e-6, tstart=None, step=5e-12, ramp=None, rf=None, ua0='probe', ic='ring',
-           save=None, ac=None, kind='ring', rsw=None, iinj=None, swap=None, rfdf=None, pre=None, mut=False)
+           save=None, ac=None, kind='ring', hold=None, rsw=None, iinj=None, swap=None, rfdf=None, pre=None, mut=False)
 
 
 def supplies(c):
@@ -207,18 +208,21 @@ def deck(c):
     if c['rfdf']:                    # the tone at the pre-run's ring f + df; start from its settled bias
         pr = pre_result(c['pre'])
         c['rf'] = (pr['f_a2'] + c['rfdf'][0], c['rfdf'][1])
-        c['ic'] = dict(a2=0, vbnf=round(pr['vbnf'], 5), vg=round(pr['vg'], 5))
+        c['ic'] = dict(a2=0, vg=round(pr['vg'], 5)) if c['hold'] is not None else \
+            dict(a2=0, vbnf=round(pr['vbnf'], 5), vg=round(pr['vg'], 5))
     hdr = (f'.include {PDK}/design.ngspice\n.lib {PDK}/sm141064.ngspice {corner}\n'
            f'.lib {PDK}/sm141064.ngspice res_typical\n.lib {PDK}/sm141064.ngspice diode_typical\n'
            f'.include {STD}\n.include {REPO}/sim/pad/tt_asw_5v0.spice\n.include {REPO}/sim/pad/pad_model_gf180.spice\n')
     body = (supplies(c) + stimuli(c) + tile_inst(c) + pads(c)
             + 'XFF 0 ck ffq vdp vdp 0 0 gf180mcu_fd_sc_mcu7t5v0__dffq_1\n'
             + 'Cqi uo_out4 0 50f\nCqq uo_out5 0 50f\n')
+    if c['hold'] is not None:       # vbnf held (the RX runs): the ring's f doesn't drift with the RC filter
+        body += f'vhold vbnf 0 {c["hold"]}\n'
     if c['kind'] == 'dbg':          # a current into ua[1] (the ground-sense pin check)
         body += 'Iinj 0 ua1 0\n'
     ic = ''
     if c['ic'] == 'ring':
-        ic = f'.ic v(a2)=0 v(vbnf)={VBNF0[corner]}\n'
+        ic = f'.ic v(a2)=0 v(vbnf)={VBNF0[corner]}\n' if c['hold'] is None else '.ic v(a2)=0\n'
     elif isinstance(c['ic'], dict):
         ic = '.ic ' + ' '.join(f'v({k})={v}' for k, v in c['ic'].items()) + '\n'
     save = c['save'] or SAVE['ring']
@@ -303,13 +307,22 @@ def cases():
     add('tx_c_tt_on_ideal', 'tx', 2400, tx=1, supply='ideal', save=SAVE['tx'])
     # 3. RX: a pre-run with the receiver on (the ring's own f and its settled vg / vbnf), then a CW tone at
     #    f + df at the dipole; the I / Q baseband and the limiter outputs
+    #    First try (rxpre_c_*, rx_c_tt_-70_p): vbnf free, from its .ic hint; it was still settling (1 Mohm / 20 pF),
+    #    the ring ran 0.96 MHz lower in the RX run than in the pre-run and the tone fell outside the baseband.
+    #    Now (rxh): vbnf held by a source at the free pre-run's mean in both runs (as sim/tune/phase_c.py does), so
+    #    the ring's f is the same in both.
     for corner in ('typical', 'ss', 'ff'):
         add(f'rxpre_c_{CN[corner]}', 'ring', 2400, corner=corner, rx_en=1, step=20e-12, tstop=2e-6,
             save=SAVE['ring'] + ' v(lo_i) v(lo_q) v(nb)')
+        add(f'rxhpre_c_{CN[corner]}', 'ring', 3500, corner=corner, rx_en=1, step=20e-12, tstop=1.2e-6,
+            hold=VBNF_RX[corner], save=SAVE['ring'] + ' v(lo_i) v(lo_q) v(nb)')
+    add('rx_c_tt_-70_p', 'rx', 3 * 3600, rx_en=1, step=20e-12, tstop=RX_TSTOP, rfdf=(200e3, -70), pre='rxpre_c_tt',
+        save=SAVE['rx'], threads=3)
     for corner, df, dbm in (('typical', 200e3, -70), ('typical', -200e3, -70), ('typical', 200e3, -95),
                             ('ss', 200e3, -70), ('ff', 200e3, -70)):
-        add(f'rx_c_{CN[corner]}_{dbm:+d}_{"p" if df > 0 else "n"}', 'rx', 3 * 3600, corner=corner, rx_en=1,
-            step=20e-12, tstop=RX_TSTOP, rfdf=(df, dbm), pre=f'rxpre_c_{CN[corner]}', save=SAVE['rx'], threads=3)
+        add(f'rxh_c_{CN[corner]}_{dbm:+d}_{"p" if df > 0 else "n"}', 'rx', 3 * 3600, corner=corner, rx_en=1,
+            step=20e-12, tstop=RX_TSTOP, rfdf=(df, dbm), pre=f'rxhpre_c_{CN[corner]}', hold=VBNF_RX[corner],
+            save=SAVE['rx'], threads=3)
     # 4. power-up: VAPWR and VDPWR 0 -> 3.3 V in 10 us through the switches, every node at 0 V (uic), macro
     #    lines at their reset values (they follow VDPWR), TX off, RX off
     # (ideal ramped supplies, as sim/top/top_pex.py startup: behind the TT switch (gate at 0 V) the tile floats near
@@ -330,7 +343,8 @@ def cases():
     add('mut_vco_code', 'ring', 1800, code=9, swap=('ui_in[0]', 'ui_in[1]'), mut=True, tstop=VCO_TSTOP)  # code bits 0 / 1 swapped
     add('mut_tx_noen', 'tx', 2400, tx=0, supply='pg', save=SAVE['tx'], mut=True)          # TX enable dropped
     add('mut_tx_rsw10', 'tx', 2400, tx=1, supply='pg', rsw=10.0, save=SAVE['tx'], mut=True)  # weak supply
-    add('mut_rx_off', 'rx', 2 * 3600, rx_en=0, step=20e-12, tstop=9e-6, threads=3, rfdf=(200e3, -70), pre='rxpre_c_tt',
+    add('mut_rx_off', 'rx', 2 * 3600, rx_en=0, step=20e-12, tstop=9e-6, threads=3, rfdf=(200e3, -70), pre='rxhpre_c_tt',
+        hold=VBNF_RX['typical'],
         save=SAVE['rx'], mut=True)                                                           # receiver not enabled
     add('mut_pwrup_txon', 'pwr', 2 * 3600, rev=3, supply='ideal', ramp=10e-6, ic='uic', step=20e-12, tstop=12e-6, tx=1,
         save=SAVE['pwr'], mut=True)                                                          # TX on at power-up

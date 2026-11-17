@@ -215,22 +215,22 @@ def rx_one(r):
 
 def check_rx(mut=False):
     out = []
-    names = [n for n, c in T.cases().items() if c['kind'] == 'rx' and n.startswith('rx_')]
+    names = [n for n, c in T.cases().items() if c['kind'] == 'rx' and n.startswith('rxh_')]
     rs = {n: res(n) for n in names}
     if mut:
         names = ['mut_rx_off', 'mut_rx_swapout']
         rs = {'mut_rx_off': res('mut_rx_off')}
-        r = res('rx_c_tt_-70_p')
+        r = res('rxh_c_tt_-70_p')
         if r is not None and 'error' not in r:      # q_i / q_q exchanged: re-analysed from the same raw
-            rs['mut_rx_swapout'] = T.analyse_with('rx_c_tt_-70_p', swap_out=True)
+            rs['mut_rx_swapout'] = T.analyse_with('rxh_c_tt_-70_p', swap_out=True)
         else:
             rs['mut_rx_swapout'] = r
     for n in names:
         ok, why = rx_one(rs[n])
         out.append((f'3 RX {n}', ok, why))
     # the sign of the I/Q phase follows the sign of the offset
-    p, m = (rs.get('rx_c_tt_-70_p'), rs.get('rx_c_tt_-70_n')) if not mut else (rs.get('mut_rx_swapout'),
-                                                                                res('rx_c_tt_-70_n'))
+    p, m = (rs.get('rxh_c_tt_-70_p'), rs.get('rxh_c_tt_-70_n')) if not mut else (rs.get('mut_rx_swapout'),
+                                                                                  res('rxh_c_tt_-70_n'))
     if p is None or m is None or bad(p) or bad(m):
         out.append(('3 RX I/Q sign flips with the offset sign', None if (p is None or m is None) else False,
                     'pending' if (p is None or m is None) else 'a run failed'))
@@ -410,6 +410,12 @@ def tables():
         r = res(n)
         if not r or 'error' in r:
             L.append(f'| {n} | {"pending" if not r else r["error"]} |' + ' |' * 9)
+            continue
+        if r['qi_edges'] < 2:
+            L.append(f"| {n} | {f6(r['f_a2'], 1e6, 3)} | {(r['f_tone'] - r['f_a2']) / 1e3:+.1f} | {r['f_bb'] / 1e3:.0f} | "
+                     f"no toggles | {r['qi_edges']} / {r['qq_edges']} | - / {r['bb_iq_phase']:+.1f} | "
+                     f"{r['lo_iq_phase']:.1f} | {r['bb_i_v']:.3f} / {r['bb_q_v']:.3f} | {r['mix_i_v'] * 1e3:.2f} | "
+                     f"{', '.join(r['flags']) or 'none'} |")
             continue
         L.append(f"| {n} | {f6(r['f_a2'], 1e6, 3)} | {(r['f_tone'] - r['f_a2']) / 1e3:+.1f} | {r['f_bb'] / 1e3:.0f} | "
                  f"{f6(r['f_qi'], 1e3, 1)} / {f6(r['f_qq'], 1e3, 1)} | {r['qi_edges']} / {r['qq_edges']} | "
