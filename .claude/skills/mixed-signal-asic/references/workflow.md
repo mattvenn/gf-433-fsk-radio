@@ -40,6 +40,8 @@ The previous chip was built by several sessions at once (Mac, cloud pod, big Lin
   (`git worktree add ../repo-topic -b topic`), so main stays a tapeout-ready fallback. Merge only when
   the human says. Copy the gitignored inputs (pcell venv, DEF) into the new worktree.
 - If a request looks like it was meant for another session's job, ask before acting.
+- Subagents may be blocked from `git push` by the permission classifier. Brief them to commit their own paths only,
+  and push from the main session.
 - A measurement session doesn't edit the generators another session is changing. It measures, reports
   and proposes options with an estimated effect each, and the human picks.
 - Block moves, circuit changes and spec trade-offs are the human's call. When stuck, stop and write
@@ -58,6 +60,10 @@ The previous chip was built by several sessions at once (Mac, cloud pod, big Lin
   first.
 - Don't edit a script while it runs. Don't run two copies of a script that rewrites a shared netlist.
 - Judge runs by their output files, not exit codes.
+- **Background agents end their turn "waiting" on a run and sit idle.** One did for 3 hours. Every brief needs:
+  "never end your turn while runs are pending; wait with a background command that exits when they finish".
+- Wait on a scheduler through its status file (`sched.py --status`, `status.json`), not `pgrep -f <script>`. The
+  wait loop's own command line contains the pattern, so `pgrep -f` matches itself and the loop never exits.
 
 ## Estimates
 - Quote run times from the timestamps of the same jobs (`ls -lT build/...`), with every chained step
