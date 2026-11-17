@@ -13,7 +13,7 @@ SUPPLY = {
     'vco.core': {'VDD': 'VAPWR', 'VDD_LS': 'VAPWR', 'VSS': 'VGND'},
     'vco.ref': VA, 'vco.decap': {'VDD_LS': 'VAPWR', 'VSS': 'VGND'},
     'xmdac': VA, 'xvpd': {'b': 'VGND'}, 'xbits': VA,
-    'xtxd': VD, 'xmac': VD, 'xties': VD,
+    'xtxd': VD, 'xmac': VD, 'xties': VA,   # tile.py ties(): the tie row sits on the VAPWR rail
     'xant_tx': VA, 'xant_rx': VA, 'xant_dbg': VA,
     'xdbg_bbi': VA, 'xdbg_bbq': VA, 'xdbg_nb': VA, 'xdbg_vctrl': VA,
     'rx.lna': VA, 'rx.bias': VA, 'rx.lsq': dict(VA, qenb='VGND'),   # qenb tied to VSS (open review item)

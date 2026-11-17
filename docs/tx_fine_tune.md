@@ -187,7 +187,8 @@ has DNL within ±0.015 LSB at all five corners, and the ΣΔ cell is 1.000 LSB.
   4 × ck = 433.92 MHz, so a toggling `ck` pin would be an on-channel spur.
 
 *Table VI. Register map. SPI mode 0, MSB first, 16-bit frames while CS_n is low: [15] 1 = read / 0 = write,
-[14:12] address, [11:0] data. SCLK must stay below clk / 8.*
+[14:12] address, [11:0] data. SCLK must stay below clk / 8. Raise CS_n after every frame: the bit counter wraps at
+32, so a longer frame writes again (formal/tx_fine.sby task `long`: with 48 bits, the first and third words are written).*
 
 | Address | Name | Bits | Reset | Use |
 |---|---|---|---|---|
