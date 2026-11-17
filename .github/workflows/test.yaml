@@ -1,7 +1,8 @@
 name: test
 # cocotb on the tx_fine macro and on the TT top level generated from the LVS source (test/Makefile runs both benches),
-# on the RTL and on the hardened netlist (GL); docs/verification_digital.md. Tools from YosysHQ's oss-cad-suite (Icarus),
-# the gate-level cell models from the same ciel gf180mcuD PDK as the lvs / eqy actions.
+# on the RTL and on the hardened netlist (GL); docs/verification_digital.md. Icarus from Ubuntu (oss-cad-suite's vvp
+# wrapper brings its own Python, which cocotb's embedded interpreter can't start under); the gate-level cell models
+# from the same ciel gf180mcuD PDK as the lvs / eqy actions.
 on:
   push:
   workflow_dispatch:
@@ -10,7 +11,6 @@ env:
   PDK_ROOT: /home/runner/pdk
   PDK: gf180mcuD
   PDK_VERSION: e8daeda73ca8f5814dbc0b11d1d05802251a3750
-  OSS_CAD_SUITE: 2026-09-30
 
 jobs:
   test:
@@ -19,20 +19,8 @@ jobs:
       - name: checkout repo
         uses: actions/checkout@v4
 
-      - name: Cache oss-cad-suite
-        id: cache-ocs
-        uses: actions/cache@v4
-        with:
-          path: /home/runner/oss-cad-suite
-          key: oss-cad-suite-${{ env.OSS_CAD_SUITE }}
-
-      - name: Install oss-cad-suite
-        if: steps.cache-ocs.outputs.cache-hit != 'true'
-        shell: bash
-        run: |
-            d=${OSS_CAD_SUITE//-/}
-            curl -sfL https://github.com/YosysHQ/oss-cad-suite-build/releases/download/$OSS_CAD_SUITE/oss-cad-suite-linux-x64-$d.tgz \
-              | tar xz -C /home/runner
+      - name: Icarus Verilog
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends iverilog
 
       - name: Install gf180mcuD PDK
         uses: TinyTapeout/ciel-action@v1
@@ -50,7 +38,6 @@ jobs:
       - name: cocotb, RTL and GL
         shell: bash
         run: |
-            export PATH=$PATH:/home/runner/oss-cad-suite/bin
             iverilog -V | head -1
             cd test
             make
