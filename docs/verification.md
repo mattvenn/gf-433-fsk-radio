@@ -85,7 +85,7 @@ the GDS and runs the real TT precheck; `docs` builds the TT documentation.
   the 8.5 kHz high-pass needs 0.5-0.9 ms to remove it; a settled sensitivity run would need about 1 ms of simulated
   time, out of reach at the time of writing.
 - **No TX / RX interlock.** The TX enables come from ui_in[5] / ui_in[6] and RX_EN from CTRL[4]; nothing on chip
-  stops both being on. Firmware must also keep DBG_SEL one-hot and raise CS_n after each 16-bit frame (formal `dbg`
+  stops both being on. Decided 2026-11-17: no hardware interlock; the firmware rules are in `bringup.md`. Firmware must also keep DBG_SEL one-hot and raise CS_n after each 16-bit frame (formal `dbg`
   and `long`).
 - **sf / fs block-level spread.** With vctrl pulled down, the extracted block-level reference runs at 321.6 MHz (sf
   code 9) and 542.0 MHz (fs code 10), far from the schematic map; this is a block-level open item, and the tile adds
