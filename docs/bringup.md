@@ -134,7 +134,9 @@ is set so the two tones land at different rates (e.g. offset 20 kHz: 80 and 120 
 
 ## 6. Open questions and testability gaps
 
-Things that are hard or impossible to observe with the current pins, for deciding on an extra debug option:
+Things that are hard or impossible to observe with the current pins. Decision 2026-11-17: Matt judged none of them
+crucial enough for an extra debug option, so the design stays as it is; the list stays here as the known blind spots
+to keep in mind when a bench result is hard to explain.
 
 - **Only one side of each baseband arm.** DBG_SEL 1 / 2 tap `oi_p` / `oq_p`, not `oi_n` / `oq_n`. The differential
   signal, the arm's DC offset and the common mode can't be separated. A switch on each negative output (or a
