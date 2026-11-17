@@ -37,12 +37,18 @@ columns.
 clk / 8 (3.1 MHz at a 25 MHz clock). **Raise CS_n after every 16-bit frame**: the bit counter wraps at 32, so a
 longer frame writes again.
 
+**SPI pins (decision 2026-11-17, Matt): keep `uio[0..3]` = SCLK, MOSI, CS_n, MISO and run the SPI from the
+RP2350's PIO (programmable I/O) or MicroPython SoftSPI.** On the demo board (tt-demo-pcb README "RP2 Pinout", the ETR
+board) `uio[0..3]` are GPIO25-28, whose fixed SPI1 functions are CSn, SCK, TX, RX: only MISO lines up with the hardware
+SPI. Re-ordering the chip's pins to match was judged not worth a re-route; PIO handles 2.5 MHz SCLK easily.
+
 ## 2. Power-up and digital
 
 One board, no antennas.
 
 | # | Test | Expected | Source | Result |
 |---|---|---|---|---|
+| D0 | Before any SPI: drive each of `uio[0..2]` high and low from the RP2350 with the project selected and read the pad back (as the 2026-11-09 pin check) | every pin follows. On the ttgf0p2 carrier `uio[1]` (our MOSI) read held low on both chips (`bench/2026-11-09/raw/chip2/notes.txt`) | bench notes | |
 | D1 | Select the project, 25 MHz clock, reset | `uo[0]` (ck) low: gated off after reset | `tx_fine_tune.md` | |
 | D2 | Read address 7 | ID = 0x433 | `src/tx_fine.v` | |
 | D3 | Read every register after reset | MED_INT 512, MED_FRAC 0, FSK_DEV 0, CTRL 0, EFF_INT 512, DBG_SEL 0 | Table VI | |

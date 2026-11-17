@@ -57,6 +57,10 @@ checks `layout/gen/tile_driver.sh`. The real TT precheck passes in CI. Open: dec
 5. **Sizing, PVT map, PVT noise, v3 layout, MC and start-up** (the docs in the table above).
 
 ## Next steps
+**Decision 2026-11-17 (Matt):** the SPI stays on `uio[0..3]` = SCLK, MOSI, CS_n, MISO, driven by the RP2350's PIO or
+SoftSPI; the demo board's hardware SPI1 on GPIO25-28 has the order CSn, SCK, TX, RX, so only MISO matches
+(`docs/bringup.md`). Check `uio[1]` toggles first: it read held low on the ttgf0p2 carrier.
+
 **Decisions 2026-11-10 (Matt):** no board components except the dipoles, so all fine tuning is on chip. TX plan is option C: a ~10-bit medium current DAC (~50 kHz LSB, ±25 MHz, from the constant-gm reference) with sigma-delta dither below one LSB, an SPI register from the RP2350, FSK as a digital offset (±100 kHz, 2-FSK), and a ÷16/÷64/÷1024 divider to `uo_out` (GF pins are fine to ~50 MHz, so `ck` at 108 MHz is not; gate it, since 4 × ck = 433.92 MHz). vctrl is tied inside the chip, with ua[0] kept as a debug override. The RP2350 counts and servos (freezing during packets). The RX gets its own dipole on a second pair of `ua` pins (6 of 6 used); zero-IF vs low-IF is deferred. Focus on the TX first.
 
 1. **Bench 2026-11-09: done** (results at the top of `bench/lab_todo.md`). **`docs/handoff_gf_silicon_factor.md` is
