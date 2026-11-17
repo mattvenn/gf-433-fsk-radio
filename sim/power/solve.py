@@ -8,7 +8,8 @@ landing ('gnd_ideal', the best case). Node voltages are the drop below the suppl
 the chip ground (VGND).
 
 Sinks: a block's current is spread over the Metal1 cells of its contacts on that net inside its box (meta.json
-'blocks'; a cell in two boxes goes to the smaller), in proportion to the contact area. Mesh islands without a path
+'blocks'; a cell in two boxes goes to the smaller), in proportion to the contact area, except in its decap
+(NO_DC; NO_DC=0 in the environment restores the old spreading). Mesh islands without a path
 to the source are dropped and their sinks reported.
 
     python3 sim/power/solve.py [mesh dir tag, default p0.5] [Ron set: tt|ss|ff]
@@ -95,12 +96,22 @@ def build(net, case, gnd_ideal=False):
     return dict(z=z, Y=Y, keep=keep, n=n, nn=nn, P=P, I=I, J=J, G=G, K=K, src=src, m5=m5)
 
 
+# regions of a block that draw no DC (decap): their contacts get no sink current. tx_drv is one flat cell; its decap
+# is everything below the band's VSS rail, i.e. west of x 232.13 in the tile (R270). Spreading the block's current
+# onto the decap contacts made its 0.6 um VDD feed look like a 27x EM hotspot (2026-11-17, sim/power/results.md).
+NO_DC = {'xtxd': [(167.53, 0.0, 232.13, 73.02)]}
+
+
 def sinks(m, names, blab):
     z = m['z']
     ids, co = z['ids'][0], z['co']
+    P = m['P']
     out = {}
     for k, b in enumerate(names):
         sel = (blab == k) & (co > 0) & (ids >= 0)
+        if os.environ.get('NO_DC', '1') == '1':
+            for x0, y0, x1, y1 in NO_DC.get(b, []):
+                sel[int(y0 / P):int(np.ceil(y1 / P)), int(x0 / P):int(np.ceil(x1 / P))] = False
         if not sel.any():
             continue
         nodes, w = ids[sel], co[sel]

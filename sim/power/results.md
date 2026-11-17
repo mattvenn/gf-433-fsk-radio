@@ -38,7 +38,7 @@ from Matt's brief, on 2026-11-17.
 ## After the fix (2026-11-17, layout/floorplan/floorplan.json straps)
 Both high-current blocks are turned in the tile (tx_drv R270, rx_lna R90), so their supply rails are vertical Metal3
 columns, and the floorplan's straps ran beside them, not over them. The straps now sit over the rails:
-- **tx_drv:** VDPWR moved from x 235.03 to 267.5 (6 µm) over the VDD rail; a new 6 µm VGND strap at 228.53 over the
+- **tx_drv:** VDPWR moved from x 235.03 to 267.0 (8.5 µm: the whole TX current runs down it) over the VDD rail; a new 6 µm VGND strap at 228.53 over the
   VSS rail.
 - **rx_lna:** VAPWR moved from 118.1 to 126.02, plus a new VAPWR strap at 76.7 and new VGND straps at 97.01 and 149.83.
 
@@ -55,14 +55,20 @@ antenna and the local precheck all pass on the new GDS.
 | VGND at the LNA | +21 mV | +5.7 mV |
 | VAPWR at the LNA | −48 / −34 mV | −32.7 / −26.8 mV (21.6 mV of it the TT switch) |
 | VAPWR at the ring | −29 mV | −28.9 / −28.2 mV (switch-dominated) |
-| VDPWR at tx_drv (worst point) | −191 / −251 mV | −183 / −205 mV, **but see below** |
+| VDPWR at tx_drv (worst point) | −191 / −251 mV | **−36.5 / −52.3 mV** (20 mV of it the TT switch) |
 
-The remaining VDPWR hotspot is at tx_drv's decap feed: a 0.6 µm VDD line crossing the VSS rail on an M2 bridge, one
-Via2 at each end (x 231-235, y 72), reported at 27× the LEF via limit. solve.py spreads a block's current over its
-supply contacts by area, so the decap, which draws no DC, gets DC here: this hotspot and the worst-point drop are an
-artefact of the current model. The output stage takes its current from the VDD rail under the new strap. Open:
-weight the sinks onto the output stage's sources and rerun; widen the decap feed anyway, because one via is ESR that
-makes the decap less effective.
+**The current model, corrected.** The first after-fix run still showed −183 / −205 mV at tx_drv's VDPWR and a Via2 at
+27× the LEF limit, both at the decap's VDD feed: a 0.6 µm line crossing the VSS rail on an M2 bridge, with one Via2 at
+each end (x 231-235, y 72). solve.py had spread the block's current over all its contacts by area, so the decap,
+which draws no DC, got DC. solve.py now gives no sink current to tx_drv's decap, which lies west of the VSS rail
+(`NO_DC`; `NO_DC=0` restores the old spreading). With the 6 µm strap the strap itself was then the worst EM point,
+at 2.4 mA/µm (1.3× the 85 °C limit of 2.09 mA/µm that tx_drv's own rails were sized to). At 8.5 µm it carries
+1.8 mA/µm.
+
+**Worst EM, all modes, after both fixes:** Metal4 2.7× the LEF figure (0.67 mA/µm; 0.86× the 85 °C limit) on the TX
+strap; elsewhere at most 2.6× LEF (0.83× at 85 °C): VAPWR Via2 / Via3 at (68, 96), and Metal1 inside tx_drv. The LEF
+gives no temperature (see "Limits"). The decap feed's single via is still worth widening: it is series resistance
+(ESR) in front of the decap, though not an EM problem.
 
 ## How TT feeds the tile (GF180)
 
