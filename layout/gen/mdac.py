@@ -22,7 +22,9 @@ Floorplan (x left to right, y bottom to top; origin = lower-left corner of the c
   Right of the array: the bars' poly contacts and the MPB drain tracks on a pb M2 bus, the tap rails on a VDD M3 bus.
   Below the array (p-substrate): NMOS rows R1 (MD 16 | MB 1, own gate vbnf) and R2 (MD 14 | MO 3) sharing a poly
     bar (mo), p+ tap rails (VSS) above and below; MDD bottom left under the switch column.
-Pins: n<g> (M2, left edge), vg (M2, right edge), vbnf (M3, right edge), VDD (M3 top strap), VSS (M3 bottom strap).
+Pins: n<g> (M2, left edge), vg and vbnf (M3, bottom edge: vg straight below MO's drains, vbnf at x = VBNF_X along an
+M3 run from MB's gate; until 2026-11-17 both were on the right edge), VDD (M3 top strap, 2.4 um), VSS (M3 bottom strap,
+2.4 um, cut where vg / vbnf leave). The tile floorplan places the cell MY.
 No Metal4/5.
 """
 import argparse, json, os, subprocess, sys
@@ -50,6 +52,7 @@ PAIR = TAPH + DT + WU + BAR_R + WU + DT
 WN, LN = 1200, 5335           # NMOS coarse unit
 WDD, LDD = 3400, 1000
 LSW = 280
+VBNF_X = 50570                # vbnf's drop to the bottom edge (the floorplan's target, pins.md)
 
 
 def snap(v):
@@ -193,8 +196,8 @@ def build(c):
         via1(c, x_vdd, yt + 190)
         via2(c, x_vdd, yt + 190)
     c.r("m3", x_vdd - 190, ytap[0], x_vdd + 190, YT)          # VDD bus up to the top strap
-    c.r("m3", XS - 750, YT - 2000, XR, YT)                    # VDD top strap
-    geo["pins"]["VDD"] = ("m3", (XS - 750 + XR) // 2, YT - 1000)
+    c.r("m3", XS - 750, YT - 2400, XR, YT)                    # VDD top strap (2.4 um: the tile's via3 landing)
+    geo["pins"]["VDD"] = ("m3", (XS - 750 + XR) // 2, YT - 1200)
     # ---- PMOS rows ----
     ctrl_y = {}
     for ri, (name, kind, nact, start) in enumerate(rows):
@@ -292,11 +295,11 @@ def build(c):
     c.r("psd", X0 - 300, ytn1, XR - 600, ytn1 + TAPH)
     c.r("psc", X0 - 300 + 75, ytn1 + 75, XR - 600 - 75, ytn1 + TAPH - 75)
     c.r("m1", X0 - 305, ytn1 - 5, XR - 595, ytn1 + TAPH + 5)
-    # VSS strap (M3) along the bottom, via2/via1 onto the bottom tap rail
-    c.r("m3", 0, YN, XR, YN + 2000)
-    for x in range(1000, XR - 1000, 4000):
-        via1(c, x, ytn0 + 190)
-        via2(c, x, ytn0 + 190)
+    # VSS strap (M3, 2.4 um) along the bottom, via2/via1 onto the bottom tap rail; gaps where vg and vbnf leave the
+    # cell through the bottom edge (2026-11-17, the tile floorplan: both pins on the edge facing the ring)
+    xr2 = [r for r in range(1000, XR - 1000, 4000)]
+    vg_x = None                                         # set below (vg's via2 / M3 drop)
+    vss_cut = []
     # tap N1 to tap N0 (M1 columns at the block's left and right ends)
     c.r("m1", X0 - 305, ytn0, X0 + 75, ytn1 + TAPH)
     geo["pins"]["VSS"] = ("m3", (XS + XR) // 2, YN + 1000)
@@ -329,9 +332,13 @@ def build(c):
                 dr.setdefault(n, []).append(cx)
         c.r("m2", x_mo - 190, ymid - 190, max(dr["mo"]) + 190, ymid + 190)    # mo track to the mo bus
         via2(c, x_mo, ymid)
-        if "vg" in dr:
-            c.r("m2", min(dr["vg"]) - 190, ymid - 190, XR, ymid + 190)
-            geo["pins"]["vg"] = ("m2", XR - 190, ymid)
+        if "vg" in dr:                                    # vg: M2 over its drains, via2, M3 drop to the bottom edge
+            c.r("m2", min(dr["vg"]) - 190, ymid - 190, max(dr["vg"]) + 190, ymid + 190)
+            vg_x = min(dr["vg"])
+            via2(c, vg_x, ymid)
+            c.r("m3", vg_x - 190, YN, vg_x + 190, ymid + 190)
+            geo["pins"]["vg"] = ("m3", vg_x, YN + 190)
+            vss_cut.append(vg_x)
     # mo: the bar contact's M2 onto the R1 mo track (M2 from the bar contact up to R1's centre)
     c.r("m2", X0 - 1290, ybarn - 190, X0 - 910, yR1 + WN // 2 + 190)
     c.r("m2", X0 - 1290, yR1 + WN // 2 - 190, X0 + 200, yR1 + WN // 2 + 190)
@@ -347,8 +354,22 @@ def build(c):
     pc_pad(c, gm, yvb)
     via1(c, gm, yvb)
     via2(c, gm, yvb)
-    c.r("m3", gm - 190, yvb - 190, XR, yvb + 190)
-    geo["pins"]["vbnf"] = ("m3", XR - 190, yvb)
+    vb_x = VBNF_X                                       # M3 left along yvb, then down to the bottom edge
+    c.r("m3", vb_x - 190, yvb - 190, gm + 190, yvb + 190)
+    c.r("m3", vb_x - 190, YN, vb_x + 190, yvb + 190)
+    geo["pins"]["vbnf"] = ("m3", vb_x, YN + 190)
+    vss_cut.append(vb_x)
+    # the VSS strap in pieces between the cuts (0.6 um M3 space to each pin drop), via stacks clear of the cuts
+    edges = [0]
+    for x in sorted(vss_cut):
+        edges += [x - 190 - 600, x + 190 + 600]
+    edges.append(XR)
+    for a, b in zip(edges[::2], edges[1::2]):
+        c.r("m3", a, YN, b, YN + 2400)
+    for x in xr2:
+        if all(abs(x - cx) > 190 + 600 + 400 for cx in vss_cut):
+            via1(c, x, ytn0 + 190)
+            via2(c, x, ytn0 + 190)
     # MDD (2 fingers 3.4/1) bottom left: S | D(md) | S, gates md, under the switch column
     xdd = XS - 1400
     yd = ytn0 + TAPH + DT
@@ -423,7 +444,8 @@ def main():
                         f"cd {out} && magic -dnull -noconsole -rcfile {rc} mdac.tcl > magic.log 2>&1"], check=False)
     pj = json.dumps(dict(XR=geo["XR"], YT=geo["YT"], pins=geo["pins"], ctrl_y=geo["ctrl_y"]), indent=1)
     (out / "geo.json").write_text(pj)
-    (REPO / "layout/mdac_pins.json").write_text(pj)      # read by layout/gen/tt_wrapper.py
+    # layout/mdac_pins.json (read by the old tile, layout/gen/tt_wrapper.py) is left as it was: it holds the
+    # right-edge vg / vbnf of the cell before 2026-11-17
     print(f"mdac {geo['XR'] / 1000:.2f} x {geo['YT'] / 1000:.2f} um, {len(pins)} pins -> {gds}")
 
 

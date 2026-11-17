@@ -75,65 +75,80 @@ def um(v):
     return int(round(v * 1000 / 5.0)) * 5
 
 
-def decap_cell(rail_to=None, taps=(), under_x0=None):
+def decap_group(c, x0, W, n, yb=600):
+    """n VDD_LS gate-cap fingers W x L (nfet_03v3) from x0 in cell c: gate strap M1 + M2 (VDD_LS) on top, S/D
+    columns down into the VSS rail (y VSS_B ... VSS_T). Returns (x1, strap bottom, strap top)."""
+    L = um(DCLS["l"])
+    cf = fet_row(c, x0, yb, W, [(L, "VDD_LS")] * n, "n")
+    yt = yb + W
+    s_b = yt + 255
+    s_t = s_b + 800
+    pcy = s_b + 190
+    for (ga, gb) in cf["gx"]:
+        c.r("poly", ga, yt, gb, pcy + 185)
+        gcx = (ga + gb) // 2
+        for o in range(-3600, 3601, 1200):
+            c.r("pc", gcx + o - 115, pcy - 115, gcx + o + 115, pcy + 115)
+    for cx in cf["rx"]:                      # S/D columns down into the VSS rail
+        c.r("m1", cx - 190, VSS_T - 300, cx + 190, cf["cb"])
+    x1 = cf["x1"]
+    c.r("m1", x0 - 400, s_b, x1, s_t)       # gate strap M1 + M2 (VDD_LS)
+    c.r("m2", x0 - 400, s_b, x1, s_t)
+    x = x0
+    while x + 400 < x1:
+        c.r("v1", x - 130, s_b + 270, x + 130, s_t - 270)
+        x += 2000
+    return x1, s_b, s_t
+
+
+def vss_rail(c, x0, xe, tap_end):
+    """VSS rail (M1 + M2, p+ tap strip to tap_end) from x0 to xe, y VSS_B ... VSS_T, as cgm_ref's rail()."""
+    c.r("m1", x0, VSS_B, xe, VSS_T)
+    c.r("m2", x0, VSS_B, xe, VSS_T)
+    x = x0 + 400
+    while x + 400 < xe:
+        c.r("v1", x - 130, VSS_B + 300, x + 130, VSS_T - 300)
+        x += 2000
+    c.r("psd", x0 + 300, VSS_B + 1010, tap_end, VSS_B + 1390)
+    c.r("psc", x0 + 375, VSS_B + 1085, tap_end - 75, VSS_B + 1315)
+
+
+def decap_cell(rail_to=None, taps=(), under_x0=None, m3=False):
     """decap_ls: nf fingers W x L (nfet_03v3), gate = VDD_LS strap (M1 + M2) on top, S/D/B VSS, rail at the bottom.
     rail_to: extend the VSS rail (M1 + M2 + p+ tap) to this local x (under lsdiv, to the core's left edge);
     taps: local x of p+ tap columns (M1 + contacts) standing on the rail up to TAP_TOP, which break up the empty
-    area under lsdiv (KLayout DCF.1a: no gap of >= 20 um between COMP shapes without dummy COMP)."""
+    area under lsdiv (KLayout DCF.1a: no gap of >= 20 um between COMP shapes without dummy COMP).
+    m3: the stand-alone cell of the tile (2026-11-17): 2.4 um M3 straps over the VSS rail and over the top of the
+    fingers (on the VDD_LS strap), with via2s, for the tile's Metal4 stripes."""
     c = Cell("decap_ls")
-    yb = 600
-    L = um(DCLS["l"])
-
-    def group(x0, W, n):
-        """n fingers W x L from x0, gate strap M1 + M2 (VDD_LS) on top, S/D columns into the VSS rail."""
-        cf = fet_row(c, x0, yb, W, [(L, "VDD_LS")] * n, "n")
-        yt = yb + W
-        s_b = yt + 255
-        s_t = s_b + 800
-        pcy = s_b + 190
-        for (ga, gb) in cf["gx"]:
-            c.r("poly", ga, yt, gb, pcy + 185)
-            gcx = (ga + gb) // 2
-            for o in range(-3600, 3601, 1200):
-                c.r("pc", gcx + o - 115, pcy - 115, gcx + o + 115, pcy + 115)
-        for cx in cf["rx"]:                      # S/D columns down into the VSS rail
-            c.r("m1", cx - 190, VSS_T - 300, cx + 190, cf["cb"])
-        x1 = cf["x1"]
-        c.r("m1", x0 - 400, s_b, x1, s_t)       # gate strap M1 + M2 (VDD_LS)
-        c.r("m2", x0 - 400, s_b, x1, s_t)
-        x = x0
-        while x + 400 < x1:
-            c.r("v1", x - 130, s_b + 270, x + 130, s_t - 270)
-            x += 2000
-        return x1, s_b, s_t
-
     g = DRAW["main"]
-    x1, s_b, s_t = group(1000, um(g["w"]), g["nf"])
+    x1, s_b, s_t = decap_group(c, 1000, um(g["w"]), g["nf"])
     xr = x1 + 1000
     xe = rail_to if rail_to is not None else xr
     under = None
     if under_x0 is not None:
         g = DRAW["under"]
-        u1, ub, ut = group(under_x0, um(g["w"]), g["nf"])
+        u1, ub, ut = decap_group(c, under_x0, um(g["w"]), g["nf"])
         assert ut < TAP_TOP, ut              # below lsdiv
         under = (under_x0 - 400, ub, u1, ut)
-    # VSS rail (M1 + M2, p+ tap), as cgm_ref's rail()
-    c.r("m1", 0, VSS_B, xe, VSS_T)
-    c.r("m2", 0, VSS_B, xe, VSS_T)
-    x = 400
-    while x + 400 < xe:
-        c.r("v1", x - 130, VSS_B + 300, x + 130, VSS_T - 300)
-        x += 2000
     te = xe - 300 if rail_to is None else xe - 1300   # tap strip stops 0.7 um short of the core's p+ ring
-    c.r("psd", 300, VSS_B + 1010, te, VSS_B + 1390)
-    c.r("psc", 375, VSS_B + 1085, te - 75, VSS_B + 1315)
+    vss_rail(c, 0, xe, te)
     for tx in taps:                          # p+ tap columns on the rail
         c.r("psd", tx - 190, VSS_B + 1010, tx + 190, TAP_TOP)
         c.r("psc", tx - 115, VSS_B + 1085, tx + 115, TAP_TOP - 75)
         c.r("m1", tx - 190, VSS_B, tx + 190, TAP_TOP)
+    m3s = {}
+    if m3:
+        m3s = dict(VSS=(0, VSS_B, xe, VSS_T), VDD_LS=(600, s_t - 2400, x1, s_t))
+        c.r("m3", *m3s["VSS"])
+        c.r("m3", *m3s["VDD_LS"])
+        for x in range(1400, xe - 600, 2000):              # between the rail's via1s (x 400 + 2000 k)
+            c.via2(x, (VSS_B + VSS_T) // 2)
+        for x in range(2000, x1 - 400, 2000):              # on the strap, between its via1s (x 1000 + 2000 k)
+            c.via2(x, (s_b + s_t) // 2)
     c.label("VSS", "m2", 1000, (VSS_B + VSS_T) // 2, port=True)
     c.label("VDD_LS", "m2", 1000, (s_b + s_t) // 2, port=True)
-    return c, dict(xr=xr, xe=xe, x1=x1, strap=(600, s_b, x1, s_t), top=s_t, under=under,
+    return c, dict(xr=xr, xe=xe, x1=x1, strap=(600, s_b, x1, s_t), top=s_t, under=under, m3=m3s,
                    gate_area_um2=sum(g["nf"] * g["w"] for g in DRAW.values()) * DCLS["l"])
 
 
@@ -154,12 +169,22 @@ def build_decap_gds(out):
     return gds, info
 
 
-def assemble(decap_gds, info, dst):
+def build_ref_top(out):
+    """cgm_ref as vco_top was built with it (cgm_ref.py --variant top): layout/cgm_ref.gds is the tile variant
+    since 2026-11-17 (pins on its top edge, M3 rail straps), which would clash with vco_top's top-level metal."""
+    gds = out / "cgm_ref_top.gds"
+    subprocess.run([sys.executable, str(HERE / "cgm_ref.py"), "--variant", "top", "--out", str(out / "layout_cgm_ref_top"),
+                    "--gds", str(gds)], check=True, capture_output=True)
+    return gds
+
+
+def assemble(decap_gds, info, dst, ref_gds=None):
     import klayout.db as db
     ly = db.Layout()
     ly.dbu = 0.001
     opt = db.LoadLayoutOptions()
-    for f in (REPO / "layout/ring_core_v3.gds", REPO / "layout/lsdiv.gds", REPO / "layout/cgm_ref.gds", decap_gds):
+    for f in (REPO / "layout/ring_core_v3.gds", REPO / "layout/lsdiv.gds", ref_gds or REPO / "layout/cgm_ref.gds",
+              decap_gds):
         ly.read(str(f), opt)
     names = {c.name for c in ly.each_cell()}
     assert {"ring_core", "lsdiv", "cgm_ref", "decap_ls"} <= names, names
@@ -281,7 +306,7 @@ def main():
     out = Path(a.out)
     out.mkdir(parents=True, exist_ok=True)
     dgds, info = build_decap_gds(out)
-    meta = assemble(dgds, info, Path(a.gds))
+    meta = assemble(dgds, info, Path(a.gds), build_ref_top(out))
     (out / "meta.json").write_text(json.dumps(meta, indent=1))
     bb = meta["bbox"]
     print(f"vco_top bbox x {bb[0]:.3f} ... {bb[2]:.3f}, y {bb[1]:.3f} ... {bb[3]:.3f} um: "
