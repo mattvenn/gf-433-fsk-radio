@@ -11,8 +11,11 @@ Fingers: at most 4.2 um (P) / 2.5 um (N) each, so the P and N rows stay short.
 The cell sits right above its mixer in rx_top (the same for I and Q): lo and lob leave on M3 through the bottom
 edge at the mixer's lo / lob pin x (layout/gen/rx_mix.py meta, the cells centred on each other), so both outputs
 reach the switches with equal wire and cross the mixer's rf / bb tracks at right angles.
-Pins: VDD, VSS (rails), in, en (M2, right edge: away from the LNA, which sits left of the mixers in rx_top),
-lo, lob (M3, bottom edge).
+Pins: VDD, VSS (rails), lo, lob (M3, bottom edge); in, en: build(pins='rx_top') M2, right edge (away from the LNA,
+which sits left of the mixers in rx_top); build(pins='tile') (default, the tile floorplan, one cell for lobuf_i and
+lobuf_q): in M3 on the top edge near its right end (lobuf_q's target; lobuf_i's right-edge target is round the
+corner), en on both the top edge's left end (lobuf_q) and the right edge (lobuf_i; en is a DC enable, so the second
+exit costs nothing; in is the LO input, one exit only).
 """
 import argparse
 import json
@@ -68,23 +71,28 @@ def cols():
     return mirror(lob_arm) + mid + lo_arm
 
 
-def mix_pins():
+def mix_pins(pins='tile'):
     """The mixer's lo / lob pin x and its width (from layout/gen/rx_mix.py, built in-process)."""
-    _, meta = R.load_gen('rx_mix').build()
+    _, meta = R.load_gen('rx_mix').build(pins=pins)
     p = meta['bands'][0]['pins']
     return p['lo'][0][0], p['lob'][0][0], meta['bbox'][2] - meta['bbox'][0]
 
 
-def build():
+def build(pins='tile'):
+    assert pins in ('tile', 'rx_top'), pins
     cell = Cell('rx_lobuf')
     band = R.Band('rx_lobuf', cols(), pins=PINS[2:], search=True)
-    xlo, xlob, wmix = mix_pins()
+    xlo, xlob, wmix = mix_pins(pins)
     info = {}
 
     def exits(bands, xr):
         dx = R.snap((xr - wmix) / 2)             # mixer origin in lobuf coordinates (cells centred)
         info['mix_dx'] = dx
-        return [dict(**{'in': ('right', None)}, en=('right', None), lo=('bottom', xlo + dx), lob=('bottom', xlob + dx))]
+        if pins == 'rx_top':
+            return [dict(**{'in': ('right', None)}, en=('right', None), lo=('bottom', xlo + dx),
+                         lob=('bottom', xlob + dx))]
+        return [dict(**{'in': ('top', 58480)}, en=[('top', 1360), ('right', None)], lo=('bottom', xlo + dx),
+                     lob=('bottom', xlob + dx))]
     metas, bb = R.stack(cell, [band], exits)
     return [cell], dict(bbox=bb, bands=metas, mix_dx=info['mix_dx'])
 

@@ -16,8 +16,16 @@ Two bands (layout/gen/rx_lib.py), bottom to top:
      Rp..r / Rp..b; one tiny well per coupling node glp, gln, gcp, gcn). N row: RLa / RLb (ppolyf_u), Rvb1, Rvb2
      (ppolyf_u_1k) and Cvb (vb's decap, next to the vb devices).
   Nets between the bands climb on M3 risers.
-Pins: VDD, VSS (rails), inp, inn, enb, nb (M3, bottom edge), q (M3, top edge, through band 2). The receiver's
-signal flows up in rx_top: the baseband below, q out of the top edge.
+Pins: VDD, VSS (rails); build(pins='rx_top'): inp, inn, enb, nb (M3, bottom edge), q (M3, top edge, through band 2).
+The receiver's signal flows up in rx_top: the baseband below, q out of the top edge.
+build(pins='tile') (default, the tile floorplan; one cell for lim_i and lim_q, both placed MX): inp, inn (M3,
+bottom edge, left end) and q (M2, left edge, as low as it goes): the lower-left corner serves lim_i's "q on the left
+edge at the bottom, inputs on the bottom edge's left end" and lim_q's "q on the bottom edge's left end, inputs on
+the left edge at the bottom". q leaves the comparator on M3 straight down to an M2 run just over the bottom VSS rail
+(under the N row, which has no M2; it crosses the pairs' gate end caps at right angles, both halves of each A B B A
+pair alike) to the left edge: not along the channel, where its track would run beside the coupling nodes gcp / gcn.
+nb, enb twice (DC nets): M3 at the bottom edge's right end (lim_i) and, up a band-1 riser at the same x, M2 on the
+right edge in band 2's channel (lim_q's "right edge, y 38").
 """
 import argparse
 import sys
@@ -58,13 +66,33 @@ def bands(D):
     return B1, B2
 
 
-def build(cell_name=CELL):
+def build(cell_name=CELL, pins='tile'):
+    assert pins in ('tile', 'rx_top'), pins
     D = {d['name']: d for d in R.flat_devs(R.sim_cells(), CELL)}
     B1, B2 = bands(D)
     cell = Cell(cell_name)
     b1 = R.Band('lim_sig', B1, ports=RISE + ['q', 'nb'], pins=['inp', 'inn', 'nb', 'enb'], search=True,
                 overlay=[one(D['Mvbsnk'])])
-    b2 = R.Band('lim_bias', B2, ports=RISE + ['q'], pins=['q'], search=False)
+    if pins == 'tile':
+        b2 = R.Band('lim_bias', B2, ports=RISE + ['nb', 'enb'], pins=['nb', 'enb'], search=False)
+    else:
+        b2 = R.Band('lim_bias', B2, ports=RISE + ['q'], pins=['q'], search=False)
+
+    def exits_tile(bands_, xr):
+        x = R.risers(bands_, RISE, xr)
+        G = R.GRID
+        xs = dict(inp=9 * G, inn=11 * G, nb=159 * G, enb=161 * G)      # 6.12, 7.48 (left of lp's riser), 108.12, 109.48
+        for n, v in xs.items():
+            assert all(abs(v - u) >= R.M3P for u in x.values()), (n, v)
+        assert xs['enb'] + 190 + 280 <= xr - R.STRAPX1, (xr, xs['enb'])            # clear of the right M3 strap
+        e1 = {n: ('top', x[n]) for n in RISE}
+        e1.update({n: ('bottom', xs[n]) for n in ('inp', 'inn')})
+        qx.append(bands_[0].span0['q'][1])           # q's M3 drop (drawn below), kept free in both bands
+        assert all(abs(qx[0] - u) >= R.M3P for u in list(x.values()) + list(xs.values()))
+        e1.update({n: ('throughb', xs[n]) for n in ('nb', 'enb')})
+        e2 = {n: ('top', x[n]) for n in RISE}
+        e2.update({n: [('top', xs[n]), ('right', None)] for n in ('nb', 'enb')})
+        return [e1, e2]
 
     def exits(bands_, xr):
         x = R.risers(bands_, RISE + ['q'], xr)
@@ -74,7 +102,20 @@ def build(cell_name=CELL):
         e2 = {n: ('top', x[n]) for n in RISE}
         e2['q'] = ('throughb', x['q'])                  # band 2 is mirrored: its local bottom is the cell top
         return [e1, e2]
-    metas, bb = R.stack(cell, [b1, b2], exits)
+    qx = []
+    metas, bb = R.stack(cell, [b1, b2], exits if pins == 'rx_top' else exits_tile, m3_shared=qx)
+    if pins == 'tile':
+        # q: via2 on its track, M3 down to just over the bottom VSS rail (local y 0), via2, M2 to the left edge
+        k, ty, _ = metas[0]['tracks']['q']
+        assert not metas[0]['flip'] and metas[0]['Y']['vss_t'] == 0
+        x, yp = qx[0], 700
+        cell.r('v2', x - 140, ty - 140, x + 140, ty + 140)
+        cell.r('m3', x - 190, yp - 190, x + 190, ty + 190)
+        cell.r('v2', x - 140, yp - 140, x + 140, yp + 140)
+        cell.r('m2', 0, yp - 190, x + 190, yp + 190)
+        cell.label('q', 'm2', 150, yp, port=True)
+        # band 2's nb / enb risers are not pins (only their right-edge exits)
+        R.edge_ports_only(cell, bb, ('nb', 'enb'))
     return [cell], dict(bbox=bb, bands=metas)
 
 

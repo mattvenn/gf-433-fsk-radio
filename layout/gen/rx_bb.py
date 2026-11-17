@@ -16,8 +16,12 @@ Three bands (layout/gen/rx_lib.py), bottom to top:
      Rp..r / Rp..b) and one tiny well per coupling node (Rp2aa on g2p, ...: the bulk is that ~60 MOhm node).
      N row: the loads R1a / R1b (ppolyf_u), R2a / R2b, R3a / R3b and Rvb1 (ppolyf_u_1k serpentines).
   Nets between bands climb on M3 risers. The coupling nodes g2p / g2n / g3p / g3n run only between B and C, short.
-Pins: VDD, VSS (rails), inp, inn, enb and nb (M3, bottom edge: they pass band A on M3), outp, outn (M3, top edge,
-through band C). The receiver's signal flows up in rx_top: mixer below, limiter above.
+Pins: VDD, VSS (rails), inp, inn (M3, bottom edge: they pass band A on M3); build(pins='rx_top'): enb and nb (M3,
+bottom edge), outp, outn (M3, top edge, through band C). The receiver's signal flows up in rx_top: mixer below,
+limiter above. build(pins='tile') (default, the tile floorplan; one cell for bb_i and bb_q, both R0): nb, enb, outn,
+outp all on M3 at the bottom edge's right end (in that order from the corner: bb_q wants them up the right edge from
+the bottom in that order, bb_i wants outp / outn at the bottom edge's right end and nb / enb round the corner on
+the right edge); outp / outn rise from band A through B to C at that x.
 """
 import argparse
 import sys
@@ -89,18 +93,27 @@ RISE_AB = ['o2p', 'o2n', 'outp', 'outn', 'vb', 'nb']
 RISE_BC = ['o1p', 'o1n', 'o2p', 'o2n', 'outp', 'outn', 'g2p', 'g2n', 'g3p', 'g3n', 'vb', 'vgr', 'vbt']
 
 
-def build(cell_name=CELL):
+def build(cell_name=CELL, pins='tile'):
+    assert pins in ('tile', 'rx_top'), pins
     D = devs()
     A, B, C = bands(D)
     cell = Cell(cell_name)
-    bA = R.Band('bb_caps', A, ports=RISE_AB, pins=['nb', 'inp', 'inn', 'enb'], top='N', search=False)
+    bA = R.Band('bb_caps', A, ports=RISE_AB, pins=['nb', 'inp', 'inn', 'enb'] + (['outp', 'outn'] if pins == 'tile' else []),
+                top='N', search=False)
     bB = R.Band('bb_sig', B, ports=RISE_AB + RISE_BC + ['inp', 'inn', 'enb'], search=False,
                 overlay=[one(D['Mvbsnk'])])
-    bC = R.Band('bb_bias', C, ports=RISE_BC, pins=['outp', 'outn'], search=False)
+    bC = R.Band('bb_bias', C, ports=RISE_BC, pins=['outp', 'outn'] if pins == 'rx_top' else [], search=False)
     risers = sorted(set(RISE_AB) | set(RISE_BC))
 
     def exits(bands_, xr):
         x = R.risers(bands_, risers + ['inp', 'inn', 'enb'], xr)
+        if pins == 'tile':
+            # the right end of the bottom edge, from the corner: nb, enb, outn, outp (x 124.44 ... 120.36)
+            G, xe = R.GRID, (xr - R.STRAPX1 - 190 - 280) // R.GRID * R.GRID
+            new = dict(nb=xe, enb=xe - 2 * G, outn=xe - 4 * G, outp=xe - 6 * G)
+            for n, v in new.items():
+                assert all(abs(v - u) >= R.M3P for m, u in x.items() if m not in new), (n, v)
+            x.update(new)
         ea = {n: ('top', x[n]) for n in RISE_AB if n != 'nb'}
         ea['nb'] = ('throughb', x['nb'])
         ea.update({n: ('throughb', x[n]) for n in ('inp', 'inn', 'enb')})      # pass the cap band to the bottom
@@ -118,9 +131,34 @@ def build(cell_name=CELL):
         eb.update({n: ('bottom', x[n]) for n in ('inp', 'inn', 'enb')})
         ec = {n: ('top', x[n]) for n in RISE_BC}       # C is mirrored: its local top (VDD rail) faces band B
         ec.update(outp=('throughb', x['outp']), outn=('throughb', x['outn']))   # and its local bottom is the top
+        if pins == 'tile':                              # outp / outn: from C down through B and A to the bottom
+            ea.update(outp=('throughb', x['outp']), outn=('throughb', x['outn']))
+            ec.update(outp=('top', x['outp']), outn=('top', x['outn']))
         return [ea, eb, ec]
     metas, bb = R.stack(cell, [bA, bB, bC], exits)
+    if pins == 'tile':
+        enb_jumper(cell, metas[1])
     return [cell], dict(bbox=bb, bands=metas)
+
+
+def enb_jumper(cell, mb):
+    """enb's band-B track runs from Mvbs's gate (left end) to its exit at the right end: as one M2 piece on a gate
+    only it breaks the Metal2 antenna ratio (484 > 400). Cut it just right of the gate and bridge the gap on M3, so
+    the long piece is not on the gate while Metal2 is etched."""
+    k, ty, (a, b) = mb['tracks']['enb']
+    old = ('m2', a - 190, ty - 190, b + 190, ty + 190)
+    assert old in cell.rects, old
+    g1, g2 = 12 * R.GRID, 15 * R.GRID                # 8.16, 10.2 um: clear of the left M3 straps (x < 4.9 um)
+    assert a + 190 < g1 and g2 < b
+    lo, hi = g1 - 190 - 300, g2 + 190 + 300
+    assert not [r for r in cell.rects if r[0] == 'm3' and r[1] < hi and r[3] > lo and r[2] < ty + 490
+                and r[4] > ty - 490], 'M3 in the way of the enb jumper'
+    cell.rects.remove(old)
+    cell.r('m2', a - 190, ty - 190, g1 + 190, ty + 190)
+    cell.r('m2', g2 - 190, ty - 190, b + 190, ty + 190)
+    cell.via2(g1, ty)
+    cell.via2(g2, ty)
+    cell.r('m3', g1 - 190, ty - 190, g2 + 190, ty + 190)
 
 
 def main():

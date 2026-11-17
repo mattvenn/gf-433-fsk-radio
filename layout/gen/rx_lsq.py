@@ -19,7 +19,10 @@ So this generator runs layout/gen/lsdiv.py's own build() (imported, not edited) 
   (so lsdiv's channel sees exactly the nets it always had).
 lsdiv's VDD rail becomes vq. Above lsdiv's top VSS rail one more band (layout/gen/rx_lib.py) holds Hq (P row, real
 VDD) and Cq (N row) with the real VDD rail on top; vq and qenb reach it on M3 risers.
-Pins: VDD (top rail), VSS (rails), aq (M2, right edge, lsdiv's a0 pin), qenb (M3, top edge), lsq (M3, top edge).
+Pins: VDD (top rail), VSS (rails), aq (M2, right edge, lsdiv's a0 pin), qenb (M3, top edge); lsq: build(pins='tile')
+(default, the tile floorplan) M2 on the left edge at the bottom (lsdiv's ls M3 vertical goes down instead of up, to
+an M2 run under the N row, just over the bottom VSS rail); build(pins='rx_top') M3 on the top edge (rx_top.py).
+Nothing of lsdiv's level shifter (aq to lsq) moves: only the lsq wire past lsdiv's ls vertical changes.
 """
 import argparse
 import sys
@@ -62,7 +65,8 @@ def lsdiv_build(patch):
     return cells[0], meta, log
 
 
-def build():
+def build(pins='tile'):
+    assert pins in ('tile', 'rx_top'), pins
     c0, m0, log0 = lsdiv_build(False)
     cell, m, log1 = lsdiv_build(True)
     # the copy: every strip from D1 rightwards and the passive band at lsdiv's coordinates
@@ -131,10 +135,24 @@ def build():
     yv = (Y['vdd_b'] + Y['vdd_t']) // 2
     cell.r('m3', xv - 190, yv - 190, xv + 190, Y['vss2_b'])
     cell.r('v2', xv - 140, yv - 140, xv + 140, yv + 140)
-    # lsq pin: lsdiv's ls M3 vertical on up to the new top edge (a window in the band's VSS / VDD rail M3)
-    cell.r('m3', ls_x - 190, bb[3] - 400, ls_x + 190, ytop)
-    cell.label('lsq', 'm3', ls_x, ytop - 200, port=True)
-    meta = dict(bbox=(0, bb[1], xr, ytop), lsdiv=m, band=meta_b, pad=PAD, ls_x=ls_x, xq=xq, xv=xv)
+    if pins == 'rx_top':
+        # lsq pin: lsdiv's ls M3 vertical on up to the new top edge (a window in the band's VSS / VDD rail M3)
+        cell.r('m3', ls_x - 190, bb[3] - 400, ls_x + 190, ytop)
+        cell.label('lsq', 'm3', ls_x, ytop - 200, port=True)
+        pins_own = None
+    else:
+        # lsq pin on the left edge, as low as the cell allows: the ls M3 vertical (it already reaches the lsx jumper
+        # at y_lsx) on down to just over the bottom VSS rail (Y vss_t = 0; M2 there is free: the N row has M1
+        # only), via2, M2 to x 0 (under lsdiv's M3 VSS strap at x 0.3-1.3)
+        assert Y['vss_t'] == 0 and y_lsx - 190 > 1200
+        yp = 700
+        cell.r('m3', ls_x - 190, yp - 190, ls_x + 190, y_lsx + 190)
+        cell.r('v2', ls_x - 140, yp - 140, ls_x + 140, yp + 140)
+        cell.r('m2', 0, yp - 190, ls_x + 190, yp + 190)
+        cell.label('lsq', 'm2', 150, yp, port=True)
+        pins_own = [('lsq', 0, yp, 'left')]
+    pins_own = (pins_own or []) + [('aq', xr, R.LL.A0_Y, 'right'), ('qenb', xq, ytop, 'top')]
+    meta = dict(bbox=(0, bb[1], xr, ytop), lsdiv=m, band=meta_b, pad=PAD, ls_x=ls_x, xq=xq, xv=xv, pins_own=pins_own)
     return [cell], meta
 
 

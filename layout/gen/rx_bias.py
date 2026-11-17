@@ -16,7 +16,8 @@ and raises row A by 12.8 um.)
   START: MS1 (0.42 / 10, gate VSS) over MS2, MS3
   RB   : Rb (ppolyf_u, 2 um wide, 4 strips) next to MN2's source
   CAP  : Cnb (nfet gate cap on nb, 3 fingers)
-Pins: VDD, VSS (rails, M2), en (M2, left edge), enb and nb (M2, right edge).
+Pins: VDD, VSS (rails, M2); en, enb, nb: build(pins='tile') (default, the tile floorplan, layout/floorplan/pins.md)
+M3 on the top edge at its right end (nb, en, enb left to right); build(pins='rx_top') M2 on the right edge (rx_top.py).
 """
 import argparse
 import sys
@@ -28,7 +29,8 @@ import rx_lib as R  # noqa: E402
 from ring_core import Cell  # noqa: E402
 
 PINS = ['VDD', 'VSS', 'en', 'enb', 'nb']
-EXITS = dict(en=('right', None), enb=('right', None), nb=('right', None))
+EXITS = dict(en=('right', None), enb=('right', None), nb=('right', None))          # rx_top
+TILE = dict(nb=('top', 80920), en=('top', 82280), enb=('top', 83640))              # the tile: top edge, right end
 RISE = ['nb', 'enb', 'x', 'n2', 'vh', 'nr']
 
 
@@ -55,11 +57,12 @@ def cols():
     ]
 
 
-def build():
+def build(pins='tile'):
+    assert pins in ('tile', 'rx_top'), pins
     cell = Cell('rx_bias')
     c = cols()
     band = R.Band('bias', c, ports=RISE, pins=PINS[2:], search=True)
-    metas, bb = R.stack(cell, [band], [EXITS])
+    metas, bb = R.stack(cell, [band], [EXITS if pins == 'rx_top' else TILE])
     return [cell], dict(bbox=bb, bands=metas)
 
 

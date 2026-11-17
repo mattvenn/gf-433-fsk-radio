@@ -772,6 +772,17 @@ class Band:
                     tracks={n: [k, c.Y(ty[n]), span[n]] for n, k in trk.items()}, offs=self.offs,
                     xend=self.xend, m3=[x for n, x, e in verts] + list(ties.values()))
 
+def edge_ports_only(cell, bb, nets, tol=500):
+    """Port labels of `nets` that are not at the cell's outer edge (a band's riser end inside the cell) become plain
+    labels: the cell's pins are then only the ones on its outline (used by the tile pin sets)."""
+    out = []
+    for (t, l, x, y, port) in cell.labels:
+        if port and t in nets and min(x - bb[0], bb[2] - x, y - bb[1], bb[3] - y) > tol:
+            port = False
+        out.append((t, l, x, y, port))
+    cell.labels = out
+
+
 def rail(c, yb, yt, x0, x1, tap=None, m3=True, skip=(), m3_only=False):
     """tx_drv.py rail(): M1 + M2 from x0 to x1 (via1 every 2 um), M3 with via2 every 2 um except in the skip
     windows, a tap strip ('p' / 'n') under it. m3_only: only the M3 + via2 (on a rail another generator drew)."""

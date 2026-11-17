@@ -15,8 +15,16 @@ Three bands (layout/gen/rx_lib.py), bottom to top:
   B-B and A-A): both centroids sit on the diffusion's centre line; a poly-only dummy finger 0.3 um past each end.
   Load resistors: ppolyf_u U-shapes, RLp and RLn side by side around the pair.
   Stage 1's outputs (outp, outn), nb and vcm climb to bands 0 and 2 on M3 risers (one x per net through all bands).
-Pins: VDD, VSS (rails), inp, inn (M2, left edge, band 1), oip, oin (M2, right edge, band 2: the I mixer sits
-up there in rx_top), oqp, oqn, nb, enb (M2, right edge, band 0: the Q mixer below it).
+Pins, build(pins='rx_top') (rx_top.py): VDD, VSS (rails), inp, inn (M2, left edge, band 1), oip, oin (M2, right
+edge, band 2: the I mixer sits up there in rx_top), oqp, oqn, nb, enb (M2, right edge, band 0: the Q mixer below it).
+build(pins='tile') (default, the tile floorplan, layout/floorplan/pins.md): the two stage-2 copies swap bands (I in
+band 0, Q in band 2; the devices and their drawing are the same, only which copy sits where), so that
+  oip, oin, nb, enb  M3, bottom edge, right end (band 0: the I mixer is on that side in the tile)
+  oqp, oqn           M3, top edge, right end (band 2)
+  inp                M2, left edge, in band 0's channel; inn M2, left edge, in band 2's channel: the inputs as far
+                     apart as the LNA allows, towards the ua[4] / ua[5] pad spacing. Each climbs from stage 1's
+                     track on an M3 riser (inp down, inn up); the riser x positions are set so that both inputs'
+                     wires (M2 + M3, stage-1 track end to the cell edge) are the same length.
 """
 import argparse
 import sys
@@ -90,11 +98,14 @@ def stage1(D):
             ('TAIL', [], [tail(D['Mt'])])]
 
 
-def build():
+def build(pins='tile'):
+    assert pins in ('tile', 'rx_top'), pins
     D = devs()
     cell = Cell('rx_lna')
     rv = [('RV', [R.from_dev(D['Mvs'], seq=['VDD', 'enb', 'vt'])], [hr(D, 'Rv1', 4), hr(D, 'Rv2', 4)])]
     up = ['outp', 'outn', 'nb', 'vcm']
+    if pins == 'tile':
+        return build_tile(D, cell, rv, up)
     b0 = R.Band('lna_q', stage2(D, 'x2q_') + rv + [('CV', [], [cvcm(D, 2)])], ports=up,
                 pins=['enb', 'oqp', 'oqn', 'nb'], search=False)
     b1 = R.Band('lna_1', stage1(D), ports=up, pins=['inp', 'inn'], search=False)
@@ -109,6 +120,46 @@ def build():
                 dict(oip=('right', None), oin=('right', None), **{n: ('bottom', x[n]) for n in up})]
     metas, bb = R.stack(cell, [b0, b1, b2], exits)
     return [cell], dict(bbox=bb, bands=metas)
+
+
+XIN = (9 * R.GRID, 15 * R.GRID)     # riser x of inn, inp (6.12, 10.2 um): equal input wire lengths (asserted)
+
+
+def build_tile(D, cell, rv, up):
+    G = R.GRID
+    b0 = R.Band('lna_i', stage2(D, 'x2i_') + rv + [('CV', [], [cvcm(D, 2)])], ports=up + ['inp'],
+                pins=['enb', 'oip', 'oin', 'nb', 'inp'], search=False)
+    b1 = R.Band('lna_1', stage1(D), ports=up + ['inp', 'inn'], search=False)
+    b2 = R.Band('lna_q', stage2(D, 'x2q_') + [('CV', [], [cvcm(D, 3)])], ports=up + ['inn'], pins=['oqp', 'oqn', 'inn'],
+                search=False)
+    xinn, xinp = XIN
+    xo = dict(nb=122 * G, enb=124 * G, oip=131 * G, oin=133 * G, oqp=133 * G, oqn=135 * G)
+
+    def exits(bands, xr):
+        x = R.risers(bands, up, xr)
+        for v in list(xo.values()) + [xinn, xinp]:
+            assert all(abs(v - u) >= R.M3P for u in x.values()), v
+        assert xo['oqn'] + 190 + 280 <= xr - R.STRAPX1
+        e0 = {n: ('top', x[n]) for n in up}
+        e0.update(nb=[('top', x['nb']), ('bottom', xo['nb'])], enb=('bottom', xo['enb']), oip=('bottom', xo['oip']),
+                  oin=('bottom', xo['oin']), inp=[('top', xinp), ('left', None)])
+        e1 = {n: ('through', x[n]) for n in up}
+        e1.update(inp=('top', xinp), inn=('bottom', xinn))       # band 1 is mirrored: its local top faces band 0
+        e2 = {n: ('bottom', x[n]) for n in up}
+        e2.update(oqp=('top', xo['oqp']), oqn=('top', xo['oqn']), inn=[('bottom', xinn), ('left', None)])
+        return [e0, e1, e2]
+    metas, bb = R.stack(cell, [b0, b1, b2], exits)
+    R.edge_ports_only(cell, bb, ('inp', 'inn', 'nb'))
+    # the two input wires: stage 1's track from its left end to the riser, the riser, the outer band's track to x 0
+    ln = {}
+    for net, mo in (('inp', metas[0]), ('inn', metas[2])):
+        k1, y1, (a1, b1_) = metas[1]['tracks'][net]
+        ko, yo, (ao, bo) = mo['tracks'][net]
+        ln[net] = (abs(y1 - yo), bo)            # M3 riser length, outer M2 length (x 0 to the riser)
+    tot = {n: sum(v) for n, v in ln.items()}
+    meta = dict(bbox=bb, bands=metas, in_wires=ln)
+    assert abs(tot['inp'] - tot['inn']) <= G, ln
+    return [cell], meta
 
 
 def main():

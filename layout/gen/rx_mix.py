@@ -15,7 +15,9 @@ One band (layout/gen/rx_lib.py):
   stand side by side, not one above the other: a transmission gate's N and P gates are complementary, so stacked
   they would ask for lo below lob at one finger and above it at the next (a track-order cycle in the channel). lo and lob leave on M3 straight up through the VDD rail (right angles to the rf / bb
   tracks), rf on the left edge (the LNA's side in rx_top), bb on the right edge (M2).
-Pins: VDD, VSS (rails), rfp, rfn (M2, left edge), bbp, bbn (M2, right edge), lo, lob (M3, top edge).
+Pins: VDD, VSS (rails), bbp, bbn (M2, right edge), lo, lob (M3, top edge); rfp, rfn: build(pins='tile') (default,
+the tile floorplan) M3 on the bottom edge at its left end (one cell for mix_i and mix_q: the corner serves mix_i's
+"bottom edge, left end" and mix_q's "left edge"); build(pins='rx_top') M2 on the left edge (rx_top.py).
 """
 import argparse
 import sys
@@ -28,7 +30,8 @@ from ring_core import Cell  # noqa: E402
 
 PINS = ['VDD', 'VSS', 'rfp', 'rfn', 'bbp', 'bbn', 'lo', 'lob']
 EXITS = dict(rfp=('left', None), rfn=('left', None), bbp=('right', None), bbn=('right', None),
-             lo=('top', None), lob=('top', None))
+             lo=('top', None), lob=('top', None))                               # rx_top
+TILE = dict(EXITS, rfp=('bottom', 1360), rfn=('bottom', 2720))                    # the tile: rf at the lower-left
 
 
 def cols():
@@ -55,10 +58,11 @@ def cols():
     ]
 
 
-def build():
+def build(pins='tile'):
+    assert pins in ('tile', 'rx_top'), pins
     cell = Cell('rx_mix')
     band = R.Band('rx_mix', cols(), pins=PINS[2:], search=True)
-    metas, bb = R.stack(cell, [band], [EXITS])
+    metas, bb = R.stack(cell, [band], [EXITS if pins == 'rx_top' else TILE])
     return [cell], dict(bbox=bb, bands=metas)
 
 

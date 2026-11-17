@@ -62,7 +62,7 @@ def blocks():
     """{name: (cells, meta)} of every block generator, built in-process."""
     out = {}
     for b in ('rx_bias', 'rx_lna', 'rx_lsq', 'rx_lobuf', 'rx_mix', 'rx_bb', 'rx_lim'):
-        out[b] = R.load_gen(b).build()
+        out[b] = R.load_gen(b).build(pins='rx_top')      # the pin set rx_top was routed for
     c, m = decap_cell()
     out['rx_decap'] = ([c], m)
     return out
