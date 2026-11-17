@@ -1,0 +1,57 @@
+# Formal checks on the tx_fine RTL (src/tx_fine.v). docs/verification_digital.md, "Formal".
+#   cd formal && sby -f tx_fine.sby            all tasks
+#   cd formal && sby -f tx_fine.sby prove      one task
+# prove: properties R, S, F, D, Q, G of fv_tx_fine.sv for all time (PDR)
+# gates: the clock-gated RTL equals the RTL with every clock gate replaced by a wire, output for output (PDR)
+# gates_bmc: the same miter as a bounded check, 60 steps (30 clk cycles), smtbmc (about 14 min)
+# dbg:   at most one DBG_SEL bit on (expected FAIL: a counterexample trace, BMC)
+# long:  the register file vs the spec with frames of 48 bits or more allowed (expected FAIL, PDR)
+[tasks]
+prove
+gates miter
+gates_bmc miter
+dbg
+long
+
+[options]
+prove: mode prove
+gates: mode prove
+gates_bmc: mode bmc
+gates_bmc: depth 60
+dbg: mode bmc
+dbg: depth 90
+long: mode prove
+multiclock on
+
+[engines]
+prove: abc pdr
+gates: abc pdr
+gates_bmc: smtbmc yices
+dbg: smtbmc yices
+long: abc pdr
+
+[script]
+prove: read_verilog -formal -sv tx_fine.v fv_tx_fine.sv
+miter: read_verilog -formal -sv -D FV_GATES tx_fine.v cg_nogate.v fv_tx_fine.sv
+dbg: read_verilog -formal -sv -D FV_DBG_ONEHOT tx_fine.v fv_tx_fine.sv
+long: read_verilog -formal -sv -D FV_LONG_FRAMES tx_fine.v fv_tx_fine.sv
+miter: copy tx_fine tx_fine_ng
+miter: chtype -map tx_cg tx_cg_ng tx_fine_ng
+hierarchy -check -top fv_tx_fine
+proc
+~miter: opt_clean fv_props
+flatten
+~miter: connect -set chk.s_med_int dut.med_int
+~miter: connect -set chk.s_med_frac dut.med_frac
+~miter: connect -set chk.s_fsk_dev dut.fsk_dev
+~miter: connect -set chk.s_ctrl dut.ctrl
+~miter: connect -set chk.s_eff_int dut.eff_int
+~miter: connect -set chk.s_eff dut.eff
+~miter: connect -set chk.s_fsk dut.s_fsk
+~miter: connect -set chk.s_acc dut.acc
+prep -top fv_tx_fine
+
+[files]
+../src/tx_fine.v
+fv_tx_fine.sv
+cg_nogate.v
