@@ -57,6 +57,9 @@ checks `layout/gen/tile_driver.sh`. The real TT precheck passes in CI. Open: dec
 5. **Sizing, PVT map, PVT noise, v3 layout, MC and start-up** (the docs in the table above).
 
 ## Next steps
+**Decision 2026-11-17 (Matt):** no TX/RX hardware interlock. Firmware keeps RX_EN off while transmitting and waits
+about 1 ms after TX before trusting `q_i` / `q_q` (`docs/bringup.md`, firmware rules).
+
 **Decision 2026-11-17 (Matt):** the SPI stays on `uio[0..3]` = SCLK, MOSI, CS_n, MISO, driven by the RP2350's PIO or
 SoftSPI; the demo board's hardware SPI1 on GPIO25-28 has the order CSn, SCK, TX, RX, so only MISO matches
 (`docs/bringup.md`). Check `uio[1]` toggles first: it read held low on the ttgf0p2 carrier.

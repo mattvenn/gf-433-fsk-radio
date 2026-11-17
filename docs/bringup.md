@@ -121,12 +121,22 @@ Notes:
 - The generator's absolute frequency and the RP2350's count disagree by up to the sum of their reference errors
   (±13 kHz for the RP2350 alone), so set Δ well above that or calibrate the generator against the count first.
 
+**Firmware rules, TX and RX (decision 2026-11-17, Matt: no hardware interlock).** TX and RX share the one
+oscillator, so the radio is half-duplex. Both on together does no harm: the supply drops stay small
+(`sim/power/results.md`), and a coupled TX only overloads the LNA's 3.3 V inputs. But the receiver then hears only
+its own carrier, at 0 Hz.
+1. Keep CTRL.RX_EN (bit 4) off while transmitting (`ui[5]` / `ui[6]` high).
+2. After TX ends, wait about 1 ms before trusting `q_i` / `q_q`: the baseband high-pass recovers from an offset step
+   in 0.5-0.9 ms (`rx_design.md`), longer if RX was left on through the transmission.
+3. Set only one DBG_SEL bit at a time, and raise CS_n after every 16-bit SPI frame (`tx_fine_tune.md`).
+
 ## 5. Two boards
 
 Board A transmits, board B receives. Both run the `tuning.md` procedure against their own RP2350 crystals.
 
 | # | Test | How | Expected | Source | Result |
 |---|---|---|---|---|---|
+| L0 | TX and RX together | One board: TX on, then RX_EN; then TX off, and time how long until a weak tone from board A decodes | nothing odd (supply currents add, no lock-up); turnaround about 1 ms | `rx_design.md` | |
 | L1 | Offset | A: TX on, no FSK. B: RX_EN. Count both | B's `q_i` / `q_q` toggle at |f_A − f_B|, up to ±26 kHz from the two crystals (±13 kHz each) | `tuning.md` | |
 | L2 | Set the offset | Move B's MED_INT / MED_FRAC until L1's toggle rate is the chosen offset (e.g. 0 or 20 kHz) | the rate follows B's word at its LSB (about 31 kHz per word) | Table VII | |
 | L3 | FSK | A: FSK_DEV for ±100 kHz, `ui[7]` sends a known pattern | B's quadrature steps reverse direction with each bit; about 8 quadrant steps per bit at 50 kbit/s | `rx_design.md` Table VI | |
