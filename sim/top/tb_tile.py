@@ -539,8 +539,9 @@ def an_rx(pl, c):
     fr = np.arange(20e3, 1.0e6, 5e3)
     amp = [abs(dft(t, oi, x, tskip)) for x in fr]
     fb = float(fr[int(np.argmax(amp))])
-    r['f_bb'] = fb
+    r['f_bb_peak'] = fb                 # information only: 9 us of window gives ~110 kHz of DFT resolution
     r['f_bb_expect'] = abs(r['f_tone'] - r['f_a2'])
+    fb = r['f_bb'] = r['f_bb_expect']   # the DFT and the phase at the known offset (tone - this run's ring f)
     ci, cq, cb = dft(t, oi, fb, tskip), dft(t, oq, fb, tskip), dft(t, bi, fb, tskip)
     r['bb_i_v'], r['bb_q_v'], r['mix_i_v'] = float(abs(ci)), float(abs(cq)), float(abs(cb))
     r['bb_iq_phase'] = float(np.angle(cq / ci, deg=True)) if abs(ci) > 0 else float('nan')

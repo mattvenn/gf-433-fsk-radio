@@ -17,8 +17,8 @@ Pass criteria (and why):
           same switch); off: < -60 dBm, ua[2] / ua[3] < 50 mV p-p;
           the ring (VAPWR) moves < 0.2 % with the TX on against off.
   3 RX    q_i and q_q both toggle at the baseband frequency (rising + falling edges >= 80 % of 2 x f_bb x window, f
-          within 15 %: the 9 us window holds under two baseband periods); the baseband tone (DFT peak, 5 kHz grid) is
-          |f_tone - f_ring| within 15 % (or 15 kHz); |I/Q phase| 50 ... 110 deg (the taps are 72 deg
+          within 15 %: the 9 us window holds under two baseband periods; the baseband DFT and the phases are taken at
+          |f_tone - f_ring| of the run); |I/Q phase| 50 ... 110 deg (the taps are 72 deg
           apart by design), the limiter phase agrees in sign with the analog baseband phase, and flips sign with the
           sign of the offset.
   4 Power-up  the ring oscillates by the end of the ramp + 5 us, ck = f / 4 at the end, vbnf rising in the last 5 us,
@@ -107,7 +107,7 @@ def check_vco(mut=False):
         if r is not None and bad(r):
             ok, why = False, f'reference {rn}: {bad(r)}'
         ratio = t['f_a2'] / r['f_a0'] - 1 if ok is not None and r is not None and not bad(r) and ok else None
-        corner = tn.split('_')[2]
+        corner = 'tt' if tn.startswith('mut_') else tn.split('_')[2]
         if ratio is not None:
             ratios.setdefault(corner, []).append(ratio)
         rows.append(dict(tile=tn, ref=rn, ok=ok, why=why, f_tile=t and t.get('f_a2'), f_ref=r and r.get('f_a0'),
@@ -206,8 +206,6 @@ def rx_one(r):
     for k in ('f_qi', 'f_qq'):
         if not abs(r[k] / r['f_bb_expect'] - 1) < 0.15:
             p.append(f"{k} {r[k] / 1e3:.1f} kHz vs {r['f_bb_expect'] / 1e3:.1f}")
-    if not (abs(r['f_bb'] - r['f_bb_expect']) < max(15e3, 0.15 * r['f_bb_expect'])):
-        p.append(f"baseband {r['f_bb'] / 1e3:.1f} kHz vs {r['f_bb_expect'] / 1e3:.1f}")
     q = r['q_iq_phase']
     if not 50 <= abs(q) <= 110:
         p.append(f'limiter I/Q phase {q:+.1f} deg')
@@ -319,7 +317,7 @@ def check_supply(mut=False):
             out.append((f'6 VCO at {v} V', None if 'pending' in (bad(r), bad(b0)) else False, bad(r) or bad(b0)))
             continue
         d = r['f_a2'] / b0['f_a2'] - 1
-        out.append((f'6 VCO at {v} V', abs(d) < 5e-3, f'{d * 100:+.3f} % ({d * 1e4 / ((float(v) - 3.3) * 100):+.4f} %/10 mV)'))
+        out.append((f'6 VCO at {v} V', abs(d) < 5e-3, f'{d * 100:+.3f} % ({d * 100 / ((float(v) - 3.3) / 0.01):+.4f} %/10 mV)'))
     on, off = (res('mut_tx_rsw10') if mut else res('tx_c_tt_on')), res('tx_c_tt_off')
     if bad(on) or bad(off):
         out.append(('6 ring supply during TX', None if 'pending' in (bad(on), bad(off)) else False, bad(on) or bad(off)))
@@ -410,7 +408,7 @@ def tables():
                  f"{TX_REF.get(cn, float('nan')):+.2f} | {r.get('ph_err_deg', float('nan')):+.2f} | {r['i_vdp_ma']:.2f} / "
                  f"{r['i_vdp_rms_ma']:.2f} | {r['vdp_ripple_mv']:.1f} / {r['vap_ripple_mv']:.1f} | "
                  f"{', '.join(r['flags']) or 'none'} |")
-    L += ['', '### RX', '', '| run | ring f (MHz) | tone - ring (kHz) | baseband f (kHz) | q_i / q_q f (kHz) | edges i / q '
+    L += ['', '### RX', '', '| run | ring f (MHz) | tone - ring (kHz) | baseband DFT peak (kHz) | q_i / q_q f (kHz) | edges i / q '
           '| I/Q limiter / baseband (deg) | LO I/Q (deg) | baseband I / Q (V) | mixer I (mV) | flags |',
           '|---|---|---|---|---|---|---|---|---|---|---|']
     for n in [k for k, c in T.cases().items() if c['kind'] == 'rx']:
@@ -419,12 +417,12 @@ def tables():
             L.append(f'| {n} | {"pending" if not r else r["error"]} |' + ' |' * 9)
             continue
         if r['qi_edges'] < 2:
-            L.append(f"| {n} | {f6(r['f_a2'], 1e6, 3)} | {(r['f_tone'] - r['f_a2']) / 1e3:+.1f} | {r['f_bb'] / 1e3:.0f} | "
+            L.append(f"| {n} | {f6(r['f_a2'], 1e6, 3)} | {(r['f_tone'] - r['f_a2']) / 1e3:+.1f} | {r.get('f_bb_peak', r['f_bb']) / 1e3:.0f} | "
                      f"no toggles | {r['qi_edges']} / {r['qq_edges']} | - / {r['bb_iq_phase']:+.1f} | "
                      f"{r['lo_iq_phase']:.1f} | {r['bb_i_v']:.3f} / {r['bb_q_v']:.3f} | {r['mix_i_v'] * 1e3:.2f} | "
                      f"{', '.join(r['flags']) or 'none'} |")
             continue
-        L.append(f"| {n} | {f6(r['f_a2'], 1e6, 3)} | {(r['f_tone'] - r['f_a2']) / 1e3:+.1f} | {r['f_bb'] / 1e3:.0f} | "
+        L.append(f"| {n} | {f6(r['f_a2'], 1e6, 3)} | {(r['f_tone'] - r['f_a2']) / 1e3:+.1f} | {r.get('f_bb_peak', r['f_bb']) / 1e3:.0f} | "
                  f"{f6(r['f_qi'], 1e3, 1)} / {f6(r['f_qq'], 1e3, 1)} | {r['qi_edges']} / {r['qq_edges']} | "
                  f"{r['q_iq_phase']:+.1f} / {r['bb_iq_phase']:+.1f} | {r['lo_iq_phase']:.1f} | {r['bb_i_v']:.3f} / "
                  f"{r['bb_q_v']:.3f} | {r['mix_i_v'] * 1e3:.2f} | {', '.join(r['flags']) or 'none'} |")
