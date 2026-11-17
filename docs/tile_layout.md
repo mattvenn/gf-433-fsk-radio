@@ -19,8 +19,8 @@ re-layouts in parallel.
 | Floorplan on the real blocks | no rule fails; warnings: a2 33 µm, ls 148 µm (want ≤ 120), cgm_ref → ring bias wires 113 µm (as in B), 47 supply crossings (3.3 V both) |
 | Tile | 693.28 × 325.36 µm, every one of 97 nets routed (M2 / M3 between blocks, Metal4 drops over the blocks that allow it), 39 Metal4 power stripes, no Metal5 |
 | DRC | magic 0, KLayout 0 (768 rules run, `feol=true beol=true`) |
-| LVS | match (10 536 devices, 5711 nets); resistor totals match; 13 of 13 mutations caught |
-| Antenna | KLayout antenna deck: 0 |
+| LVS | match (10 536 devices, 5711 nets); resistor totals match; 14 of 14 mutations caught |
+| Antenna | KLayout antenna deck: 0 (24 rules); a planted violation is caught |
 | TT precheck | local structural checks pass (`layout/gen/tile_precheck.py`); the real TT precheck runs in CI on push (not run here, below) |
 
 ## Step 1: the digital macro
@@ -70,6 +70,8 @@ without crossing. The receiver generators keep a `pins='rx_top'` variant, so `rx
 edge (built) adds about 3.2 fF extracted (magic 8.3.684; about 4 fF with substrate C estimated by hand), the north edge
 about 0.7 fF but needs at least 55 µm more wire round to `rx_lsq` and crosses ck. In the tile a2 is a 31 µm wire, about
 2 fF more. At about 1 % of frequency per fF, expect the ring about 5 % slower until the tile is extracted.
+**Measured (2026-11-17, `sim/top/tile_results.md`):** 11.6-12.3 % slower at every corner. The a2 net carries
+19.0 fF in the extracted tile against about 3.3 fF on the other ring nodes; 433.92 MHz moves to code 12-13 at tt.
 
 **Not on target** (a few µm, set by internal tracks): the LNA inputs are 50.3 µm apart, not 43.68 (each band's channel
 track; the two input wires are the same length inside); `rx_lsq`'s lsq and `rx_lim`'s q are at y 3.1 µm (the bottom
@@ -166,7 +168,8 @@ the first full run had 384 KLayout errors; the causes and fixes:
 - a route via next to its own pin stub's via (the stub's is off the grid) made overlapping cuts (V2.1, V2.2a): the
   route's via is left out and the two metals joined to the stub's;
 - via3 arrays per decomposed piece of a landing came too close (V3.2a): one cut grid per landing polygon;
-- long wires into small gates (ANT.16): the antenna-diode rows;
+- long wires into small gates (ANT.16): the antenna-diode rows (2026-11-17: the tile passes without them too, since
+  those nets stay off Metal4, so they are spare protection);
 - a stub's 0.18 µm spacing inside `bits_inv`, and DCF.1a (fill; existing fill now counts as a keep-out).
 
 **LVS.** `layout/gen/check_tt.sh` extracts the flattened tile with magic and compares it with

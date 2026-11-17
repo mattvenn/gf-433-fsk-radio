@@ -202,12 +202,11 @@ static timing analysis' (STA's) and GL simulation's job.
 3. **Frames of 48 bits or more write twice** (formal task `long`): the firmware must raise CS_n after each 16-bit
    frame. The register map comment in `info.yaml` could say so.
 4. **The tie cells on the TT outputs are powered from VAPWR** (`lvs/make_source.py` and `layout/gen/tile.py`), so
-   `uio_oe[3]` = 1 and the tied-low outputs come from the analog supply. `layout/gen/tile_nets.py` lists
-   `'xties': VD` (VDPWR) in `SUPPLY`, which is not used. Both supplies are 3.3 V, so this works, but the two files
-   disagree.
+   `uio_oe[3]` = 1 and the tied-low outputs come from the analog supply. `layout/gen/tile_nets.py` listed them on
+   VDPWR (an unused entry); fixed to VAPWR in 01796ac, the LVS source unchanged. Both supplies are 3.3 V.
 5. **uio_oe[3] is always 1:** MISO drives the bus even with CS_n high and in reset (low). Fine with one device on
    the bus.
 6. `sr[15]` in the SPI shifter is never read (synthesis removed it); harmless.
 
 At the time of writing the TT-level tests use logic stubs for every analog block, so they check wiring and control,
-not analog behaviour. The real TT precheck (and any TT test action) has not run on these files yet.
+not analog behaviour. The real TT precheck runs in CI (`gds.yaml`) and passes since 27ca4ab.

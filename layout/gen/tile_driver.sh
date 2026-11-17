@@ -6,8 +6,8 @@
 #   3 tile     layout/gen/tile.py (GDS + LEF), lvs/make_source.py (the LVS source)
 #   4 drc      magic DRC (drc(full)) and KLayout DRC (feol=true beol=true; the rule
 #              count must be > 0, or the deck ran nothing)
-#   5 lvs      layout/gen/check_tt.sh: netgen LVS, resistor totals, 13 mutations that must all FAIL
-#   6 antenna  KLayout's antenna deck on the tile (its rule count must be > 0)
+#   5 lvs      layout/gen/check_tt.sh: netgen LVS, resistor totals, 14 mutations that must all FAIL
+#   6 antenna  KLayout's antenna deck on the tile (its rule count must be > 0; a planted violation must be caught)
 #   7 precheck the structural TT rules, locally (layout/gen/tile_precheck.py); the real TT precheck runs in CI
 #   8 summary
 # Run from the repo root (in the image): bash layout/gen/tile_driver.sh     Results: build/tile/run/
@@ -131,7 +131,24 @@ A=$OUT/antenna; mkdir -p $A
 nantr=$(grep -c "Executing rule" $A/klayout_antenna.log)
 nant=$(python3 -c "import xml.etree.ElementTree as E; print(len(E.parse('$A/antenna.lyrdb').getroot().find('items')))" 2>/dev/null)
 [ "$nantr" -gt 0 ] && [ "$nant" = 0 ] || fail 6 antenna $A/klayout_antenna.log
-step 6 antenna "done: KLayout antenna deck ($nantr rules) $nant violations"
+# mutation: the tile plus a planted violation (a 300 x 300 um Metal1 plate on a 0.5 x 0.6 um gate, off to the side)
+# must give ANT violations. (Removing the three antenna-diode rows is no mutation: the tile still passes without
+# them, 2026-11-17, since the protected nets stay off Metal4, tile_nets.NO_M4_NETS.)
+python3 - $REPO/gds/$T.gds $A/mut.gds <<'PYEOF'
+import sys, klayout.db as db
+ly = db.Layout(); ly.read(sys.argv[1]); top = ly.top_cell()
+def B(l, x0, y0, x1, y1):
+    top.shapes(ly.layer(l, 0)).insert(db.Box(*(round(v * 1000) - 2000000 for v in (x0, y0, x1, y1))))
+B(22, 0, 0, 2, 0.6); B(32, -0.5, -0.5, 2.5, 1.1); B(30, 0.8, -0.5, 1.3, 3)   # COMP, NPLUS, POLY2: the gate
+B(33, 0.9, 2.3, 1.12, 2.52); B(34, 0.7, 2.1, 300, 300)                       # contact, the Metal1 plate
+ly.write(sys.argv[2])
+PYEOF
+( cd $A && nice -n 19 klayout -b -r $PDK_ROOT/$PDK/libs.tech/klayout/tech/drc/gf180mcu.drc -rd input=$A/mut.gds \
+    -rd topcell=$T -rd report=$A/mut.lyrdb -rd variant=D -rd run_mode=deep -rd threads=8 -rd decks=antenna \
+    -rd feol=true -rd beol=true > klayout_antenna_mut.log 2>&1 )
+nmut=$(python3 -c "import xml.etree.ElementTree as E; print(len(E.parse('$A/mut.lyrdb').getroot().find('items')))" 2>/dev/null)
+[ "${nmut:-0}" -gt 0 ] || fail 6 antenna "planted antenna violation not caught: $A/klayout_antenna_mut.log"
+step 6 antenna "done: KLayout antenna deck ($nantr rules) $nant violations; planted violation caught ($nmut)"
 
 # ---- 7. precheck (local) ----
 # The structural Tiny Tapeout rules re-implemented here (layout/gen/tile_precheck.py: pins at the template's places,

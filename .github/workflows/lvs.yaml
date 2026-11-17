@@ -3,7 +3,7 @@ name: lvs
 # LVS of the Tiny Tapeout wrapper: gds/tt_um_mattvenn_gf433_vco.gds (flattened, extracted with magic) against
 # lvs/tt_um_mattvenn_gf433_vco.spice (lvs/make_source.py) with netgen; layout/gen/check_tt.sh does the work and
 # fails unless the circuits match uniquely with no property or pin errors, the resistor sizes match and its
-# three mutations are caught. Same PDK as the TT precheck (gf180mcuD, open_pdks e8daeda, via ciel).
+# 14 mutations are caught. Same PDK as the TT precheck (gf180mcuD, open_pdks e8daeda, via ciel).
 on:
   push:
   workflow_dispatch:
