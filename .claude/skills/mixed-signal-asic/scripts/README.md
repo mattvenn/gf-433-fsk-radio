@@ -8,7 +8,9 @@ Copy them into the new repo. They assume this layout, run from the repo root ins
 |---|---|---|---|
 | `osic-mac` | `tools/` | Runs a command in the pinned IIC-OSIC-TOOLS image: repo mounted at its own path, `.designinit` mounted, `.spiceinit` copied into build/, `OSIC_PDK_ROOT` override, direct exec inside the image | image tag; `DESIGNINIT` env (default `~/asic/.designinit`, example in `designinit.example`); it calls `tools/osic-inimage` when already in the image |
 | `longrun` | `tools/` | Detached job → `build/<name>.log` + `build/<name>.done`, systemd-inhibit sleep where available | on the Mac wrap it in `caffeinate -i` |
-| `sched.py` | `sim/rerun/` | CPU-budget job scheduler (threads, est, deps, lock, stagger, adopts orphans, live job-file reload, `--status`) | `--budget` = cgroup CPUs − 2 |
+| `sched.py` | `sim/rerun/` | CPU-budget job scheduler (threads, est, deps, lock, stagger, `prio`, `reserve`, real-load gating, stall / idle / error reporting, adopts orphans, live job-file reload, `--status`) | `--budget` = cgroup CPUs − 2, `--load` the same |
+| `durations.py` | `sim/rerun/` | Each job's measured time against its `est`, by family, for the run report; `--json` writes the per-job minutes the next job file loads as its `est` | `family()`'s name patterns |
+| `watch.py` | `sim/rerun/` | One status line plus every new `sched.log` line since the last call, with ALERT on FAIL / STALLED / ERROR / IDLE / a dead scheduler: for a session's status loop | none |
 | `check.sh` | `layout/` | Block DRC (magic full + KLayout `sky130A_mr`), antenna on a flattened copy in a fresh session, density, netgen LVS that **fails on property errors** | std-cell lib name if not hd |
 | `pex.sh` + `pexfix.py` | `layout/` | magic R+C extraction → `layout/pex/<b>.spice` with the schematic port order and the substrate tied to VSS | pin a magic version that keeps substrate C (8.3.642 did; 8.3.684 didn't) |
 | `pexswap.py` | `tools/` | Swaps schematic `.subckt`s in a deck for the extracted ones | include path relative to build/ |

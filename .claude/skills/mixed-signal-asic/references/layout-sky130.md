@@ -54,6 +54,12 @@ property errors, and PEX close to the schematic on what the block must do.
   stays clean in the tile (hvi.5 showed up only standalone).
 - Ringless nfets leave hvntm notches. Draw one hvntm rectangle over the whole NMOS row.
 - Two overlapping via arrays fail via2.1a/2.2 in KLayout but not in magic. Let shapes abut.
+- **Via arrays, not single cuts or 1 × n rows**, wherever the shape allows (a design review asked for it: a
+  single cut is the EM and yield weak point). Audit each block with a script that counts single cuts and
+  1 × n rows per cut layer, keep the baseline table in the layout notes, and rerun it after every change.
+- A high-gain chain laid out as tall, thin stages in a straight line (input caps squashed to fit, multiple
+  vias) kept the output → input coupling at 0 aF in extraction and gained 0.37 dB over a U-shaped one, with
+  the same stability edge.
 - Metal wider than 3 µm needs 0.4 µm spacing (m3.3cd / m4.5ab), and a rail merged with a supply wire
   becomes "wide".
 - MIM: unrelated met3 within ~1.3 µm of the bottom plate is an error (capm.11/2b), as is a via2 within

@@ -79,6 +79,10 @@ bit-exact digital model ─vectors─► RTL (cocotb) ─► harden ─► GL   
   lost 1.5 dB only as a pair. Block benches need the real source impedance as well as the real load.
 - Block and tile extraction gave a high-gain path 3.6 dB apart with the same magic settings. Quote
   the tile number and keep the worse one as a bound.
+- Near the noise floor, one noise realisation proves nothing (±23 % run to run at −90 dBm): run several and
+  compare means, against a transistor-level bench rather than the behavioural model.
+- Take every job estimate from the last run's measured times. Guesses were 8–88× out, and a full machine
+  doubles long runs.
 - Measure at the operating point that matters (near the spec limit, at the real trim code), not
   where it is easy.
 - "Works" doesn't prove the wiring. A reversed trim bus still converged. Use structural checks

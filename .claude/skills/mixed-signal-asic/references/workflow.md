@@ -58,6 +58,15 @@ The previous chip was built by several sessions at once (Mac, cloud pod, big Lin
   load-average limit. It adopts orphaned jobs on restart, re-reads the job file, and reruns failed jobs
   whose command changed. Long jobs reserve their threads, and the short jobs that gate long ones go
   first.
+- **Every `est` from a measurement.** After each run, `durations.py --json` writes per-job minutes into a
+  tracked file, and the next job file loads it (+10 %). Guessed estimates in one run were 8–88× out, and a
+  large wrong `est` also decides start order and thread reservations.
+- Don't fake an `est` to steer the scheduler: raising priority jobs to 20 h hid their real times and made them
+  reserve threads. Use `prio` (start order) and `reserve: False` (a waiting long job doesn't hold threads).
+- Declare the threads a job really keeps busy: one job running two ngspice at ~3 CPUs each, declared as 4,
+  pushed the load to 37–39 on 28 CPUs and slowed everything 5–10 %.
+- Before blaming a suspect for a slow run, A/B it with short timing runs (old vs fixed input, small vs big
+  netlist). A plausible bug (repeated PWL times) turned out to cost nothing; the netlist and the load did.
 - Don't edit a script while it runs. Don't run two copies of a script that rewrites a shared netlist.
 - Judge runs by their output files, not exit codes.
 - **Background agents end their turn "waiting" on a run and sit idle.** One did for 3 hours. Every brief needs:
@@ -70,6 +79,15 @@ The previous chip was built by several sessions at once (Mac, cloud pod, big Lin
   included. Past mistake: "~45 min" for three variants that took ~45 min *each*.
 - Estimate Claude's own coding work from how long similar changes took in this repo (often minutes),
   not from what a person would need.
+
+## Reports
+- Every table has units, in the column header or beside each number.
+- Every run report has a job-duration table (count, threads, min / median / max, est, ratio) and what the
+  times say for next time.
+- Check every number in a draft against its log before publishing: a 40-row report's first draft had five
+  wrong (a misread column, block counts, a supply point).
+- When a later run disproves an explanation in a report, correct the report, the TODO and the code comments
+  in one commit, and say so plainly.
 
 ## Machines
 - Laptop: design, layout, small sims. The big machine: full verification batches, started from a
