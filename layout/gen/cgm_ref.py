@@ -451,7 +451,10 @@ def build(sets=(), variant="tile"):
                     c.via2(x, y)
                     y += 600
                 x += 2000
-        tile = dict(ytop=ytop, vctrl=(vx, ytop), vbnf=(bx, ytop), m3_vdd=(nw_x0, Y["vdd_b"], W_bb, Y["vdd_t"]),
+        # the VDD strap runs on left on M3 alone (no via2: the M2 under it is not VDD) to 1 um past the vbnf riser,
+        # so a VAPWR stripe can land on it left of the macro's x range in the tile (the cell sits under the macro)
+        c.r("m3", bx + 190 + 1000, Y["vdd_b"], nw_x0 + 10, Y["vdd_t"])
+        tile = dict(ytop=ytop, vctrl=(vx, ytop), vbnf=(bx, ytop), m3_vdd=(bx + 1190, Y["vdd_b"], W_bb, Y["vdd_t"]),
                     m3_vss=(1000, Y["vss_b"], W_bb, Y["vss_t"]))
     for n, xx, yy in (("net1", mp["rx"][3], Y["ps_b"] + 190), ("net3", bterm[0], rcy),
                       ("net4", bterm[1], rcy), ("net2", g3x, g3y)):

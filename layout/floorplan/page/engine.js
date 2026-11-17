@@ -83,6 +83,12 @@
     // vco_top as its parts (the same layout, cut along its own sub-cells: vco_top.gds instance boxes). The ring and
     // lsdiv stay one unit: their a0 pins abut with no wire (a0 is 5.83 fF in all). Own frames: lower-left = 0, 0.
     for (const [n, p] of Object.entries(VCO_PARTS)) cat[n] = Object.assign({ inst: n, supply: 'VAPWR', group: 'vco', vco: 'parts', m4: [] }, p);
+    // the real cells once they exist (docs/handoff_tile_layout.md step 2: vco_core, cgm_ref, decap_ls as their own GDS)
+    for (const [n, cell] of [['vco.core', 'vco_core'], ['vco.ref', 'cgm_ref'], ['vco.decap', 'decap_ls']]) {
+      // (the real cgm_ref has one vctrl pin for both ends of its feed-through: the ring's wire takes it too)
+      if (C[cell]) Object.assign(cat[n], { w: C[cell].w, h: C[cell].h,
+        pins: cell === 'cgm_ref' && !C[cell].pins.vctrl_l ? Object.assign({ vctrl_l: C[cell].pins.vctrl }, C[cell].pins) : C[cell].pins, m4: C[cell].m4 || [], real: cell });   // (vco.core keeps its zones: same outline)
+    }
     cat.xvco.vco = 'block';
     // the debug switches: our own 3.3 V transmission gate (an estimate: nfet + pfet 03v3 and an inverter for the
     // complement, ~15 x 12 um with its guard ring; VAPWR, no level shifter since its control is 3.3 V too), or Tiny
@@ -90,17 +96,18 @@
     for (const [inst, label] of DBG) {
       cat[inst] = { inst, cell: 'dbg_tg', label, w: 15, h: 12, supply: 'VAPWR', group: 'dbg', estimate: true, m4: [],
         pins: { mod: { layer: 'Metal2', x: 7.5, y: 12 }, bus: { layer: 'Metal2', x: 7.5, y: 0 }, ctrl: { layer: 'Metal2', x: 0, y: 6 } } };
+      if (C.dbg_tg) Object.assign(cat[inst], { w: C.dbg_tg.w, h: C.dbg_tg.h, pins: C.dbg_tg.pins, estimate: false });
       if (C.tt_asw_5v0) cat[inst].alt = { asw: { cell: 'tt_asw_5v0', w: C.tt_asw_5v0.w, h: C.tt_asw_5v0.h, pins: C.tt_asw_5v0.pins, m4: C.tt_asw_5v0.m4, straps: C.tt_asw_5v0.straps, estimate: false } };
     }
     cat.xmdac = real('xmdac', 'mdac', { supply: 'VAPWR', group: 'fine', label: 'mdac' });
     cat.xvpd = real('xvpd', 'vctrl_pd', { supply: 'VAPWR', group: 'vco', label: 'vctrl_pd' });
-    cat.xbits = { inst: 'xbits', cell: 'bits_inv', w: 20.16, h: 7.84, supply: 'VAPWR', group: 'vco', label: 'code inverters', glue: true,
+    cat.xbits = { inst: 'xbits', cell: 'bits_inv', w: 19.04, h: 9.04, supply: 'VAPWR', group: 'vco', label: 'code inverters', glue: true,
       pins: { in: { layer: 'Metal3', x: 10.08, y: 7.84 }, out: { layer: 'Metal3', x: 10.08, y: 0 } }, m4: [],
-      note: 'tt_wrapper.py: five inv_1 (bitb = not ui_in) and five antenna diodes, two std-cell rows (20.16 x 7.84 um)' };
+      note: 'tile.py bits_cell(): five inv_1 (bitb = not ui_in) and five antenna diodes, two std-cell rows (19.04 x 9.04 um)' };
     cat.xtxd = real('xtxd', 'tx_drv', { supply: 'VDPWR', group: 'tx', label: 'tx_drv' });
     cat.xmac = real('xmac', 'tx_fine', { supply: 'VDPWR', group: 'dig', label: 'tx_fine (macro)', halo: 5, reshape: true,
-      pins: Object.assign({}, C.tx_fine.pins, C.tx_fine.pins.rx_en ? {} : { rx_en: MAC_RXEN },
-        Object.fromEntries(DBG.map(([, , , k]) => [`dbg_sel[${k}]`, { layer: 'Metal2', x: 100 + 4 * k, y: 0, est: true }]))),
+      pins: Object.assign({}, C.tx_fine.pins.rx_en ? {} : { rx_en: MAC_RXEN },
+        Object.fromEntries(DBG.map(([, , , k]) => [`dbg_sel[${k}]`, { layer: 'Metal2', x: 100 + 4 * k, y: 0, est: true }])), C.tx_fine.pins),
       m4: [[0, 0, C.tx_fine.w, C.tx_fine.h]], straps: C.tx_fine.straps || [] });
     // the receiver as one block, with its cells' outlines as zones (rx_top's own placement)
     const rinst = {}, seen = {};

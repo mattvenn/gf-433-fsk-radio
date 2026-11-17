@@ -27,6 +27,12 @@ GDS = {
     'rx_lobuf': 'layout/rx_lobuf.gds', 'rx_mix': 'layout/rx_mix.gds', 'rx_bb': 'layout/rx_bb.gds',
     'rx_lim': 'layout/rx_lim.gds', 'rx_decap': ('layout/rx_top.gds', 'rx_decap'),
 }
+# the tile's own cells (docs/handoff_tile_layout.md step 2): vco_top split into the ring + lsdiv unit, cgm_ref and the
+# VDD_LS decap; the debug switch. Read when their GDS exists.
+for _k, _g in (('vco_core', 'layout/vco_core.gds'), ('cgm_ref', 'layout/cgm_ref.gds'), ('decap_ls', 'layout/decap_ls.gds'),
+               ('dbg_tg', 'layout/dbg_tg.gds')):
+    if os.path.exists(os.path.join(ROOT, _g)):
+        GDS[_k] = _g
 # Tiny Tapeout's 5 V analog switch (github.com/TinyTapeout/tt-multiplexer, asw/gf180mcuD/tt_asw_5v0), for the debug
 # mux: read from a clone next to this repo (TT_MUX=<path> to point elsewhere); skipped when it is not there.
 TT_MUX = os.environ.get('TT_MUX', os.path.join(ROOT, '..', 'tt-multiplexer'))
@@ -80,8 +86,17 @@ def main():
         out['tt_asw_5v0'] = a
     # the digital macro's Metal4 power straps (the only Metal4 a tile stripe may run on over the macro)
     t = out['tx_fine']
-    t['straps'] = [{'net': 'VDD' if (r[0] % 40) < 17 else 'VSS', 'x': r[0], 'w': r[2]}
-                   for r in t['m4'] if r[3] > 200]
+    # (from its LEF: which strap is which net; the GDS boxes don't say)
+    import re
+    lef = open(os.path.join(ROOT, 'macro/tx_fine/lef/tx_fine.lef')).read()
+    t['straps'] = []
+    for net in ('VDD', 'VSS'):
+        body = re.search(rf'PIN {net}(.*?)END {net}', lef, re.S).group(1)
+        for r in re.findall(r'LAYER Metal4 ;\s*RECT (\S+) (\S+) (\S+) (\S+)', body):
+            x0, y0, x1, y1 = map(float, r)
+            if y1 - y0 > 0.6 * t['h']:
+                t['straps'].append({'net': net, 'x': round(x0, 2), 'w': round(x1 - x0, 2)})
+    t['straps'].sort(key=lambda d: d['x'])
     d = os.path.join(ROOT, 'layout', 'floorplan')
     os.makedirs(d, exist_ok=True)
     with open(os.path.join(d, 'blocks.json'), 'w') as fh:
