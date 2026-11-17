@@ -12,8 +12,8 @@
   "DIE_AREA": [
     0,
     0,
-    170,
-    260
+    250,
+    176.8
   ],
   "PL_TARGET_DENSITY_PCT": 50,
   "FP_PIN_ORDER_CFG": "dir::pin_order.cfg",

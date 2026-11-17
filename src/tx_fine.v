@@ -19,7 +19,10 @@
  *   1 MED_FRAC [7:0]  fractional word, through the SD (0)
  *   2 FSK_DEV  [11:0] FSK deviation, 4.8 fixed point in DAC LSBs (0)
  *   3 CTRL     [0] SD_EN (0)  [1] CK_EN: ck on uo[0] (0)  [2] FSK_EN (0)  [3] FSK_INV (0)
+ *              [4] RX_EN: the receiver's enable, output rx_en (0)
  *   4 EFF_INT  [9:0]  read only: the integer word the DAC sees now (after FSK and saturation)
+ *   5 DBG_SEL  [3:0]  the debug switches onto ua[0], outputs dbg_sel[3:0] (0): [0] baseband I, [1] baseband Q,
+ *              [2] the receiver bias nb, [3] vctrl. At most one should be on (firmware's job).
  *   7 ID       [11:0] read only: 12'h433
  * Effective word = {MED_INT, MED_FRAC} + DEV when FSK_EN and the synchronised fsk input (ui[7]) is 1 (0 with
  * FSK_INV), - DEV when it is 0, saturated to 0 ... 1023 + 255/256. The integer part drives the array; the
@@ -67,7 +70,9 @@ module tx_fine (
     output wire        div1024,    // f / 1024 = ck / 256 (424 kHz)
     output reg  [30:0] dac_tn,     // thermometer, active low: segment i+1 on (0) when word[9:5] > i
     output reg  [4:0]  dac_bn,     // binary word[4:0], active low
-    output reg         dac_sdn     // the SD cell (1 LSB), active low
+    output reg         dac_sdn,    // the SD cell (1 LSB), active low
+    output wire        rx_en,      // CTRL[4]: the receiver's enable
+    output wire [3:0]  dbg_sel     // DBG_SEL: the debug switches onto ua[0]
 );
     // ---------------- clk domain ----------------
     reg [2:0] s_sclk, s_cs;
@@ -89,9 +94,12 @@ module tx_fine (
     reg [9:0]  med_int;
     reg [7:0]  med_frac;
     reg [11:0] fsk_dev;
-    reg [3:0]  ctrl;
+    reg [4:0]  ctrl;
+    reg [3:0]  dbg;
     reg [9:0]  eff_int;
     wire sd_en = ctrl[0], ck_en = ctrl[1], fsk_en = ctrl[2], fsk_inv = ctrl[3];
+    assign rx_en = ctrl[4];
+    assign dbg_sel = dbg;
 
     reg [4:0]  bitcnt;
     reg [15:0] sr;
@@ -108,8 +116,9 @@ module tx_fine (
             3'd0: rdmux = {2'b00, med_int};
             3'd1: rdmux = {4'h0, med_frac};
             3'd2: rdmux = fsk_dev;
-            3'd3: rdmux = {8'h00, ctrl};
+            3'd3: rdmux = {7'h00, ctrl};
             3'd4: rdmux = {2'b00, eff_int};
+            3'd5: rdmux = {8'h00, dbg};
             3'd7: rdmux = 12'h433;
             default: rdmux = 12'h000;
         endcase
@@ -118,7 +127,7 @@ module tx_fine (
     always @(posedge clk_spi or negedge rst_n)
         if (!rst_n) begin
             bitcnt <= 0; sr <= 0; rd <= 0; rnw <= 0; addr <= 0; miso <= 0;
-            med_int <= 10'd512; med_frac <= 8'd0; fsk_dev <= 12'd0; ctrl <= 4'd0;
+            med_int <= 10'd512; med_frac <= 8'd0; fsk_dev <= 12'd0; ctrl <= 5'd0; dbg <= 4'd0;
         end else if (!sel) begin
             bitcnt <= 0; miso <= 0;
         end else begin
@@ -135,7 +144,8 @@ module tx_fine (
                         3'd0: med_int  <= {sr[8:0], s_mosi[1]};
                         3'd1: med_frac <= {sr[6:0], s_mosi[1]};
                         3'd2: fsk_dev  <= {sr[10:0], s_mosi[1]};
-                        3'd3: ctrl     <= {sr[2:0], s_mosi[1]};
+                        3'd3: ctrl     <= {sr[3:0], s_mosi[1]};
+                        3'd5: dbg      <= {sr[2:0], s_mosi[1]};
                         default: ;
                     endcase
                 end

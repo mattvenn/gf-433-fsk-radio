@@ -1,4 +1,4 @@
-> Not started.
+> Running: step 2/5 (block pin moves and dbg_tg) since 08:50, ETA 11:00. Step 1 done (tx_fine 250 x 176.8 um clean).
 
 # Handoff: move the block pins to the agreed floorplan, then lay out the tile with the real blocks (sim server)
 

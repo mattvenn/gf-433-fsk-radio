@@ -177,7 +177,7 @@ has DNL within ±0.015 LSB at all five corners, and the ΣΔ cell is 1.000 LSB.
 
 ## The digital macro (`src/tx_fine.v`, `macro/tx_fine`)
 
-**What it does.** The macro is one LibreLane-hardened block (170 × 260 µm, Metal1-4, gf180mcuD 7-track cells at
+**What it does.** The macro is one LibreLane-hardened block (250 × 176.8 µm since 2026-11-17, `docs/tile_layout.md`; 170 × 260 µm before, Metal1-4, gf180mcuD 7-track cells at
 3.3 V) with two clock domains:
 - `clk` (the TT project clock, 25 MHz recommended): the SPI register, the FSK offset, the ΣΔ and the 37 DAC control
   lines (31 thermometer segments, 5 binary bits, the ΣΔ cell), registered and active low (0 V turns a cell on).
@@ -194,8 +194,9 @@ has DNL within ±0.015 LSB at all five corners, and the ΣΔ cell is 1.000 LSB.
 | 0 | MED_INT | [9:0] | 512 | medium DAC word |
 | 1 | MED_FRAC | [7:0] | 0 | ΣΔ fraction (LSB / 256) |
 | 2 | FSK_DEV | [11:0] | 0 | FSK deviation, 4.8 fixed point in LSBs |
-| 3 | CTRL | [0] SD_EN, [1] CK_EN, [2] FSK_EN, [3] FSK_INV | 0 | |
+| 3 | CTRL | [0] SD_EN, [1] CK_EN, [2] FSK_EN, [3] FSK_INV, [4] RX_EN | 0 | RX_EN drives the receiver's enable (`rx_en`) |
 | 4 | EFF_INT | [9:0] | read only | the integer word the DAC sees (after FSK and saturation) |
+| 5 | DBG_SEL | [3:0] | 0 | the debug switches onto ua[0] (`dbg_sel[3:0]`): [0] baseband I, [1] baseband Q, [2] the receiver bias nb, [3] vctrl; at most one on (firmware's job) |
 | 7 | ID | [11:0] | 0x433 | read only |
 
 The effective word is {MED_INT, MED_FRAC} ± FSK_DEV (+ when ui[7] = 1, unless FSK_INV), saturated to 0 … 1023.996. It is
