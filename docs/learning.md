@@ -359,4 +359,10 @@ Things that were easy to forget during the review sessions. Try each one before 
    before the mixer). Only the first gain stage's noise counts in full.</details>
 9. How does the baseband's AC coupling between stages work (the PMOS gate cap, the 0.42/12 µm subthreshold PMOS on
    `vgr`, and the stacked diode-connected pair)?
-   <details><summary>Answer</summary>(To be covered in the review session.)</details>
+   <details><summary>Answer</summary>Without a DC path the next stage's gate would float. The coupling cap (a PMOS gate
+   cap, gate on the high-Z node because oxide doesn't leak) passes the signal; a subthreshold PMOS (0.42/12 µm, gate on
+   `vgr` from a replica so it tracks process) holds the gate at `vb` with about 60 MΩ, which with about 1 pF sets the
+   2.6 kHz high-pass. Pushed hard it passes only about 1 nA, so a 1 V step would take 1 pF × 1 V / 1 nA = 1 ms. In
+   parallel, two diode-connected PMOS in series, back to back (a MOS-bipolar pseudo-resistor), are over 1 GΩ for small
+   signals but conduct exponentially for steps of about 0.3 V or more in either direction, so power-up and big
+   overloads recover quickly. A 10 mV step still takes 0.5–0.9 ms: too small to wake the diodes.</details>
