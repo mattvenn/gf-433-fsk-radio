@@ -38,10 +38,13 @@ it, but there are two standard-cell rings:
   gf180mcuD inv_1 / inv_2 / inv_4 chains, taps from 3 to 161 stages; the expected range was 15–350 MHz.
   One user report of "~78 MHz", with the setting not given.
 
-**Action [open]:** measure #207 (÷N outputs) and #200 (a few `clksel` values) on a ttgf0p2 board, with
-the board's VDPWR recorded. Then simulate the same std-cell rings, extracted from their GDS if
-possible. That gives the GF **silicon / extracted-tt factor** (sky130 was ×0.866). Until we have it,
-the tuning range must cover ×0.7–×1.4 of nominal.
+**GF silicon / extracted-tt factor: about 1.0 at typical [silicon], measured 2026-11-09**
+(`docs/gf_silicon_factor.md`; sky130 was ×0.866). On the ttgf0p2 ring #614 the six inv_2 taps give
+silicon/sim 0.993–1.001, between the sf and tt corners; the 5× inv_1 ring gives 0.935, the least certain
+bench point (re-measure it). So the ×0.7–×1.4 margin carried over from sky130 is no longer needed: even at
+0.935 the extracted VCO range (193–851 MHz over the corners) becomes about 180–796 MHz and still covers
+433.92 MHz. Permanent slowdowns from loading the ring (for example the receiver's Q tap, −1.8 %) come out of
+that headroom, so keep a running total.
 
 ## Simulated GF180 3.3 V ring basics
 [sim] `sim/vco/ring_basic.py`: plain nfet/pfet_03v3 inverters, Wn/Wp = 2/5 µm, L = 0.28 µm, AD/AS from a
