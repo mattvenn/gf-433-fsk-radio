@@ -81,6 +81,12 @@ accepted: [{rule: power_out.max_len, reason: "driver off while measuring; route 
 - EM: one 1.2 µm strap with one via4 column was at 2× the limit for a ~10 mA driver. 5 µm straps with
   three via4 columns per met5 landing fixed it, together with feeding the driver's rail at several
   points (a single-point feed made a 275 % hotspot that wider routes couldn't fix).
+- **Size each strap from the current it alone carries**, not a default width. In gf-433-oscillator one Metal4 strap
+  fed the whole TX driver: 6 µm was 2.4 mA/µm, over the 85 °C limit; 8.5 µm gave 1.8 mA/µm. Do the arithmetic
+  (I / w against the 85 °C limit) for every strap that feeds one big load, and use the LEF figure as a flag.
+- **Moving straps can retune an oscillator.** New straps placed near a ring's long internal wire added 0.9 fF of
+  coupling to it (ring 0.7 % slower, and the TX enables now kick that node). After any power-grid change,
+  re-extract and recheck the total C on sensitive nets; keep straps off them or shield them.
 - Decap behind 10–20 Ω of mesh does nothing (|Z| ≈ R_VDD + R_VSS, flat to hundreds of MHz). Put it at
   the load. Characterise decaps with an AC bench: C = Im(I)/ωV, ESR = Re(1/Y).
 - Move aggressive loads onto their own supply (moving a driver to 3.3 V took a ~10 mA step off

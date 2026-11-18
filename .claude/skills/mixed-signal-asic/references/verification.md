@@ -25,6 +25,15 @@ system transient would have taken years.
   extracted-vs-model offset exactly, before any long noisy run.
 - Use short paired runs (stimulus on/off) with **shared** noise (numpy + filesource) to measure small
   differences. State the remaining coverage gap explicitly.
+- **Start AC couplings settled with `.ic` instead of simulating their settling.** A receiver whose 8.5 kHz
+  high-pass needs ~1 ms to clear the LO start-up offset would have taken ~110 h per run. A 3 µs pre-run (LO on,
+  no RF) gives each coupling node's settled voltage; the real runs preset those nodes with `.ic` (a capacitor is
+  open in the operating point, so its charge starts at the settled value). Preset only the first coupling in
+  each chain (later ones follow a settled stage), and check the pre-run's drift is negligible. A −95 dBm run then
+  took 22 µs of simulated time. Without a noise source this proves a working chain, not the sensitivity.
+- **A capacitance-only extraction cannot show supply resistance.** For a high-current driver, run a short window
+  on the R+C extraction too (shorten the run rather than skip it: 150 ns instead of 300 ns, ~3 h on 4 threads).
+  On gf-433-oscillator it gave −0.19 dB and 14 mV p-p supply ripple, both invisible in the C-only run.
 
 - **Compare a transistor-level result with a transistor-level bench, not the behavioural model.** A joined
   run's −90 dBm swing looked +70 % off against the model; the model reads ~1.3× low near the noise floor, and
