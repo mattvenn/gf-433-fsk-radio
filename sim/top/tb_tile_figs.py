@@ -92,13 +92,13 @@ def fig_tx():
     return r['p1_dbm']
 
 
-def fig_rx(name='rxh_c_tt_-70_p'):
+def fig_rx(name='rxh_c_tt_-70_p', out='rx_tt.png'):
     r = res(name)
     if not r or 'error' in r:
         return None
     pl = raw(name)
     t = pl['time']
-    m = t > T.RX_TSKIP
+    m = t > (T.cases()[name].get('tskip') or T.RX_TSKIP)
     tu = t[m] * 1e6
     fig, ax = plt.subplots(2, 1, figsize=(7, 4.2), sharex=True)
     ax[0].plot(tu, (pl['v(oi_p)'] - pl['v(oi_n)'])[m], color=C1, label='baseband I (oi_p - oi_n)')
@@ -111,7 +111,7 @@ def fig_rx(name='rxh_c_tt_-70_p'):
     ax[1].set_xlabel('time (us)')
     ax[1].legend(loc='lower center', bbox_to_anchor=(0.5, 1.0), fontsize=7, ncol=2)
     fig.tight_layout()
-    fig.savefig(IMG / 'rx_tt.png')
+    fig.savefig(IMG / out)
     plt.close(fig)
     return r
 
@@ -159,6 +159,7 @@ def fig_zac():
 
 def main():
     IMG.mkdir(parents=True, exist_ok=True)
+    fig_rx('rxs_c_tt_-95_p', 'rx_settled_tt_m95.png')
     for f in (fig_vco, fig_tx, fig_rx, fig_pwr, fig_zac):
         out = f()
         print(f.__name__, 'skipped (pending)' if out is None else 'ok', '' if out is None or isinstance(out, dict) and

@@ -146,6 +146,30 @@ def check_vco(mut=False):
         out.append(('1d codes 0 ... 31 bracket 433.92 MHz at tt',
                     f['vco_c_tt_k0_w512'] < FLO < f['vco_c_tt_k31_w512'],
                     f"{f['vco_c_tt_k0_w512'] / 1e6:.1f} ... {f['vco_c_tt_k31_w512'] / 1e6:.1f} MHz"))
+    # after d606bd4 (re-extracted): the same shift?
+    sh = []
+    okn = True
+    for c, k in (('tt', 9), ('ss', 11), ('ff', 7)):
+        t2, t1, rf = res(f'vco2_c_{c}_k{k}_w512'), res(f'vco_c_{c}_k{k}_w512'), res(f'ref_{c}_k{k}_w512')
+        if bad(t2) or bad(t1) or bad(rf):
+            okn = None if okn is not False and 'pending' in (bad(t2), bad(t1), bad(rf)) else False
+            continue
+        sh.append(f"{c} {(t2['f_a2'] / rf['f_a0'] - 1) * 100:+.2f} % (before {(t1['f_a2'] / rf['f_a0'] - 1) * 100:+.2f} %, "
+                  f"new / old {(t2['f_a2'] / t1['f_a2'] - 1) * 100:+.3f} %)")
+        okn = okn and ring_ok(t2)[0]
+    out.append(('1g after d606bd4 (re-extracted): ring sane, shift against the block', okn if not mut else None,
+                ', '.join(sh) or 'pending'))
+    sh, okn = [], True
+    for c, k in (('tt', 9), ('ss', 11), ('ff', 7)):
+        t3, t1, rf = res(f'vco3_c_{c}_k{k}_w512'), res(f'vco_c_{c}_k{k}_w512'), res(f'ref_{c}_k{k}_w512')
+        if bad(t3) or bad(t1) or bad(rf):
+            okn = None if okn is not False and 'pending' in (bad(t3), bad(t1), bad(rf)) else False
+            continue
+        sh.append(f"{c} {(t3['f_a2'] / rf['f_a0'] - 1) * 100:+.2f} % (first layout {(t1['f_a2'] / rf['f_a0'] - 1) * 100:+.2f} %, "
+                  f"new / old {(t3['f_a2'] / t1['f_a2'] - 1) * 100:+.3f} %)")
+        okn = okn and ring_ok(t3)[0]
+    out.append(('1h after fca76de (re-extracted): ring sane, shift against the block', okn if not mut else None,
+                ', '.join(sh) or 'pending'))
     fs = {c: (res(f'vco_c_sf_k{c}_w512') or {}).get('f_a2') for c in (9, 15, 23, 31)}
     if fs[31] is None:
         out.append(('1f 433.92 MHz in reach at sf (code 31, word 512 above it)', None, 'pending'))
@@ -158,7 +182,7 @@ def check_vco(mut=False):
 # ------------------------------------------------------------------------------------------------ 2 TX
 def check_tx(mut=False):
     out = []
-    names = [n for n, c in T.cases().items() if c['kind'] == 'tx' and n.startswith('tx_') and '_on' in n]
+    names = [n for n, c in T.cases().items() if c['kind'] == 'tx' and n.startswith(('tx_', 'tx3_')) and '_on' in n]
     if mut:
         names = ['mut_tx_noen', 'mut_tx_rsw10']
     for n in names:
@@ -199,7 +223,8 @@ def rx_one(r):
     if b:
         return (None if b == 'pending' else False), b
     p = []
-    win = T.RX_TSTOP - T.RX_TSKIP
+    cs = T.cases().get(r['name'].split(' ')[0], {})
+    win = cs.get('tstop', T.RX_TSTOP) - (cs.get('tskip') or T.RX_TSKIP)
     need = 0.8 * 2 * r['f_bb_expect'] * win          # rising + falling edges
     if not (r['qi_edges'] >= need and r['qq_edges'] >= need):
         p.append(f"edges {r['qi_edges']} / {r['qq_edges']} (need {need:.0f})")
@@ -217,7 +242,7 @@ def rx_one(r):
 
 def check_rx(mut=False):
     out = []
-    names = [n for n, c in T.cases().items() if c['kind'] == 'rx' and n.startswith('rxh_')]
+    names = [n for n, c in T.cases().items() if c['kind'] == 'rx' and n.startswith(('rxh_', 'rxs_'))]
     rs = {n: res(n) for n in names}
     if mut:
         names = ['mut_rx_off', 'mut_rx_swapout']

@@ -52,6 +52,12 @@ VBNF0 = dict(typical=1.232, ss=1.384, ff=1.083, sf=1.232, fs=1.232)   # .ic hint
 CN = dict(typical='tt', ss='ss', ff='ff', sf='sf', fs='fs')
 RDIP, CDIP = 73.0, 100e-12
 VBNF_RX = dict(typical=1.23479, ss=1.38751, ff=1.08568)   # vbnf means of rxpre_c_* (free vbnf, 1.2-2 us)
+# the receiver's first AC coupling per arm (rx_bb stage 1 -> stage 2): stage 1 is DC-coupled to the mixer, so the
+# mixer's DC offset when the LO starts (about -3 mV, LO self-mixing) shifts these nodes, and the 8.5 kHz high-pass
+# then takes 0.5-0.9 ms to settle (docs/rx_design.md). Found in tile_c.spice: the drains of the nfets gated by
+# bi_* / bq_* that are also the source / drain / well of an L = 10 um pfet coupling cap (2026-11-17, after d606bd4).
+S1_NODES = ('xtile.w_33972_51181#', 'xtile.w_28656_51181#', 'xtile.w_7081_50899#', 'xtile.w_1765_50899#')
+SETTLE = S1_NODES + ('bi_p', 'bi_n', 'bq_p', 'bq_n')
 VCO_TSTOP = 0.6e-6    # the tile's ring runs: f over the last 40 % (240 ns, ~90 periods)
 RX_TSTOP = 14e-6      # 20 ps steps: 1.7-2.5 s per ns on the C-only tile with one thread
 BAD = ('singular', 'timestep too small', 'transient op started', 'error', 'no such', 'unknown subckt', 'timeout')
@@ -71,7 +77,7 @@ def ports(pex):
 # ------------------------------------------------------------------------------------------------ deck
 DEF = dict(pex='c', corner='typical', temp=27, code=None, word=512, sd=0, rx_en=0, dbg=0, tx=0, supply='ideal',
            vap=VDD, vdp=VDD, tstop=1.2e-6, tstart=None, step=5e-12, ramp=None, rf=None, ua0='probe', ic='ring',
-           save=None, ac=None, kind='ring', hold=None, rsw=None, iinj=None, swap=None, rfdf=None, pre=None, mut=False)
+           save=None, ac=None, kind='ring', hold=None, settle=False, tskip=None, rsw=None, iinj=None, swap=None, rfdf=None, pre=None, mut=False)
 
 
 def supplies(c):
@@ -210,6 +216,8 @@ def deck(c):
         c['rf'] = (pr['f_a2'] + c['rfdf'][0], c['rfdf'][1])
         c['ic'] = dict(a2=0, vg=round(pr['vg'], 5)) if c['hold'] is not None else \
             dict(a2=0, vbnf=round(pr['vbnf'], 5), vg=round(pr['vg'], 5))
+        if pr.get('settle'):         # the high-pass starts settled: the stage-1 outputs and the mixer outputs at
+            c['ic'].update({k: round(v, 6) for k, v in pr['settle'].items()})   # their running means (see S1_NODES)
     hdr = (f'.include {PDK}/design.ngspice\n.lib {PDK}/sm141064.ngspice {corner}\n'
            f'.lib {PDK}/sm141064.ngspice res_typical\n.lib {PDK}/sm141064.ngspice diode_typical\n'
            f'.include {STD}\n.include {REPO}/sim/pad/tt_asw_5v0.spice\n.include {REPO}/sim/pad/pad_model_gf180.spice\n')
@@ -339,6 +347,26 @@ def cases():
         add(f'vco_c_tt_k9_w512_v{v:.2f}', 'ring', 1800, vap=v, vdp=v, tstop=VCO_TSTOP)
     for sup in ('vap', 'vdp'):
         add(f'zac_c_tt_{sup}', 'zac', 600, ac=sup, ic=None, save=f'i(vs{sup[1]})')
+    # after d606bd4 (supply straps over the TX driver's and LNA's rails), re-extracted: the VCO at tt / ss / ff
+    for corner in ('typical', 'ss', 'ff'):
+        add(f'vco2_c_{CN[corner]}_k{CODE[corner]}_w512', 'ring', 1800, corner=corner, code=CODE[corner], tstop=VCO_TSTOP)
+    # after fca76de (TX VDPWR strap 8.5 um; tile_*.spice re-extracted, commit 244147a): VCO and TX again; the rcx TX
+    # run puts the supply-grid resistance in the loop (the C-only netlist has none)
+    for corner in ('typical', 'ss', 'ff'):
+        add(f'vco3_c_{CN[corner]}_k{CODE[corner]}_w512', 'ring', 1800, corner=corner, code=CODE[corner], tstop=VCO_TSTOP)
+        add(f'tx3_c_{CN[corner]}_on', 'tx', 3000, corner=corner, tx=1, supply='pg', save=SAVE['tx'])
+    add('tx3_c_tt_on_k13', 'tx', 3000, tx=1, code=13, supply='pg', save=SAVE['tx'])
+    add('tx3_rcx_tt_on_k13', 'tx', 4 * 3600, rev=1, pex='rcx', tx=1, code=13, supply='pg', tstop=150e-9, save=SAVE['tx'],
+        threads=4)
+    # RX, settled: a pre-run with the LO running and no RF gives the stage-1 / mixer running means (SETTLE), the
+    # RX runs start from them, so the 8.5 kHz high-pass starts in its steady state
+    sv = SAVE['ring'] + ' v(lo_i) v(lo_q) v(nb) ' + ' '.join(f'v({k})' for k in SETTLE)
+    add('rxset_c_tt', 'ring', 3000, rx_en=1, step=20e-12, tstop=3e-6, hold=VBNF_RX['typical'], settle=True,
+        save=sv, threads=4)
+    for dbm in (-70, -90, -95, -100):
+        add(f'rxs_c_tt_{dbm:+d}_p', 'rx', 4 * 3600, rx_en=1, step=20e-12, tstop=22e-6, tskip=6e-6, rfdf=(200e3, dbm),
+            pre='rxset_c_tt', hold=VBNF_RX['typical'], save=SAVE['rx'] + ' ' + ' '.join(f'v({k})' for k in S1_NODES),
+            threads=4)
     # mutations: the checks must fail on these
     add('mut_dbg_swap01', 'dbg', 1800, rx_en=1, ic=None, swap=('dbg_sel[0]', 'dbg_sel[1]'), mut=True)
     add('mut_dbg_c_rxoff', 'dbg', 1800, rx_en=0, ic=None, mut=True)                     # receiver bias off
@@ -481,7 +509,14 @@ def analyse_with(name, **over):
 def an_ring(pl, c):
     t = pl['time']
     m = t >= 0.6 * t[-1]
-    return ring_meas(t[m], {k: v[m] for k, v in pl.items()})
+    r = ring_meas(t[m], {k: v[m] for k, v in pl.items()})
+    if c.get('settle'):              # running means over the last 1 us (rxset: presets for the settled RX runs)
+        m1 = t >= t[-1] - 1e-6
+        r['settle'] = {k: mean(t[m1], pl[f'v({k})'][m1]) for k in SETTLE}
+        r['settle_t0'] = {k: float(pl[f'v({k})'][0]) for k in SETTLE}
+        m2 = (t >= t[-1] - 2e-6) & (t < t[-1] - 1e-6)
+        r['settle_drift_mv'] = {k: (r['settle'][k] - mean(t[m2], pl[f'v({k})'][m2])) * 1e3 for k in SETTLE}
+    return r
 
 
 def an_tx(pl, c):
@@ -522,7 +557,7 @@ RX_TSKIP = 5e-6
 
 def an_rx(pl, c):
     t = pl['time']
-    tskip = RX_TSKIP
+    tskip = c.get('tskip') or RX_TSKIP
     m = t >= tskip
     p = {k: v[m] for k, v in pl.items()}
     tm = t[m]
@@ -568,6 +603,9 @@ def an_rx(pl, c):
     r['q_iq_phase'] = float(np.median(ph)) if ph else float('nan')
     # the baseband's DC offset over the window (the 8.5 kHz high-pass still settling from the LO's start)
     r['oi_mean'], r['oq_mean'] = mean(tm, oi[m]), mean(tm, oq[m])
+    h = (tm[0] + tm[-1]) / 2                         # drift of the baseband DC across the window
+    r['oi_mean_1'], r['oi_mean_2'] = mean(tm[tm < h], oi[m][tm < h]), mean(tm[tm >= h], oi[m][tm >= h])
+    r['tskip'] = tskip
     r['mix_i_mean_mv'] = mean(tm, bi[m]) * 1e3
     r['qi_min'], r['qi_max'] = float(qi.min()), float(qi.max())
     # LO: I / Q phase at the mixers (deg of the LO period), duty
