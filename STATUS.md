@@ -65,7 +65,7 @@ about 1 ms after TX before trusting `q_i` / `q_q` (`docs/bringup.md`, firmware r
 SoftSPI; the demo board's hardware SPI1 on GPIO25-28 has the order CSn, SCK, TX, RX, so only MISO matches
 (`docs/bringup.md`). Check `uio[1]` toggles first: it read held low on the ttgf0p2 carrier.
 
-**Decisions 2026-11-10 (Matt):** no board components except the dipoles, so all fine tuning is on chip. TX plan is option C: a ~10-bit medium current DAC (~50 kHz LSB, ±25 MHz, from the constant-gm reference) with sigma-delta dither below one LSB, an SPI register from the RP2350, FSK as a digital offset (±100 kHz, 2-FSK), and a ÷16/÷64/÷1024 divider to `uo_out` (GF pins are fine to ~50 MHz, so `ck` at 108 MHz is not; gate it, since 4 × ck = 433.92 MHz). vctrl is tied inside the chip, with ua[0] kept as a debug override. The RP2350 counts and servos (freezing during packets). The RX gets its own dipole on a second pair of `ua` pins (6 of 6 used); zero-IF vs low-IF is deferred. Focus on the TX first. **Option C (fine tuning and FSK, item 3) is complete (2026-11-12); the TX is not: the driver's harmonics are open (item 5, `docs/handoff_tx_harmonics.md` on branch `tx-harmonics`).**
+**Decisions 2026-11-10 (Matt):** no board components except the dipoles, so all fine tuning is on chip. TX plan is option C: a ~10-bit medium current DAC (~50 kHz LSB, ±25 MHz, from the constant-gm reference) with sigma-delta dither below one LSB, an SPI register from the RP2350, FSK as a digital offset (±100 kHz, 2-FSK), and a ÷16/÷64/÷1024 divider to `uo_out` (GF pins are fine to ~50 MHz, so `ck` at 108 MHz is not; gate it, since 4 × ck = 433.92 MHz). vctrl is tied inside the chip, with ua[0] kept as a debug override. The RP2350 counts and servos (freezing during packets). The RX gets its own dipole on a second pair of `ua` pins (6 of 6 used); zero-IF vs low-IF is deferred. Focus on the TX first. **2026-11-12 (Matt): the exception is a board low-pass filter for the TX harmonics** (item 5). **Option C (fine tuning and FSK, item 3) is complete (2026-11-12). Harmonics: board filter (item 5); the proposed 20-22 µm final stage is not in the tile layout yet.**
 
 1. **Bench 2026-11-09: done** (results at the top of `bench/lab_todo.md`). **`docs/handoff_gf_silicon_factor.md` is
    running on the sim server (started 2026-11-09 evening)**: `git pull` for its status / DONE / FAILED files, then compare
@@ -132,12 +132,14 @@ SoftSPI; the demo board's hardware SPI1 on GPIO25-28 has the order CSn, SCK, TX,
    - On the extracted vco_top: the tap does not disturb the ring. Behind TT's power switch (tt_pg_3v3_hp_2, Ron
      1.2–1.5 ohm, common to the whole tile) keying the driver on moves the ring +0.03…+0.05 % (+110…+210 kHz), ripple
      12–15 mV, no jitter change. LS duty passes through (out_p 54.0 % at ff). 3rd harmonic at the dipole -14 dBc.
-   - **To check: on-chip harmonic reduction** (the 3rd is -14 dBc at the dipole; the ETSI spurious limit at 1.3 GHz
-     is about -36 dBc at our power; the pad path filters only ~2.6 dB). Block sims on the driver bench:
-     - slower, controlled edges (rise time ~T/3 = 0.77 ns nulls the 3rd; ~1.7 dB of fundamental; the null moves with
-       corner);
-     - two ring taps 72 deg apart summed in a split final stage (~8 dB off the 3rd, ~1 dB of fundamental; tracks
-       process); together perhaps -30…-35 dBc.
+   - **Harmonics: fixed with a board low-pass filter (Matt, 2026-11-12)**, after option 1 (on-chip slew control) failed
+     (`docs/tx_harmonics.md`, merged from PR #2). A balanced 5th-order pi low-pass between the pins and the
+     dipole, standard values per line 4.7 pF / 18 nH / 15 pF / 18 nH / 4.7 pF (caps to ground, so the common mode is
+     filtered too; `sim/tx/board_lpf.py`): H3 -55.7…-60.1 dBc, H5 below -77 dBc at 5 corners x 15/60 ohm x n_off 0/3
+     (today -14 / -23; pass line -36). The filter transforms the load and raises the power, so the pad current would
+     reach 13.8 mA rms at ff / 15 ohm with the 40 um final stage. **Proposed chip change: final stage 40 -> 20-22 um**
+     (pad current <= 9.3 / 9.9 mA, fundamental +2.0…+6.6 / +2.5…+7.2 dBm, supply 6.5-10.5 mA). Not done yet. Short
+     experiments can run without the filter (harmonics as today).
    - In the 2x2 tile above lsdiv; wrapper LVS passes (5 mutations caught), KLayout DRC clean except fill rules.
    - CI on 6503f1c: TT precheck, LVS and docs workflows pass.
    - **ua pin limit is 10 mA rms** (tnt, 2026-11-11): each arm carries 7.8-8.1 mA rms at tt / 40 Ω, but
