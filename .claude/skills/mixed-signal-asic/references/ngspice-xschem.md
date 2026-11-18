@@ -36,6 +36,10 @@ ngspice-44.2 (`2025.07`) raises a bogus `Pclm ... is not positive` fatal error.
 - **A failed `op` silently becomes a "transient op"**: unsettled slow nodes, charging currents in the
   supply, no error. Grep for `Transient op started` / `singular matrix`. In extracted netlists the
   usual cause is nets with only parasitic C (unconnected stubs): tie them down through 1 GΩ.
+- **An `op` can also converge with KCL unbalanced at one node, and no warning** (53k-node tile: a NAND output at
+  1.78125 V with 4 µA flowing nowhere, the supply current 10× off). Signs: the node on a 1/512 V grid, far from
+  its neighbours, and tighter tolerances giving another impossible answer. Diff all node voltages against a
+  good run (another temperature, the C-only netlist), then `.nodeset` the node.
 - "timestep too small" at the very end: check how many points were written before you throw the run
   away.
 
@@ -49,6 +53,12 @@ ngspice-44.2 (`2025.07`) raises a bogus `Pclm ... is not positive` fatal error.
 - Parallel runs that write a fixed netlist name race each other. Use per-run names, staggered starts,
   or a lock (`sched.py` has both).
 - ngspice 47 exits 1 after a d_cosim run even when it completed. Judge by the raw file and the log.
+- **d_cosim can lose a slow analog edge at an `adc_bridge`.** A comparator lingering mid-swing at a clock tick
+  left the RTL reading 0 for ~2.3 ms while the node sat at 1.8 V. Use one a2d threshold (`in_low = in_high`,
+  e.g. 0.9 V) and a d2a probe on the RTL's input, and check that probe against the analog node.
+- **Count warnings in every log, not just errors.** A PWL file written with times at `.4e` repeated a third of
+  its points from 1 µs on (50 ps steps rounding together): 80,000 "non-increasing PWL time points" warnings per
+  run for weeks, and a wrong noise waveform. Write PWL times with enough digits (`.6e` here).
 
 ## xschem
 - Headless netlist: `xschem -n -s -q -o build tb.sch`. **Grep the netlist for `IS MISSING`**, since
@@ -94,6 +104,9 @@ ngspice-44.2 (`2025.07`) raises a bogus `Pclm ... is not positive` fatal error.
 - `if $var = string` doesn't work.
 - Join echo lines with `echo "$a" NOEOL` + `sed -z "s/ NOEOL\n/ /g"`.
 - Switch AC sources inside one run: `alter @vin[acmag]=0`, `alter @vcm[acmag]=1`.
+- **`trnoise` can't be seeded.** Neither `set rndseed` nor `.options seed` (in the deck or in `.control`)
+  makes it repeat (ngspice 46/47, retested 2026-11-17). Each run is a new realisation; for repeatable noise use
+  numpy + filesource. Read the project's own notes before trusting a seed.
 - `trnoise` with clocked sources gives "timestep too small" when edges land on the noise grid. Offset
   every edge by NT/2. Use `tanh(k*x)` rather than a hard ternary in B-sources.
 - `.options interp` with `tran tstep ... tmax` saves only on the tstep grid: 400 µs gave a 2 MB raw

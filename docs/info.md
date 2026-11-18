@@ -12,11 +12,12 @@ The oscillator is a current-fed ring: five plain inverters sit between VDD and a
 
 - **Coarse tuning:** a 5-bit binary-weighted DAC (ui_in[4:0]) on top of a fixed base current. Each step is about
   4 % of the frequency.
-- **Fine tuning:** one extra DAC leg driven by the analog pin vctrl (ua[0]). Over 0–3.3 V it covers more than one
-  coarse step, so every frequency in the range can be reached, at every process corner.
+- **Fine tuning:** one extra DAC leg driven by vctrl, set on chip by the tx_fine macro (a 10-bit DAC with a
+  sigma-delta modulator, written over SPI). Over 0–3.3 V it covers more than one coarse step, so every frequency in
+  the range can be reached, at every process corner. For bench work, vctrl can also be driven from ua[0] through the
+  debug multiplexer (DBG_SEL = 3).
 - **Bias:** a constant-gm (beta-multiplier) reference with an n-well + n+ resistor, filtered by a 1 MΩ / 20 pF RC
-  low-pass before it reaches the DAC. The filter keeps the reference noise off the ring; its output is vbnf, and the
-  unfiltered bias vbn is brought out on ua[1] as a monitor.
+  low-pass before it reaches the DAC. The filter keeps the reference noise off the ring; its output is vbnf.
 - **Output:** the ring swings between vg and VDD, not rail to rail. An AC-coupled level shifter (2 fF metal-finger
   coupling capacitor and three inverters, with feedback that holds the duty cycle at about 50 %) restores full
   swing, and a true single-phase clock (TSPC) divide-by-4 brings it to about 108 MHz on uo_out[0].
@@ -45,20 +46,22 @@ Made with [Claude Code](https://claude.com/claude-code).
 ## How to test
 
 1. Power the board and select this project.
-2. Set vctrl (ua[0]) to about 2 V, from a DAC or a potentiometer between 0 and 3.3 V.
+2. Set vctrl to about 2 V: write the fine-tuning word over SPI, or select vctrl on the debug multiplexer
+   (DBG_SEL = 3) and drive ua[0] from a DAC or a potentiometer between 0 and 3.3 V.
 3. Set the 5-bit code on ui_in[4:0] (ui_in[0] is the least significant bit) and measure the frequency on uo_out[0].
    It is the oscillator frequency divided by 4: 433.92 MHz gives 108.48 MHz. The RP2350 can count it with a PIO
    state machine.
 4. To tune to a target, binary-search the code with vctrl at mid-range, then adjust vctrl for the fine setting.
    Around 433.92 MHz, ±50 kHz of FSK (frequency-shift keying) needs about ±1–2 mV of vctrl.
-5. ua[1] shows the bias voltage vbn (about 1.1–1.4 V depending on the process corner); load it only with a
-   high-impedance probe.
+5. ua[0] reads one internal node at a time through the debug multiplexer (DBG_SEL: RX baseband I, RX baseband Q,
+   the RX bias, vctrl); load it only with a high-impedance probe. ua[1] is tied to the on-chip ground (VGND): use it
+   as the reference when measuring ua[0], and don't drive it.
 
 The silicon frequency may differ from simulation by tens of percent; the range is wide enough that a code near
 433.92 MHz should still exist, but expect the code to differ from the table above.
 
 ## External hardware
 
-- A voltage source for vctrl (ua[0]): the RP2350 with a filtered PWM (pulse-width modulation) output, or a
-  potentiometer.
+- Optional, for bench tuning without the on-chip DAC: a voltage source for vctrl on ua[0] (debug multiplexer
+  DBG_SEL = 3), the RP2350 with a filtered PWM (pulse-width modulation) output, or a potentiometer.
 - A frequency counter or the RP2350 to measure uo_out[0].

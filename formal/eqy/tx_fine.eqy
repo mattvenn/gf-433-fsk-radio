@@ -1,0 +1,11 @@
+# Logic equivalence: tx_fine RTL (gold) vs the shipped netlist (gate). Template: run.sh appends the generated
+# [match tx_fine] section (match.py). docs/verification_digital.md, "Equivalence (eqy)".
+[gold]
+script in/gold.ys
+
+[gate]
+script in/gate.ys
+
+[strategy sat]
+use sat
+depth 5

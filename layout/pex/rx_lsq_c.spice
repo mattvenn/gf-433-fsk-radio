@@ -1,0 +1,119 @@
+* rx_lsq: magic R+C extraction of layout/rx_lsq.gds (layout/gen/pex.sh)
+* extracted 2026-11-16T12:08:59+01:00 with magic 8.3.642, mode c, from rx_lsq.gds
+.subckt rx_lsq VDD VSS aq qenb lsq
+X0 vq qenb VDD VDD pfet_03v3 ad=1.6675p pd=4.335u as=0.9338p ps=3.895u w=3.335u l=0.28u
+X1 lf lsq VSS ppolyf_u_1k r_width=1u r_length=0.15912m
+X2 D1x D1qb VSS VSS nfet_03v3 ad=1p pd=4u as=0.28p ps=1.56u w=1u l=0.28u
+X3 a_3350_160# D1y VSS VSS nfet_03v3 ad=0.28p pd=1.56u as=0.45p ps=2.9u w=1u l=0.28u
+X4 VSS vq VSS VSS nfet_03v3 ad=2.2932p pd=8.75u as=33.5804p ps=0.1541m w=8.19u l=10u
+X5 vq lg lo1 vq pfet_03v3 ad=0.225p pd=1.9u as=1.1p ps=5.4u w=0.5u l=0.28u
+X6 lo2 lo1 VSS VSS nfet_03v3 ad=0.6p pd=3.2u as=0.27p ps=2.1u w=0.6u l=0.28u
+X7 VSS lg lo1 VSS nfet_03v3 ad=0.1686p pd=1.74u as=0.5448p ps=5.16u w=0.22u l=0.28u
+X8 VDD qenb vq VDD pfet_03v3 ad=1.50075p pd=7.57u as=1.6675p ps=4.335u w=3.335u l=0.28u
+X9 lsq lo2 vq vq pfet_03v3 ad=3p pd=8u as=1.35p ps=6.9u w=3u l=0.28u
+X10 lsq qenb VSS VSS nfet_03v3 ad=0.42p pd=2.84u as=0.189p ps=1.74u w=0.42u l=0.28u
+X11 D1qb D1y vq vq pfet_03v3 ad=2p pd=6u as=0.9p ps=4.9u w=2u l=0.28u
+X12 a_3668_1223# D1qb vq vq pfet_03v3 ad=0.56p pd=2.56u as=0.56p ps=2.56u w=2u l=0.28u
+X13 vq D1qb q1 vq pfet_03v3 ad=0.675p pd=3.9u as=1.5p ps=5u w=1.5u l=0.28u
+X14 VDD qenb vq VDD pfet_03v3 ad=0.9338p pd=3.895u as=1.6675p ps=4.335u w=3.335u l=0.28u
+X15 vq lsq D1y vq pfet_03v3 ad=0.56p pd=2.56u as=2p ps=6u w=2u l=0.28u
+X16 VSS lsq a_4094_160# VSS nfet_03v3 ad=0.28p pd=1.56u as=0.28p ps=1.56u w=1u l=0.28u
+X17 vq qenb VDD VDD pfet_03v3 ad=1.6675p pd=4.335u as=0.9338p ps=3.895u w=3.335u l=0.28u
+X18 D1x lsq a_3668_1223# vq pfet_03v3 ad=2p pd=6u as=0.56p ps=2.56u w=2u l=0.28u
+X19 vq qenb VDD VDD pfet_03v3 ad=1.6675p pd=4.335u as=1.50075p ps=7.57u w=3.335u l=0.28u
+X20 lf VSS lg vq pfet_03v3 ad=0.2808p pd=2.76u as=0.2808p ps=2.76u w=0.22u l=2u
+X21 tt lsq VSS VSS nfet_03v3 ad=0.42p pd=2.84u as=0.189p ps=1.74u w=0.42u l=0.28u
+X22 a_4094_160# D1x D1y VSS nfet_03v3 ad=0.28p pd=1.56u as=1p ps=4u w=1u l=0.28u
+X23 VSS vq VSS VSS nfet_03v3 ad=3.6855p pd=17.28u as=0 ps=0 w=8.19u l=10u
+X24 VSS lf VSS VSS nfet_03v3 ad=7.2p pd=32.9u as=0 ps=0 w=16u l=16u
+X25 tt lsq vq vq pfet_03v3 ad=1.05p pd=4.1u as=0.4725p ps=3u w=1.05u l=0.28u
+X26 VSS D1qb q1 VSS nfet_03v3 ad=0.27p pd=2.1u as=0.6p ps=3.2u w=0.6u l=0.28u
+X27 lsq lo2 VSS VSS nfet_03v3 ad=1.2p pd=4.4u as=0.54p ps=3.3u w=1.2u l=0.28u
+X28 VDD qenb vq VDD pfet_03v3 ad=0.9338p pd=3.895u as=1.6675p ps=4.335u w=3.335u l=0.28u
+X29 lo2 lo1 vq vq pfet_03v3 ad=1.5p pd=5u as=0.675p ps=3.9u w=1.5u l=0.28u
+X30 VSS vq VSS VSS nfet_03v3 ad=2.2932p pd=8.75u as=0 ps=0 w=8.19u l=10u
+X31 D1qb lsq a_3350_160# VSS nfet_03v3 ad=1p pd=4u as=0.28p ps=1.56u w=1u l=0.28u
+C0 lo1 lo2 1.04229f
+C1 lsq qenb 0.29513f
+C2 D1qb lo1 0
+C3 lf a_3668_1223# 0
+C4 lf lo2 0
+C5 D1x q1 0
+C6 D1qb lf 0.00156f
+C7 D1y lo1 0
+C8 aq lg 1.98512f
+C9 VDD vq 2.02528f
+C10 D1y lf 0
+C11 qenb lf 0.30376f
+C12 aq lf 0.00402f
+C13 D1qb q1 0.74328f
+C14 D1qb a_3350_160# 0.07726f
+C15 D1x vq 0.26831f
+C16 D1y q1 0.00721f
+C17 D1y a_3350_160# 0.01134f
+C18 lsq lg 0
+C19 lsq lo1 0.12133f
+C20 vq a_4094_160# 0.00409f
+C21 vq a_3668_1223# 0.23085f
+C22 vq lo2 0.39275f
+C23 lsq lf 0.33461f
+C24 D1qb vq 0.59062f
+C25 lo1 lg 0.20859f
+C26 D1x a_4094_160# 0.00911f
+C27 vq tt 0.16377f
+C28 D1y vq 0.51666f
+C29 lg lf 0.22692f
+C30 D1x a_3668_1223# 0.14135f
+C31 VDD qenb 1.6011f
+C32 D1x lo2 0.08987f
+C33 D1x D1qb 0.70987f
+C34 lo1 lf 0.00642f
+C35 qenb vq 3.60286f
+C36 D1x D1y 0.88042f
+C37 vq aq 0.03342f
+C38 lsq q1 0.04689f
+C39 lsq a_3350_160# 0.01386f
+C40 D1qb a_4094_160# 0.0061f
+C41 D1qb a_3668_1223# 0.01794f
+C42 D1qb lo2 0.02485f
+C43 D1y a_4094_160# 0.07136f
+C44 D1y a_3668_1223# 0.00509f
+C45 D1y lo2 0.003f
+C46 lsq VDD 0.49096f
+C47 D1qb D1y 0.74379f
+C48 q1 lf 0
+C49 lsq vq 2.04665f
+C50 vq lg 0.33992f
+C51 qenb tt 0.08632f
+C52 lsq D1x 0.65684f
+C53 lo1 vq 0.28227f
+C54 vq lf 3.24477f
+C55 lsq a_4094_160# 0.01348f
+C56 lsq a_3668_1223# 0.02603f
+C57 D1x lo1 0
+C58 lsq lo2 0.96379f
+C59 lsq D1qb 1.76399f
+C60 lsq tt 0.83329f
+C61 lg lo2 0.00588f
+C62 lsq D1y 1.40306f
+C63 vq q1 0.21914f
+C64 lo1 a_4094_160# 0
+C65 vq a_3350_160# 0.00198f
+C66 aq VSS 0.59049f
+C67 lsq VSS 5.26999f
+C68 qenb VSS 3.03731f
+C69 VDD VSS 19.9319f
+C70 a_4094_160# VSS 0.14599f
+C71 a_3350_160# VSS 0.14869f
+C72 lg VSS 1.43835f
+C73 lo1 VSS 0.65272f
+C74 D1x VSS 0.56776f
+C75 a_3668_1223# VSS 0.01195f
+C76 tt VSS 0.30547f
+C77 q1 VSS 0.35733f
+C78 D1y VSS 0.5322f
+C79 D1qb VSS 1.02159f
+C80 lo2 VSS 0.69051f
+C81 lf VSS 7.21235f
+C82 vq VSS 42.4662f
+.ends

@@ -1,0 +1,12 @@
+# eqy gold: the RTL, read as LibreLane synthesis reads it (Yosys defines SYNTHESIS, so tx_cg instantiates the
+# library's icgtp_1, black-boxed on both sides: icg_bb.v). Paths relative to build/eqy.
+read_verilog -lib in/icg_bb.v
+read_verilog -sv rtl/tx_fine.v
+hierarchy -top tx_fine
+flatten
+prep -top tx_fine
+memory_map
+opt_clean
+# the netlist names each bit of an internal bus as its own net (\med_int[3]): split the RTL's internal vectors
+# the same way so the names match (ports stay vectors on both sides)
+splitnets -format []

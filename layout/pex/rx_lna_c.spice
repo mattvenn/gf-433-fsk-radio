@@ -1,0 +1,225 @@
+* rx_lna: magic R+C extraction of layout/rx_lna.gds (layout/gen/pex.sh)
+* extracted 2026-11-16T12:08:55+01:00 with magic 8.3.642, mode c, from rx_lna.gds
+.subckt rx_lna VDD VSS inp inn oip oin oqp oqn nb enb
+X0 inp vcm VSS ppolyf_u_1k r_width=1u r_length=20u
+X1 oqp outn x2q_tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X2 x2q_tail nb VSS VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.5u
+X3 outp inn tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X4 tail inn outp VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X5 tail inp outn VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X6 outn inp tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X7 VSS nb tail VSS nfet_03v3 ad=2.8p pd=10.56u as=5p ps=11u w=10u l=0.5u
+X8 x2q_tail nb VSS VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.5u
+X9 VSS nb x2q_tail VSS nfet_03v3 ad=10p pd=22u as=5p ps=11u w=10u l=0.5u
+X10 VSS nb tail VSS nfet_03v3 ad=2.8p pd=10.56u as=5p ps=11u w=10u l=0.5u
+X11 outn inp tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X12 tail inp outn VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X13 VSS vcm VSS VSS nfet_03v3 ad=4.4235p pd=20.56u as=0.19575n ps=0.63694m w=9.83u l=10u
+X14 VSS nb x2q_tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.5u
+X15 tail inp outn VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X16 tail inn outp VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X17 tail inn outp VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X18 VSS nb tail VSS nfet_03v3 ad=2.8p pd=10.56u as=5p ps=11u w=10u l=0.5u
+X19 x2i_tail outp oin VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X20 tail nb VSS VSS nfet_03v3 ad=5p pd=11u as=2.8p ps=10.56u w=10u l=0.5u
+X21 VSS nb tail VSS nfet_03v3 ad=2.8p pd=10.56u as=5p ps=11u w=10u l=0.5u
+X22 outp inn tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X23 x2q_tail outn oqp VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X24 tail nb VSS VSS nfet_03v3 ad=5p pd=11u as=2.8p ps=10.56u w=10u l=0.5u
+X25 x2i_tail nb VSS VSS nfet_03v3 ad=5p pd=11u as=2.8p ps=10.56u w=10u l=0.5u
+X26 outn inp tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X27 VSS vcm VSS VSS nfet_03v3 ad=2.7524p pd=10.39u as=0 ps=0 w=9.83u l=10u
+X28 VSS nb x2i_tail VSS nfet_03v3 ad=2.8p pd=10.56u as=5p ps=11u w=10u l=0.5u
+X29 x2q_tail outn oqp VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X30 outp inn tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X31 VSS vcm VSS VSS nfet_03v3 ad=2.7524p pd=10.39u as=0 ps=0 w=9.83u l=10u
+X32 outp VDD VSS ppolyf_u r_width=4u r_length=9.14u
+X33 oip outn x2i_tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X34 oin outp x2i_tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X35 VSS nb x2i_tail VSS nfet_03v3 ad=4.5p pd=20.9u as=5p ps=11u w=10u l=0.5u
+X36 outn inp tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X37 oqn VDD VSS ppolyf_u r_width=2u r_length=9.14u
+X38 tail nb VSS VSS nfet_03v3 ad=5p pd=11u as=2.8p ps=10.56u w=10u l=0.5u
+X39 outn inp tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X40 tail inn outp VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X41 outp inn tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X42 outp inn tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X43 x2q_tail outn oqp VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X44 tail nb VSS VSS nfet_03v3 ad=5p pd=11u as=2.8p ps=10.56u w=10u l=0.5u
+X45 outn inp tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X46 tail inn outp VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X47 vt enb VDD VDD pfet_03v3 ad=2p pd=6u as=2p ps=6u w=2u l=0.28u
+X48 VSS nb tail VSS nfet_03v3 ad=2.8p pd=10.56u as=5p ps=11u w=10u l=0.5u
+X49 outp inn tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X50 vt vcm VSS ppolyf_u_1k r_width=1u r_length=40u
+X51 tail inp outn VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X52 tail inp outn VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X53 x2i_tail outn oip VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X54 tail inn outp VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X55 tail inn outp VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X56 oqn outp x2q_tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X57 x2i_tail outn oip VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X58 tail nb VSS VSS nfet_03v3 ad=5p pd=11u as=2.8p ps=10.56u w=10u l=0.5u
+X59 VSS nb tail VSS nfet_03v3 ad=2.8p pd=10.56u as=5p ps=11u w=10u l=0.5u
+X60 oqn outp x2q_tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X61 x2i_tail outp oin VSS nfet_03v3 ad=5p pd=11u as=10p ps=22u w=10u l=0.28u
+X62 outn VDD VSS ppolyf_u r_width=4u r_length=9.14u
+X63 tail nb VSS VSS nfet_03v3 ad=5p pd=11u as=2.8p ps=10.56u w=10u l=0.5u
+X64 tail inp outn VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X65 tail inn outp VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X66 tail inp outn VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X67 oip outn x2i_tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X68 tail inn outp VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X69 outn inp tail VSS nfet_03v3 ad=10p pd=22u as=5p ps=11u w=10u l=0.28u
+X70 VSS nb tail VSS nfet_03v3 ad=2.8p pd=10.56u as=5p ps=11u w=10u l=0.5u
+X71 tail nb VSS VSS nfet_03v3 ad=5p pd=11u as=2.8p ps=10.56u w=10u l=0.5u
+X72 outp inn tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X73 vcm VSS VSS ppolyf_u_1k r_width=1u r_length=30u
+X74 outp inn tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X75 x2i_tail nb VSS VSS nfet_03v3 ad=5p pd=11u as=2.8p ps=10.56u w=10u l=0.5u
+X76 oip VDD VSS ppolyf_u r_width=2u r_length=9.14u
+X77 oqn outp x2q_tail VSS nfet_03v3 ad=10p pd=22u as=5p ps=11u w=10u l=0.28u
+X78 outp inn tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X79 tail nb VSS VSS nfet_03v3 ad=5p pd=11u as=4.5p ps=20.9u w=10u l=0.5u
+X80 outn inp tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X81 outn inp tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X82 oqp VDD VSS ppolyf_u r_width=2u r_length=9.14u
+X83 VSS nb x2i_tail VSS nfet_03v3 ad=2.8p pd=10.56u as=5p ps=11u w=10u l=0.5u
+X84 oin outp x2i_tail VSS nfet_03v3 ad=10p pd=22u as=5p ps=11u w=10u l=0.28u
+X85 x2i_tail nb VSS VSS nfet_03v3 ad=5p pd=11u as=2.8p ps=10.56u w=10u l=0.5u
+X86 x2q_tail outp oqn VSS nfet_03v3 ad=5p pd=11u as=10p ps=22u w=10u l=0.28u
+X87 inn vcm VSS ppolyf_u_1k r_width=1u r_length=20u
+X88 oin VDD VSS ppolyf_u r_width=2u r_length=9.14u
+X89 outp inn tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X90 x2i_tail outn oip VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X91 tail nb VSS VSS nfet_03v3 ad=5p pd=11u as=2.8p ps=10.56u w=10u l=0.5u
+X92 outn inp tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X93 VSS nb tail VSS nfet_03v3 ad=2.8p pd=10.56u as=5p ps=11u w=10u l=0.5u
+X94 tail nb VSS VSS nfet_03v3 ad=5p pd=11u as=2.8p ps=10.56u w=10u l=0.5u
+X95 VSS nb tail VSS nfet_03v3 ad=2.8p pd=10.56u as=5p ps=11u w=10u l=0.5u
+X96 tail inn outp VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X97 tail inp outn VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X98 tail inp outn VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X99 oqp outn x2q_tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X100 x2q_tail outp oqn VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X101 tail inn outp VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X102 x2q_tail nb VSS VSS nfet_03v3 ad=5p pd=11u as=10p ps=22u w=10u l=0.5u
+X103 VSS nb tail VSS nfet_03v3 ad=2.8p pd=10.56u as=5p ps=11u w=10u l=0.5u
+X104 x2i_tail outp oin VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X105 oqp outn x2q_tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X106 VSS vcm VSS VSS nfet_03v3 ad=4.915p pd=10.83u as=0 ps=0 w=9.83u l=10u
+X107 tail nb VSS VSS nfet_03v3 ad=5p pd=11u as=2.8p ps=10.56u w=10u l=0.5u
+X108 x2q_tail outp oqn VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X109 outp inn tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X110 tail inp outn VSS nfet_03v3 ad=5p pd=11u as=10p ps=22u w=10u l=0.28u
+X111 VSS nb tail VSS nfet_03v3 ad=2.8p pd=10.56u as=5p ps=11u w=10u l=0.5u
+X112 outp inn tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X113 x2i_tail nb VSS VSS nfet_03v3 ad=5p pd=11u as=4.5p ps=20.9u w=10u l=0.5u
+X114 VSS nb x2q_tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.5u
+X115 VSS nb tail VSS nfet_03v3 ad=4.5p pd=20.9u as=5p ps=11u w=10u l=0.5u
+X116 tail nb VSS VSS nfet_03v3 ad=5p pd=11u as=2.8p ps=10.56u w=10u l=0.5u
+X117 outn inp tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X118 outn inp tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X119 VSS nb x2i_tail VSS nfet_03v3 ad=2.8p pd=10.56u as=5p ps=11u w=10u l=0.5u
+X120 oip outn x2i_tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X121 tail inp outn VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X122 VSS nb x2q_tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.5u
+X123 VSS vcm VSS VSS nfet_03v3 ad=9.83p pd=21.66u as=0 ps=0 w=9.83u l=10u
+X124 x2q_tail nb VSS VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.5u
+X125 oin outp x2i_tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X126 tail inn outp VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X127 tail inp outn VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+C0 inp outn 18.7991f
+C1 nb vcm 5.49697f
+C2 oip outp 0.20541f
+C3 x2q_tail oqn 3.85225f
+C4 tail outn 14.68f
+C5 oin VDD 3.9316f
+C6 tail inp 7.17035f
+C7 inn VDD 0.23366f
+C8 VDD vt 0.26026f
+C9 oip nb 0.74345f
+C10 oip vcm 0.18755f
+C11 oqn oqp 0.16891f
+C12 outp oin 2.04127f
+C13 x2q_tail VDD 0.4423f
+C14 outp inn 10.251f
+C15 enb vt 0.39792f
+C16 outn oqn 0.20838f
+C17 oin nb 0.442f
+C18 oin vcm 3.39538f
+C19 inn nb 0.09082f
+C20 oqp VDD 1.5821f
+C21 x2q_tail outp 7.58097f
+C22 vt nb 0.12457f
+C23 x2i_tail VDD 0.4499f
+C24 inn vcm 0.20267f
+C25 vt vcm 0.07779f
+C26 oip oin 0.59817f
+C27 x2q_tail nb 6.97815f
+C28 outn VDD 1.14358f
+C29 enb oqp 4.38691f
+C30 outp oqp 0.13193f
+C31 inp VDD 0.23113f
+C32 outp x2i_tail 4.78521f
+C33 x2q_tail vcm 0.00345f
+C34 tail VDD 0.95652f
+C35 oqp nb 0.31636f
+C36 outp outn 3.9644f
+C37 x2i_tail nb 4.33675f
+C38 inp outp 6.18554f
+C39 oqp vcm 0.24483f
+C40 x2i_tail vcm 0.00751f
+C41 tail outp 14.6174f
+C42 outn nb 0.20354f
+C43 inp nb 0.18399f
+C44 outn vcm 0.34711f
+C45 oip x2i_tail 4.02866f
+C46 inp vcm 0.18531f
+C47 tail nb 7.84139f
+C48 oqn VDD 4.13169f
+C49 tail vcm 0.28139f
+C50 oip outn 5.97421f
+C51 enb oqn 0
+C52 oin x2i_tail 3.92909f
+C53 outp oqn 4.85285f
+C54 oqp vt 0.0591f
+C55 inn x2i_tail 0
+C56 outn oin 0.33025f
+C57 oqn nb 2.38722f
+C58 oqn vcm 0.43052f
+C59 x2q_tail oqp 4.09819f
+C60 inn outn 5.60588f
+C61 enb VDD 0.31951f
+C62 inp inn 1.82107f
+C63 outp VDD 4.50585f
+C64 tail inn 12.2271f
+C65 x2q_tail outn 8.15817f
+C66 VDD nb 4.58792f
+C67 VDD vcm 1.71588f
+C68 outn oqp 8.87468f
+C69 enb nb 0.7783f
+C70 outn x2i_tail 5.49393f
+C71 outp nb 0.21791f
+C72 inp x2i_tail 0
+C73 oip VDD 2.03657f
+C74 enb vcm 2.73623f
+C75 outp vcm 3.3929f
+C76 oqn vt 0.13876f
+C77 oqp VSS 4.15888f
+C78 oqn VSS 6.36453f
+C79 enb VSS 0.83134f
+C80 inn VSS 5.95112f
+C81 inp VSS 7.57695f
+C82 oip VSS 4.24415f
+C83 nb VSS 25.5444f
+C84 oin VSS 5.32043f
+C85 VDD VSS 0.10224p
+C86 x2q_tail VSS 6.46619f
+C87 vt VSS 0.67237f
+C88 tail VSS 19.28f
+C89 vcm VSS 25.6592f
+C90 x2i_tail VSS 6.52016f
+C91 outn VSS 9.91838f
+C92 outp VSS 9.64338f
+.ends

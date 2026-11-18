@@ -79,6 +79,10 @@ bit-exact digital model ─vectors─► RTL (cocotb) ─► harden ─► GL   
   lost 1.5 dB only as a pair. Block benches need the real source impedance as well as the real load.
 - Block and tile extraction gave a high-gain path 3.6 dB apart with the same magic settings. Quote
   the tile number and keep the worse one as a bound.
+- Near the noise floor, one noise realisation proves nothing (±23 % run to run at −90 dBm): run several and
+  compare means, against a transistor-level bench rather than the behavioural model.
+- Take every job estimate from the last run's measured times. Guesses were 8–88× out, and a full machine
+  doubles long runs.
 - Measure at the operating point that matters (near the spec limit, at the real trim code), not
   where it is easy.
 - "Works" doesn't prove the wiring. A reversed trim bus still converged. Use structural checks
@@ -104,6 +108,10 @@ bit-exact digital model ─vectors─► RTL (cocotb) ─► harden ─► GL   
   filesource.
 - magic `antennacheck` reports nothing unless it runs on a flattened copy in a fresh session with
   `debug`. Prove it with a deliberate violation.
+- Positive-control every checker on the *final* layout, not only on a test cell. Removing the tile's antenna
+  diodes changed nothing (the protected nets had moved off met4), so "remove the protection" was no mutation at
+  all. A planted violation (a big met1 plate on a tiny gate, added to a copy of the tile) is the one that proves
+  the deck can fail. Record protection that turns out to be redundant.
 - magic `extresist` / FastHenry are unusable for supply nets. Build your own conductance mesh (see
   floorplan-power.md).
 - Exit codes lie (cocotb `make`, tool wrappers that end in `grep`, ngspice after d_cosim). Judge runs
@@ -142,6 +150,26 @@ bit-exact digital model ─vectors─► RTL (cocotb) ─► harden ─► GL   
 
 Spend the effort on MC, supply sweeps and the power grid instead.
 
+## Must do before tapeout
+These caught real faults that every other check passed.
+- **Power-grid IR / EM analysis on the final tile, plus a supply-landing check in the tile build.**
+  - **What happened:** LVS, DRC, antenna, the TT precheck and the C-only tile sims all passed while a rotated TX driver's
+    ground reached the grid only through the router's thin wire: 17.6 Ω, 259 mV of ground lift, one via at 80× its
+    EM limit (gf-433-oscillator, 2026-11-17).
+  - **Cause:** LVS checks connectivity, not resistance. The block was turned (its rails became vertical), the
+    hand-placed strap over it wasn't moved, so it blocked the strap that should have landed on the VSS rail.
+  - **The build:** fail unless every block supply lands on a strap with Via3 cuts ≥ 2 × (block current / per-cut EM
+    limit). Only a named allow-list of tiny blocks (antenna rows, ties, debug switches) may be wired by the signal
+    router. Re-check strap positions whenever a block is moved or rotated.
+  - **The analysis:** a conductance mesh from the GDS with each block's measured current (floorplan-power.md).
+  - **Mutation-test both** on a cut strap join.
+- **Use the standard TT pinouts wherever possible**
+  ([tinytapeout.com/specs/pinouts](https://tinytapeout.com/specs/pinouts/)). SPI on uio[0..3] is CS, MOSI, MISO, SCK;
+  UART and I2C have their own conventions too. Decide before the layout. Check the demo board's MCU pin functions too
+  (tt-demo-pcb README, "RP2 Pinout"): on the RP2350 board uio[0..3] are GPIO25-28, which are SPI1 CSn, SCK, TX, RX,
+  so even the TT order needs PIO / SoftSPI there. gf-433-oscillator shipped a non-standard SCLK, MOSI, CS_n, MISO
+  order and found out after layout, too late to change cheaply.
+
 ## Starting a new project: checklist
 - [ ] Repo skeleton: `xschem/` (+`gen/`), `layout/gen/`, `layout/pex/`, `layout/ref/`, `sim/<block>/`,
       `model/`, `verilog/`, `docs/`, `tools/`, `build/` (gitignored). Tracked root `.spiceinit`.
@@ -153,6 +181,8 @@ Spend the effort on MC, supply sweeps and the power grid instead.
 - [ ] Bench numbers from previous silicon, the platform's pad/supply model, and a system model with
       budgets.
 - [ ] Pinout as one source of truth, checked in CI against info.yaml, the schematic, the LEF and GL.
+      Standard TT pinouts (SPI, UART, I2C) wherever possible; check the demo board's MCU pin functions.
+- [ ] Supply-landing check in the tile build and an IR / EM run on the final tile ("Must do" above).
 - [ ] CI: TT gds + precheck, real tile LVS with pinned tools (fail on property errors), docs.
 - [ ] A constraints file (net classes, aggressors, modes, keep-outs) written at schematic time for
       the floorplan and router (sketch in floorplan-power.md).

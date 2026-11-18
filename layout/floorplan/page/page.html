@@ -1,0 +1,1007 @@
+<title>GF433 Tile Floorplan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: a layout-editor workbench. Canvas fills the left, a dense inspector column on the right; stacks on phones. */
+:root {
+  --bg: #eef0ec; --panel: #f8f9f6; --ink: #1d2320; --muted: #5f6a64; --line: #cfd5cf; --grid: #dfe4de;
+  --die: #fbfcfa; --accent: #0f6e63; --accent-ink: #ffffff; --sel: #d9480f;
+  --rx: #127a6c; --rxout: #0e7490; --lo: #b4237d; --rfin: #0b5fa5; --clk: #c2410c; --digw: #57534e; --fine: #6d28d9; --en: #8a6a12; --tx: #b45309; --ana: #4d7c0f; --dbg: #be185d; --dig: #475569; --vap: #2563a8; --vdp: #b4531f; --gnd: #475569;
+  --decap: #7b8794; --pass: #2f7d32; --warn: #b7791f; --fail: #c0392b; --info: #6b7280;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --ui: "IBM Plex Sans Condensed", "Arial Narrow", "Roboto Condensed", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #121614; --panel: #181d1b; --ink: #e3e8e4; --muted: #94a19a; --line: #2c3430; --grid: #222a26;
+  --die: #0d100f; --accent: #3fb8a6; --accent-ink: #06201c; --sel: #ff8a4c;
+  --rx: #3fc1ad; --rxout: #38bdf8; --lo: #ef6ab8; --rfin: #5aa9ef; --clk: #fb8a4a; --digw: #a8a29e; --fine: #a78bfa; --en: #d9b44a; --tx: #f2a23a; --ana: #9acd4c; --dbg: #f472b6; --dig: #94a3b8; --vap: #6ea8ef; --vdp: #f09a62; --gnd: #94a3b8;
+  --decap: #8b98a6; --pass: #5cbf60; --warn: #e3a83b; --fail: #f0675a; --info: #9aa3ad; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #121614; --panel: #181d1b; --ink: #e3e8e4; --muted: #94a19a; --line: #2c3430; --grid: #222a26;
+  --die: #0d100f; --accent: #3fb8a6; --accent-ink: #06201c; --sel: #ff8a4c;
+  --rx: #3fc1ad; --rxout: #38bdf8; --lo: #ef6ab8; --rfin: #5aa9ef; --clk: #fb8a4a; --digw: #a8a29e; --fine: #a78bfa; --en: #d9b44a; --tx: #f2a23a; --ana: #9acd4c; --dbg: #f472b6; --dig: #94a3b8; --vap: #6ea8ef; --vdp: #f09a62; --gnd: #94a3b8;
+  --decap: #8b98a6; --pass: #5cbf60; --warn: #e3a83b; --fail: #f0675a; --info: #9aa3ad; color-scheme: dark }
+* { box-sizing: border-box }
+html, body { height: 100% }
+body { background: var(--bg); color: var(--ink); font: 14px/1.4 var(--ui); }
+button, input, select, textarea { font: inherit; color: inherit }
+.app { display: block }
+header { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; padding: 10px 16px; border-bottom: 1px solid var(--line); background: var(--panel) }
+.brand { display: flex; align-items: baseline; gap: 10px; min-width: 0 }
+.brand h1 { margin: 0; font-size: 18px; font-weight: 700; letter-spacing: .01em }
+.brand .sub { font: 12px var(--mono); color: var(--muted) }
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; order: 3; flex: 1 1 100%; min-width: 0 }
+.tools { margin-left: auto }
+.tab { flex: 0 0 auto; border: 1px solid var(--line); background: transparent; padding: 4px 10px; border-radius: 3px; cursor: pointer; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
+.tab[aria-selected="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent) }
+.tab .dots { font: 11px var(--mono); margin-left: 6px; opacity: .85 }
+.tools { display: flex; flex-wrap: wrap; gap: 6px; align-items: center }
+.btn { border: 1px solid var(--line); background: var(--die); padding: 4px 10px; border-radius: 3px; cursor: pointer }
+.btn:hover { border-color: var(--accent) }
+.btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent) }
+.btn:disabled { opacity: .45; cursor: default }
+:focus-visible { outline: 2px solid var(--sel); outline-offset: 1px }
+.sync { font: 12px var(--mono); color: var(--muted) }
+main { display: block }
+.stage { position: relative; width: 100%; height: max(300px, min(calc(100vw * 0.56), calc(100vh - 96px))); overflow: hidden; background: var(--bg); border-bottom: 1px solid var(--line) }
+svg#cv { width: 100%; height: 100%; display: block; touch-action: none; user-select: none; cursor: grab }
+svg#cv.panning { cursor: grabbing }
+.overlay { position: absolute; left: 12px; bottom: 12px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 12px }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 3px; overflow: hidden }
+.seg button { border: 0; background: var(--die); padding: 4px 12px; cursor: pointer }
+.seg button + button { border-left: 1px solid var(--line) }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--bg) }
+.diagram .keys, .diagram .overlay, .diagram .coords { display: none }
+svg#cv.dg { cursor: default }
+.dg [data-dinst] { cursor: pointer }
+.dg [data-dinst]:hover rect.blk { stroke-width: 2.4 }
+.chip { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border: 1px solid var(--line); border-radius: 3px; background: var(--panel); cursor: pointer }
+.chip input { margin: 0 }
+.coords { position: absolute; right: 12px; bottom: 12px; font: 12px var(--mono); color: var(--muted); background: var(--panel); border: 1px solid var(--line); padding: 2px 8px; border-radius: 3px }
+.tip { position: absolute; pointer-events: none; background: var(--ink); color: var(--bg); font: 12px var(--mono); padding: 3px 7px; border-radius: 3px; white-space: nowrap; z-index: 3 }
+.keys { position: absolute; right: 12px; top: 12px; font: 11px var(--mono); color: var(--muted); text-align: right; line-height: 1.5 }
+aside { background: var(--panel); display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); align-items: start; min-width: 0 }
+section.box { border-bottom: 1px solid var(--line); border-right: 1px solid var(--line); padding: 12px 16px; display: grid; gap: 8px; min-width: 0 }
+#secChecks { grid-row: span 3 }
+section.box > h2 { margin: 0; font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); display: flex; justify-content: space-between; align-items: baseline; gap: 8px }
+section.box > h2 .meta { letter-spacing: 0; text-transform: none; font: 12px var(--mono) }
+.empty { color: var(--muted); font-size: 13px }
+.row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center }
+.kv { display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; font: 12px var(--mono) }
+.kv dt { color: var(--muted) } .kv dd { margin: 0; text-align: right; font-variant-numeric: tabular-nums }
+label.f { display: grid; gap: 2px; font-size: 12px; color: var(--muted) }
+input[type=number], input[type=text], select, textarea { background: var(--die); border: 1px solid var(--line); border-radius: 3px; padding: 3px 6px; min-width: 0 }
+input[type=number] { width: 84px; font-family: var(--mono); font-size: 12px }
+textarea { width: 100%; font: 12px var(--mono); resize: vertical }
+.orients { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px }
+.orients button { padding: 3px 0; font: 12px var(--mono) }
+.orients button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent) }
+.checks { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none }
+.check { position: relative; cursor: help; display: grid; grid-template-columns: 44px 1fr auto; gap: 2px 8px; align-items: baseline; padding: 6px 8px; border-radius: 3px; background: var(--die); border-left: 3px solid var(--info) }
+.check .why { display: none; position: absolute; left: 0; right: 0; top: calc(100% + 4px); z-index: 6; background: var(--ink); color: var(--bg); padding: 8px 10px; border-radius: 3px; font-size: 12px; line-height: 1.45; box-shadow: 0 4px 14px rgb(0 0 0 / .25) }
+.check .why b { display: block; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 2px; opacity: .75 }
+.check:hover .why, .check:focus .why { display: block }
+.check:hover, .check:focus { outline: 1px solid var(--line) }
+.check.pass { border-left-color: var(--pass) } .check.warn { border-left-color: var(--warn) } .check.fail { border-left-color: var(--fail) }
+.check .st { font: 600 11px var(--mono); text-transform: uppercase }
+.check.pass .st { color: var(--pass) } .check.warn .st { color: var(--warn) } .check.fail .st { color: var(--fail) } .check.info .st { color: var(--info) }
+.check .t { font-weight: 600 } .check .v { font: 12px var(--mono); font-variant-numeric: tabular-nums; text-align: right }
+.check .d { grid-column: 2 / 4; font-size: 12px; color: var(--muted) }
+.summary { display: flex; gap: 10px; font: 12px var(--mono) }
+.summary b { font-weight: 600 }
+.bar { height: 12px; display: flex; border-radius: 2px; overflow: hidden; background: var(--grid) }
+.bar span { display: block; height: 100% }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 12px; color: var(--muted) }
+.sw { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; vertical-align: -1px }
+.tbl { width: 100%; border-collapse: collapse; font: 12px var(--mono); font-variant-numeric: tabular-nums }
+.tbl td { padding: 2px 4px; border-bottom: 1px solid var(--grid) } .tbl td.n { text-align: right }
+.tbl tr:hover td { background: var(--grid); cursor: default }
+.scroll { max-height: 280px; overflow-y: auto }
+.note { font-size: 12px; color: var(--muted); white-space: pre-wrap; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden }
+.note.open { display: block }
+.linkbtn { border: 0; background: none; padding: 0; color: var(--accent); cursor: pointer; font-size: 12px; justify-self: start }
+
+.warnbox { font-size: 12px; padding: 6px 8px; border-radius: 3px; background: var(--die); border-left: 3px solid var(--warn) }
+.ro .edit-only { display: none !important }
+details > summary { cursor: pointer; font-size: 12px; color: var(--muted) }
+@media (max-width: 860px) {
+  .stage { height: min(62vh, 80vw); min-height: 300px }
+  .keys { display: none }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important } }
+</style>
+
+<div class="app" id="app">
+  <header>
+    <div class="brand"><h1>GF433 Tile Floorplan</h1><span class="sub" id="tileSub">tt_analog_2x2_pgvaa</span></div>
+    <div class="tabs" id="tabs" role="tablist" aria-label="Variants"></div>
+    <div class="tools">
+      <div class="seg" role="group" aria-label="View"><button id="mLayout" data-mode="layout">Layout</button><button id="mDiagram" data-mode="diagram">Block diagram</button></div>
+      <button class="btn" id="bFull" title="Fill the screen (Esc to leave)">Full screen</button>
+      <button class="btn edit-only" id="bDup" title="Copy this variant">Duplicate</button>
+      <button class="btn edit-only" id="bRen">Rename</button>
+      <button class="btn edit-only" id="bDel">Delete</button>
+      <button class="btn edit-only" id="bNew" title="A new variant with every block parked under the tile">Blank</button>
+      <span class="sync" id="sync">connecting…</span>
+    </div>
+  </header>
+  <main>
+    <div class="stage" id="stage">
+      <svg id="cv" aria-label="Tile floorplan"></svg>
+      <div class="keys">drag: move · wheel: zoom · drag empty: pan · shift-drag: select a group · shift-click: add / remove<br>Esc clear · R rotate · X flip ↕ (MX) · Y flip ↔ (MY) · arrows nudge · F fit</div>
+      <div class="overlay" id="layers"></div>
+      <div class="coords" id="coords">x –, y – µm</div>
+      <div class="tip" id="tip" hidden></div>
+    </div>
+    <aside id="side">
+      <section class="box" id="secVariant"></section>
+      <section class="box" id="secSel"></section>
+      <section class="box" id="secChecks"></section>
+      <section class="box" id="secArea"></section>
+      <section class="box" id="secNets"></section>
+      <section class="box" id="secCross"></section>
+      <section class="box" id="secStraps"></section>
+      <section class="box" id="secIO"></section>
+      <section class="box" id="secSettings"></section>
+    </aside>
+  </main>
+</div>
+
+<script>/*DATA*/</script>
+<script>/*ENGINE*/</script>
+<script>
+(function () {
+'use strict';
+const DATA = window.FP_DATA, FP = window.FP, CAT = FP.buildCatalog(DATA), TILE = DATA.tile, H = TILE.h, W = TILE.w;
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const f1 = (x) => (Math.round(x * 100) / 100).toString();
+const snap = (x) => Math.round(x * 2) / 2;
+const NET_COLOR = { rfin: 'var(--rfin)', rx: 'var(--rx)', rxout: 'var(--rxout)', lo: 'var(--lo)', clk: 'var(--clk)', dig: 'var(--digw)', fine: 'var(--fine)', en: 'var(--en)', tx: 'var(--tx)', ana: 'var(--ana)', dbg: 'var(--dbg)' };
+const SUPPLY_COLOR = { VAPWR: 'var(--vap)', VDPWR: 'var(--vdp)' };
+const GROUP_COLOR = SUPPLY_COLOR;
+const STRAP_COLOR = { VGND: 'var(--gnd)', VAPWR: 'var(--vap)', VDPWR: 'var(--vdp)' };
+const PWR = /^(VDD|VSS|VDD_LS|VAPWR|VDPWR|VGND)$/;
+$('#tileSub').textContent = `${(TILE.source || '').split('/').pop().replace('.def', '')} · ${W} × ${H} µm`;
+
+// ---- state
+const S = {
+  variants: {},          // id -> variant body (from the store, or local when there is no store)
+  order: [],
+  cur: null,
+  sel: null,             // {kind: 'inst'|'decap'|'strap', id}
+  settings: Object.assign({}, FP.DEFAULT_SETTINGS),
+  view: null,
+  mode: 'layout',
+  layers: { flylines: true, pins: true, m4: false, labels: true, grid: true, decap: true, zones: true, bus: true },
+  hoverNet: null,
+  canWrite: true, db: null, user: null, uid: null, names: {},
+  dirty: new Set(), saving: new Set(), dragging: false,
+};
+try { const l = JSON.parse(localStorage.getItem('fp.layers') || 'null'); if (l) Object.assign(S.layers, l); } catch (e) {}
+try { if (localStorage.getItem('fp.mode') === 'diagram') S.mode = 'diagram'; } catch (e) {}
+
+const clone = (o) => JSON.parse(JSON.stringify(o));
+const cur = () => S.variants[S.cur] || null;
+
+// Unplaced blocks wait in a parking row under the tile.
+function parked(v) {
+  const out = {}; let x = 0;
+  for (const [n, c] of Object.entries(CAT)) {
+    if ((v.place && v.place[n]) || !FP.inMode(c, v)) continue;
+    const [w, h] = estWH(v, n);
+    if (x + w > W) x = 0;
+    out[n] = { x, y: -40 - h, orient: 'R0', parked: true };
+    x += w + 6;
+  }
+  return out;
+}
+function estWH(v, n) {             // a block's own (unrotated) size, after a macro reshape
+  const c = CAT[n], e = v.est && v.est[n];
+  if (c.glue || !e) return [c.w, c.h];
+  return [e.w, (e.area || c.w * c.h) / e.w];
+}
+function viewVariant(v) {           // the variant with parked blocks filled in, for drawing only
+  return Object.assign({}, v, { place: Object.assign({}, parked(v), v.place || {}) });
+}
+
+// ---- store
+let unsub = null;
+async function connect() {
+  let db = null, user = null;
+  try { db = window.claude && await window.claude.use('db'); } catch (e) { db = null; }
+  try { user = window.claude && await window.claude.use('user'); } catch (e) { user = null; }
+  S.db = db; S.user = user;
+  if (user) {
+    try { S.uid = await user.id(); } catch (e) {}
+    try { const c = await user.can('data.write'); if (c === false) setReadOnly(); } catch (e) {}
+  }
+  if (!db) { setSync('local only: changes stay in this view'); if (!S.order.length) render(); return; }
+  setSync('loading…');
+  db.collection('variants').onSnapshot((snap) => {
+    const seen = new Set();
+    for (const d of snap.docs) {
+      seen.add(d.id);
+      if (S.dirty.has(d.id) || S.saving.has(d.id) || (S.dragging && d.id === S.cur)) continue;
+      S.variants[d.id] = clone(d.data());
+    }
+    for (const id of Object.keys(S.variants)) if (!seen.has(id) && !S.dirty.has(id) && !S.saving.has(id)) delete S.variants[id];
+    sortOrder();
+    if (!S.cur || !S.variants[S.cur]) S.cur = pickStart();
+    setSync(snap.metadata.fromCache ? 'syncing…' : 'saved');
+    render(); resolveNames();
+  }, (e) => setSync('store unavailable: ' + e.code));
+  db.doc('config/settings').onSnapshot((d) => {
+    if (d.exists && !S.dirty.has('$settings')) { Object.assign(S.settings, FP.DEFAULT_SETTINGS, d.data()); render(); }
+  }, () => {});
+}
+function pickStart() {
+  let id = null; try { id = localStorage.getItem('fp.cur'); } catch (e) {}
+  return id && S.variants[id] ? id : S.order[0] || null;
+}
+function sortOrder() {
+  S.order = Object.keys(S.variants).sort((a, b) => ((S.variants[a].order ?? 99) - (S.variants[b].order ?? 99)) || a.localeCompare(b));
+}
+function setSync(t) { $('#sync').textContent = t; }
+function setReadOnly() { S.canWrite = false; $('#app').classList.add('ro'); setSync('view only'); }
+
+const timers = {};
+function touch(id) {                // a local edit: save after a pause, one write at a time per doc
+  id = id || S.cur;
+  const v = S.variants[id]; if (!v) return;
+  v.updatedAt = new Date().toISOString(); if (S.uid) v.updatedBy = S.uid;
+  S.dirty.add(id); setSync('unsaved…');
+  clearTimeout(timers[id]);
+  timers[id] = setTimeout(() => flush(id), 700);
+  render();
+}
+async function flush(id) {
+  if (S.dragging && id === S.cur) { timers[id] = setTimeout(() => flush(id), 300); return; }
+  if (!S.db) { S.dirty.delete(id); setSync('local only: changes stay in this view'); return; }
+  if (S.saving.has(id)) { timers[id] = setTimeout(() => flush(id), 300); return; }
+  S.dirty.delete(id); S.saving.add(id); setSync('saving…');
+  try {
+    if (id === '$settings') await S.db.doc('config/settings').set(clone(S.settings));
+    else if (S.variants[id]) await S.db.collection('variants').doc(id).set(clone(S.variants[id]));
+    else await S.db.collection('variants').doc(id).delete();
+    setSync('saved');
+  } catch (e) {
+    if (e && e.code === 'invalid_argument') { setReadOnly(); setSync('view only: this view cannot save'); }
+    else if (e && e.code === 'quota_exceeded') setSync('store full: delete a variant');
+    else setSync('save failed (' + (e && e.code || 'error') + '), retrying');
+    if (e && e.code === 'unavailable') { S.dirty.add(id); timers[id] = setTimeout(() => flush(id), 1500 + Math.random() * 1000); }
+  } finally { S.saving.delete(id); }
+}
+async function resolveNames() {
+  if (!S.user || !S.user.profiles) return;
+  const ids = [...new Set(Object.values(S.variants).map(v => v.updatedBy).filter(Boolean))];
+  if (!ids.length) return;
+  try { const ps = await S.user.profiles(ids); for (const id of ids) S.names[id] = (ps[id] && ps[id].name) || ''; renderVariantBox(); } catch (e) {}
+}
+
+// ---- view transform (SVG user units = um, y flipped)
+const Y = (y) => H - y;
+function fit() {
+  const st = $('#stage').getBoundingClientRect();
+  const v = cur(), pk = v ? Object.values(viewVariant(v).place).filter(p => p.parked) : [];
+  const extra = pk.length ? Math.max(...pk.map(p => -p.y)) - 18 : 0;   // show the parking row under the tile
+  const m = 10, vw = W + 2 * m, vh = H + 2 * m + 24 + Math.max(0, extra);
+  const ar = st.width / Math.max(1, st.height);
+  let w = vw, h = vh;
+  if (w / h < ar) w = h * ar; else h = w / ar;
+  S.view = { x: -m - (w - vw) / 2, y: -m - (h - vh) / 2 - 4, w, h };
+}
+function toUm(evt) {
+  const svg = $('#cv'), r = svg.getBoundingClientRect(), v = S.view;
+  const x = v.x + (evt.clientX - r.left) / r.width * v.w, sy = v.y + (evt.clientY - r.top) / r.height * v.h;
+  return [x, H - sy];
+}
+
+// ---- drawing
+function rectEl(r, attrs) {
+  return `<rect x="${r[0]}" y="${Y(r[1] + r[3])}" width="${Math.max(0, r[2])}" height="${Math.max(0, r[3])}" ${attrs || ''}/>`;
+}
+function text(x, y, s, size, attrs) {
+  return `<text x="${x}" y="${Y(y)}" font-size="${size}" ${attrs || ''}>${esc(s)}</text>`;
+}
+let last = null;
+// group selection: S.sel = {kind: 'group', items: [{kind: 'inst' | 'decap', id}]}
+function isSel(kind, id) {
+  if (!S.sel) return false;
+  if (S.sel.kind === 'group') return S.sel.items.some(q => q.kind === kind && q.id === id);
+  return S.sel.kind === kind && S.sel.id === id;
+}
+function selItems() { return !S.sel ? [] : S.sel.kind === 'group' ? S.sel.items : (S.sel.kind === 'inst' || S.sel.kind === 'decap') ? [{ kind: S.sel.kind, id: S.sel.id }] : []; }
+function setGroup(items) { S.sel = items.length === 0 ? null : items.length === 1 ? { kind: items[0].kind, id: items[0].id } : { kind: 'group', items }; }
+function toggleSel(kind, id) {
+  const items = selItems().slice(), i = items.findIndex(q => q.kind === kind && q.id === id);
+  if (i >= 0) items.splice(i, 1); else items.push({ kind, id });
+  setGroup(items);
+}
+function bandRect() { const b = drag; return [Math.min(b.x0, b.x1), Math.min(b.y0, b.y1), Math.abs(b.x1 - b.x0), Math.abs(b.y1 - b.y0)]; }
+function decapRef(v, id) { const [b, i] = id.split('.'); return b === 'reserved' ? (v.reserved || [])[+i - 1] : ((v.decaps || {})[b] || [])[+i - 1]; }
+function itemPos(v, q) { if (q.kind === 'inst') { const p = viewVariant(v).place[q.id]; return { x: p.x, y: p.y, orient: p.orient }; } const d = decapRef(v, q.id); return { x: d.x, y: d.y }; }
+function setItemPos(v, q, x, y, o) { if (q.kind === 'inst') v.place[q.id] = { x, y, orient: o.orient }; else { const d = decapRef(v, q.id); d.x = x; d.y = y; } }
+function moveGroup(v, dx, dy) { for (const q of selItems()) { const o = itemPos(v, q); setItemPos(v, q, +(o.x + dx).toFixed(3), +(o.y + dy).toFixed(3), o); } }
+function draw() {
+  $('#stage').classList.toggle('diagram', S.mode === 'diagram');
+  $('#cv').classList.toggle('dg', S.mode === 'diagram');
+  document.querySelectorAll('[data-mode]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.mode === S.mode)));
+  if (S.mode === 'diagram') { if (cur()) last = FP.evaluate(DATA, CAT, cur(), S.settings); drawDiagram(); return; }
+  const v = cur(); const svg = $('#cv');
+  if (!S.view) fit();
+  svg.setAttribute('viewBox', `${S.view.x} ${S.view.y} ${S.view.w} ${S.view.h}`);
+  const scale = S.view.w / Math.max(1, svg.getBoundingClientRect().width);   // um per px
+  const out = [];
+  out.push(`<defs>
+    <pattern id="g10" width="10" height="10" patternUnits="userSpaceOnUse" y="${Y(0) % 10}"><path d="M10 0H0V10" fill="none" stroke="var(--grid)" stroke-width="${0.6 * scale}"/></pattern>
+    <pattern id="g50" width="50" height="50" patternUnits="userSpaceOnUse" y="${Y(0) % 50}"><rect width="50" height="50" fill="url(#g10)"/><path d="M50 0H0V50" fill="none" stroke="var(--line)" stroke-width="${0.9 * scale}"/></pattern>
+    <pattern id="hatch" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="4" stroke="currentColor" stroke-width="0.8" opacity=".55"/></pattern>
+    <pattern id="hatchE" width="3" height="3" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)"><line x1="0" y1="0" x2="0" y2="3" stroke="currentColor" stroke-width="0.5" opacity=".5"/></pattern>
+  </defs>`);
+  out.push(rectEl([0, 0, W, H], `fill="var(--die)" stroke="var(--ink)" stroke-width="${1.2 * scale}"`));
+  if (S.layers.grid) out.push(rectEl([0, 0, W, H], 'fill="url(#g50)"'));
+  // tile pins
+  const ROLE = { 'ua[0]': 'debug mux', 'ua[1]': 'unused', 'ua[2]': 'TX out_n', 'ua[3]': 'TX out_p', 'ua[4]': 'RX in_p', 'ua[5]': 'RX in_n', 'ua[6]': 'n/a', 'ua[7]': 'n/a' };
+  let tx0 = W, tx1 = 0;
+  for (const [n, p] of Object.entries(TILE.pins)) {
+    const bottom = p.y0 < 1, ua = n.startsWith('ua'), dead = n === 'ua[6]' || n === 'ua[7]';
+    if (!bottom) { tx0 = Math.min(tx0, p.x0); tx1 = Math.max(tx1, p.x1); }
+    out.push(rectEl([p.x0, bottom ? -1.5 : H - 1, p.x1 - p.x0, 2.5], `fill="${ua ? (dead ? 'var(--muted)' : 'var(--ink)') : 'var(--dig)'}"`));
+    if (ua) {
+      const x = (p.x0 + p.x1) / 2;
+      out.push(text(x, -7, n, 4.2, `text-anchor="middle" fill="var(--ink)" font-family="var(--mono)"`));
+      out.push(text(x, -12.5, ROLE[n], 3.6, `text-anchor="middle" fill="var(--muted)" font-family="var(--mono)"`));
+    } else if (/^(uo_out\[[0-5]\]|ui_in\[[0-7]\]|clk|rst_n|uio_in\[[0-2]\]|uio_out\[3\])$/.test(n) && scale < 0.6) {
+      const x = (p.x0 + p.x1) / 2;
+      out.push(`<text x="${x}" y="${Y(H) - 2}" font-size="1.8" fill="var(--muted)" font-family="var(--mono)" transform="rotate(-90 ${x} ${Y(H) - 2})">${esc(n)}</text>`);
+    }
+  }
+  out.push(text((tx0 + tx1) / 2, H + 3.5, `TT digital pins  x ${tx0.toFixed(0)}–${tx1.toFixed(0)}`, 3.6, `text-anchor="middle" fill="var(--muted)" font-family="var(--mono)"`));
+  out.push(text(W, -7, '0, 0 lower-left · µm', 3.4, `text-anchor="end" fill="var(--muted)" font-family="var(--mono)"`));
+  if (!v) { svg.innerHTML = out.join(''); return; }
+  const vv = viewVariant(v);
+  const r = FP.evaluate(DATA, CAT, vv, S.settings);
+  last = r;
+  // top channel
+  if (r.channelShapes && r.channelShapes.length) {
+    for (const c of r.channelShapes) out.push(rectEl(c, `fill="var(--dig)" fill-opacity=".12" stroke="none"`));
+    const top = r.channelShapes.reduce((a, c) => c[3] > a[3] ? c : a);
+    out.push(text(top[0] + 2, H - top[3] - 3, 'TT pin channel', 3.2, 'fill="var(--muted)" font-family="var(--mono)"'));
+  }
+  // reserved areas
+  for (const q of r.R.reserved) {
+    const id = `reserved.${q.idx + 1}`, sel = isSel('decap', id);
+    out.push(`<g data-decap="${id}" style="cursor:move;color:var(--vap)">` + rectEl(q.rect, `fill="url(#hatch)" stroke="${sel ? 'var(--sel)' : 'var(--vap)'}" stroke-dasharray="${3 * scale} ${2 * scale}" stroke-width="${(sel ? 1.8 : 1.1) * scale}"`) +
+      text(q.rect[0] + 3, q.rect[1] + q.rect[3] - 7, q.label, 5, 'fill="var(--vap)" font-weight="600"') +
+      (sel ? rectEl([q.rect[0] + q.rect[2] - 2, q.rect[1] - 0.5, 2.5, 2.5], 'data-resize="1" fill="var(--sel)" style="cursor:nwse-resize"') : '') + '</g>');
+  }
+  // stripes
+  const [sy0, sy1] = TILE.stripe_y || [5, H - 5];
+  (v.straps || []).forEach((st, i) => {
+    const issue = r.checks.find(c => c.rule === 10 && c.status === 'fail' && c.detail.includes(`${st.net} @ ${(Math.round(st.x * 10) / 10).toFixed(1)}`));
+    const sel = S.sel && S.sel.kind === 'strap' && S.sel.id === i;
+    out.push(`<g data-strap="${i}" style="cursor:ew-resize">` +
+      rectEl([st.x - 1.5, sy0, st.w + 3, sy1 - sy0], 'fill="transparent"') +
+      rectEl([st.x, sy0, st.w, sy1 - sy0], `fill="${STRAP_COLOR[st.net] || 'var(--muted)'}" fill-opacity="${sel ? .7 : .35}" stroke="${issue ? 'var(--fail)' : sel ? 'var(--sel)' : 'none'}" stroke-width="${1.2 * scale}"`) +
+      text(st.x + st.w / 2, sy1 - 3, st.net, 2.6, `text-anchor="middle" fill="var(--ink)" font-family="var(--mono)" transform="rotate(-90 ${st.x + st.w / 2} ${Y(sy1 - 3)})"`) + '</g>');
+  });
+  // decaps
+  for (const d of S.layers.decap ? r.R.decaps : []) {
+    const sel = isSel('decap', d.name), col = SUPPLY_COLOR[d.def.net];
+    out.push(`<g data-decap="${d.name}" style="cursor:move;color:${col}">` + rectEl(d.rect, `fill="url(#hatch)" stroke="${sel ? 'var(--sel)' : col}" stroke-opacity="${sel ? 1 : .6}" stroke-width="${(sel ? 1.6 : 0.8) * scale}"`) +
+      (d.rect[2] > 20 && d.rect[3] > 9 ? text(d.rect[0] + 2, d.rect[1] + d.rect[3] - 4.5, `${d.def.label} ${d.idx + 1}`, 3.2, 'fill="var(--muted)" font-family="var(--mono)"') +
+        text(d.rect[0] + 2, d.rect[1] + d.rect[3] - 8.5, `${f1(d.rect[2])} × ${f1(d.rect[3])}`, 2.8, 'fill="var(--muted)" font-family="var(--mono)"') : '') +
+      (sel ? rectEl([d.rect[0] + d.rect[2] - 2, d.rect[1] - 0.5, 2.5, 2.5], 'data-resize="1" fill="var(--sel)" style="cursor:nwse-resize"') : '') + '</g>');
+  }
+  // blocks, coloured by supply domain
+  const order = Object.values(r.R.inst).sort((a, b) => (b.rect[2] * b.rect[3]) - (a.rect[2] * a.rect[3]));
+  for (const ins of order) {
+    const c = ins.cat, col = SUPPLY_COLOR[ins.supply] || 'var(--dig)', sel = isSel('inst', ins.name);
+    const isParked = vv.place[ins.name].parked;
+    const g = [`<g data-inst="${ins.name}" style="cursor:move;color:${col}" opacity="${isParked ? .55 : 1}">`];
+    if (ins.halo) g.push(rectEl(ins.halo, `fill="none" stroke="${col}" stroke-dasharray="${2 * scale} ${2 * scale}" stroke-width="${0.8 * scale}"`));
+    g.push(rectEl(ins.rect, `fill="${col}" fill-opacity="${c.group === 'dig' ? .1 : .15}" stroke="${sel ? 'var(--sel)' : col}" stroke-width="${(sel ? 2 : 1) * scale}"`));
+    if (c.glue || c.estimate || ins.reshaped) g.push(rectEl(ins.rect, 'fill="url(#hatchE)"'));
+    if (S.layers.zones) for (const [zn, z] of Object.entries(ins.zones)) {
+      g.push(rectEl(z, `fill="none" stroke="${col}" stroke-opacity=".7" stroke-dasharray="${1.2 * scale} ${1.2 * scale}" stroke-width="${0.6 * scale}"`));
+      if (S.layers.labels && z[2] > 18 && z[3] > 6) g.push(text(z[0] + 1, z[1] + 1.2, zn, Math.min(4, Math.max(2, z[3] / 6)), `fill="${col}" font-family="var(--mono)"`));
+    }
+    if (S.layers.m4) {
+      for (const m of ins.m4) g.push(rectEl(m, `fill="var(--fail)" fill-opacity=".14" stroke="var(--fail)" stroke-opacity=".5" stroke-width="${0.5 * scale}"`));
+      for (const q of ins.straps) g.push(rectEl(q.r, `fill="${STRAP_COLOR[q.net]}" fill-opacity=".6" stroke="none"`));
+    }
+    if (S.layers.pins) for (const [pn, p] of Object.entries(ins.pins)) {
+      if (ins.name === 'xmac' && /^dac_/.test(pn) && !/^dac_(tn\[(0|15|30)\]|bn\[0\]|sdn)$/.test(pn)) continue;
+      const sz = 1.2;
+      g.push(rectEl([p.at[0] - sz / 2, p.at[1] - sz / 2, sz, sz], `fill="${PWR.test(pn) ? 'var(--muted)' : col}"`));
+      if (p.moved || p.est) g.push(`<circle cx="${p.at[0]}" cy="${Y(p.at[1])}" r="1.8" fill="none" stroke="var(--sel)" stroke-width="${0.9 * scale}"><title>${p.est ? 'estimated pin position (not in the GDS yet)' : 'moved pin'}</title></circle>`);
+      if (S.layers.labels && scale < 0.35 && !PWR.test(pn)) g.push(text(p.at[0] + 0.9, p.at[1] + 0.5, pn, 1.6, 'fill="var(--ink)" font-family="var(--mono)"'));
+    }
+    const [x, y, w, h] = ins.rect;
+    if (S.layers.labels) {
+      const nm = c.label || c.cell;
+      const fs = Math.max(2.4, Math.min(9, Math.min(w / (nm.length * 0.62 + 1), h / 2.6)));
+      g.push(text(x + w / 2, y + h / 2 + fs * 0.1, nm, fs, `text-anchor="middle" fill="var(--ink)" font-weight="600"`));
+      if (h > fs * 2.4) g.push(text(x + w / 2, y + h / 2 - fs * 0.95, `${ins.name} · ${c.cell} · ${ins.pl.orient} · ${ins.supply}`, fs * 0.5, `text-anchor="middle" fill="var(--muted)" font-family="var(--mono)"`));
+      if (ins.reshaped && !c.reshape && h > fs * 3.4) g.push(text(x + w / 2, y + h / 2 - fs * 1.9, `${f1(ins.w)} × ${f1(ins.h)}: needs a re-layout`, Math.min(3.4, fs * 0.5), 'text-anchor="middle" fill="var(--muted)" font-family="var(--mono)"'));
+      if (c.reshape) g.push(text(x + w / 2, y + h / 2 - fs * 1.9, (Math.abs(ins.w - c.w) > 1e-6 ? `${f1(ins.w)} × ${f1(ins.h)}: needs a re-harden` : `as hardened, ${c.w} × ${c.h}`) + ' · rx_en pin estimated', 3.4, 'text-anchor="middle" fill="var(--muted)" font-family="var(--mono)"'));
+    }
+    g.push('</g>');
+    out.push(g.join(''));
+  }
+  // flylines (the DAC bus as one band when "bus" is on)
+  if (S.layers.flylines) for (const n of r.nets) {
+    if (n.missing) continue;
+    if (S.layers.bus && n.cls === 'fine' && !/^dac_(tn\[0\]|tn\[30\]|sdn)$/.test(n.name)) continue;
+    const hot = S.hoverNet === n.name;
+    const pts = [n.segs[0].slice(0, 2)].concat(n.segs.map(q => q.slice(2, 4)));   // the L route, or the route round the receiver
+    out.push(`<polyline data-net="${esc(n.name)}" points="${pts.map(p => `${p[0]},${Y(p[1])}`).join(' ')}" fill="none" stroke="${NET_COLOR[n.cls]}" stroke-width="${(hot ? 2.6 : n.cls === 'fine' ? 0.7 : 1.1) * scale}" stroke-opacity="${hot ? 1 : .8}" ${n.cls === 'en' ? `stroke-dasharray="${3 * scale} ${2 * scale}"` : n.est ? `stroke-dasharray="${1 * scale} ${1.5 * scale}"` : ''}/>`);
+    out.push(`<polyline data-net="${esc(n.name)}" points="${pts.map(p => `${p[0]},${Y(p[1])}`).join(' ')}" fill="none" stroke="transparent" stroke-width="${7 * scale}"/>`);
+  }
+  if (drag && drag.kind === 'band') { const b = bandRect(); out.push(rectEl(b, `fill="var(--sel)" fill-opacity=".08" stroke="var(--sel)" stroke-dasharray="${3 * scale} ${2 * scale}" stroke-width="${scale}"`)); }
+  out.push(text(0, -24, 'parking: unplaced blocks wait here; drag them into the tile', 3.4, 'fill="var(--muted)" font-family="var(--mono)" ' + (Object.values(vv.place).some(p => p.parked) ? '' : 'visibility="hidden"')));
+  svg.innerHTML = out.join('');
+}
+
+// ---- block diagram: how the blocks join; lengths from the open variant
+const DG = {
+  blocks: [
+    ['pad:ua[4]', 'ua[4]', 'RX in_p', 20, 70, 50, 22, 'pad'], ['pad:ua[5]', 'ua[5]', 'RX in_n', 20, 120, 50, 22, 'pad'],
+    ['rx.lna', 'rx_lna', 'LNA, I and Q stage 2', 110, 60, 110, 100, 'rx'],
+    ['rx.mix_i', 'rx_mix', 'mixer I', 270, 40, 90, 44, 'rx'], ['rx.mix_q', 'rx_mix', 'mixer Q', 270, 136, 90, 44, 'rx'],
+    ['rx.lobuf_i', 'rx_lobuf', 'LO buffer I', 270, 230, 90, 36, 'rx'], ['rx.lobuf_q', 'rx_lobuf', 'LO buffer Q', 400, 230, 90, 36, 'rx'],
+    ['rx.lsq', 'rx_lsq', 'Q level shift', 400, 300, 90, 40, 'rx'],
+    ['rx.bb_i', 'rx_bb', 'baseband I', 400, 30, 110, 50, 'rx'], ['rx.bb_q', 'rx_bb', 'baseband Q', 400, 130, 110, 50, 'rx'],
+    ['rx.lim_i', 'rx_lim', 'limiter I', 550, 30, 100, 50, 'rx'], ['rx.lim_q', 'rx_lim', 'limiter Q', 550, 130, 100, 50, 'rx'],
+    ['rx.bias', 'rx_bias', 'bias (nb, enb)', 110, 190, 110, 36, 'rx'], ['rx.decap', 'rx_decap', '', 110, 240, 110, 26, 'rx'],
+    ['pad:uo_out[4]', 'uo[4]', 'q_i', 700, 44, 50, 22, 'pad'], ['pad:uo_out[5]', 'uo[5]', 'q_q', 700, 144, 50, 22, 'pad'],
+    ['xvco', 'vco_top', 'ring · lsdiv ÷4 · cgm_ref', 110, 390, 380, 70, 'vco'],
+    ['pad:ua[0]', 'ua[0]', 'vctrl', 20, 474, 50, 22, 'pad'], ['pad:ua[1]', 'ua[1]', 'vbn', 20, 400, 50, 22, 'pad'],
+    ['xvpd', 'vctrl_pd', '200 kΩ', 110, 480, 90, 30, 'vco'],
+    ['xmdac', 'mdac', 'fine-tune DAC', 330, 500, 160, 46, 'fine'],
+    ['xbits', 'code inv', 'ui_in[0:4]', 540, 470, 90, 34, 'vco'],
+    ['xtxd', 'tx_drv', 'TX driver', 560, 330, 100, 50, 'tx'],
+    ['pad:ua[2]', 'ua[2]', 'TX out_n', 700, 320, 50, 22, 'pad'], ['pad:ua[3]', 'ua[3]', 'TX out_p', 700, 368, 50, 22, 'pad'],
+    ['xmac', 'tx_fine', '', 800, 20, 90, 540, 'dig'],
+    ['pad:clk', 'TT pins', 'clk rst_n SPI fsk', 940, 40, 60, 60, 'pad'], ['pad:uo_out[0]', 'uo[0:3]', 'ck ÷16 ÷64 ÷1024', 940, 140, 60, 50, 'pad'],
+    ['pad:ui_in[5]', 'ui[5:6]', 'TX enables', 700, 420, 50, 34, 'pad'], ['pad:ui_in[2]', 'ui[0:4]', 'coarse code', 700, 480, 50, 34, 'pad'],
+  ],
+  // [net name (as in the engine), points, options]
+  wires: [
+    ['rx_inp', [[70, 81], [110, 81]], { name: '' }], ['rx_inn', [[70, 131], [110, 131]], { name: '' }],
+    ['ri_p', [[220, 75], [270, 62]], { name: 'RF I' }], ['rq_p', [[220, 140], [270, 158]], { name: 'RF Q' }],
+    ['bi_p', [[360, 55], [400, 55]], { name: '' }], ['bq_p', [[360, 155], [400, 155]], { name: '' }],
+    ['oi_p', [[510, 55], [550, 55]], { name: '' }], ['oq_p', [[510, 155], [550, 155]], { name: '' }],
+    ['q_i', [[650, 55], [700, 55]]], ['q_q', [[650, 155], [700, 155]]],
+    ['lo_i', [[315, 230], [315, 84]], { name: 'lo / lob I', pos: [372, 222, 'start'] }], ['lo_q', [[445, 230], [445, 200], [330, 200], [330, 180]], { name: 'lo / lob Q' }],
+    ['lsq', [[445, 300], [445, 266]]],
+    ['ls rx', [[200, 390], [200, 248], [270, 248]], { name: 'ls (I)' }], ['a2', [[250, 390], [250, 320], [400, 320]], { name: 'a2 (Q)' }],
+    ['ls tx', [[480, 410], [520, 410], [520, 355], [560, 355]], { name: 'ls' }],
+    ['tx_out_n', [[660, 343], [700, 331]], { name: '' }], ['tx_out_p', [[660, 367], [700, 379]], { name: '' }],
+    ['en_p', [[700, 437], [610, 437], [610, 380]], { name: 'en_p / en_n' }],
+    ['vctrl', [[70, 485], [90, 485], [90, 440], [110, 440]]], ['vctrl pd', [[155, 480], [155, 460]], { name: '' }], ['vbn', [[110, 411], [70, 411]]],
+    ['vg', [[360, 500], [360, 460]], { name: 'vg' }], ['vbnf', [[400, 460], [400, 500]], { name: 'vbnf' }],
+    ['dac_tn[30]', [[800, 523], [490, 523]], { name: '37 DAC lines' }],
+    ['ck', [[470, 390], [470, 386], [800, 386]], { name: 'ck = f / 4', pos: [680, 398, 'middle'] }],
+    ['code', [[700, 497], [630, 497]], { name: '' }], ['bits', [[585, 470], [585, 460], [490, 460]], { name: 'bit / bitb' }],
+    ['rx_en', [[800, 285], [600, 285], [600, 282], [490, 282], [490, 266]], { name: 'rx_en' }],
+    ['clk', [[940, 70], [890, 70]], { name: 'clk, SPI' }], ['div16', [[890, 165], [940, 165]], { name: 'dividers' }],
+  ],
+};
+function drawDiagram() {
+  const svg = $('#cv'), nets = last ? last.nets : [], o = [];
+  const byName = (n) => nets.find(q => q.name === n);
+  const VB = [0, -6, 1010, 600];
+  svg.setAttribute('viewBox', VB.join(' '));
+  o.push(`<defs><marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L8 4L0 8z" fill="context-stroke"/></marker></defs>`);
+  o.push(`<rect x="${VB[0]}" y="${VB[1]}" width="${VB[2]}" height="${VB[3]}" fill="var(--die)"/>`);
+  o.push(`<line x1="8" y1="372" x2="780" y2="372" stroke="var(--line)" stroke-dasharray="4 4"/>`);
+  o.push(`<text x="12" y="16" font-size="13" font-weight="700" fill="var(--vap)" letter-spacing="1">RECEIVER · VAPWR</text>`);
+  o.push(`<text x="12" y="388" font-size="13" font-weight="700" fill="var(--vap)" letter-spacing="1">VCO · VAPWR</text>`);
+  o.push(`<text x="560" y="318" font-size="13" font-weight="700" fill="var(--vdp)" letter-spacing="1">TX · VDPWR</text>`);
+  const mode = cur() ? FP.rxMode(cur()) : 'block';
+  for (const [id, name, sub, x, y, w, h, g] of DG.blocks) {
+    const pad = id.startsWith('pad:'), c = CAT[id];
+    const col = pad ? 'var(--ink)' : SUPPLY_COLOR[c ? c.supply : ''] || 'var(--dig)';
+    const placed = !pad && cur() && cur().place && (cur().place[id] || (c && c.rx === 'cells' && mode === 'block' && cur().place.xrx));
+    o.push(`<g ${pad ? '' : `data-dinst="${mode === 'block' && c && c.rx === 'cells' ? 'xrx' : id === 'xvco' && cur() && FP.vcoMode(cur()) === 'parts' ? 'vco.core' : id}"`}><title>${esc(pad ? id.slice(4) : id + ' (' + name + ')' + (placed ? '' : ' — not placed in this variant'))}</title>`);
+    o.push(`<rect class="blk" x="${x}" y="${y}" width="${w}" height="${h}" rx="${pad ? 0 : 3}" fill="${col}" fill-opacity="${pad ? .9 : .12}" stroke="${col}" stroke-width="1.4" ${placed || pad ? '' : 'stroke-dasharray="4 3"'}/>`);
+    if (pad) o.push(`<text x="${x + w / 2}" y="${y + 15}" font-size="10" text-anchor="middle" fill="var(--die)" font-family="var(--mono)">${esc(name)}</text><text x="${x + w / 2}" y="${y - 4}" font-size="9" text-anchor="middle" fill="var(--muted)" font-family="var(--mono)">${esc(sub)}</text>`);
+    else if (id === 'xmac') o.push(`<text x="${x + w / 2}" y="${y + h / 2}" font-size="14" font-weight="600" text-anchor="middle" fill="var(--ink)" transform="rotate(-90 ${x + w / 2} ${y + h / 2})">tx_fine (digital macro, 25 MHz + ck domain) · VDPWR</text>`);
+    else {
+      o.push(`<text x="${x + 8}" y="${y + 16}" font-size="13" font-weight="600" fill="var(--ink)">${esc(name)}</text>`);
+      if (sub && h > 26) o.push(`<text x="${x + 8}" y="${y + 30}" font-size="10" fill="var(--muted)" font-family="var(--mono)">${esc(sub)}</text>`);
+    }
+    o.push('</g>');
+  }
+  const tw = (t) => t.length * 5.5;
+  const lab = (x, y, t, col, anchor) => `<text x="${x}" y="${y}" font-size="9" text-anchor="${anchor || 'middle'}" fill="${col}" font-family="var(--mono)">${esc(t)}</text>`;
+  for (const [n, pts, opt = {}] of DG.wires) {
+    const net = byName(n), cls = ((FP.NETS.concat(FP.RX_NETS)).find(q => q[0] === n) || [])[1] || 'rx';
+    const col = NET_COLOR[cls], hot = S.hoverNet === n;
+    o.push(`<polyline data-net="${esc(n)}" points="${pts.map(p => p.join(',')).join(' ')}" fill="none" stroke="${col}" stroke-width="${hot ? 3 : 1.6}" ${cls === 'en' ? 'stroke-dasharray="5 3"' : ''} marker-end="url(#ar)"/>`);
+    o.push(`<polyline data-net="${esc(n)}" points="${pts.map(p => p.join(',')).join(' ')}" fill="none" stroke="transparent" stroke-width="10"/>`);
+    const fam = n === 'dac_tn[30]' ? nets.filter(q => q.cls === 'fine' && !q.missing) : null;
+    const len = fam ? (fam.length ? Math.max(...fam.map(q => q.len)) : null) : net && !net.missing ? net.len : null;
+    const name = opt.name !== undefined ? opt.name : n, L = len !== null ? `${len.toFixed(0)} µm` : '';
+    let best = 0, bl = -1;
+    for (let i = 0; i < pts.length - 1; i++) { const l = Math.abs(pts[i + 1][0] - pts[i][0]) + Math.abs(pts[i + 1][1] - pts[i][1]); if (l > bl) { bl = l; best = i; } }
+    const a = pts[best], b = pts[best + 1], one = [name, L].filter(Boolean).join(' ');
+    if (opt.pos) { o.push(lab(opt.pos[0], opt.pos[1], one, col, opt.pos[2])); continue; }
+    if (a[1] === b[1]) {
+      const mx = (a[0] + b[0]) / 2;
+      if (Math.abs(b[0] - a[0]) >= tw(one) + 8) o.push(lab(mx, a[1] - 4, one, col));
+      else { if (name) o.push(lab(mx, a[1] - 4, name, col)); if (L) o.push(lab(mx, a[1] + 11, L, col)); }
+    } else {
+      const my = (a[1] + b[1]) / 2;
+      if (name) o.push(lab(a[0] + 4, my - 2, name, col, 'start')); if (L) o.push(lab(a[0] + 4, my + 9, L, col, 'start'));
+    }
+  }
+  o.push(`<text x="12" y="572" font-size="10" fill="var(--muted)" font-family="var(--mono)">Lengths: Manhattan, in the open variant (receiver ${mode === 'cells' ? 'as cells' : 'as one block: its inside wires have no length here'}). Dashed outline: not placed. Click a block to find it in the layout.</text>`);
+  o.push(`<text x="12" y="586" font-size="10" fill="var(--muted)" font-family="var(--mono)">Blue: VAPWR (quiet analog + receiver). Orange: VDPWR (TX driver, digital macro). Every wire between the two is a supply crossing (3.3 V both).</text>`);
+  svg.innerHTML = o.join('');
+}
+function setMode(m) {
+  S.mode = m; try { localStorage.setItem('fp.mode', m); } catch (e) {}
+  if (m === 'layout') fit();
+  draw();
+}
+document.querySelectorAll('[data-mode]').forEach(b => b.onclick = () => setMode(b.dataset.mode));
+
+// ---- panels
+function badge(st) { return `<span class="st">${st}</span>`; }
+function renderTabs() {
+  const t = $('#tabs');
+  if (!S.order.length) { t.innerHTML = '<span class="empty">No variants yet</span>'; return; }
+  t.innerHTML = S.order.map(id => {
+    const v = S.variants[id];
+    const r = FP.evaluate(DATA, CAT, viewVariant(v), S.settings);
+    const f = r.checks.filter(c => c.status === 'fail').length, w = r.checks.filter(c => c.status === 'warn').length;
+    return `<button class="tab" role="tab" data-tab="${esc(id)}" aria-selected="${id === S.cur}" title="${esc(v.name)}">${esc(v.name)}<span class="dots">${f} fail · ${w} warn</span></button>`;
+  }).join('');
+}
+function renderVariantBox() {
+  const v = cur(), el = $('#secVariant');
+  if (!v) {
+    el.innerHTML = `<h2>Variants</h2><p class="empty">Nothing here yet. Claude writes named variants into this page's shared store, and they appear as tabs above.
+      Start a blank variant, or import a floorplan.json below.</p><div class="row edit-only"><button class="btn primary" id="bNew2">Start a blank variant</button></div>`;
+    const b = $('#bNew2'); if (b) b.onclick = newBlank;
+    return;
+  }
+  const who = v.updatedBy ? (v.updatedBy === S.uid ? 'you' : (S.names[v.updatedBy] || 'someone')) : '';
+  el.innerHTML = `<h2>${esc(v.name)} <span class="meta">${v.updatedAt ? new Date(v.updatedAt).toLocaleString() : ''}${who ? ' · ' + esc(who) : ''}</span></h2>
+    <div class="row"><span class="sync">receiver as</span><div class="seg" role="group" aria-label="Receiver"><button data-rx="block" aria-pressed="${FP.rxMode(v) === 'block'}">rx_top (one block)</button><button data-rx="cells" aria-pressed="${FP.rxMode(v) === 'cells'}">its 12 cells</button></div></div>
+    <div class="row"><span class="sync">vco_top as</span><div class="seg" role="group" aria-label="vco_top"><button data-vco="block" aria-pressed="${FP.vcoMode(v) === 'block'}">one block</button><button data-vco="parts" aria-pressed="${FP.vcoMode(v) === 'parts'}">ring + lsdiv · cgm_ref · decap</button></div></div>
+    <div class="row"><span class="sync">debug switch</span><div class="seg" role="group" aria-label="Debug switch"><button data-dbg="tg" aria-pressed="${(v.dbgCell || 'tg') === 'tg'}">own tgate (est. 15 × 12)</button><button data-dbg="asw" aria-pressed="${v.dbgCell === 'asw'}">tt_asw_5v0 (40 × 30)</button></div></div>
+    <div class="row edit-only"><button class="btn" id="bFitAll" title="Move every placed block's signal pins to the edge facing what they connect to">Fit all pins to this floorplan</button><button class="btn" id="bPinsAll">Put all pins back</button></div>
+    <div class="note${S.noteOpen ? ' open' : ''}" id="noteView">${esc(v.note || '')}</div>
+    <div class="row"><button class="linkbtn" id="noteMore">${S.noteOpen ? 'less' : 'more'}</button>
+    <details class="edit-only"><summary>Edit the note</summary><textarea id="noteEd" rows="6">${esc(v.note || '')}</textarea></details></div>`;
+  $('#noteMore').onclick = () => { S.noteOpen = !S.noteOpen; renderVariantBox(); };
+  el.querySelectorAll('[data-rx]').forEach(b => b.onclick = () => { if (S.canWrite) setRxMode(v, b.dataset.rx); });
+  el.querySelectorAll('[data-vco]').forEach(b => b.onclick = () => { if (S.canWrite) setVcoMode(v, b.dataset.vco); });
+  el.querySelectorAll('[data-dbg]').forEach(b => b.onclick = () => { if (S.canWrite && (v.dbgCell || 'tg') !== b.dataset.dbg) { v.dbgCell = b.dataset.dbg; touch(); } });
+  const fa = $('#bFitAll'); if (fa) fa.onclick = () => { const R0 = FP.resolve(CAT, v); v.pins = FP.fitPins(DATA, CAT, v, Object.keys(R0.inst)); touch(); };
+  const pa = $('#bPinsAll'); if (pa) pa.onclick = () => { v.pins = {}; touch(); };
+  const ne = $('#noteEd'); if (ne) ne.oninput = () => { v.note = ne.value; $('#noteView').textContent = ne.value; touchQuiet(); };
+}
+let quietT = null;
+// Switch the receiver between rx_top as one block and its cells. Cells not yet placed start where rx_top has
+// them (when rx_top is placed upright), and rx_top keeps its own placement while the cells are in use.
+function setRxMode(v, mode) {
+  if (FP.rxMode(v) === mode) return;
+  v.rx = mode;
+  const p = v.place.xrx;
+  if (mode === 'cells' && p && p.orient === 'R0') {
+    for (const [n, c] of Object.entries(CAT)) if (c.rx === 'cells' && !v.place[n] && c.inRxTop) v.place[n] = { x: +(p.x + c.inRxTop[0]).toFixed(3), y: +(p.y + c.inRxTop[1]).toFixed(3), orient: 'R0' };
+  }
+  S.sel = null; touch();
+}
+// Switch vco_top between one block and its parts. Parts not yet placed start where vco_top has them, in
+// vco_top's orientation; vco_top keeps its own placement while the parts are in use.
+function setVcoMode(v, mode) {
+  if (FP.vcoMode(v) === mode) return;
+  v.vco = mode;
+  const p = v.place.xvco, c0 = CAT.xvco;
+  if (mode === 'parts' && p) {
+    const pl = { x: p.x, y: p.y, orient: p.orient || 'R0' };
+    for (const [n, c] of Object.entries(CAT)) if (c.vco === 'parts' && !v.place[n] && c.inVco) {
+      const r = FP.mapRect(pl, c0.w, c0.h, [c.inVco[0], c.inVco[1], c.w, c.h]);
+      v.place[n] = { x: +r[0].toFixed(3), y: +r[1].toFixed(3), orient: pl.orient };
+    }
+  }
+  S.sel = null; touch();
+}
+function touchQuiet() { clearTimeout(quietT); quietT = setTimeout(() => { const v = cur(); if (v) { S.dirty.add(S.cur); v.updatedAt = new Date().toISOString(); if (S.uid) v.updatedBy = S.uid; flush(S.cur); } }, 800); }
+
+function renderSel() {
+  const el = $('#secSel'), v = cur();
+  if (!v || !S.sel) { el.innerHTML = `<h2>Selection</h2><p class="empty">Click a block, decap, reserved area or stripe to edit it. Dragging snaps to 0.5 µm. Shift-drag over empty space selects a group; shift-click adds or removes one.</p>`; return; }
+  if (S.sel.kind === 'group') {
+    const items = S.sel.items, names = items.map(q => q.kind === 'inst' ? q.id : q.id);
+    const R0 = FP.resolve(CAT, viewVariant(v)), rs = items.map(q => q.kind === 'inst' ? R0.inst[q.id] && R0.inst[q.id].rect : (R0.decaps.concat(R0.reserved).find(d => d.name === q.id) || {}).rect).filter(Boolean);
+    const bx = Math.min(...rs.map(r => r[0])), by = Math.min(...rs.map(r => r[1])), bx1 = Math.max(...rs.map(r => r[0] + r[2])), by1 = Math.max(...rs.map(r => r[1] + r[3]));
+    el.innerHTML = `<h2>Group <span class="meta">${items.length} selected</span></h2>
+      <p class="note" style="display:block">${esc(names.join(', '))}</p>
+      <dl class="kv"><dt>group outline</dt><dd>x ${f1(bx)}–${f1(bx1)}, y ${f1(by)}–${f1(by1)} (${f1(bx1 - bx)} × ${f1(by1 - by)})</dd></dl>
+      <div class="row edit-only"><label class="f">move by x<input type="number" step="0.5" id="gdx" value="0"></label><label class="f">y<input type="number" step="0.5" id="gdy" value="0"></label><button class="btn" id="gMove">Move</button><button class="btn" id="gClear">Clear selection</button></div>
+      <p class="empty" style="margin:0">Drag any of them to move the group. Arrows nudge 0.5 µm (shift: 5 µm). Esc clears.</p>`;
+    $('#gMove').onclick = () => { const dx = +$('#gdx').value, dy = +$('#gdy').value; if (isFinite(dx) && isFinite(dy) && (dx || dy)) { moveGroup(v, dx, dy); touch(); } };
+    $('#gClear').onclick = () => { S.sel = null; render(); };
+    return;
+  }
+  if (S.sel.kind === 'inst') {
+    const n = S.sel.id, c = CAT[n], p = viewVariant(v).place[n];
+    if (!c || !p) { S.sel = null; return renderSel(); }
+    const ins = last && last.R.inst[n];
+    const [ew] = estWH(v, n), A0 = c.w * c.h, A = (v.est && v.est[n] && v.est[n].area) || A0;
+    el.innerHTML = `<h2>${esc(c.label || n)} <span class="meta">${esc(n)} · ${esc(c.cell)} · ${esc(c.supply || '')}</span></h2>
+      <div class="row"><label class="f">x<input type="number" step="0.5" id="sx" value="${f1(p.x)}"></label><label class="f">y<input type="number" step="0.5" id="sy" value="${f1(p.y)}"></label></div>
+      <div class="orients edit-only">${Object.keys(FP.ORIENTS).map(o => `<button class="btn" data-or="${o}" aria-pressed="${p.orient === o}">${o}</button>`).join('')}</div>
+      ${!c.glue ? `<label class="f">width (height follows, at the area below)<input type="range" id="mwR" min="${Math.max(4, Math.ceil(A / 318))}" max="${Math.min(685, Math.floor(A / 4))}" step="0.5" value="${f1(ew)}"></label>
+      <div class="row edit-only"><label class="f">w<input type="number" step="0.5" id="mw" value="${f1(ew)}"></label><label class="f">h<input type="number" id="mh" value="${(A / ew).toFixed(2)}" disabled></label>
+      <label class="f">area, µm²<input type="number" step="500" id="mA" value="${Math.round(A)}"></label><span class="sync">${A >= A0 ? '+' : ''}${(100 * (A / A0 - 1)).toFixed(1)} % vs ${c.reshape ? 'hardened' : 'the GDS'}</span></div>
+      <div class="row edit-only"><button class="btn" id="mReset">Back to ${c.w} × ${c.h}</button></div>` : ''}
+      <dl class="kv"><dt>placed size</dt><dd>${ins ? `${f1(ins.rect[2])} × ${f1(ins.rect[3])} µm` : '-'}</dd><dt>area</dt><dd>${f1(c.glue ? c.w * c.h : A)} µm²</dd>
+      <dt>status</dt><dd>${c.estimate && (v.dbgCell || 'tg') === 'tg' ? 'estimate: not laid out yet (hatched)' : c.glue ? 'standard cells, outline from tt_wrapper.py (hatched)' : ins && ins.reshaped ? `reshaped: needs a ${c.reshape ? 're-harden' : 're-layout'} (hatched)` : p.parked ? 'parked, not placed' : c.inVco ? 'part of vco_top (its GDS outline)' : 'GDS outline'}</dd>
+      ${ins && Object.values(ins.pins).some(q => q.moved) ? `<dt>pins moved</dt><dd>${esc(Object.entries(ins.pins).filter(([, q]) => q.moved).map(([k]) => k).join(', '))} (orange rings): ${c.reshape ? 'a new pin_order.cfg' : 'a re-layout'}</dd>` : ''}
+      ${ins && Object.values(ins.pins).some(q => q.est) ? `<dt>estimated pins</dt><dd>${esc(Object.entries(ins.pins).filter(([, q]) => q.est).map(([k]) => k).join(', '))} (orange rings)</dd>` : ''}
+      ${c.inRxTop ? `<dt>in rx_top</dt><dd>at (${f1(c.inRxTop[0])}, ${f1(c.inRxTop[1])})</dd>` : ''}</dl>
+      ${p.parked ? '' : `<div class="row edit-only"><button class="btn" id="bFit">Fit its pins to this floorplan</button>${ins && Object.values(ins.pins).some(q => q.moved) ? '<button class="btn" id="bPinReset">Put its pins back</button>' : ''}<button class="btn" id="bPark">Park it (unplace)</button></div>`}`;
+    const setXY = () => { const x = +$('#sx').value, y = +$('#sy').value; if (isFinite(x) && isFinite(y)) { v.place[n] = Object.assign({}, p, { x, y }); delete v.place[n].parked; touch(); } };
+    $('#sx').onchange = setXY; $('#sy').onchange = setXY;
+    if (!c.glue) {
+      const setWA = (w, A, live) => {   // keep the top-right corner while the block changes shape (moved pins stay in its frame)
+        A = Math.min(150000, Math.max(50, +A)); w = Math.min(685, Math.floor(A / 4), Math.max(4, Math.ceil(A / 318), snap(+w)));
+        if (!isFinite(w) || !isFinite(A)) return;
+        const o = viewVariant(v).place[n], [ow, oh] = estWH(v, n);
+        const [pw0, ph0] = FP.placedSize(o.orient, ow, oh), [pw1, ph1] = FP.placedSize(o.orient, w, A / w);
+        v.est = v.est || {};
+        if (Math.abs(w - c.w) < 1e-6 && Math.abs(A - A0) < 1) delete v.est[n];
+        else v.est[n] = Object.assign({ w }, Math.abs(A - A0) > 1 ? { area: +A.toFixed(1) } : {});
+        v.place[n] = { x: +(o.x + pw0 - pw1).toFixed(3), y: +(o.y + ph0 - ph1).toFixed(3), orient: o.orient };
+        if (live) { draw(); renderChecks(); $('#mw').value = f1(w); $('#mh').value = (A / w).toFixed(2); } else touch();
+      };
+      const curA = () => (v.est && v.est[n] && v.est[n].area) || A0;
+      $('#mwR').oninput = () => setWA($('#mwR').value, curA(), true);
+      $('#mwR').onchange = () => setWA($('#mwR').value, curA(), false);
+      $('#mw').onchange = () => setWA($('#mw').value, curA(), false);
+      $('#mA').onchange = () => setWA(estWH(v, n)[0], +$('#mA').value, false);
+      $('#mReset').onclick = () => setWA(c.w, A0, false);
+    }
+    el.querySelectorAll('[data-or]').forEach(b => b.onclick = () => setOrient(n, b.dataset.or));
+    const bp = $('#bPark'); if (bp) bp.onclick = () => { delete v.place[n]; S.sel = null; touch(); };
+    const bf = $('#bFit'); if (bf) bf.onclick = () => { v.pins = FP.fitPins(DATA, CAT, v, [n]); touch(); };
+    const br = $('#bPinReset'); if (br) br.onclick = () => { if (v.pins) delete v.pins[n]; touch(); };
+  } else if (S.sel.kind === 'decap') {
+    const [base, i] = S.sel.id.split('.'), d = decapRef(v, S.sel.id), res = base === 'reserved';
+    if (!d) { S.sel = null; return renderSel(); }
+    const list = res ? v.reserved : v.decaps[base], def = FP.DECAPS[base];
+    el.innerHTML = `<h2>${res ? 'Reserved area' : esc(def.label)} ${i} <span class="meta">${res ? 'keep-out' : def.cell + ' · estimate'}</span></h2>
+      ${res ? `<label class="f">label<input type="text" id="dl" value="${esc(d.label || '')}"></label>` : ''}
+      <div class="row"><label class="f">x<input type="number" step="0.5" id="dx" value="${f1(d.x)}"></label><label class="f">y<input type="number" step="0.5" id="dy" value="${f1(d.y)}"></label>
+      <label class="f">w<input type="number" step="0.5" id="dw" value="${f1(d.w)}"></label><label class="f">h<input type="number" step="0.5" id="dh" value="${f1(d.h)}"></label></div>
+      <dl class="kv"><dt>this rectangle</dt><dd>${f1(d.w * d.h)} µm²${res ? '' : ` ≈ ${(FP.DECAP_FF * d.w * d.h / 1000).toFixed(1)} pF`}</dd>${res ? '' : `<dt>all ${def.net} decap</dt><dd>${f1(list.reduce((t, q) => t + q.w * q.h, 0))} µm²</dd>`}</dl>
+      <div class="row edit-only"><button class="btn" id="bDecDel">Remove this rectangle</button></div>`;
+    for (const k of ['x', 'y', 'w', 'h']) $('#d' + k).onchange = () => { d[k] = Math.max(k === 'w' || k === 'h' ? 1 : -1e9, +$('#d' + k).value); touch(); };
+    const dl = $('#dl'); if (dl) dl.onchange = () => { d.label = dl.value; touch(); };
+    $('#bDecDel').onclick = () => { list.splice(+i - 1, 1); S.sel = null; touch(); };
+  } else if (S.sel.kind === 'strap') {
+    const st = (v.straps || [])[S.sel.id]; if (!st) { S.sel = null; return renderSel(); }
+    el.innerHTML = `<h2>Stripe ${esc(st.net)} <span class="meta">Metal4, y ${(TILE.stripe_y || [5])[0]}–${(TILE.stripe_y || [0, H - 5])[1]}</span></h2>
+      <div class="row"><label class="f">net<select id="tn">${['VGND', 'VAPWR', 'VDPWR'].map(n => `<option ${n === st.net ? 'selected' : ''}>${n}</option>`).join('')}</select></label>
+      <label class="f">x<input type="number" step="0.1" id="tx" value="${f1(st.x)}"></label><label class="f">w<input type="number" step="0.1" id="tw" value="${f1(st.w)}"></label></div>
+      <div class="row edit-only"><button class="btn" id="bStDel">Remove stripe</button></div>`;
+    $('#tn').onchange = () => { st.net = $('#tn').value; touch(); };
+    $('#tx').onchange = () => { st.x = +$('#tx').value; touch(); };
+    $('#tw').onchange = () => { st.w = Math.max(0.5, +$('#tw').value); touch(); };
+    $('#bStDel').onclick = () => { v.straps.splice(S.sel.id, 1); S.sel = null; touch(); };
+  }
+}
+// Why each rule exists (docs/floorplan_spec.md "Rules, ranked")
+const WHY = {
+  'RX input far from the macro and clocks': 'Three mechanisms. (1) Ring-derived signals (ck = f/4, the ÷16 / ÷64 / ÷1024 outputs, the macro\'s ck domain) are locked to the LO, so their 433.92 MHz harmonic mixes to exactly 0 Hz: a DC offset the AC couplings remove while it is steady, but a step (CK_EN or a divider switched during RX) blanks the receiver for ~1 ms. (2) The 25 MHz clock is not locked: its harmonics at 425 / 450 MHz land 8.9 / 16 MHz away after mixing (out of band) but load the LNA, and beats between the 25 MHz and ck domains can land within ±143 kHz: in band, unfilterable. (3) Supply / substrate coupling into the ring puts spurs on the LO (reciprocal mixing). Measured from the LNA and the ua[4] / ua[5] wires to the macro halo, every ck / divider / 25 MHz / SPI / DAC flyline and the top channel. Fails if one of those crosses the LNA.',
+  'LO wires short and matched': 'a2 is a ring node: every fF on it slows the ring and shifts the I/Q phase (72° by design, 77° extracted). ls (lsdiv\'s level shifter) drives both the TX tap and the receiver\'s I LO buffer; lsq (the Q level shifter inside the receiver) drives the Q buffer. Matching the two loads should bring the I/Q phase back towards 72° (rx_layout.md). So the receiver\'s LO end sits next to lsdiv and the ring\'s a2. a2 is not a vco_top pin yet: its position here is the ring node (estimate).',
+  'LNA at ua[4] / ua[5]': 'The input pair: short, symmetric wires keep the input match and the common-mode rejection, and keep the input away from everything else.',
+  'TX driver at ua[2] / ua[3]': 'tx_drv pushes 12.6 mA of 434 MHz edges into the pads: long wires add R, L and C, and radiate inside the tile. It is off while receiving, so its distance from the RX is soft, but ua[3] is the pad next to ua[4].',
+  'Supply domains': 'VAPWR (3.3 V) feeds the quiet analog (vco_top, mdac, vctrl_pd, the code inverters) and the receiver; VDPWR feeds tx_drv and the digital macro; VGND is shared. Each block should take its supply from a nearby stripe of its own rail, and every signal between the two domains is a place where the supplies and grounds meet (listed under Supply crossings; all 3.3 V to 3.3 V, no level shifters).',
+  'No digital or LO wire over the RX': 'The baseband and limiter AC-coupling nodes are about 60 MΩ: a µV of coupling there is a signal. So no clock, digital, DAC, enable, TX or LO wire, nor q_i / q_q (the limiters\' full-swing outputs, whose edges come at the signal\'s own rate: in band), runs over a receiver block (its own wires excepted, and the receiver\'s internal wiring). A wire whose straight L route would cross the receiver is routed round it on a 2 µm grid and drawn that way; the rule warns when the detours add up past the threshold and fails only when a wire has no way round, or the top channel runs over the receiver.',
+  'Short fine-tune bus': 'The 37 DAC control lines (thermometer, binary and ΣΔ) from tx_fine to mdac switch with the code and the ΣΔ dither; short lines are less load for the macro and less coupling. mdac\'s vg output goes straight into the ring\'s shared node: it must be short.',
+  'Macro near the top edge': 'The TT digital pins are on the top edge (x 15–321); the macro talks to them (clk, rst_n, SPI, fsk, ck_o and the dividers), and the code and enable pins go to vco_top and tx_drv. Their wires run in a channel along the top, as tall as the number of wires side by side at each x. The macro should sit close under it.',
+  'Fit and spacing': 'Everything inside 693.28 × 325.36 µm, 2–3 µm between blocks for guard rings (the keep-out setting), nothing in the macro\'s halo, nothing on a reserved area.',
+  'Power stripes': 'Power reaches the TT grid through vertical Metal4 stripes (≥ 0.8 µm wide, y 5–320.36); Metal5 is not allowed. A stripe can\'t cross Metal4 inside a block: the macro routes on Metal4, so over the macro a stripe may only run on one of its own strap pairs (VDD → VDPWR, VSS → VGND). The analog blocks use no Metal4.',
+  'VCO bias wires (vco_top split)': 'Inside vco_top, cgm_ref abuts the ring: vbnf (the filtered bias on the coarse DAC gates) and vctrl (the fine-tune node) have no wire at all. Split apart, both become wires, and the reference path already dominates the VCO\'s FM noise (7.3–8.3 kHz rms against a 15 kHz limit): keep them short and away from the macro, the clocks and the DAC lines. Only scored when vco_top is placed as its parts.',
+  'Debug mux next to its sources': 'ua[0] is a debug pin: four Tiny Tapeout analog switches (tt_asw_5v0, 40 × 30 µm, with its own level shifter, so it takes VDPWR and VAPWR) connect baseband I, baseband Q, the receiver bias nb or vctrl to it, one at a time, by SPI bits in tx_fine (all off after reset). A switch sits next to its source, so while it is off the sensitive node only sees a short stub and the switch\'s off capacitance; the bus to the pad is routed round the receiver (rule 6). With the vctrl switch on, ua[0] is also the bench override of the VCO fine-tune node.',
+  'Decap VAPWR': 'Fill decap on VAPWR, at ~2.4 fF/µm² (nfet gate cap at ~60 % fill). No target yet; vco_top carries 10 pF on VDD_LS and the receiver its own rx_decap.',
+  'Decap VDPWR': 'Fill decap on VDPWR, at ~2.4 fF/µm². No target yet: the TX driver\'s 12.6 mA edges are the main load.',
+  'Unplaced blocks': 'Blocks still in the parking row under the tile are left out of every check. Place them to have them scored.',
+};
+
+function renderChecks() {
+  const el = $('#secChecks');
+  if (!last) { el.innerHTML = '<h2>Checklist</h2><p class="empty">Rules appear once a variant is open.</p>'; return; }
+  const cs = last.checks, n = (s) => cs.filter(c => c.status === s).length;
+  el.innerHTML = `<h2>Checklist <span class="meta">ranked rules, live</span></h2>
+    <div class="summary"><span style="color:var(--fail)"><b>${n('fail')}</b> fail</span><span style="color:var(--warn)"><b>${n('warn')}</b> warn</span><span style="color:var(--pass)"><b>${n('pass')}</b> pass</span></div>
+    <ol class="checks">${cs.map(c => `<li class="check ${c.status}" tabindex="0">${badge(c.status)}<span class="t">${c.rule}. ${esc(c.title)}</span><span class="v">${esc(c.value)}</span><span class="d">${esc(c.detail)}</span>${WHY[c.title] ? `<div class="why" role="tooltip"><b>Why</b>${esc(WHY[c.title])}</div>` : ''}</li>`).join('')}</ol>`;
+}
+function renderArea() {
+  const el = $('#secArea');
+  if (!last) { el.innerHTML = '<h2>Area</h2>'; return; }
+  const a = last.area, k = (x) => (x / 1000).toFixed(1) + 'k', pct = (x) => Math.max(0, 100 * x / a.tile).toFixed(1);
+  el.innerHTML = `<h2>Area <span class="meta">tile ${k(a.tile)} µm²</span></h2>
+    <div class="bar" role="img" aria-label="Area use"><span style="width:${pct(a.macro)}%;background:var(--vdp)"></span><span style="width:${pct(a.rx)}%;background:var(--rx)"></span><span style="width:${pct(a.other)}%;background:var(--vap)"></span><span style="width:${pct(a.decap)}%;background:var(--decap)"></span><span style="width:${pct(a.spacing)}%;background:var(--warn)"></span></div>
+    <div class="legend"><span><i class="sw" style="background:var(--vdp)"></i>macro ${k(a.macro)}</span><span><i class="sw" style="background:var(--rx)"></i>receiver ${k(a.rx)}</span><span><i class="sw" style="background:var(--vap)"></i>other blocks ${k(a.other)}</span><span><i class="sw" style="background:var(--decap)"></i>decap ${k(a.decap)}</span><span><i class="sw" style="background:var(--warn)"></i>spacing +10 % ${k(a.spacing)}</span></div>
+    <dl class="kv"><dt>placed blocks + decap</dt><dd>${k(a.tile - a.free)} · ${(100 * (a.tile - a.free) / a.tile).toFixed(0)} %</dd><dt>free (before spacing)</dt><dd>${k(a.free)}</dd>
+    <dt>receiver cells / rx_top</dt><dd>70.4k / 111.0k</dd></dl>`;
+}
+function renderNets() {
+  const el = $('#secNets');
+  if (!last) { el.innerHTML = '<h2>Nets</h2>'; return; }
+  const rows = last.nets.filter(n => !n.missing);
+  const total = rows.reduce((t, n) => t + n.len, 0);
+  el.innerHTML = `<h2>Nets <span class="meta">Manhattan, ${(total / 1000).toFixed(2)} mm total</span></h2>
+    <div class="legend">${Object.entries(FP.NET_CLASSES).map(([c, l]) => `<span><i class="sw" style="background:${NET_COLOR[c]}"></i>${l}</span>`).join('')}</div>
+    <div class="scroll"><table class="tbl"><tbody>${rows.map(n => `<tr data-net="${esc(n.name)}"><td><i class="sw" style="background:${NET_COLOR[n.cls]}"></i>${esc(n.name)}${n.est ? ' *' : ''}</td><td>${esc(n.a.replace('pad:', ''))} → ${esc(n.b.replace('pad:', ''))}</td><td class="n">${n.len.toFixed(1)}</td></tr>`).join('')}</tbody></table></div>
+    <p class="empty" style="margin:0">* an end is an estimated pin (vco_top a2, tx_fine rx_en). With "bus" on, the 37 DAC lines are drawn as three.</p>`;
+  el.querySelectorAll('tr[data-net]').forEach(tr => { tr.onmouseenter = () => { S.hoverNet = tr.dataset.net; draw(); }; tr.onmouseleave = () => { S.hoverNet = null; draw(); }; });
+}
+function renderCross() {
+  const el = $('#secCross');
+  if (!last) { el.innerHTML = '<h2>Supply crossings</h2>'; return; }
+  const cs = last.crossings, dac = cs.filter(c => c.cls === 'fine'), rest = cs.filter(c => c.cls !== 'fine');
+  el.innerHTML = `<h2>Supply crossings <span class="meta">VAPWR ↔ VDPWR, ${cs.length}</span></h2>
+    <p class="empty" style="margin:0">Every signal between the two rails (TT digital pins count as VDPWR). All 3.3 V to 3.3 V: no level shifters, but each is a place where the supplies and grounds meet.</p>
+    <div class="scroll"><table class="tbl"><tbody>${rest.map(c => `<tr data-net="${esc(c.net)}"><td><i class="sw" style="background:${NET_COLOR[c.cls]}"></i>${esc(c.net)}</td><td>${esc(c.from)} → ${esc(c.to)}</td></tr>`).join('')}
+    ${dac.length ? `<tr><td><i class="sw" style="background:var(--fine)"></i>DAC lines × ${dac.length}</td><td>${esc(dac[0].from.replace(/dac_\w+\[\d+\]/, 'dac_*'))} → ${esc(dac[0].to.replace(/n[sb]\d+/, 'n*'))}</td></tr>` : ''}</tbody></table></div>`;
+  el.querySelectorAll('tr[data-net]').forEach(tr => { tr.onmouseenter = () => { S.hoverNet = tr.dataset.net; draw(); }; tr.onmouseleave = () => { S.hoverNet = null; draw(); }; });
+}
+function renderStraps() {
+  const el = $('#secStraps'), v = cur();
+  if (!v) { el.innerHTML = '<h2>Power stripes</h2>'; return; }
+  const st = v.straps || [], [y0, y1] = TILE.stripe_y || [5, H - 5];
+  el.innerHTML = `<h2>Power stripes <span class="meta">Metal4 ≥ ${TILE.stripe_min_w || 0.8} µm, y ${y0}–${y1}</span></h2>
+    ${st.length ? `<div class="scroll"><table class="tbl"><tbody>${st.map((s, i) => `<tr><td><i class="sw" style="background:${STRAP_COLOR[s.net]}"></i>${s.net}</td><td class="n">x ${f1(s.x)}</td><td class="n">w ${f1(s.w)}</td><td class="n"><button class="btn" data-ss="${i}">edit</button></td></tr>`).join('')}</tbody></table></div>` : '<p class="empty">No stripes yet.</p>'}
+    <div class="row edit-only"><button class="btn" id="bStrap">Add a stripe</button><button class="btn" id="bDecA">Add VAPWR decap</button><button class="btn" id="bDecD">Add VDPWR decap</button><button class="btn" id="bRes">Add a reserved area</button></div>
+    <div class="warnbox">Stripes can't cross Metal4 (red with the Metal4 layer on): over the macro they must sit on its own VDD / VSS straps.</div>`;
+  el.querySelectorAll('[data-ss]').forEach(b => b.onclick = () => { S.sel = { kind: 'strap', id: +b.dataset.ss }; render(); });
+  const add = $('#bStrap'); if (add) add.onclick = () => { v.straps = v.straps || []; v.straps.push({ net: 'VAPWR', x: 2, w: 2 }); S.sel = { kind: 'strap', id: v.straps.length - 1 }; touch(); };
+  const ad = (base) => () => { v.decaps = v.decaps || {}; (v.decaps[base] = v.decaps[base] || []).push({ x: 0, y: -90, w: 40, h: 25 }); S.sel = { kind: 'decap', id: `${base}.${v.decaps[base].length}` }; touch(); };
+  const a1 = $('#bDecA'); if (a1) a1.onclick = ad('deca');
+  const a2 = $('#bDecD'); if (a2) a2.onclick = ad('decd');
+  const a3 = $('#bRes'); if (a3) a3.onclick = () => { v.reserved = v.reserved || []; v.reserved.push({ x: 0, y: -120, w: 100, h: 60, label: 'reserved' }); S.sel = { kind: 'decap', id: `reserved.${v.reserved.length}` }; touch(); };
+}
+async function saveFile(name, text) {
+  let dl = null; try { dl = window.claude && await window.claude.use('downloads'); } catch (e) {}
+  if (dl) { try { await dl.save({ filename: name, data: text }); setSync('file offered'); return; } catch (e) { if (e && e.code === 'declined') return; } }
+  copy(text);
+}
+async function copy(t) {
+  try { await navigator.clipboard.writeText(t); setSync('copied'); }
+  catch (e) { const ta = $('#ioText'); ta.value = t; ta.closest('details').open = true; ta.select(); setSync('select and copy the JSON'); }
+}
+function renderIO() {
+  const el = $('#secIO'), v = cur();
+  el.innerHTML = `<h2>floorplan.json <span class="meta">layout/floorplan/</span></h2>
+    <div class="row"><button class="btn primary" id="bExp" ${v ? '' : 'disabled'}>Save floorplan.json</button><button class="btn" id="bCopy" ${v ? '' : 'disabled'}>Copy JSON</button></div>
+    <details><summary>Show / paste JSON</summary><textarea id="ioText" rows="8" placeholder="Paste a floorplan.json here, then import it"></textarea>
+    <div class="row edit-only"><button class="btn" id="bImp">Import as a new variant</button><label class="btn">Open a file<input type="file" id="ioFile" accept=".json,application/json" hidden></label></div></details>
+    <p class="empty" style="margin:0">x, y are the lower-left of each placed bbox; rot / mirror give the KLayout DCplxTrans for the tile generator. Save it as layout/floorplan/floorplan.json.</p>`;
+  const json = () => JSON.stringify(FP.exportJSON(DATA, CAT, v, S.settings), null, 1);
+  if (v) { $('#bExp').onclick = () => saveFile('floorplan.json', json()); $('#bCopy').onclick = () => copy(json()); }
+  const imp = (txt) => { try { const j = JSON.parse(txt); const nv = FP.importJSON(CAT, j); addVariant(nv); } catch (e) { setSync('import failed: ' + e.message); } };
+  const bi = $('#bImp'); if (bi) bi.onclick = () => imp($('#ioText').value);
+  const fi = $('#ioFile'); if (fi) fi.onchange = () => { const f = fi.files[0]; if (f) f.text().then(imp); };
+}
+function renderSettings() {
+  const el = $('#secSettings'), s = S.settings;
+  const fields = [['keepout', 'keep-out between blocks, µm'], ['track', 'top channel track pitch, µm'], ['r1', '1. RX input ↔ macro / clocks ≥'], ['r2a', '2. a2 wire ≤'], ['r2b', '2. ls → rx ≤'], ['r2m', '2. |I load − Q load| ≤'],
+    ['lsq', '2. lsq wire inside rx_top, µm'], ['r6', '6. total detour round the RX ≤'], ['r3', '3. ua[4] / ua[5] → LNA ≤'], ['r4', '4. tx_drv → ua[2] / ua[3] ≤'], ['r7', '7. longest DAC line ≤'], ['r7b', '7. mdac.vg → vco_top.vg ≤'], ['r8', '8. macro top ↔ tile top ≤'], ['r11', '11. cgm_ref → ring vbnf / vctrl ≤'], ['r11d', '11. their gap to clock / DAC wires ≥'], ['r12', '12. debug source → its switch ≤']];
+  el.innerHTML = `<h2>Thresholds <span class="meta">shared with everyone</span></h2>
+    <div class="row">${fields.map(([k, l]) => `<label class="f">${l}<input type="number" step="0.5" data-set="${k}" value="${s[k]}"></label>`).join('')}</div>
+    <div class="row edit-only"><button class="btn" id="bReset">Reset to defaults</button></div>`;
+  el.querySelectorAll('[data-set]').forEach(i => i.onchange = () => { const x = +i.value; if (isFinite(x)) { s[i.dataset.set] = x; S.dirty.add('$settings'); clearTimeout(timers.$s); timers.$s = setTimeout(() => flush('$settings'), 600); render(); } });
+  const br = $('#bReset'); if (br) br.onclick = () => { Object.assign(s, FP.DEFAULT_SETTINGS); S.dirty.add('$settings'); flush('$settings'); render(); };
+}
+function renderLayers() {
+  $('#layers').innerHTML = Object.entries({ flylines: 'flylines', bus: 'DAC bus as 3', pins: 'pins', labels: 'labels', zones: 'zones', decap: 'decap', m4: 'Metal4', grid: 'grid' })
+    .map(([k, l]) => `<label class="chip"><input type="checkbox" id="ly_${k}" data-layer="${k}" ${S.layers[k] ? 'checked' : ''}>${l}</label>`).join('') +
+    `<button class="chip" id="bFit">fit</button>`;
+  document.querySelectorAll('[data-layer]').forEach(c => c.onchange = () => { S.layers[c.dataset.layer] = c.checked; try { localStorage.setItem('fp.layers', JSON.stringify(S.layers)); } catch (e) {} draw(); });
+  $('#bFit').onclick = () => { fit(); draw(); };
+}
+function render() {
+  draw(); renderTabs(); renderVariantBox(); renderSel(); renderChecks(); renderArea(); renderNets(); renderCross(); renderStraps(); renderIO(); renderSettings();
+  const has = !!cur();
+  for (const b of ['#bDup', '#bRen', '#bDel']) $(b).disabled = !has;
+}
+
+// ---- variant actions
+function newId() { return 'v' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5); }
+function addVariant(v) {
+  const id = newId();
+  v.order = Math.max(0, ...Object.values(S.variants).map(x => x.order || 0)) + 1;
+  S.variants[id] = v; sortOrder(); S.cur = id; S.sel = null; touch(id);
+}
+function newBlank() {
+  addVariant({ name: 'Blank', note: '', rx: 'cells', place: {}, decaps: {}, straps: [], est: {}, reserved: [] });
+}
+$('#bNew').onclick = newBlank;
+$('#bFull').onclick = async () => {
+  try {
+    if (document.fullscreenElement) await document.exitFullscreen();
+    else await document.documentElement.requestFullscreen();
+  } catch (e) { setSync('full screen not available here: open the link in its own tab'); }
+};
+document.addEventListener('fullscreenchange', () => { $('#bFull').textContent = document.fullscreenElement ? 'Exit full screen' : 'Full screen'; setTimeout(() => { fit(); draw(); }, 50); });
+$('#bDup').onclick = () => { const v = cur(); if (!v) return; const c = clone(v); c.name = v.name.replace(/( \(copy\))*$/, '') + ' (copy)'; addVariant(c); };
+$('#bRen').onclick = () => {
+  const v = cur(); if (!v) return;
+  const tab = document.querySelector(`[data-tab="${CSS.escape(S.cur)}"]`);
+  const inp = document.createElement('input'); inp.type = 'text'; inp.id = 'renameInput'; inp.value = v.name; inp.style.width = '260px';
+  tab.replaceWith(inp); inp.focus(); inp.select();
+  const done = (ok) => { if (ok && inp.value.trim()) { v.name = inp.value.trim(); touch(); } else render(); };
+  inp.onkeydown = (e) => { if (e.key === 'Enter') done(true); if (e.key === 'Escape') done(false); };
+  inp.onblur = () => done(true);
+};
+let delArm = 0;
+$('#bDel').onclick = () => {
+  const b = $('#bDel');
+  if (Date.now() - delArm > 3000) { delArm = Date.now(); b.textContent = 'Delete? click again'; setTimeout(() => { b.textContent = 'Delete'; }, 3000); return; }
+  delArm = 0; b.textContent = 'Delete';
+  const id = S.cur; delete S.variants[id]; sortOrder(); S.cur = S.order[0] || null; S.sel = null;
+  S.dirty.add(id); flush(id); render();
+};
+$('#tabs').addEventListener('click', (e) => {
+  const t = e.target.closest('[data-tab]'); if (!t) return;
+  S.cur = t.dataset.tab; S.sel = null; try { localStorage.setItem('fp.cur', S.cur); } catch (err) {} fit(); render();
+});
+
+// ---- canvas interaction
+const svg = $('#cv');
+let drag = null;
+function setOrient(n, o) {
+  const v = cur(), vv = viewVariant(v), p = vv.place[n], [ew, eh] = estWH(v, n);
+  const [w0, h0] = FP.placedSize(p.orient, ew, eh), [w1, h1] = FP.placedSize(o, ew, eh);
+  v.place[n] = { x: snap(p.x + (w0 - w1) / 2), y: snap(p.y + (h0 - h1) / 2), orient: o };
+  touch();
+}
+svg.addEventListener('pointerdown', (e) => {
+  if (e.button !== 0) return;
+  if (S.mode === 'diagram') {
+    const g = e.target.closest('[data-dinst]');
+    if (g && CAT[g.dataset.dinst]) { S.sel = { kind: 'inst', id: g.dataset.dinst }; setMode('layout'); render(); }
+    return;
+  }
+  const v = cur(); const [x, y] = toUm(e);
+  let gi = e.target.closest('[data-inst]'), gd = e.target.closest('[data-decap]'); const gs = e.target.closest('[data-strap]');
+  if (v && !gi && !gd && !gs && !e.target.closest('[data-resize]')) {   // a flyline or label on top: hit-test the blocks underneath
+    const R0 = FP.resolve(CAT, viewVariant(v)), inR = (r) => x >= r[0] && x <= r[0] + r[2] && y >= r[1] && y <= r[1] + r[3];
+    const bi = Object.values(R0.inst).filter(i => inR(i.rect)).sort((a, b) => a.rect[2] * a.rect[3] - b.rect[2] * b.rect[3])[0];
+    const bd = S.layers.decap ? R0.decaps.filter(d => inR(d.rect)).sort((a, b) => a.rect[2] * a.rect[3] - b.rect[2] * b.rect[3])[0] : null;
+    const pick = bi && bd ? (bi.rect[2] * bi.rect[3] <= bd.rect[2] * bd.rect[3] ? 'i' : 'd') : bi ? 'i' : bd ? 'd' : null;
+    if (pick === 'i') gi = { dataset: { inst: bi.name } }; else if (pick === 'd') gd = { dataset: { decap: bd.name } };
+  }
+  svg.setPointerCapture(e.pointerId);
+  if (v && e.shiftKey && (gi || gd)) {                       // shift-click: add to / remove from the group
+    toggleSel(gi ? 'inst' : 'decap', gi ? gi.dataset.inst : gd.dataset.decap); drag = null; render(); return;
+  }
+  if (v && e.shiftKey && !gs) {                              // shift-drag on empty space: selection box
+    drag = { kind: 'band', x0: x, y0: y, x1: x, y1: y, keep: selItems().slice() }; S.dragging = false; draw(); return;
+  }
+  const hit = gi ? { kind: 'inst', id: gi.dataset.inst } : gd && !e.target.dataset.resize ? { kind: 'decap', id: gd.dataset.decap } : null;
+  if (v && S.canWrite && hit && S.sel && S.sel.kind === 'group' && isSel(hit.kind, hit.id)) {   // drag the whole group
+    drag = { kind: 'group', x0: x, y0: y, orig: S.sel.items.map(q => [q, itemPos(v, q)]) }; S.dragging = true; render(); return;
+  }
+  if (v && S.canWrite && gi) {
+    const n = gi.dataset.inst, p = viewVariant(v).place[n];
+    S.sel = { kind: 'inst', id: n }; drag = { kind: 'inst', n, dx: x - p.x, dy: y - p.y, p0: p, moved: false };
+  } else if (v && S.canWrite && gd) {
+    const d = decapRef(v, gd.dataset.decap);
+    S.sel = { kind: 'decap', id: gd.dataset.decap };
+    drag = e.target.dataset.resize ? { kind: 'resize', d, x0: d.x, y1: d.y + d.h } : { kind: 'decap', d, dx: x - d.x, dy: y - d.y };
+  } else if (v && S.canWrite && gs) {
+    const st = v.straps[+gs.dataset.strap]; S.sel = { kind: 'strap', id: +gs.dataset.strap }; drag = { kind: 'strap', st, dx: x - st.x };
+  } else if (!S.canWrite && (gi || gd || gs)) {
+    S.sel = gi ? { kind: 'inst', id: gi.dataset.inst } : gd ? { kind: 'decap', id: gd.dataset.decap } : { kind: 'strap', id: +gs.dataset.strap };
+    drag = { kind: 'pan', cx: e.clientX, cy: e.clientY, v0: Object.assign({}, S.view) };
+  } else {
+    if (e.target === svg || !e.target.closest('[data-net]')) S.sel = null;
+    drag = { kind: 'pan', cx: e.clientX, cy: e.clientY, v0: Object.assign({}, S.view) }; svg.classList.add('panning');
+  }
+  S.dragging = drag.kind !== 'pan';
+  render();
+});
+svg.addEventListener('pointermove', (e) => {
+  const [x, y] = toUm(e);
+  $('#coords').textContent = `x ${x.toFixed(1)}, y ${y.toFixed(1)} µm`;
+  const tip = $('#tip');
+  const tn = e.target.closest && e.target.closest('[data-net]');
+  if (tn && last && !drag) {
+    const n = last.nets.find(q => q.name === tn.dataset.net);
+    if (n) { const r = $('#stage').getBoundingClientRect(); tip.hidden = false; tip.textContent = `${n.name}: ${n.a.replace('pad:', '')} → ${n.b.replace('pad:', '')}  ${n.len.toFixed(1)} µm`; tip.style.left = (e.clientX - r.left + 12) + 'px'; tip.style.top = (e.clientY - r.top + 12) + 'px'; }
+    if (S.hoverNet !== n.name) { S.hoverNet = n.name; draw(); }
+  } else if (!drag) { tip.hidden = true; if (S.hoverNet) { S.hoverNet = null; draw(); } }
+  if (!drag) return;
+  const v = cur();
+  if (drag.kind === 'pan') {
+    const r = svg.getBoundingClientRect();
+    S.view.x = drag.v0.x - (e.clientX - drag.cx) / r.width * S.view.w;
+    S.view.y = drag.v0.y - (e.clientY - drag.cy) / r.height * S.view.h;
+    draw(); return;
+  }
+  if (drag.kind === 'band') { drag.x1 = x; drag.y1 = y; draw(); return; }
+  if (drag.kind === 'group') {
+    const dx = snap(x - drag.x0), dy = snap(y - drag.y0);
+    for (const [q, o] of drag.orig) setItemPos(v, q, +(o.x + dx).toFixed(3), +(o.y + dy).toFixed(3), o);
+    drag.moved = dx !== 0 || dy !== 0; draw(); renderChecks(); return;
+  }
+  if (drag.kind === 'inst') { v.place[drag.n] = { x: snap(x - drag.dx), y: snap(y - drag.dy), orient: drag.p0.orient }; drag.moved = true; }
+  else if (drag.kind === 'decap') { drag.d.x = snap(x - drag.dx); drag.d.y = snap(y - drag.dy); }
+  else if (drag.kind === 'resize') { drag.d.w = Math.max(2, snap(x - drag.x0)); const ny = Math.min(drag.y1 - 2, snap(y)); drag.d.h = drag.y1 - ny; drag.d.y = ny; }
+  else if (drag.kind === 'strap') { drag.st.x = Math.round((x - drag.dx) * 10) / 10; }
+  draw(); renderChecks();
+});
+function endDrag() {
+  if (!drag) return;
+  const was = drag; drag = null; S.dragging = false; svg.classList.remove('panning');
+  if (was.kind === 'band') {
+    const v = cur(), b = [Math.min(was.x0, was.x1), Math.min(was.y0, was.y1), Math.abs(was.x1 - was.x0), Math.abs(was.y1 - was.y0)];
+    const R0 = FP.resolve(CAT, viewVariant(v)), items = was.keep.slice();
+    const add = (kind, id) => { if (!items.some(q => q.kind === kind && q.id === id)) items.push({ kind, id }); };
+    if (b[2] > 0.5 || b[3] > 0.5) {
+      for (const i of Object.values(R0.inst)) if (FP.overlap(i.rect, b) > 0) add('inst', i.name);
+      if (S.layers.decap) for (const d of R0.decaps) if (FP.overlap(d.rect, b) > 0) add('decap', d.name);
+    }
+    setGroup(items); render(); return;
+  }
+  if (was.kind === 'group') { if (was.moved) touch(); else render(); return; }
+  if (was.kind !== 'pan') touch(); else render();
+}
+svg.addEventListener('pointerup', endDrag);
+svg.addEventListener('pointercancel', endDrag);
+svg.addEventListener('wheel', (e) => {
+  if (S.mode === 'diagram') return;
+  e.preventDefault();
+  const r = svg.getBoundingClientRect(), k = Math.exp(e.deltaY * 0.0015);
+  const fx = (e.clientX - r.left) / r.width, fy = (e.clientY - r.top) / r.height;
+  const nw = Math.min(2000, Math.max(20, S.view.w * k)), nh = S.view.h * nw / S.view.w;
+  S.view.x += (S.view.w - nw) * fx; S.view.y += (S.view.h - nh) * fy; S.view.w = nw; S.view.h = nh;
+  draw();
+}, { passive: false });
+document.addEventListener('keydown', (e) => {
+  if (/INPUT|TEXTAREA|SELECT/.test(document.activeElement && document.activeElement.tagName)) return;
+  if (S.mode === 'diagram') return;
+  if (e.key === 'f' || e.key === 'F') { fit(); draw(); return; }
+  if (e.key === 'Escape' && S.sel) { S.sel = null; render(); return; }
+  const v = cur(); if (!v || !S.sel || !S.canWrite) return;
+  if (S.sel.kind === 'group') {
+    const st = e.shiftKey ? 5 : 0.5, dir = { ArrowLeft: [-st, 0], ArrowRight: [st, 0], ArrowUp: [0, st], ArrowDown: [0, -st] }[e.key];
+    if (dir) { e.preventDefault(); moveGroup(v, dir[0], dir[1]); touch(); }
+    return;
+  }
+  if (S.sel.kind === 'inst') {
+    const n = S.sel.id, p = viewVariant(v).place[n];
+    const op = { r: 'rot', R: 'rot', x: 'mx', X: 'mx', y: 'my', Y: 'my' }[e.key];
+    if (op) { setOrient(n, FP.compose(p.orient, op)); e.preventDefault(); return; }
+  }
+  const st = e.shiftKey ? 5 : 0.5, dir = { ArrowLeft: [-st, 0], ArrowRight: [st, 0], ArrowUp: [0, st], ArrowDown: [0, -st] }[e.key];
+  if (!dir) return;
+  e.preventDefault();
+  if (S.sel.kind === 'inst') { const p = viewVariant(v).place[S.sel.id]; v.place[S.sel.id] = { x: p.x + dir[0], y: p.y + dir[1], orient: p.orient }; }
+  else if (S.sel.kind === 'decap') { const d = decapRef(v, S.sel.id); if (d) { d.x += dir[0]; d.y += dir[1]; } }
+  else if (S.sel.kind === 'strap') { v.straps[S.sel.id].x = Math.round((v.straps[S.sel.id].x + dir[0] / 5) * 10) / 10; }
+  touch();
+});
+new ResizeObserver(() => { const old = S.view; fit(); if (old) { /* keep zoom on resize only when first fitting */ } draw(); }).observe($('#stage'));
+
+renderLayers();
+if (window.FP_DEV_VARIANTS) {        // local preview hook (not used in the published page)
+  for (const v of window.FP_DEV_VARIANTS) { S.variants[v.id] = clone(v); }
+  sortOrder(); S.cur = S.order[0];
+}
+render();
+connect();
+})();
+</script>

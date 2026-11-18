@@ -67,6 +67,10 @@ accepted: [{rule: power_out.max_len, reason: "driver off while measuring; route 
   design for the worse.
 - Block convention: full-width horizontal rails, VDD top and VSS bottom, met1+2+3 stacked. Full-height
   met4 straps at the top level land on them through via3. Document any block that breaks this.
+- **A rotated block's rails are vertical: the straps must sit right over them.** A 90°-turned TX driver kept a
+  strap placed for its old orientation, its VSS ended up wired by the signal router (17.6 Ω, 259 mV, a via at 80×
+  EM), and LVS / DRC / precheck all passed. Gate the build on a supply-landing check (every block supply on a
+  strap, Via3 cuts sized for its current, router-wired supplies only for an allow-list of tiny blocks).
 - Straps on both sides plus a middle set, run as VDD/VSS pairs. Keep the noisy and quiet grounds
   separate, joined only at the straps, with the sensitive blocks' guard rings on the quiet ground.
 - **Biggest finding:** sensitive blocks sat 27–67 Ω from their supply because current wound through
@@ -101,6 +105,11 @@ accepted: [{rule: power_out.max_len, reason: "driver off while measuring; route 
   4. ngspice solves DC R, IR, AC |Z|, EM per layer and via, and the aggressor's switching transient
      seen at the sensitive blocks' supplies.
 - Probe a block's local supply at its devices' current-carrying terminals (S/D, R/C ends), not bulk.
+- **Don't spread a block's DC current by contact area.** That puts DC into decap, which draws none. A thin decap
+  feed then shows up as an EM hotspot: gf-433-oscillator had a 0.6 µm decap VDD line with one via reported at 27×
+  the limit. Weight the current onto the devices that carry it (the output stage's sources), and treat a decap
+  feed as an AC / ESR question, not an EM one. A single via in a decap feed is series resistance that halves
+  the decap's use.
 - Point injection over-reads EM at mcon/via1 (a 71 % reading was really ~9 %). Sanity-check hot spots.
 - Make what-ifs cheap (a strap-width json, `IDEAL=1`, trunk multipliers), and **check the copy for
   shorts before simulating**.

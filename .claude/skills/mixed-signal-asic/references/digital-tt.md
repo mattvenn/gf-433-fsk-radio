@@ -19,6 +19,14 @@
 - Run a local precheck (no met5, power-pin width and extent, nothing touching) plus magic DRC "the TT
   way" before relying on the GitHub precheck. Re-export the GDS/LEF and re-precheck after every layout
   change. Confirm the precheck accepts known antenna violations inside the macro.
+- **The precheck's analog pin check:** ua[k] counts as connected when flat met4 touches the ring 0.1–0.5 µm around
+  its pin rectangle, or a via3 lies inside it. Connected must equal `k < analog_pins`, and every connected pin needs
+  a pinout description. A spare ua inside the `analog_pins` range fails CI. Give it a job: gf-433-oscillator
+  strapped its spare ua[1] to VGND as a Kelvin ground sense for readings on the debug pin. Copy the check into the
+  local precheck and mutation-test it on the GDS that CI rejected.
+- **A TT pin strapped straight to a supply loses its name in extraction:** magic merges the port into the supply
+  net and netgen reports "no matching pin". Use `ext2spice short resistor` and put a 0 Ω resistor between the
+  supply and the pin in the LVS source. Then add an LVS mutation that removes the strap.
 - Old TT template scripts were stale (2x2 DEF, another project's readnet lines), and the inherited LVS
   CI had never actually reached LVS. **Audit inherited CI.**
 
@@ -78,6 +86,11 @@
 `check_pinout.py` holds a PINOUT table and checks `info.yaml`, the top schematic nets, the macro LEF,
 the GL netlist and `uio_oe` against it, and also emits the cocotb wrapper. It was mutation-tested
 (swapped ua[0]/ua[1], a reversed bus, a wrong label) and runs first in CI.
+
+Choose the pins from the TT conventions first (https://tinytapeout.com/specs/pinouts/: SPI on uio[0..3] = CS, MOSI,
+MISO, SCK, the Pmod order), then check what the demo board's MCU can drive natively (tt-demo-pcb README, "RP2
+Pinout"; RP2350 board: uio[0..3] = GPIO25-28 = SPI1 CSn, SCK, TX, RX). If neither matches, plan PIO / SoftSPI in
+the firmware and write the decision down. Changing the pin order after layout means a re-route and every check again.
 
 ## CI
 - `gds.yaml`: TT custom_gds (gds + lef + a `src/project.v` stub) → precheck → viewer. Extra docs (e.g. an

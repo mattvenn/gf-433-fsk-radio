@@ -10,14 +10,17 @@ Floorplan (x left to right, y bottom to top), one flat cell, one logic band over
     columns: M5n | M4n M3n M2n M1n NANDn (mirrored) | T A1 A2 B1 TG XB XA | NANDp M1p M2p M3p M4p | M5p
   M5 (5 fingers, N 8 / P 20 um), drawn as a textbook inverter: one poly gate per finger runs from the N row across
     the channel to the P row; a poly bar on the y4 track joins them, contacted at its inner end. Drains: 1 um M1 straps
-    from the N row across the channel to the P row, joined by a 2 um M2 + M3 out bar (a reserved slot above the
-    tracks) that runs to the out pin at the block edge (out_n left, out_p right). Sources: 1 um M1 straps to the
+    from the N row across the channel to the P row, joined by a 2 um M2 + M3 drain bar (a reserved slot above the
+    tracks); an 8 um M3 vertical from it down to the out pin on the E edge. Sources: 1 um M1 straps to the
     rails. EM: sized for the measured stage-5 currents (sim/tx/results/block_sch.txt, worst ff / rroute 15: 7.3 mA
     |avg|, 10.3 mA rms per arm) at the GF180MCU 85 C line limit (2.09 mA/um, Metal1..Metal5) and 0.58 mA per via.
   TG gates: the N gate (VDD) and the P gate (VSS) go on their own tracks (tgh, tgl), then M3 to the VDD / VSS rail.
   decap band: DC, nfet gate caps (gate VDD, S/D/B VSS) in row pairs; the two rows of a pair share continuous poly
     gates and a VDD poly-contact strap between them, joined to the VDD rail by M3 verticals.
-Pins: VDD, VSS (rails, M2), ls, en_p, en_n (M3, top edge), out_p (right edge), out_n (left edge) (M2 + M3).
+Pins (own frame, bbox lower-left = 0, 0; layout/floorplan/pins.md): VDD, VSS (rails, M2); ls, en_p, en_n on the
+  W edge's top end (M2, from their tracks by M3 verticals); out_p and out_n both on the E edge, 43.68 um apart (the
+  ua[3] / ua[2] pad pitch), OUTW = 8 um wide: M3 verticals from the M5 drain bars down through the decap, out_n then
+  runs east as M2 + M3 (M2 alone under out_p's vertical). The decap's VDD M3 vertical is in the strip left of M5n.
 No Metal4/5: the rails carry M3 (via2 arrays) for the VDPWR Metal4 stripe at the top level.
 """
 import argparse
@@ -45,7 +48,11 @@ _spec.loader.exec_module(TX)
 snap, um = LL.snap, LL.um
 DGAP = LL.DGAP
 RAIL = 2400
-OUT_H = 2000                                   # out bar height (M2 + M3)
+OUT_H = 2000                                   # M5 drain bar height (M2 + M3)
+OUTW = 8000                                    # output route width (M3; out_n also M2 east of M5n)
+OUT_Y = {'out_p': 10830, 'out_n': 54510}       # own frame, E edge: 43.68 um apart = ua[3] / ua[2] pad pitch
+PIN_Y = {'en_n': 87550, 'en_p': 94830, 'ls': 104920}   # own frame, W edge (ls capped below the VDD rail)
+XV = 1100                                      # decap VDD M3 vertical, left of M5n
 RW5 = 1200                                     # M5 S/D region width (1 um M1 strap on it)
 
 
@@ -97,36 +104,55 @@ def split_cols(s):
 
 
 # ---- geometry helpers ------------------------------------------------------------------------------------------
-def rail(c, yb, yt, x0, x1, tap=None, m3=True, skip=()):
-    """M1 + M2 rail from x0 to x1 (via1 every 2 um); M3 on it with via2 every 2 um, except in the skip windows
-    (x ranges where an M3 vertical crosses); a tap strip ('p' / 'n', x range) under it."""
+def rail(c, yb, yt, x0, x1, tap=None, m2skip=()):
+    """Power rail from x0 to x1: M1 and M3 continuous (the tile's Metal4 stripes land on the M3), M2 with windows
+    (m2skip: x ranges where a signal crosses the rail on M2, vert()); via1 / via2 every 2 um on the M2 pieces; a tap
+    strip ('p' / 'n', x range) under it."""
     c.r('m1', x0, yb, x1, yt)
-    c.r('m2', x0, yb, x1, yt)
-    x = x0 + 400
-    while x + 400 < x1:
-        c.r('v1', x - 130, yb + 300, x + 130, yt - 300)
-        x += 2000
-    if m3:
-        segs, a = [], x0
-        for (s0, s1) in sorted(skip):
-            if s0 > a:
-                segs.append((a, s0))
-            a = max(a, s1)
-        if a < x1:
-            segs.append((a, x1))
-        for a, b in segs:
-            if b - a < 1000:
-                continue
-            c.r('m3', a, yb, b, yt)
-            x = a + 500
-            while x + 500 <= b:
-                c.r('v2', x - 140, yb + 300, x + 140, yt - 300)
-                x += 2000
+    c.r('m3', x0, yb, x1, yt)
+    segs, a = [], x0
+    for (s0, s1) in sorted(m2skip):
+        if s0 > a:
+            segs.append((a, s0))
+        a = max(a, s1)
+    if a < x1:
+        segs.append((a, x1))
+    for a, b in segs:
+        if b - a < 1000:
+            continue
+        c.r('m2', a, yb, b, yt)
+        x = a + 400
+        while x + 400 <= b:
+            c.r('v1', x - 130, yb + 300, x + 130, yt - 300)
+            c.r('v2', x - 140, yb + 300, x + 140, yt - 300)
+            x += 2000
     if tap:
         kind, (a, b) = tap
         imp, cont = ('psd', 'psc') if kind == 'p' else ('nsd', 'nsc')
         c.r(imp, a, yb + 1010, b, yb + 1390)
         c.r(cont, a + 75, yb + 1085, b - 75, yb + 1315)
+
+
+def vert(c, x0, x1, y0, y1, rails):
+    """M3 vertical x0..x1 from y0 up to y1 that crosses the rails (yb, yt) it meets on an M2 bridge: the M3 stops
+    0.4 um short of the rail, the M2 reaches V past that, with a via2 array (0.36 um space, V2.2b) on each overlap.
+    Returns [(rail, the rail's M2 window)]."""
+    wide = x1 - x0 >= 1000
+    V = 2100 if wide else 600
+    xs = list(range(x0 + 400, x1 - 300, 700)) if wide else [(x0 + x1) // 2]
+    out, a = [], y0
+    for yb, yt in sorted(r for r in rails if y0 < r[0] and r[1] < y1):
+        lo, hi = yb - 400, yt + 400
+        c.r('m3', x0, a, x1, lo)
+        c.r('m2', x0, lo - V, x1, hi + V)
+        for ya, yz in ((lo - V, lo), (hi, hi + V)):
+            for vy in (range(ya + 400, yz - 300 + 1, 700) if wide else [(ya + yz) // 2]):
+                for vx in xs:
+                    c.r('v2', vx - 140, vy - 140, vx + 140, vy + 140)
+        out.append(((yb, yt), (x0 - 400, x1 + 400)))
+        a = hi
+    c.r('m3', x0, a, x1, y1)
+    return out
 
 
 def m5_width(nf):
@@ -164,7 +190,10 @@ def draw_m5(c, Y, y_in, xd0, nf, wn, wp, out, x_edge, side):
             c.r('m1', cx - 500, Y['vss_t'] - 300, cx + 500, nt - ENC_CO + 75)
             c.r('m1', cx - 500, pb + ENC_CO - 75, cx + 500, Y['vdd_b'] + 300)
     yb, yt = Y['out_b'], Y['out_t']
-    xa, xb = (min(outs) - 500, x_edge) if side == 'R' else (x_edge, max(outs) + 500)
+    if x_edge is None:                                            # local bar over the drains; routed by the caller
+        xa, xb = min(outs) - 500, max(outs) + 500
+    else:
+        xa, xb = (min(outs) - 500, x_edge) if side == 'R' else (x_edge, max(outs) + 500)
     c.r('m2', xa, yb, xb, yt)
     c.r('m3', xa, yb, xb, yt)
     for cx in outs:                                               # 2 x 3 via1 per drain strap
@@ -174,8 +203,9 @@ def draw_m5(c, Y, y_in, xd0, nf, wn, wp, out, x_edge, side):
     for vx in range(xa + 400, xb - 300, 600):                     # via2 array along the bar
         for vy in range(yb + 400, yt - 300, 600):
             c.r('v2', vx - 140, vy - 140, vx + 140, vy + 140)
-    lx = xb - 400 if side == 'R' else xa + 400
-    c.label(out, 'm3', lx, snap((yb + yt) / 2), port=True)
+    if x_edge is not None:
+        lx = xb - 400 if side == 'R' else xa + 400
+        c.label(out, 'm3', lx, snap((yb + yt) / 2), port=True)
     return xd1, xp
 
 
@@ -308,22 +338,14 @@ def build():
         if net not in xpin:                # internal net names for the extraction (a, b, t, ..., py4)
             c.label(net, 'm2', snap((a + b) / 2), ty[net])
     # M5n (left, out_n to x 0) and M5p (right, out_p to xr)
-    draw_m5(c, Y, ty['ny4'], xd5n, nf5, wn5, wp5, 'out_n', 0, 'L')
-    draw_m5(c, Y, ty['py4'], xd5p, nf5, wn5, wp5, 'out_p', xr, 'R')
-    # M3 verticals: pins up to the top edge (through a window in the VDD rail's M3), TG ties to the rails
+    draw_m5(c, Y, ty['ny4'], xd5n, nf5, wn5, wp5, 'out_n', None, 'L')
+    draw_m5(c, Y, ty['py4'], xd5p, nf5, wn5, wp5, 'out_p', None, 'R')
     ytop = Y['vdd_t']
-    skip_vdd, skip_vss = [], []
-    for net, xx in xpin.items():
-        c.via2(xx, ty[net])
-        c.r('m3', xx - 190, ty[net] - 190, xx + 190, ytop)
-        c.label(net, 'm3', xx, ytop - 200, port=True)
-        skip_vdd.append((xx - 190 - 400, xx + 190 + 400))
     for net, xx in xtie.items():
         yr = (Y['vdd_b'] + Y['vdd_t']) // 2 if net == 'tgh' else (Y['vss_b'] + Y['vss_t']) // 2
         c.via2(xx, ty[net])
         c.r('m3', xx - 190, min(ty[net], yr) - 190, xx + 190, max(ty[net], yr) + 190)
-        c.via2(xx, yr)                     # onto the rail's M2; the rail's own M3 has a window here
-        (skip_vdd if net == 'tgh' else skip_vss).append((xx - 190 - 400, xx + 190 + 400))
+        # (no via2 here: the M3 tie merges with the rail's continuous M3)
     # wells, taps, rails
     pxs = [x for (_, _, _, cp, _) in place for x in cp] + [xd5n]
     pmax = xd5p + m5_width(nf5)
@@ -344,14 +366,56 @@ def build():
     for xx in (tx0, tx1 - 600):
         c.r('m1', xx, yt2, xx + 600, Y['vdd_b'] + 300)
     Y['tap2'] = yt2
-    # decap below: its VDD verticals (M3) cross the VSS rail through windows
-    s_dc, dmeta, ybot = decap(c, s, xr, Y, xv=(x_col0 - 300, xlogic + 100))   # M3-free x: inside the M5s
-    skip_vss += s_dc
-    rail(c, Y['vss_b'], Y['vss_t'], 0, xr, tap=('p', (300, xr - 300)), skip=skip_vss)
-    rail(c, Y['vdd_b'], Y['vdd_t'], 0, xr, tap=('n', (nw_x0 + 150, nw_x1 - 150)), skip=skip_vdd)
-    c.label('VSS', 'm2', 1000, (Y['vss_b'] + Y['vss_t']) // 2, port=True)
-    c.label('VDD', 'm2', 1000, (Y['vdd_b'] + Y['vdd_t']) // 2, port=True)
-    meta = dict(Y=Y, bbox=(0, ybot, xr, ytop), tracks={n: [k, ty[n], span[n]] for n, k in trk.items()}, ntrk=ntrk,
+    # decap below; its VDD vertical (M3, the strip left of M5n) crosses the VSS rails on M2 (vert())
+    straps, dmeta, ybot = decap(c, s, xr, Y, xv=(XV,))
+    vss_rails = [(Y['vss_b'], Y['vss_t'])] + straps
+    win = {r: [] for r in vss_rails}            # M2 windows per VSS rail
+    for r, w in vert(c, XV - 300, XV + 300, min(dmeta['vdd_y']) - 300, (Y['vdd_b'] + Y['vdd_t']) // 2,
+                     vss_rails):
+        win[r].append(w)
+    c.via2(XV, (Y['vdd_b'] + Y['vdd_t']) // 2)
+    # pins in the cell's own frame (bbox lower-left = 0, 0): layout/floorplan/pins.md (R270 in the tile: own E edge
+    # faces the pads ua[3] / ua[2], own W edge faces north)
+    yo = {'out_p': ybot + OUT_Y['out_p'], 'out_n': ybot + OUT_Y['out_n']}
+    ypin = {net: min(ybot + PIN_Y[net], Y['vdd_b'] - 700) for net in xpin}   # below the VDD rail's M2
+    # ls, en_p, en_n: M3 up from the track to the pin's y, then M2 to the W edge (under every M3 vertical)
+    for net, xx in xpin.items():
+        c.via2(xx, ty[net])
+        c.via2(xx, ypin[net])
+        c.r('m3', xx - 190, ty[net] - 190, xx + 190, ypin[net] + 190)
+        c.r('m2', 0, ypin[net] - 190, xx + 190, ypin[net] + 190)
+        c.label(net, 'm2', 200, ypin[net], port=True)
+    # outputs: OUTW wide M3 verticals from the M5 bars down to the pin y, then to the E edge. out_n: M3 down over
+    # M5n, then M2 + M3 east to the edge; its M2 alone passes under out_p's M3 vertical.
+    xn0, xn1 = xd5n + 100, xd5n + 100 + OUTW
+    xp0, xp1 = xd5p + 600, xd5p + 600 + OUTW
+    assert xp1 <= xr - 1500, (xp1, xr)
+    hn, hp = OUTW // 2, OUTW // 2
+    # the VSS rails keep M1 + M3 across the outputs: the outputs cross them on M2 (vert())
+    for x0, x1, ylo in ((xn0, xn1, yo['out_n'] - hn), (xp0, xp1, yo['out_p'] - hp)):
+        for r, w in vert(c, x0, x1, ylo, Y['out_t'], vss_rails):
+            win[r].append(w)
+    # out_p to the edge: M3 clear of the decap's VSS straps (their M3), centred on the pin
+    yfree = min(yb for yb, yt in straps if yb > yo['out_p']) - 400
+    hp2 = min(hp, yfree - yo['out_p'])
+    c.r('m3', xp0, yo['out_p'] - hp2, xr, yo['out_p'] + hp2)
+    Y['out_p_w'] = 2 * hp2
+    c.r('m2', xn0, yo['out_n'] - hn, xr, yo['out_n'] + hn)
+    for a, b in ((xn0, xp0 - 300), (xp1 + 300, xr)):
+        c.r('m3', a, yo['out_n'] - hn, b, yo['out_n'] + hn)
+        for vx in range(a + 400, b - 300, 700):                  # V2.2b: 0.36 um space in large arrays
+            for vy in range(yo['out_n'] - hn + 400, yo['out_n'] + hn - 300, 700):
+                c.r('v2', vx - 140, vy - 140, vx + 140, vy + 140)
+    c.label('out_n', 'm3', xr - 400, yo['out_n'], port=True)
+    c.label('out_p', 'm3', xr - 400, yo['out_p'], port=True)
+    for (yb, yt) in vss_rails:
+        rail(c, yb, yt, 0, xr, tap=('p', (300, xr - 300)), m2skip=win[(yb, yt)])
+    rail(c, Y['vdd_b'], Y['vdd_t'], 0, xr, tap=('n', (nw_x0 + 150, nw_x1 - 150)))
+    Y['vss_rails'] = vss_rails
+    c.label('VSS', 'm3', 1000, (Y['vss_b'] + Y['vss_t']) // 2, port=True)
+    c.label('VDD', 'm3', 1000, (Y['vdd_b'] + Y['vdd_t']) // 2, port=True)
+    meta = dict(Y=Y, pins_own=dict(**{n: [xr, yo[n] - ybot] for n in yo},
+                                   **{n: [0, ypin[n] - ybot] for n in ypin}), bbox=(0, ybot, xr, ytop), tracks={n: [k, ty[n], span[n]] for n, k in trk.items()}, ntrk=ntrk,
                 cols=colx, xpin=xpin, xtie=xtie, decap=dmeta, offs=offs, S=s)
     return c, meta
 
@@ -395,7 +459,7 @@ def decap(c, s, xr, Yb, xv):
         xg1 = x0 + RWd + (n1 - 1) * (L + RWd) + L
         c.r('poly', x0 + RWd, ym - 300, xg1, ym + 300)
         c.r('pc', x0 + RWd + 200, ym - 115, xg1 - 200, ym + 115)
-        c.r('m1', xv[0] - 300, ym - 300, xv[1] + 300, ym + 300)
+        c.r('m1', min(xv) - 300, ym - 300, max(max(xv) + 300, xg1 - 200), ym + 300)
         for xx in xv:
             c.via1(xx, ym)
             c.via2(xx, ym)
@@ -403,14 +467,7 @@ def decap(c, s, xr, Yb, xv):
         y = ylow
         straps.append((y - RAIL, y))
         y -= RAIL
-    for yb, yt in straps:
-        rail(c, yb, yt, 0, xr, tap=('p', (300, xr - 300)), m3=False)
-    ytop = (Yb['vdd_b'] + Yb['vdd_t']) // 2
-    for xx in xv:
-        c.r('m3', xx - 300, min(vdd_y) - 300, xx + 300, ytop + 300)
-        c.via2(xx, ytop)
-    win = [(xx - 300 - 400, xx + 300 + 400) for xx in xv]
-    return win, dict(rows_pairs=npair, per_row=ng, vdd_y=vdd_y), y
+    return straps, dict(rows_pairs=npair, per_row=ng, vdd_y=vdd_y), y
 
 
 def main():

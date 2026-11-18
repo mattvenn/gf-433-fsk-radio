@@ -1,0 +1,15 @@
+# eqy gate: the shipped netlist with the cells' functions from the PDK's liberty file (flops, latches and
+# combinational functions; the clock gate has none there and is black-boxed). Paths relative to build/eqy.
+read_liberty -ignore_miss_func in/cells.lib
+read_verilog -lib in/icg_bb.v
+read_verilog gate.v
+hierarchy -top tx_fine
+# fill, tap, endcap, decap and antenna-diode cells have no logic
+delete t:gf180mcu_fd_sc_mcu7t5v0__fill* t:gf180mcu_fd_sc_mcu7t5v0__endcap t:gf180mcu_fd_sc_mcu7t5v0__antenna
+# flatten, then hide the names it made for the cells' pins and internal wires (they carry hdlname): only the
+# netlist's own net names are left for eqy to match against the RTL
+flatten
+rename -hide w:* a:hdlname %i
+delete =gf180mcu_*
+read_verilog -lib in/icg_bb.v
+prep -top tx_fine

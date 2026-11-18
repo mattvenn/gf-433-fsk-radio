@@ -228,3 +228,33 @@ async def clock_gating(dut):
     nd = await count_edges(dut.clk_dec, 80, dut.clk)
     await t
     assert (await ne) == 4 and nd == 4, f"FSK: eff {ne.result()} / dec {nd} edges for 4 FSK edges"
+
+
+@cocotb.test()
+async def rx_en_and_dbg_sel(dut):
+    """CTRL[4] = RX_EN drives rx_en; DBG_SEL (address 5, [3:0]) drives dbg_sel. Both reset to 0, read back, and
+    leave the other bits alone."""
+    await start(dut)
+    assert int(dut.rx_en.value) == 0 and int(dut.dbg_sel.value) == 0
+    assert await rd(dut, 5) == 0
+    await wr(dut, 0, 0x155); await wr(dut, 3, 0b0101)               # SD_EN, FSK_EN; RX_EN off
+    assert int(dut.rx_en.value) == 0
+    await wr(dut, 3, 0b10101)                                         # + RX_EN
+    assert int(dut.rx_en.value) == 1
+    assert await rd(dut, 3) == 0b10101
+    assert int(dut.dbg_sel.value) == 0, "CTRL write leaked into dbg_sel"
+    for v in (0b0001, 0b0010, 0b0100, 0b1000, 0b0000, 0b1010):
+        await wr(dut, 5, v | 0xff0)                                   # upper bits are not stored
+        assert int(dut.dbg_sel.value) == v, (v, int(dut.dbg_sel.value))
+        assert await rd(dut, 5) == v
+        assert await rd(dut, 3) == 0b10101, "DBG_SEL write changed CTRL"
+        assert int(dut.rx_en.value) == 1
+    assert await rd(dut, 0) == 0x155
+    await wr(dut, 3, 0b00101)
+    assert int(dut.rx_en.value) == 0 and int(dut.dbg_sel.value) == 0b1010
+    assert await rd(dut, 7) == 0x433
+    # reset clears both
+    dut.rst_n.value = 0
+    await ClockCycles(dut.clk, 2)
+    assert int(dut.rx_en.value) == 0 and int(dut.dbg_sel.value) == 0
+    dut.rst_n.value = 1

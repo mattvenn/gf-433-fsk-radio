@@ -11,10 +11,20 @@ A tunable 433.92 MHz oscillator on GF180MCU (Tiny Tapeout, ttgf26c), with no ind
 It is to become an **FM radio toolkit**:
 - **On chip:** the VCO, dividers, the antenna driver, the LNA, the mixer and the IF chain.
 - **On the RP2350:** all the digital: tuning, demodulation and framing.
-- **Receiver:** single LO, low IF (about 200–300 kHz), demodulated by RP2350 PIO. I/Q is deferred to a later tapeout.
+- **Receiver (option B, Matt 2026-11-12):** zero IF, I/Q mixers on two ring taps 72° apart, a limiter per arm, two bits to
+  uo[4]/uo[5], decoded by the RP2350 PIO as a quadrature counter (`sim/rx/rx_model.py`).
 - **Range:** room-temperature operation only.
 
 ## Start here
+**2026-11-17: the tile is laid out from the agreed floorplan (variant B), branch `floorplan`: `docs/tile_layout.md`.**
+The receiver (as its cells), the debug mux on ua[0] and the re-hardened macro (250 × 176.8 µm, RX_EN + DBG_SEL) are
+in; DRC 0 (magic and KLayout), LVS match with 14 / 14 mutations caught, antenna 0. Generator `layout/gen/tile.py`,
+checks `layout/gen/tile_driver.sh`. The real TT precheck passes in CI. Open: decap only about 7.4 pF.
+**Tile simulated (2026-11-18, fca76de, `sim/top/tile_results.md`):** TX (+6.16 dBm at code 13; +5.97 dBm with the
+supply grid's R), RX settled at -70 ... -100 dBm, power-up, debug mux, supplies pass; power IR / EM pass
+(`sim/power/results.md`); 10 / 10 mutations. **The ring runs 12.2-12.8 % slow** (19.9 fF on a2): 433.92 MHz still reached at every corner
+(tt code 12-13); accept or re-lay out rx_lsq is Matt's call. Every test: `docs/verification.md`.
+
 **The oscillator topology is chosen: a current-fed ring with a 5-bit current DAC.**
 - It passes every check so far, in schematic and on the extracted v3 layout.
 - **GF silicon factor: about 1.0 at typical** (`docs/gf_silicon_factor.md`, 2026-11-09). On the ttgf0p2 ring #614
@@ -48,6 +58,13 @@ It is to become an **FM radio toolkit**:
 5. **Sizing, PVT map, PVT noise, v3 layout, MC and start-up** (the docs in the table above).
 
 ## Next steps
+**Decision 2026-11-17 (Matt):** no TX/RX hardware interlock. Firmware keeps RX_EN off while transmitting and waits
+about 1 ms after TX before trusting `q_i` / `q_q` (`docs/bringup.md`, firmware rules).
+
+**Decision 2026-11-17 (Matt):** the SPI stays on `uio[0..3]` = SCLK, MOSI, CS_n, MISO, driven by the RP2350's PIO or
+SoftSPI; the demo board's hardware SPI1 on GPIO25-28 has the order CSn, SCK, TX, RX, so only MISO matches
+(`docs/bringup.md`). Check `uio[1]` toggles first: it read held low on the ttgf0p2 carrier.
+
 **Decisions 2026-11-10 (Matt):** no board components except the dipoles, so all fine tuning is on chip. TX plan is option C: a ~10-bit medium current DAC (~50 kHz LSB, ±25 MHz, from the constant-gm reference) with sigma-delta dither below one LSB, an SPI register from the RP2350, FSK as a digital offset (±100 kHz, 2-FSK), and a ÷16/÷64/÷1024 divider to `uo_out` (GF pins are fine to ~50 MHz, so `ck` at 108 MHz is not; gate it, since 4 × ck = 433.92 MHz). vctrl is tied inside the chip, with ua[0] kept as a debug override. The RP2350 counts and servos (freezing during packets). The RX gets its own dipole on a second pair of `ua` pins (6 of 6 used); zero-IF vs low-IF is deferred. Focus on the TX first. **Option C (fine tuning and FSK, item 3) is complete (2026-11-12); the TX is not: the driver's harmonics are open (item 5, `docs/handoff_tx_harmonics.md` on branch `tx-harmonics`).**
 
 1. **Bench 2026-11-09: done** (results at the top of `bench/lab_todo.md`). **`docs/handoff_gf_silicon_factor.md` is
@@ -100,7 +117,7 @@ It is to become an **FM radio toolkit**:
      corrects it) and the FSK overshoot at a major carry (firmware keeps the FSK pair inside one block of 32).
 4. **Reference layout: done** (`docs/ref_layout.md`, `layout/cgm_ref.gds`, 238.8 × 69.4 µm, DRC/LVS/antenna clean).
    Extracted core + extracted reference: f within −0.03 % of the schematic reference at tt/ss/ff, vbnf start-up
-   88–94 µs. **Top level `vco_top` done** (`docs/top_layout.md`, 407.7 × 70.8 µm, DRC/LVS/antenna clean, no Metal4/5): the extracted
+   88–94 µs. **Top level `vco_top` done** (`docs/top_layout.md`, 386.6 × 70.8 µm since the 2026-11-16 decap redraw (was 407.7), DRC/LVS/antenna clean, no Metal4/5): the extracted
    top matches the blocks within 0.07 % (tt 418.0 MHz at code 9 with the LS). As a straight row it needs a 2x2;
    folded (about 29k µm²) it would fit a 1x2. Open: a0 tap for the TX driver, full start-up to settling.
    - **Tempco at room temperature is +100…+140 ppm/°C (about 45–60 kHz/°C)**, schematic and layout alike. The sizing
@@ -128,9 +145,18 @@ It is to become an **FM radio toolkit**:
    - **Open:** ask tnt about VDPWR before the power switch (bond wires, chip grid); re-floorplan with the receiver.
      The pin plan can't be known before tapeout (it depends on the other projects then), so the TX is checked
      over n_off 0-3 instead.
-6. **Receiver blocks:**
-   - port the OOK LNA (linear, not limiting) to GF180;
-   - new: mixer, IF preamp, filter, limiter and comparator.
+6. **Receiver: option B, schematics and first-pass sims done on branch `rx-option-b` (2026-11-13), for Matt's review
+   before layout** (`docs/rx_design.md`, handoff `docs/handoff_rx_schematic.md`).
+   - Blocks (`sim/rx/rx_*.py`, sheets `xschem/rx_*.sch`, checked by `xschem/gen/check_rx.py`): constant-gm bias;
+     two-stage LNA (the OOK amp_dp port, pin self-biased at vcm, one second stage per mixer); Q tap = a copy of
+     lsdiv's level shifter with the same load, on a2 (I from `ls`); passive TG mixers; 3-stage baseband (LPF 137-150 kHz,
+     HPF 8.3-9.4 kHz); limiter + hysteresis comparator to uo[4] / uo[5]. vco_top has a new `a2` port (not in the layout yet).
+   - Results: NF antenna to comparator 5.7-8.4 dB over corners / n_off / routing (7.27 dB tt, n_off 3, 40 ohm); I/Q 71-74 deg;
+     hysteresis 0.29-0.41 x noise; about 7 mA; the model with these numbers gives -110.4 dBm at BER 1e-3, 10 kbit/s.
+   - **For the review:** rx_en vs the ring (gating the Q tap moves the ring 14-23 LSB; keeping it on costs 0.18-0.26 mA
+     off-state; the schematic keeps it on); offset-step recovery about 1 ms; rx_en wiring; VAPWR vs VDPWR; filter order;
+     the areas.
+   - The pin costs NF: 26–97 Ω of switch + routing and 7.7 pF per side (a 240 MHz low-pass with the dipole).
 
    **Pin budget: GF analog pin model done** (`docs/pad_model.md`, `sim/pad/pad_model_gf180.spice`,
    `xschem/pad_model_gf180.sch`, checked by `sim/pad/check_xsch.py`). tnt's `tt_asw_5v0` switch is 11–37 Ω tt
@@ -143,6 +169,13 @@ It is to become an **FM radio toolkit**:
 7. **Later:** a PLL (on-chip PFD, charge pump and loop filter, reference from the RP2350), and I/Q for the receiver.
 8. **Sign-off:** full PVT (5 corners × 0/27/70 °C × VDD ±4.5 %) plus MC on the extracted tile.
 9. **Estimated tile:** 2x2.
+10. **To consider later: extra debug options** (`docs/bringup.md` section 6; Matt 2026-11-17: not crucial, the
+    design stays as it is for now). Candidates, most diagnostic value first:
+    - a divided Q LO on spare `uo[6]`, to tell a dead Q LO path from a dead Q mixer or limiter (a new divider
+      cell plus layout);
+    - debug switches on `oi_n` / `oq_n`, to separate the baseband offset from the common mode (two `dbg_tg` cells
+      plus two DBG_SEL bits);
+    - the macro keeping only the lowest set DBG_SEL bit, so two switches can't short two nodes (digital only).
 
 ## Done 2026-11-09 (TX driver)
 - Plan steps 1–5: circuit + xschem sheets (`sim/tx/tx_drv.py`, `xschem/gen/tx_drv.py`), block and top-level benches

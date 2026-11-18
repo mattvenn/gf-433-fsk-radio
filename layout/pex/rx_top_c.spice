@@ -1,0 +1,1883 @@
+* rx_top: magic R+C extraction of layout/rx_top.gds (layout/gen/pex.sh)
+* extracted 2026-11-16T12:09:03+01:00 with magic 8.3.642, mode c, from rx_top.gds
+.subckt rx_top VDD VSS inp inn ls aq en q_i q_q
+X0 bbi_t1 bi_p bbi_o1n VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X1 bbi_t2 nb VSS VSS nfet_03v3 ad=0.3304p pd=2.76u as=0.1774p ps=1.74u w=0.3u l=0.5u
+X2 lna_outn inp lna_tail VSS nfet_03v3 ad=10p pd=22u as=5p ps=11u w=10u l=0.28u
+X3 lna_tail inn lna_outp VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X4 VSS VDD VSS VSS nfet_03v3 ad=3.36p pd=12.56u as=1.63227n ps=4.15874m w=12u l=10u
+X5 lna_vt lna_vcm VSS ppolyf_u_1k r_width=1u r_length=40u
+X6 VSS nb lna_tail VSS nfet_03v3 ad=2.8p pd=10.56u as=5p ps=11u w=10u l=0.5u
+X7 lna_tail nb VSS VSS nfet_03v3 ad=5p pd=11u as=2.8p ps=10.56u w=10u l=0.5u
+X8 lo_bi_Py2 lo_bi_Py1 VDD VDD pfet_03v3 ad=1.25p pd=3.5u as=2.5p ps=7u w=2.5u l=0.28u
+X9 lna_outp inn lna_tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X10 bbq_o1p bq_n bbq_t1 VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X11 bq_n lob_q rq_n VDD pfet_03v3 ad=4p pd=9u as=4p ps=9u w=8u l=0.28u
+X12 lq_cq lq_co VSS VSS nfet_03v3 ad=0.5p pd=3u as=0.225p ps=1.9u w=0.5u l=0.28u
+X13 bbi_t1 bi_p bbi_o1n VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X14 lo_lq_vq VSS VDD VDD pfet_03v3 ad=1.6675p pd=4.335u as=0.9338p ps=3.895u w=3.335u l=0.28u
+X15 lna_outp inn lna_tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X16 li_ln li_gcn li_ln li_ln pfet_03v3 ad=12.285p pd=26.57u as=24.57p ps=53.14u w=12.285u l=10u
+X17 rq_p lob_q bq_p VDD pfet_03v3 ad=8p pd=18u as=4p ps=9u w=8u l=0.28u
+X18 VSS lo_lq_D1qb lo_lq_q1 VSS nfet_03v3 ad=0.27p pd=2.1u as=0.6p ps=3.2u w=0.6u l=0.28u
+X19 lq_cb lq_ca VDD VDD pfet_03v3 ad=1.7p pd=5.4u as=0.765p ps=4.3u w=1.7u l=0.5u
+X20 VSS nb bbi_vgr VSS nfet_03v3 ad=0.189p pd=1.74u as=0.42p ps=2.84u w=0.42u l=50u
+X21 ri_p VDD VSS ppolyf_u r_width=2u r_length=9.14u
+X22 lna_x2i_tail nb VSS VSS nfet_03v3 ad=5p pd=11u as=2.8p ps=10.56u w=10u l=0.5u
+X23 lo_bi_x ls VDD VDD pfet_03v3 ad=0.3p pd=1.6u as=0.6p ps=3.2u w=0.6u l=0.28u
+X24 lna_outp inn lna_tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X25 VSS VDD VSS VSS nfet_03v3 ad=3.36p pd=12.56u as=0 ps=0 w=12u l=10u
+X26 VSS li_vb VSS ppolyf_u_1k r_width=1u r_length=0.10002m
+X27 lo_bq_a lo_bq_b VSS VSS nfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=0.28u
+X28 lna_tail nb VSS VSS nfet_03v3 ad=5p pd=11u as=4.5p ps=20.9u w=10u l=0.5u
+X29 rq_n lna_outp lna_x2q_tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X30 lo_bq_Ny2 lo_bq_Ny1 VDD VDD pfet_03v3 ad=1.25p pd=3.5u as=2.5p ps=7u w=2.5u l=0.28u
+X31 lna_outn inp lna_tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X32 lna_outn inp lna_tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X33 VSS lo_bq_Py2 lo_q VSS nfet_03v3 ad=2.5p pd=7u as=1.25p ps=3.5u w=2.5u l=0.28u
+X34 bbi_g2n bbi_vgr bbi_vb bbi_vb pfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=12u
+X35 bq_p lob_q rq_p VDD pfet_03v3 ad=4p pd=9u as=8p ps=18u w=8u l=0.28u
+X36 bi_p lo_i ri_p VSS nfet_03v3 ad=4p pd=9u as=8p ps=18u w=8u l=0.28u
+X37 bi_n lob_i ri_n VDD pfet_03v3 ad=4p pd=9u as=4p ps=9u w=8u l=0.28u
+X38 b_x enb VSS VSS nfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=0.28u
+X39 nb b_n2 b_vh VDD pfet_03v3 ad=4p pd=10u as=2p ps=5u w=4u l=1u
+X40 VDD lo_bi_Py1 lo_bi_Py2 VDD pfet_03v3 ad=2.5p pd=7u as=1.25p ps=3.5u w=2.5u l=0.28u
+X41 nb nb VSS VSS nfet_03v3 ad=2p pd=6u as=2p ps=6u w=2u l=0.5u
+X42 VSS bbq_o2p VSS VSS nfet_03v3 ad=12.285p pd=25.57u as=0 ps=0 w=24.57u l=10u
+X43 bbq_t2 bbq_g2n bbq_o2p VSS nfet_03v3 ad=2p pd=5u as=2p ps=5u w=4u l=1u
+X44 bbi_o1n bi_p bbi_t1 VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X45 bq_n lo_q rq_n VSS nfet_03v3 ad=4p pd=9u as=4p ps=9u w=8u l=0.28u
+X46 VSS nb lna_x2i_tail VSS nfet_03v3 ad=2.8p pd=10.56u as=5p ps=11u w=10u l=0.5u
+X47 li_mRpLb li_mRpLb li_vb li_vb pfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=1u
+X48 bbq_t1 bq_p bbq_o1n VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X49 VSS lo_lq_vq VSS VSS nfet_03v3 ad=2.2932p pd=8.75u as=0 ps=0 w=8.19u l=10u
+X50 bi_n lo_i ri_p VDD pfet_03v3 ad=4p pd=9u as=4p ps=9u w=8u l=0.28u
+X51 lq_cb lq_gcn lq_ct VSS nfet_03v3 ad=1p pd=3u as=1p ps=3u w=2u l=0.5u
+X52 b_x nb VSS VSS nfet_03v3 ad=2p pd=6u as=2p ps=6u w=2u l=0.28u
+X53 VSS oi_p VSS VSS nfet_03v3 ad=12.285p pd=25.57u as=0 ps=0 w=24.57u l=10u
+X54 VSS lna_vcm VSS VSS nfet_03v3 ad=4.4235p pd=20.56u as=0 ps=0 w=9.83u l=10u
+X55 ri_n lna_outp lna_x2i_tail VSS nfet_03v3 ad=10p pd=22u as=5p ps=11u w=10u l=0.28u
+X56 lo_bi_Ny0 lo_bi_b lo_bi_Ngs VSS nfet_03v3 ad=1p pd=4u as=0.28p ps=1.56u w=1u l=0.28u
+X57 lna_x2i_tail nb VSS VSS nfet_03v3 ad=5p pd=11u as=2.8p ps=10.56u w=10u l=0.5u
+X58 li_tL li_glp li_ln VSS nfet_03v3 ad=2p pd=5u as=4p ps=10u w=4u l=0.5u
+X59 bbi_t1 bi_p bbi_o1n VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X60 VSS bi_n VSS VSS nfet_03v3 ad=3.6855p pd=17.28u as=0 ps=0 w=8.19u l=5u
+X61 VSS bq_n VSS VSS nfet_03v3 ad=2.2932p pd=8.75u as=0 ps=0 w=8.19u l=5u
+X62 lo_bi_t lo_bi_x VSS VSS nfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=0.28u
+X63 q_q lq_cq VSS VSS nfet_03v3 ad=2p pd=6u as=0.9p ps=4.9u w=2u l=0.28u
+X64 rq_n lna_outp lna_x2q_tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X65 ri_n lob_i bi_p VSS nfet_03v3 ad=4p pd=9u as=4p ps=9u w=8u l=0.28u
+X66 VSS oq_n VSS VSS nfet_03v3 ad=12.285p pd=25.57u as=0 ps=0 w=24.57u l=10u
+X67 lo_bq_t lo_bq_x VSS VSS nfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=0.28u
+X68 li_ca li_cb VDD VDD pfet_03v3 ad=1.7p pd=5.4u as=0.765p ps=4.3u w=1.7u l=0.5u
+X69 VSS bbi_o2p VSS VSS nfet_03v3 ad=12.285p pd=25.57u as=0 ps=0 w=24.57u l=10u
+X70 lo_bi_Py1 lo_bi_Py0 VSS VSS nfet_03v3 ad=0.8p pd=3.6u as=0.8p ps=3.6u w=0.8u l=0.28u
+X71 bbi_o1p bbi_g2p bbi_o1p bbi_o1p pfet_03v3 ad=12.285p pd=26.57u as=36.855p ps=79.71u w=12.285u l=10u
+X72 bbq_t2 nb VSS VSS nfet_03v3 ad=0.3304p pd=2.76u as=0.1774p ps=1.74u w=0.3u l=0.5u
+X73 lob_q lo_bq_Ny2 VDD VDD pfet_03v3 ad=2.0825p pd=5.165u as=2.0825p ps=5.165u w=4.165u l=0.28u
+X74 lq_lp lq_gcp lq_lp lq_lp pfet_03v3 ad=12.285p pd=26.57u as=24.57p ps=53.14u w=12.285u l=10u
+X75 lo_bi_Py2 lo_bi_Py1 VSS VSS nfet_03v3 ad=2p pd=6u as=2p ps=6u w=2u l=0.28u
+X76 bbq_g3n bbq_vgr bbq_vb bbq_vb pfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=12u
+X77 VDD VSS lo_lq_vq VDD pfet_03v3 ad=0.9338p pd=3.895u as=1.6675p ps=4.335u w=3.335u l=0.28u
+X78 VDD lo_bi_Ny1 lo_bi_Ny2 VDD pfet_03v3 ad=2.5p pd=7u as=1.25p ps=3.5u w=2.5u l=0.28u
+X79 bbq_o1n bq_p bbq_t1 VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X80 VSS oq_n VSS VSS nfet_03v3 ad=24.57p pd=51.14u as=0 ps=0 w=24.57u l=10u
+X81 oi_p li_glp oi_p oi_p pfet_03v3 ad=12.285p pd=26.57u as=24.57p ps=53.14u w=12.285u l=10u
+X82 lq_ca lq_ca VDD VDD pfet_03v3 ad=1p pd=4u as=0.45p ps=2.9u w=1u l=0.5u
+X83 VSS oi_n VSS VSS nfet_03v3 ad=12.285p pd=25.57u as=0 ps=0 w=24.57u l=10u
+X84 lo_bi_Pgs lo_bi_a lo_bi_Py0 VSS nfet_03v3 ad=0.28p pd=1.56u as=1p ps=4u w=1u l=0.28u
+X85 bbq_o2n bbq_g3n bbq_o2n bbq_o2n pfet_03v3 ad=6.1425p pd=13.285u as=36.855p ps=79.71u w=12.285u l=10u
+X86 bbi_o1n bi_p bbi_t1 VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X87 bbi_g2p bbi_vgr bbi_vb bbi_vb pfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=12u
+X88 li_mRpCa li_mRpCa li_gcp li_gcp pfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=1u
+X89 lo_bq_a lo_bq_ta VSS VSS nfet_03v3 ad=1p pd=4u as=1p ps=4u w=1u l=0.28u
+X90 VSS nb VSS VSS nfet_03v3 ad=4.095p pd=9.19u as=0 ps=0 w=8.19u l=10u
+X91 bbi_g3n bbi_vgr bbi_vb bbi_vb pfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=12u
+X92 li_mRpCb li_mRpCb li_gcn li_gcn pfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=1u
+X93 ri_n VDD VSS ppolyf_u r_width=2u r_length=9.14u
+X94 lq_vbt enb VDD VDD pfet_03v3 ad=1p pd=4u as=0.45p ps=2.9u w=1u l=0.28u
+X95 lo_bq_ta lo_bq_t VDD VDD pfet_03v3 ad=1.25p pd=4.5u as=1.25p ps=4.5u w=1.25u l=0.28u
+X96 lna_outp inn lna_tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X97 VSS lq_vb VSS VSS nfet_03v3 ad=12.285p pd=26.57u as=0 ps=0 w=12.285u l=10u
+X98 bbi_t2 bbi_g2p bbi_o2n VSS nfet_03v3 ad=2p pd=5u as=4p ps=10u w=4u l=1u
+X99 VDD VSS lo_lq_vq VDD pfet_03v3 ad=1.50075p pd=7.57u as=1.6675p ps=4.335u w=3.335u l=0.28u
+X100 bbi_o2n bbi_g3n bbi_o2n bbi_o2n pfet_03v3 ad=6.1425p pd=13.285u as=36.855p ps=79.71u w=12.285u l=10u
+X101 bbq_t1 bq_n bbq_o1p VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X102 bbq_t1 bq_n bbq_o1p VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X103 VDD lo_bi_Ny0 lo_bi_Ny1 VDD pfet_03v3 ad=2p pd=6u as=2p ps=6u w=2u l=0.28u
+X104 bbq_vb bbq_vbt VSS ppolyf_u_1k r_width=1u r_length=0.15002m
+X105 VSS lo_bi_Py2 lo_i VSS nfet_03v3 ad=2.5p pd=7u as=1.25p ps=3.5u w=2.5u l=0.28u
+X106 bbi_t1 bi_n bbi_o1p VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X107 VDD bbq_o1n VSS ppolyf_u r_width=2u r_length=57.14u
+X108 lo_bi_a lo_bi_ta VSS VSS nfet_03v3 ad=1p pd=4u as=1p ps=4u w=1u l=0.28u
+X109 lna_tail nb VSS VSS nfet_03v3 ad=5p pd=11u as=2.8p ps=10.56u w=10u l=0.5u
+X110 lna_outn inp lna_tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X111 lq_tL lq_glp lq_ln VSS nfet_03v3 ad=2p pd=5u as=4p ps=10u w=4u l=0.5u
+X112 lna_x2i_tail lna_outn ri_p VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X113 VDD lo_bi_b lo_bi_Ny0 VDD pfet_03v3 ad=1.25p pd=4.5u as=0.625p ps=2.25u w=1.25u l=0.28u
+X114 VSS lna_vcm VSS VSS nfet_03v3 ad=2.7524p pd=10.39u as=0 ps=0 w=9.83u l=10u
+X115 bbq_o1n bbq_g2n bbq_o1n bbq_o1n pfet_03v3 ad=6.1425p pd=13.285u as=36.855p ps=79.71u w=12.285u l=10u
+X116 VSS nb lna_tail VSS nfet_03v3 ad=2.8p pd=10.56u as=5p ps=11u w=10u l=0.5u
+X117 li_ct li_gcp li_ca VSS nfet_03v3 ad=1p pd=3u as=2p ps=6u w=2u l=0.5u
+X118 lo_bi_a lo_bi_b VDD VDD pfet_03v3 ad=1.05p pd=4.1u as=1.05p ps=4.1u w=1.05u l=0.28u
+X119 bbi_t1 bi_n bbi_o1p VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X120 VSS bbq_o2p VSS VSS nfet_03v3 ad=24.57p pd=51.14u as=0 ps=0 w=24.57u l=10u
+X121 lo_bi_g0s ls lo_bi_x VSS nfet_03v3 ad=0.14p pd=1.06u as=0.5p ps=3u w=0.5u l=0.28u
+X122 b_n2 nb b_nr VSS nfet_03v3 ad=2p pd=6u as=1p ps=3u w=2u l=0.5u
+X123 VDD oi_p VSS ppolyf_u_1k r_width=1u r_length=0.2m
+X124 lna_tail nb VSS VSS nfet_03v3 ad=5p pd=11u as=2.8p ps=10.56u w=10u l=0.5u
+X125 li_cx li_cx VSS VSS nfet_03v3 ad=1p pd=4u as=0.45p ps=2.9u w=1u l=0.5u
+X126 oi_p bbi_g3n bbi_t3 VSS nfet_03v3 ad=2p pd=5u as=2p ps=5u w=4u l=1u
+X127 VSS lna_vcm VSS VSS nfet_03v3 ad=2.7524p pd=10.39u as=0 ps=0 w=9.83u l=10u
+X128 bbq_o1p bq_n bbq_t1 VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X129 VDD lo_bi_Ny2 lob_i VDD pfet_03v3 ad=2.0825p pd=5.165u as=4.165p ps=10.33u w=4.165u l=0.28u
+X130 bq_p lo_q rq_n VDD pfet_03v3 ad=4p pd=9u as=4p ps=9u w=8u l=0.28u
+X131 lq_mRpCa lq_mRpCa lq_vb lq_vb pfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=1u
+X132 lq_mRpCa lq_mRpCa lq_gcp lq_gcp pfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=1u
+X133 VSS bbq_o2n VSS VSS nfet_03v3 ad=12.285p pd=25.57u as=0 ps=0 w=24.57u l=10u
+X134 VSS nb lna_tail VSS nfet_03v3 ad=2.8p pd=10.56u as=5p ps=11u w=10u l=0.5u
+X135 rq_n VDD VSS ppolyf_u r_width=2u r_length=9.14u
+X136 bbi_o1p bi_n bbi_t1 VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X137 lo_i lo_bi_Py2 VDD VDD pfet_03v3 ad=2.0825p pd=5.165u as=4.165p ps=10.33u w=4.165u l=0.28u
+X138 VDD bbi_o1p VSS ppolyf_u r_width=2u r_length=57.14u
+X139 rq_n lna_outp lna_x2q_tail VSS nfet_03v3 ad=10p pd=22u as=5p ps=11u w=10u l=0.28u
+X140 bq_n lo_q rq_p VDD pfet_03v3 ad=4p pd=9u as=4p ps=9u w=8u l=0.28u
+X141 lo_lq_D1x lsq a_41496_1776# lo_lq_vq pfet_03v3 ad=2p pd=6u as=0.56p ps=2.56u w=2u l=0.28u
+X142 VSS bbi_o2n VSS VSS nfet_03v3 ad=24.57p pd=51.14u as=0 ps=0 w=24.57u l=10u
+X143 VSS lo_bq_Ny0 lo_bq_Ny1 VSS nfet_03v3 ad=0.8p pd=3.6u as=0.8p ps=3.6u w=0.8u l=0.28u
+X144 lo_bi_b VSS lo_bi_tb VDD pfet_03v3 ad=2.5p pd=7u as=2.5p ps=7u w=2.5u l=0.28u
+X145 li_mRpLb li_mRpLb li_gln li_gln pfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=1u
+X146 bbi_o1p bi_n bbi_t1 VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X147 lna_tail inn lna_outp VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X148 VSS nb bbi_t1 VSS nfet_03v3 ad=3.6p pd=16.9u as=4p ps=9u w=8u l=0.5u
+X149 lq_gcn lq_vgr lq_vb lq_vb pfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=12u
+X150 bbi_t1 bi_n bbi_o1p VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X151 lna_tail inp lna_outn VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X152 ri_n lo_i bi_p VDD pfet_03v3 ad=4p pd=9u as=4p ps=9u w=8u l=0.28u
+X153 bbq_t3 nb VSS VSS nfet_03v3 ad=0.8p pd=3.6u as=0.36p ps=2.5u w=0.8u l=0.5u
+X154 lq_ln lq_glp lq_tL VSS nfet_03v3 ad=4p pd=10u as=2p ps=5u w=4u l=0.5u
+X155 bbi_vbt enb VDD VDD pfet_03v3 ad=1p pd=4u as=0.45p ps=2.9u w=1u l=0.28u
+X156 VDD lo_bi_Ny2 lob_i VDD pfet_03v3 ad=4.165p pd=10.33u as=2.0825p ps=5.165u w=4.165u l=0.28u
+X157 lna_tail inp lna_outn VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X158 bbq_t1 nb VSS VSS nfet_03v3 ad=4p pd=9u as=3.6p ps=16.9u w=8u l=0.5u
+X159 bbq_t1 bq_p bbq_o1n VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X160 li_cx li_cb VDD VDD pfet_03v3 ad=2p pd=6u as=0.9p ps=4.9u w=2u l=0.5u
+X161 nb enb VSS VSS nfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=0.28u
+X162 li_ca li_gcp li_ct VSS nfet_03v3 ad=2p pd=6u as=1p ps=3u w=2u l=0.5u
+X163 lo_bq_Ngs en VSS VSS nfet_03v3 ad=0.28p pd=1.56u as=1p ps=4u w=1u l=0.28u
+X164 b_vh b_n2 nb VDD pfet_03v3 ad=2p pd=5u as=4p ps=10u w=4u l=1u
+X165 li_ln li_glp li_tL VSS nfet_03v3 ad=4p pd=10u as=2p ps=5u w=4u l=0.5u
+X166 VSS en lo_bq_Pgs VSS nfet_03v3 ad=1p pd=4u as=0.28p ps=1.56u w=1u l=0.28u
+X167 ri_p lo_i bi_n VDD pfet_03v3 ad=4p pd=9u as=4p ps=9u w=8u l=0.28u
+X168 li_gcp li_vgr li_vb li_vb pfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=12u
+X169 lna_tail inn lna_outp VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X170 VSS en lo_bi_Pgs VSS nfet_03v3 ad=1p pd=4u as=0.28p ps=1.56u w=1u l=0.28u
+X171 bbi_mRp2a bbi_mRp2a bbi_g2p bbi_g2p pfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=1u
+X172 lo_bq_g0s lsq lo_bq_x VSS nfet_03v3 ad=0.14p pd=1.06u as=0.5p ps=3u w=0.5u l=0.28u
+X173 lo_bi_Ngs en VSS VSS nfet_03v3 ad=0.28p pd=1.56u as=1p ps=4u w=1u l=0.28u
+X174 bbi_mRp2a bbi_mRp2a bbi_vb bbi_vb pfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=1u
+X175 li_tL nb VSS VSS nfet_03v3 ad=2p pd=6u as=0.9p ps=4.9u w=2u l=0.5u
+X176 b_n2 nb b_nr VSS nfet_03v3 ad=2p pd=6u as=1p ps=3u w=2u l=0.5u
+X177 li_lp li_gcp li_lp li_lp pfet_03v3 ad=12.285p pd=26.57u as=24.57p ps=53.14u w=12.285u l=10u
+X178 VSS bbq_o2p VSS VSS nfet_03v3 ad=12.285p pd=25.57u as=0 ps=0 w=24.57u l=10u
+X179 bbi_o1p bi_n bbi_t1 VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X180 oq_p bbq_g3n bbq_t3 VSS nfet_03v3 ad=2p pd=5u as=2p ps=5u w=4u l=1u
+X181 VSS lo_bq_Ny1 lo_bq_Ny2 VSS nfet_03v3 ad=2p pd=6u as=2p ps=6u w=2u l=0.28u
+X182 rq_p lob_q bq_n VSS nfet_03v3 ad=8p pd=18u as=4p ps=9u w=8u l=0.28u
+X183 VSS nb lna_tail VSS nfet_03v3 ad=2.8p pd=10.56u as=5p ps=11u w=10u l=0.5u
+X184 VDD en lo_bq_Py0 VDD pfet_03v3 ad=1.25p pd=4.5u as=0.625p ps=2.25u w=1.25u l=0.28u
+X185 lna_x2i_tail lna_outp ri_n VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X186 oq_n lq_gln oq_n oq_n pfet_03v3 ad=12.285p pd=26.57u as=24.57p ps=53.14u w=12.285u l=10u
+X187 lq_tL nb VSS VSS nfet_03v3 ad=2p pd=6u as=0.9p ps=4.9u w=2u l=0.5u
+X188 bbq_o1n bq_p bbq_t1 VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X189 lna_vcm VSS VSS ppolyf_u_1k r_width=1u r_length=30u
+X190 lsq VSS VSS VSS nfet_03v3 ad=0.42p pd=2.84u as=0.189p ps=1.74u w=0.42u l=0.28u
+X191 lo_bi_Ny2 lo_bi_Ny1 VDD VDD pfet_03v3 ad=1.25p pd=3.5u as=2.5p ps=7u w=2.5u l=0.28u
+X192 VSS oi_p VSS VSS nfet_03v3 ad=12.285p pd=25.57u as=0 ps=0 w=24.57u l=10u
+X193 lna_tail nb VSS VSS nfet_03v3 ad=5p pd=11u as=2.8p ps=10.56u w=10u l=0.5u
+X194 lo_q lo_bq_Py2 VSS VSS nfet_03v3 ad=1.25p pd=3.5u as=2.5p ps=7u w=2.5u l=0.28u
+X195 lna_outp inn lna_tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X196 lq_mRpLb lq_mRpLb lq_gln lq_gln pfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=1u
+X197 VSS oq_n VSS VSS nfet_03v3 ad=12.285p pd=25.57u as=0 ps=0 w=24.57u l=10u
+X198 rq_n lob_q bq_p VSS nfet_03v3 ad=4p pd=9u as=4p ps=9u w=8u l=0.28u
+X199 VSS nb lna_tail VSS nfet_03v3 ad=2.8p pd=10.56u as=5p ps=11u w=10u l=0.5u
+X200 lna_outp inn lna_tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X201 VSS bbi_o2p VSS VSS nfet_03v3 ad=12.285p pd=25.57u as=0 ps=0 w=24.57u l=10u
+X202 lo_lq_D1x lo_lq_D1qb VSS VSS nfet_03v3 ad=1p pd=4u as=0.28p ps=1.56u w=1u l=0.28u
+X203 inn lna_vcm VSS ppolyf_u_1k r_width=1u r_length=20u
+X204 lna_x2q_tail lna_outp rq_n VSS nfet_03v3 ad=5p pd=11u as=10p ps=22u w=10u l=0.28u
+X205 lna_tail inp lna_outn VSS nfet_03v3 ad=5p pd=11u as=10p ps=22u w=10u l=0.28u
+X206 bbq_mRp3a bbq_mRp3a bbq_g3p bbq_g3p pfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=1u
+X207 lq_glp lq_vgr lq_vb lq_vb pfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=12u
+X208 bbq_mRp3a bbq_mRp3a bbq_vb bbq_vb pfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=1u
+X209 li_vbt enb VDD VDD pfet_03v3 ad=1p pd=4u as=0.45p ps=2.9u w=1u l=0.28u
+X210 bbi_t1 bi_p bbi_o1n VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X211 VSS nb lna_tail VSS nfet_03v3 ad=4.5p pd=20.9u as=5p ps=11u w=10u l=0.5u
+X212 lna_tail nb VSS VSS nfet_03v3 ad=5p pd=11u as=2.8p ps=10.56u w=10u l=0.5u
+X213 VSS oi_p VSS VSS nfet_03v3 ad=24.57p pd=51.14u as=0 ps=0 w=24.57u l=10u
+X214 lna_outn inp lna_tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X215 lna_x2i_tail nb VSS VSS nfet_03v3 ad=5p pd=11u as=4.5p ps=20.9u w=10u l=0.5u
+X216 lq_vb lq_vbt VSS ppolyf_u_1k r_width=1u r_length=0.15m
+X217 lq_gln lq_vgr lq_vb lq_vb pfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=12u
+X218 bbi_t1 bi_p bbi_o1n VSS nfet_03v3 ad=10p pd=21u as=20p ps=42u w=20u l=1u
+X219 lq_cb lq_cb VDD VDD pfet_03v3 ad=1p pd=4u as=0.45p ps=2.9u w=1u l=0.5u
+X220 lo_bq_Pgs lo_bq_a lo_bq_Py0 VSS nfet_03v3 ad=0.28p pd=1.56u as=1p ps=4u w=1u l=0.28u
+X221 bbq_mRp2b bbq_mRp2b bbq_vb bbq_vb pfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=1u
+X222 bbq_t1 bq_n bbq_o1p VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X223 VSS bq_n VSS VSS nfet_03v3 ad=3.6855p pd=17.28u as=0 ps=0 w=8.19u l=5u
+X224 lo_lq_vq lo_lq_D1qb lo_lq_q1 lo_lq_vq pfet_03v3 ad=0.675p pd=3.9u as=1.5p ps=5u w=1.5u l=0.28u
+X225 lna_outn inp lna_tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X226 VSS VDD VSS VSS nfet_03v3 ad=5.4p pd=24.9u as=0 ps=0 w=12u l=10u
+X227 lq_ct lq_gcp lq_ca VSS nfet_03v3 ad=1p pd=3u as=2p ps=6u w=2u l=0.5u
+X228 lo_bq_b lo_bq_a VDD VDD pfet_03v3 ad=1.05p pd=4.1u as=1.05p ps=4.1u w=1.05u l=0.28u
+X229 a_41178_713# lo_lq_D1y VSS VSS nfet_03v3 ad=0.28p pd=1.56u as=0.45p ps=2.9u w=1u l=0.28u
+X230 bi_p lob_i ri_p VDD pfet_03v3 ad=4p pd=9u as=8p ps=18u w=8u l=0.28u
+X231 q_i li_cq VDD VDD pfet_03v3 ad=5p pd=12u as=2.25p ps=10.9u w=5u l=0.28u
+X232 lob_i lo_bi_Ny2 VDD VDD pfet_03v3 ad=2.0825p pd=5.165u as=2.0825p ps=5.165u w=4.165u l=0.28u
+X233 VSS nb lna_x2i_tail VSS nfet_03v3 ad=2.8p pd=10.56u as=5p ps=11u w=10u l=0.5u
+X234 bbi_mRp3a bbi_mRp3a bbi_vb bbi_vb pfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=1u
+X235 lsq lo_lq_lo2 VSS VSS nfet_03v3 ad=1.2p pd=4.4u as=0.54p ps=3.3u w=1.2u l=0.28u
+X236 lo_lq_vq lo_lq_lg lo_lq_lo1 lo_lq_vq pfet_03v3 ad=0.225p pd=1.9u as=1.1p ps=5.4u w=0.5u l=0.28u
+X237 VSS nb VSS VSS nfet_03v3 ad=4.095p pd=9.19u as=0 ps=0 w=8.19u l=10u
+X238 bbq_o1n bq_p bbq_t1 VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X239 oi_n bbi_g3p bbi_t3 VSS nfet_03v3 ad=4p pd=10u as=2p ps=5u w=4u l=1u
+X240 lo_bq_Ny0 en VDD VDD pfet_03v3 ad=0.625p pd=2.25u as=1.25p ps=4.5u w=1.25u l=0.28u
+X241 bbq_o2p bbq_g3p bbq_o2p bbq_o2p pfet_03v3 ad=6.1425p pd=13.285u as=36.855p ps=79.71u w=12.285u l=10u
+X242 lna_tail inp lna_outn VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X243 ri_p lna_outn lna_x2i_tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X244 lo_bi_a lo_bi_b VSS VSS nfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=0.28u
+X245 bbi_o1n bi_p bbi_t1 VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X246 lo_lq_tt lsq lo_lq_vq lo_lq_vq pfet_03v3 ad=1.05p pd=4.1u as=0.4725p ps=3u w=1.05u l=0.28u
+X247 VSS bbq_vb VSS VSS nfet_03v3 ad=24.57p pd=51.14u as=0 ps=0 w=24.57u l=10u
+X248 bbi_o2n bbi_g3n bbi_o2n bbi_o2n pfet_03v3 ad=12.285p pd=26.57u as=0 ps=0 w=12.285u l=10u
+X249 lq_cq lq_co VDD VDD pfet_03v3 ad=1.25p pd=4.5u as=0.5625p ps=3.4u w=1.25u l=0.28u
+X250 li_cq li_co VSS VSS nfet_03v3 ad=0.5p pd=3u as=0.225p ps=1.9u w=0.5u l=0.28u
+X251 bbq_o1p bq_n bbq_t1 VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X252 VSS lo_bi_Ny1 lo_bi_Ny2 VSS nfet_03v3 ad=2p pd=6u as=2p ps=6u w=2u l=0.28u
+X253 lo_bq_tb lo_bq_t VDD VDD pfet_03v3 ad=3.75p pd=9.5u as=3.75p ps=9.5u w=3.75u l=0.28u
+X254 li_cb li_ca VDD VDD pfet_03v3 ad=1.7p pd=5.4u as=0.765p ps=4.3u w=1.7u l=0.5u
+X255 li_co li_cx VSS VSS nfet_03v3 ad=1p pd=4u as=0.45p ps=2.9u w=1u l=0.5u
+X256 bbi_o1n bi_p bbi_t1 VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X257 VSS bq_p VSS VSS nfet_03v3 ad=2.2932p pd=8.75u as=0 ps=0 w=8.19u l=5u
+X258 lna_tail inn lna_outp VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X259 ri_n lna_outp lna_x2i_tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X260 lo_bq_Py0 lo_bq_a VDD VDD pfet_03v3 ad=0.625p pd=2.25u as=1.25p ps=4.5u w=1.25u l=0.28u
+X261 bbi_o2p bbi_g3p bbi_o2p bbi_o2p pfet_03v3 ad=6.1425p pd=13.285u as=36.855p ps=79.71u w=12.285u l=10u
+X262 VSS lo_bi_Ny0 lo_bi_Ny1 VSS nfet_03v3 ad=0.8p pd=3.6u as=0.8p ps=3.6u w=0.8u l=0.28u
+X263 li_mRpCb li_mRpCb li_vb li_vb pfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=1u
+X264 lo_bi_ta lo_bi_t VDD VDD pfet_03v3 ad=1.25p pd=4.5u as=1.25p ps=4.5u w=1.25u l=0.28u
+X265 lo_lq_lf lsq VSS ppolyf_u_1k r_width=1u r_length=0.15912m
+X266 lna_tail inp lna_outn VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X267 bbq_o1n bbq_g2n bbq_o1n bbq_o1n pfet_03v3 ad=12.285p pd=26.57u as=0 ps=0 w=12.285u l=10u
+X268 VSS lo_lq_vq VSS VSS nfet_03v3 ad=3.6855p pd=17.28u as=0 ps=0 w=8.19u l=10u
+X269 bbq_t1 bq_n bbq_o1p VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X270 lq_ca lq_gcp lq_ct VSS nfet_03v3 ad=2p pd=6u as=1p ps=3u w=2u l=0.5u
+X271 b_vh b_n2 b_n2 VDD pfet_03v3 ad=2p pd=5u as=2p ps=5u w=4u l=1u
+X272 bbq_mRp3b bbq_mRp3b bbq_g3n bbq_g3n pfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=1u
+X273 lq_ca lq_cb VDD VDD pfet_03v3 ad=1.7p pd=5.4u as=0.765p ps=4.3u w=1.7u l=0.5u
+X274 bbi_t1 bi_n bbi_o1p VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X275 bbq_mRp2b bbq_mRp2b bbq_g2n bbq_g2n pfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=1u
+X276 lo_bi_tb lo_bi_t VSS VSS nfet_03v3 ad=1.5p pd=5u as=1.5p ps=5u w=1.5u l=0.28u
+X277 bbi_t2 bbi_g2n bbi_o2p VSS nfet_03v3 ad=2p pd=5u as=2p ps=5u w=4u l=1u
+X278 lo_bq_Ny0 lo_bq_b lo_bq_Ngs VSS nfet_03v3 ad=1p pd=4u as=0.28p ps=1.56u w=1u l=0.28u
+X279 bbq_t1 bq_p bbq_o1n VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X280 bbq_g3p bbq_vgr bbq_vb bbq_vb pfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=12u
+X281 lna_tail inn lna_outp VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X282 VSS VDD VSS VSS nfet_03v3 ad=5.4p pd=24.9u as=0 ps=0 w=12u l=10u
+X283 nb b_x b_n2 VSS nfet_03v3 ad=1p pd=4u as=1p ps=4u w=1u l=0.28u
+X284 lo_lq_vq VSS VDD VDD pfet_03v3 ad=1.6675p pd=4.335u as=0.9338p ps=3.895u w=3.335u l=0.28u
+X285 lna_outp inn lna_tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X286 VSS bbq_o2n VSS VSS nfet_03v3 ad=12.285p pd=25.57u as=0 ps=0 w=24.57u l=10u
+X287 rq_p lna_outn lna_x2q_tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X288 li_co li_ca VDD VDD pfet_03v3 ad=2p pd=6u as=0.9p ps=4.9u w=2u l=0.5u
+X289 bbi_o1n bbi_g2n bbi_o1n bbi_o1n pfet_03v3 ad=6.1425p pd=13.285u as=36.855p ps=79.71u w=12.285u l=10u
+X290 oq_n bbq_g3p bbq_t3 VSS nfet_03v3 ad=4p pd=10u as=2p ps=5u w=4u l=1u
+X291 bbi_o1n bi_p bbi_t1 VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X292 VSS en lo_bq_g0s VSS nfet_03v3 ad=0.5p pd=3u as=0.14p ps=1.06u w=0.5u l=0.28u
+X293 bbq_g2n bbq_vgr bbq_vb bbq_vb pfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=12u
+X294 lo_bq_a lo_bq_ta VDD VDD pfet_03v3 ad=2.5p pd=7u as=2.5p ps=7u w=2.5u l=0.28u
+X295 VSS VDD VSS VSS nfet_03v3 ad=3.36p pd=12.56u as=0 ps=0 w=12u l=10u
+X296 VSS oi_n VSS VSS nfet_03v3 ad=12.285p pd=25.57u as=0 ps=0 w=24.57u l=10u
+X297 bbq_o1p bq_n bbq_t1 VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X298 lna_x2q_tail lna_outp rq_n VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X299 lo_bq_Py2 lo_bq_Py1 VSS VSS nfet_03v3 ad=2p pd=6u as=2p ps=6u w=2u l=0.28u
+X300 lna_outn inp lna_tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X301 lna_x2q_tail nb VSS VSS nfet_03v3 ad=5p pd=11u as=10p ps=22u w=10u l=0.5u
+X302 lna_tail inp lna_outn VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X303 VSS nb lna_tail VSS nfet_03v3 ad=2.8p pd=10.56u as=5p ps=11u w=10u l=0.5u
+X304 b_nr nb b_n2 VSS nfet_03v3 ad=1p pd=3u as=2p ps=6u w=2u l=0.5u
+X305 VSS bbi_o2n VSS VSS nfet_03v3 ad=12.285p pd=25.57u as=0 ps=0 w=24.57u l=10u
+X306 VSS lo_lq_lg lo_lq_lo1 VSS nfet_03v3 ad=0.1686p pd=1.74u as=0.5448p ps=5.16u w=0.22u l=0.28u
+X307 VSS VDD VSS VSS nfet_03v3 ad=3.36p pd=12.56u as=0 ps=0 w=12u l=10u
+X308 VSS oq_p VSS VSS nfet_03v3 ad=12.285p pd=25.57u as=0 ps=0 w=24.57u l=10u
+X309 lq_mRpLb lq_mRpLb lq_vb lq_vb pfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=1u
+X310 rq_p lna_outn lna_x2q_tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X311 bbi_t1 bi_n bbi_o1p VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X312 VSS lna_vcm VSS VSS nfet_03v3 ad=4.915p pd=10.83u as=0 ps=0 w=9.83u l=10u
+X313 lna_x2q_tail lna_outp rq_n VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X314 VSS nb lna_tail VSS nfet_03v3 ad=2.8p pd=10.56u as=5p ps=11u w=10u l=0.5u
+X315 lna_outn inp lna_tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X316 bbq_t1 bq_p bbq_o1n VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X317 VSS nb VSS VSS nfet_03v3 ad=8.19p pd=18.38u as=0 ps=0 w=8.19u l=10u
+X318 lq_cx lq_cx VSS VSS nfet_03v3 ad=1p pd=4u as=0.45p ps=2.9u w=1u l=0.5u
+X319 VSS lsq a_41922_713# VSS nfet_03v3 ad=0.28p pd=1.56u as=0.28p ps=1.56u w=1u l=0.28u
+X320 bbi_vgr bbi_vgr bbi_vb bbi_vb pfet_03v3 ad=4p pd=10u as=4p ps=10u w=4u l=1u
+X321 VSS bq_p VSS VSS nfet_03v3 ad=2.2932p pd=8.75u as=0 ps=0 w=8.19u l=5u
+X322 VDD VSS lo_lq_vq VDD pfet_03v3 ad=0.9338p pd=3.895u as=1.6675p ps=4.335u w=3.335u l=0.28u
+X323 li_gln li_vgr li_vb li_vb pfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=12u
+X324 lq_tL lq_gln lq_lp VSS nfet_03v3 ad=2p pd=5u as=2p ps=5u w=4u l=0.5u
+X325 q_q lq_cq VDD VDD pfet_03v3 ad=5p pd=12u as=2.25p ps=10.9u w=5u l=0.28u
+X326 VDD lo_bq_Py2 lo_q VDD pfet_03v3 ad=2.0825p pd=5.165u as=2.0825p ps=5.165u w=4.165u l=0.28u
+X327 lo_lq_D1qb lo_lq_D1y lo_lq_vq lo_lq_vq pfet_03v3 ad=2p pd=6u as=0.9p ps=4.9u w=2u l=0.28u
+X328 VSS nb lna_x2q_tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.5u
+X329 VDD oq_n VSS ppolyf_u_1k r_width=1u r_length=0.2m
+X330 li_ct li_gcn li_cb VSS nfet_03v3 ad=1p pd=3u as=1p ps=3u w=2u l=0.5u
+X331 lna_tail inp lna_outn VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X332 bbq_o2p bbq_g2n bbq_t2 VSS nfet_03v3 ad=2p pd=5u as=2p ps=5u w=4u l=1u
+X333 li_tL li_gln li_lp VSS nfet_03v3 ad=2p pd=5u as=2p ps=5u w=4u l=0.5u
+X334 VDD bbq_o2p VSS ppolyf_u_1k r_width=1u r_length=0.2m
+X335 bbi_o1p bi_n bbi_t1 VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X336 rq_p VDD VSS ppolyf_u r_width=2u r_length=9.14u
+X337 VSS bq_p VSS VSS nfet_03v3 ad=3.6855p pd=17.28u as=0 ps=0 w=8.19u l=5u
+X338 lna_tail inp lna_outn VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X339 rq_n lo_q bq_p VDD pfet_03v3 ad=4p pd=9u as=4p ps=9u w=8u l=0.28u
+X340 VSS VDD VSS VSS nfet_03v3 ad=3.36p pd=12.56u as=0 ps=0 w=12u l=10u
+X341 VSS bbi_o2p VSS VSS nfet_03v3 ad=12.285p pd=25.57u as=0 ps=0 w=24.57u l=10u
+X342 bbq_o1n bq_p bbq_t1 VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X343 b_vh enb VDD VDD pfet_03v3 ad=4p pd=10u as=1.8p ps=8.9u w=4u l=0.28u
+X344 b_nr nb b_n2 VSS nfet_03v3 ad=1p pd=3u as=2p ps=6u w=2u l=0.5u
+X345 VDD en lo_bi_Py0 VDD pfet_03v3 ad=1.25p pd=4.5u as=0.625p ps=2.25u w=1.25u l=0.28u
+X346 bbi_o1p bi_n bbi_t1 VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X347 lo_q lo_bq_Py2 VDD VDD pfet_03v3 ad=4.165p pd=10.33u as=2.0825p ps=5.165u w=4.165u l=0.28u
+X348 lna_tail inn lna_outp VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X349 lq_cx lq_cb VDD VDD pfet_03v3 ad=2p pd=6u as=0.9p ps=4.9u w=2u l=0.5u
+X350 VSS bi_n VSS VSS nfet_03v3 ad=2.2932p pd=8.75u as=0 ps=0 w=8.19u l=5u
+X351 lq_mRpLa lq_mRpLa lq_vb lq_vb pfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=1u
+X352 ri_p lob_i bi_p VDD pfet_03v3 ad=8p pd=18u as=4p ps=9u w=8u l=0.28u
+X353 VSS bi_p VSS VSS nfet_03v3 ad=2.2932p pd=8.75u as=0 ps=0 w=8.19u l=5u
+X354 lo_bi_ta lo_bi_t VSS VSS nfet_03v3 ad=0.5p pd=3u as=0.5p ps=3u w=0.5u l=0.28u
+X355 a_41496_1776# lo_lq_D1qb lo_lq_vq lo_lq_vq pfet_03v3 ad=0.56p pd=2.56u as=0.56p ps=2.56u w=2u l=0.28u
+X356 lna_tail inn lna_outp VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X357 VDD bbi_o2p VSS ppolyf_u_1k r_width=1u r_length=0.2m
+X358 lob_q lo_bq_Ny2 VSS VSS nfet_03v3 ad=1.25p pd=3.5u as=2.5p ps=7u w=2.5u l=0.28u
+X359 VSS VDD VSS VSS nfet_03v3 ad=3.36p pd=12.56u as=0 ps=0 w=12u l=10u
+X360 bbq_vb VSS VSS ppolyf_u_1k r_width=1u r_length=99.99u
+X361 bbq_t1 bq_p bbq_o1n VSS nfet_03v3 ad=10p pd=21u as=20p ps=42u w=20u l=1u
+X362 VSS nb lna_x2q_tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.5u
+X363 VSS bbq_o2n VSS VSS nfet_03v3 ad=24.57p pd=51.14u as=0 ps=0 w=24.57u l=10u
+X364 VSS nb lna_tail VSS nfet_03v3 ad=2.8p pd=10.56u as=5p ps=11u w=10u l=0.5u
+X365 VSS lna_vcm VSS VSS nfet_03v3 ad=9.83p pd=21.66u as=0 ps=0 w=9.83u l=10u
+X366 bbi_t1 bi_p bbi_o1n VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X367 lna_x2q_tail nb VSS VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.5u
+X368 li_cb li_cb VDD VDD pfet_03v3 ad=1p pd=4u as=0.45p ps=2.9u w=1u l=0.5u
+X369 bbi_t3 nb VSS VSS nfet_03v3 ad=0.8p pd=3.6u as=0.36p ps=2.5u w=0.8u l=0.5u
+X370 bbq_t1 bq_n bbq_o1p VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X371 lna_x2i_tail lna_outp ri_n VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X372 bbq_vbt enb VDD VDD pfet_03v3 ad=1p pd=4u as=0.45p ps=2.9u w=1u l=0.28u
+X373 VDD en lo_bq_x VDD pfet_03v3 ad=0.6p pd=3.2u as=0.3p ps=1.6u w=0.6u l=0.28u
+X374 li_glp li_vgr li_vb li_vb pfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=12u
+X375 bbi_t1 bi_p bbi_o1n VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X376 li_gcn li_vgr li_vb li_vb pfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=12u
+X377 lo_bq_Py1 lo_bq_Py0 VDD VDD pfet_03v3 ad=2p pd=6u as=2p ps=6u w=2u l=0.28u
+X378 lob_i lo_bi_Ny2 VSS VSS nfet_03v3 ad=1.25p pd=3.5u as=2.5p ps=7u w=2.5u l=0.28u
+X379 inp lna_vcm VSS ppolyf_u_1k r_width=1u r_length=20u
+X380 lna_tail nb VSS VSS nfet_03v3 ad=5p pd=11u as=2.8p ps=10.56u w=10u l=0.5u
+X381 VSS bi_n VSS VSS nfet_03v3 ad=2.2932p pd=8.75u as=0 ps=0 w=8.19u l=5u
+X382 VSS nb lna_tail VSS nfet_03v3 ad=2.8p pd=10.56u as=5p ps=11u w=10u l=0.5u
+X383 lna_outp inn lna_tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X384 lo_bi_b lo_bi_a VDD VDD pfet_03v3 ad=1.05p pd=4.1u as=1.05p ps=4.1u w=1.05u l=0.28u
+X385 bbi_mRp2b bbi_mRp2b bbi_vb bbi_vb pfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=1u
+X386 bbq_o1p bbq_g2p bbq_o1p bbq_o1p pfet_03v3 ad=6.1425p pd=13.285u as=36.855p ps=79.71u w=12.285u l=10u
+X387 bbi_o1p bi_n bbi_t1 VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X388 lo_i lo_bi_Py2 VSS VSS nfet_03v3 ad=1.25p pd=3.5u as=2.5p ps=7u w=2.5u l=0.28u
+X389 lo_lq_vq VSS VDD VDD pfet_03v3 ad=1.6675p pd=4.335u as=1.50075p ps=7.57u w=3.335u l=0.28u
+X390 bbq_o1n bq_p bbq_t1 VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X391 lna_tail nb VSS VSS nfet_03v3 ad=5p pd=11u as=2.8p ps=10.56u w=10u l=0.5u
+X392 rq_p lna_outn lna_x2q_tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X393 bbi_t1 nb VSS VSS nfet_03v3 ad=4p pd=9u as=3.6p ps=16.9u w=8u l=0.5u
+X394 lo_bi_Ny0 en VDD VDD pfet_03v3 ad=0.625p pd=2.25u as=1.25p ps=4.5u w=1.25u l=0.28u
+X395 lna_x2q_tail nb VSS VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.5u
+X396 lq_vgr lq_vgr lq_vb lq_vb pfet_03v3 ad=4p pd=10u as=4p ps=10u w=4u l=1u
+X397 bbi_o2p bbi_g3p bbi_o2p bbi_o2p pfet_03v3 ad=12.285p pd=26.57u as=0 ps=0 w=12.285u l=10u
+X398 lna_x2i_tail nb VSS VSS nfet_03v3 ad=5p pd=11u as=2.8p ps=10.56u w=10u l=0.5u
+X399 lna_outn inp lna_tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X400 bbq_o1p bq_n bbq_t1 VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X401 lo_lq_vq lsq lo_lq_D1y lo_lq_vq pfet_03v3 ad=0.56p pd=2.56u as=2p ps=6u w=2u l=0.28u
+X402 oi_n li_gln oi_n oi_n pfet_03v3 ad=12.285p pd=26.57u as=24.57p ps=53.14u w=12.285u l=10u
+X403 lo_bq_t lo_bq_x VDD VDD pfet_03v3 ad=1.05p pd=4.1u as=1.05p ps=4.1u w=1.05u l=0.28u
+X404 bi_n lo_i ri_n VSS nfet_03v3 ad=4p pd=9u as=4p ps=9u w=8u l=0.28u
+X405 lo_bi_tb lo_bi_t VDD VDD pfet_03v3 ad=3.75p pd=9.5u as=3.75p ps=9.5u w=3.75u l=0.28u
+X406 VDD li_ln VSS ppolyf_u r_width=1u r_length=28.56u
+X407 bbi_t1 bi_p bbi_o1n VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X408 lo_bq_Py1 lo_bq_Py0 VSS VSS nfet_03v3 ad=0.8p pd=3.6u as=0.8p ps=3.6u w=0.8u l=0.28u
+X409 bbq_t3 bbq_g3p oq_n VSS nfet_03v3 ad=2p pd=5u as=4p ps=10u w=4u l=1u
+X410 bbi_vb bbi_vbt VSS ppolyf_u_1k r_width=1u r_length=0.15002m
+X411 VSS nb lna_x2i_tail VSS nfet_03v3 ad=2.8p pd=10.56u as=5p ps=11u w=10u l=0.5u
+X412 lo_bi_Py0 lo_bi_a VDD VDD pfet_03v3 ad=0.625p pd=2.25u as=1.25p ps=4.5u w=1.25u l=0.28u
+X413 VDD bbq_o2n VSS ppolyf_u_1k r_width=1u r_length=0.2m
+X414 bbq_t1 bq_n bbq_o1p VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X415 lna_outp inn lna_tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X416 VSS bbq_o2n VSS VSS nfet_03v3 ad=12.285p pd=25.57u as=0 ps=0 w=24.57u l=10u
+X417 VSS nb bbq_vgr VSS nfet_03v3 ad=0.189p pd=1.74u as=0.42p ps=2.84u w=0.42u l=50u
+X418 VDD lq_ln VSS ppolyf_u r_width=1u r_length=28.56u
+X419 bbi_mRp3a bbi_mRp3a bbi_g3p bbi_g3p pfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=1u
+X420 bbq_mRp2a bbq_mRp2a bbq_vb bbq_vb pfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=1u
+X421 bbi_o1n bbi_g2n bbi_o1n bbi_o1n pfet_03v3 ad=12.285p pd=26.57u as=0 ps=0 w=12.285u l=10u
+X422 lna_x2q_tail nb VSS VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.5u
+X423 bbi_mRp3b bbi_mRp3b bbi_g3n bbi_g3n pfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=1u
+X424 bbi_t3 bbi_g3p oi_n VSS nfet_03v3 ad=2p pd=5u as=4p ps=10u w=4u l=1u
+X425 VSS nb lna_x2q_tail VSS nfet_03v3 ad=10p pd=22u as=5p ps=11u w=10u l=0.5u
+X426 VSS oi_n VSS VSS nfet_03v3 ad=12.285p pd=25.57u as=0 ps=0 w=24.57u l=10u
+X427 lna_outp VDD VSS ppolyf_u r_width=4u r_length=9.14u
+X428 VDD bbi_o2n VSS ppolyf_u_1k r_width=1u r_length=0.2m
+X429 li_vb li_vbt VSS ppolyf_u_1k r_width=1u r_length=0.15m
+X430 lna_outn inp lna_tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X431 bbq_o2n bbq_g2p bbq_t2 VSS nfet_03v3 ad=4p pd=10u as=2p ps=5u w=4u l=1u
+X432 ri_n lna_outp lna_x2i_tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X433 bbi_o1n bi_p bbi_t1 VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X434 VSS nb lna_x2i_tail VSS nfet_03v3 ad=4.5p pd=20.9u as=5p ps=11u w=10u l=0.5u
+X435 ri_p lna_outn lna_x2i_tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X436 lo_bi_b VDD lo_bi_tb VSS nfet_03v3 ad=1p pd=4u as=1p ps=4u w=1u l=0.28u
+X437 lq_ct nb VSS VSS nfet_03v3 ad=2p pd=6u as=0.9p ps=4.9u w=2u l=0.5u
+X438 VSS bbi_o2n VSS VSS nfet_03v3 ad=12.285p pd=25.57u as=0 ps=0 w=24.57u l=10u
+X439 bbq_o1p bq_n bbq_t1 VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X440 VSS oq_p VSS VSS nfet_03v3 ad=12.285p pd=25.57u as=0 ps=0 w=24.57u l=10u
+X441 lo_bi_a lo_bi_ta VDD VDD pfet_03v3 ad=2.5p pd=7u as=2.5p ps=7u w=2.5u l=0.28u
+X442 bbq_o2p bbq_g3p bbq_o2p bbq_o2p pfet_03v3 ad=12.285p pd=26.57u as=0 ps=0 w=12.285u l=10u
+X443 bbi_o1n bi_p bbi_t1 VSS nfet_03v3 ad=20p pd=42u as=10p ps=21u w=20u l=1u
+X444 VSS oi_n VSS VSS nfet_03v3 ad=24.57p pd=51.14u as=0 ps=0 w=24.57u l=10u
+X445 rq_n lob_q bq_n VDD pfet_03v3 ad=4p pd=9u as=4p ps=9u w=8u l=0.28u
+X446 lna_tail inn lna_outp VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X447 VSS bi_p VSS VSS nfet_03v3 ad=3.6855p pd=17.28u as=0 ps=0 w=8.19u l=5u
+X448 lo_lq_lo2 lo_lq_lo1 VSS VSS nfet_03v3 ad=0.6p pd=3.2u as=0.27p ps=2.1u w=0.6u l=0.28u
+X449 lna_tail nb VSS VSS nfet_03v3 ad=5p pd=11u as=2.8p ps=10.56u w=10u l=0.5u
+X450 lna_outn inp lna_tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X451 VSS nb lna_x2q_tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.5u
+X452 VSS oq_p VSS VSS nfet_03v3 ad=24.57p pd=51.14u as=0 ps=0 w=24.57u l=10u
+X453 lna_outp inn lna_tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X454 lna_outp inn lna_tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X455 li_mRpLa li_mRpLa li_vb li_vb pfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=1u
+X456 li_mRpLa li_mRpLa li_glp li_glp pfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=1u
+X457 VSS oi_p VSS VSS nfet_03v3 ad=12.285p pd=25.57u as=0 ps=0 w=24.57u l=10u
+X458 bbi_t1 bi_n bbi_o1p VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X459 lo_lq_lo2 lo_lq_lo1 lo_lq_vq lo_lq_vq pfet_03v3 ad=1.5p pd=5u as=0.675p ps=3.9u w=1.5u l=0.28u
+X460 lo_lq_tt lsq VSS VSS nfet_03v3 ad=0.42p pd=2.84u as=0.189p ps=1.74u w=0.42u l=0.28u
+X461 bbq_vgr bbq_vgr bbq_vb bbq_vb pfet_03v3 ad=4p pd=10u as=4p ps=10u w=4u l=1u
+X462 li_cq li_co VDD VDD pfet_03v3 ad=1.25p pd=4.5u as=0.5625p ps=3.4u w=1.25u l=0.28u
+X463 rq_p lo_q bq_n VDD pfet_03v3 ad=4p pd=9u as=4p ps=9u w=8u l=0.28u
+X464 bq_p lo_q rq_p VSS nfet_03v3 ad=4p pd=9u as=8p ps=18u w=8u l=0.28u
+X465 VSS lo_bi_Ny2 lob_i VSS nfet_03v3 ad=2.5p pd=7u as=1.25p ps=3.5u w=2.5u l=0.28u
+X466 lna_tail nb VSS VSS nfet_03v3 ad=5p pd=11u as=2.8p ps=10.56u w=10u l=0.5u
+X467 bbq_t1 bq_p bbq_o1n VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X468 VSS bbi_vb VSS VSS nfet_03v3 ad=24.57p pd=51.14u as=0 ps=0 w=24.57u l=10u
+X469 lo_bq_b lo_bq_a VSS VSS nfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=0.28u
+X470 bbi_t1 bi_n bbi_o1p VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X471 lna_outn inp lna_tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X472 VSS li_vb VSS VSS nfet_03v3 ad=6.1425p pd=13.285u as=0 ps=0 w=12.285u l=10u
+X473 lo_bq_Py2 lo_bq_Py1 VDD VDD pfet_03v3 ad=1.25p pd=3.5u as=2.5p ps=7u w=2.5u l=0.28u
+X474 li_ct nb VSS VSS nfet_03v3 ad=2p pd=6u as=0.9p ps=4.9u w=2u l=0.5u
+X475 VSS bi_p VSS VSS nfet_03v3 ad=2.2932p pd=8.75u as=0 ps=0 w=8.19u l=5u
+X476 bbi_mRp2b bbi_mRp2b bbi_g2n bbi_g2n pfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=1u
+X477 VDD lo_bi_Py2 lo_i VDD pfet_03v3 ad=2.0825p pd=5.165u as=2.0825p ps=5.165u w=4.165u l=0.28u
+X478 bbq_o1p bq_n bbq_t1 VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X479 lo_bq_ta lo_bq_t VSS VSS nfet_03v3 ad=0.5p pd=3u as=0.5p ps=3u w=0.5u l=0.28u
+X480 lo_bq_x lsq VDD VDD pfet_03v3 ad=0.3p pd=1.6u as=0.6p ps=3.2u w=0.6u l=0.28u
+X481 lna_tail inn lna_outp VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X482 VDD oi_n VSS ppolyf_u_1k r_width=1u r_length=0.2m
+X483 bbi_o1p bi_n bbi_t1 VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X484 VSS nb lna_tail VSS nfet_03v3 ad=2.8p pd=10.56u as=5p ps=11u w=10u l=0.5u
+X485 bbi_o2p bbi_g2n bbi_t2 VSS nfet_03v3 ad=2p pd=5u as=2p ps=5u w=4u l=1u
+X486 lna_vt enb VDD VDD pfet_03v3 ad=2p pd=6u as=2p ps=6u w=2u l=0.28u
+X487 lo_bi_b lo_bi_a VSS VSS nfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=0.28u
+X488 ri_p lob_i bi_n VSS nfet_03v3 ad=8p pd=18u as=4p ps=9u w=8u l=0.28u
+X489 lq_mRpCb lq_mRpCb lq_vb lq_vb pfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=1u
+X490 bbq_o1n bq_p bbq_t1 VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X491 bbq_o1n bq_p bbq_t1 VSS nfet_03v3 ad=20p pd=42u as=10p ps=21u w=20u l=1u
+X492 VSS lo_bq_Ny2 lob_q VSS nfet_03v3 ad=2.5p pd=7u as=1.25p ps=3.5u w=2.5u l=0.28u
+X493 VDD lo_bq_Py1 lo_bq_Py2 VDD pfet_03v3 ad=2.5p pd=7u as=1.25p ps=3.5u w=2.5u l=0.28u
+X494 enb en VDD VDD pfet_03v3 ad=1p pd=4u as=0.45p ps=2.9u w=1u l=0.28u
+X495 lq_ct lq_gcn lq_cb VSS nfet_03v3 ad=1p pd=3u as=1p ps=3u w=2u l=0.5u
+X496 li_cb li_gcn li_ct VSS nfet_03v3 ad=1p pd=3u as=1p ps=3u w=2u l=0.5u
+X497 bbi_g3p bbi_vgr bbi_vb bbi_vb pfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=12u
+X498 li_lp li_gln li_tL VSS nfet_03v3 ad=2p pd=5u as=2p ps=5u w=4u l=0.5u
+X499 lo_i lo_bi_Py2 VDD VDD pfet_03v3 ad=4.165p pd=10.33u as=2.0825p ps=5.165u w=4.165u l=0.28u
+X500 lq_co lq_cx VSS VSS nfet_03v3 ad=1p pd=4u as=0.45p ps=2.9u w=1u l=0.5u
+X501 bbq_t3 bbq_g3n oq_p VSS nfet_03v3 ad=2p pd=5u as=2p ps=5u w=4u l=1u
+X502 lna_x2q_tail lna_outn rq_p VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X503 lna_outp inn lna_tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X504 lo_bq_b VDD lo_bq_tb VSS nfet_03v3 ad=1p pd=4u as=1p ps=4u w=1u l=0.28u
+X505 li_mRpCa li_mRpCa li_vb li_vb pfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=1u
+X506 bbq_t1 bq_p bbq_o1n VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X507 VSS nb lq_vgr VSS nfet_03v3 ad=0.189p pd=1.74u as=0.42p ps=2.84u w=0.42u l=50u
+X508 lna_tail inp lna_outn VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X509 lo_lq_lf VSS lo_lq_lg lo_lq_vq pfet_03v3 ad=0.2808p pd=2.76u as=0.2808p ps=2.76u w=0.22u l=2u
+X510 lna_tail inp lna_outn VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X511 VDD bbi_o1n VSS ppolyf_u r_width=2u r_length=57.14u
+X512 VSS bbq_o2p VSS VSS nfet_03v3 ad=12.285p pd=25.57u as=0 ps=0 w=24.57u l=10u
+X513 bbq_o1p bbq_g2p bbq_o1p bbq_o1p pfet_03v3 ad=12.285p pd=26.57u as=0 ps=0 w=12.285u l=10u
+X514 VDD oq_p VSS ppolyf_u_1k r_width=1u r_length=0.2m
+X515 lo_bq_tb lo_bq_t VSS VSS nfet_03v3 ad=1.5p pd=5u as=1.5p ps=5u w=1.5u l=0.28u
+X516 VSS lo_lq_vq VSS VSS nfet_03v3 ad=2.2932p pd=8.75u as=0 ps=0 w=8.19u l=10u
+X517 bbi_t3 bbi_g3n oi_p VSS nfet_03v3 ad=2p pd=5u as=2p ps=5u w=4u l=1u
+X518 lna_x2i_tail lna_outn ri_p VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X519 VDD en lo_bi_x VDD pfet_03v3 ad=0.6p pd=3.2u as=0.3p ps=1.6u w=0.6u l=0.28u
+X520 oq_p lq_glp oq_p oq_p pfet_03v3 ad=12.285p pd=26.57u as=24.57p ps=53.14u w=12.285u l=10u
+X521 VSS bbi_o2p VSS VSS nfet_03v3 ad=24.57p pd=51.14u as=0 ps=0 w=24.57u l=10u
+X522 lna_tail inn lna_outp VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X523 lna_tail inn lna_outp VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X524 lna_x2q_tail lna_outn rq_p VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X525 lo_bi_Py1 lo_bi_Py0 VDD VDD pfet_03v3 ad=2p pd=6u as=2p ps=6u w=2u l=0.28u
+X526 VDD lo_bq_Ny1 lo_bq_Ny2 VDD pfet_03v3 ad=2.5p pd=7u as=1.25p ps=3.5u w=2.5u l=0.28u
+X527 lq_co lq_ca VDD VDD pfet_03v3 ad=2p pd=6u as=0.9p ps=4.9u w=2u l=0.5u
+X528 VSS oq_n VSS VSS nfet_03v3 ad=12.285p pd=25.57u as=0 ps=0 w=24.57u l=10u
+X529 bi_p lo_i ri_n VDD pfet_03v3 ad=4p pd=9u as=4p ps=9u w=8u l=0.28u
+X530 bbq_o1n bq_p bbq_t1 VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X531 bbq_g2p bbq_vgr bbq_vb bbq_vb pfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=12u
+X532 bbi_o1p bbi_g2p bbi_o1p bbi_o1p pfet_03v3 ad=6.1425p pd=13.285u as=0 ps=0 w=12.285u l=10u
+X533 VDD lq_lp VSS ppolyf_u r_width=1u r_length=28.56u
+X534 lq_mRpCb lq_mRpCb lq_gcn lq_gcn pfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=1u
+X535 bbi_o1n bi_p bbi_t1 VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X536 lna_x2i_tail lna_outn ri_p VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X537 VDD li_lp VSS ppolyf_u r_width=1u r_length=28.56u
+X538 lna_tail nb VSS VSS nfet_03v3 ad=5p pd=11u as=2.8p ps=10.56u w=10u l=0.5u
+X539 VSS nb lna_tail VSS nfet_03v3 ad=2.8p pd=10.56u as=5p ps=11u w=10u l=0.5u
+X540 lq_gcp lq_vgr lq_vb lq_vb pfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=12u
+X541 lsq lo_lq_lo2 lo_lq_vq lo_lq_vq pfet_03v3 ad=3p pd=8u as=1.35p ps=6.9u w=3u l=0.28u
+X542 b_n2 b_n2 b_vh VDD pfet_03v3 ad=2p pd=5u as=2p ps=5u w=4u l=1u
+X543 lq_mRpLa lq_mRpLa lq_glp lq_glp pfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=1u
+X544 bbq_t2 bbq_g2p bbq_o2n VSS nfet_03v3 ad=2p pd=5u as=4p ps=10u w=4u l=1u
+X545 lo_bi_t lo_bi_x VDD VDD pfet_03v3 ad=1.05p pd=4.1u as=1.05p ps=4.1u w=1.05u l=0.28u
+X546 li_ca li_ca VDD VDD pfet_03v3 ad=1p pd=4u as=0.45p ps=2.9u w=1u l=0.5u
+X547 lq_lp lq_gln lq_tL VSS nfet_03v3 ad=2p pd=5u as=2p ps=5u w=4u l=0.5u
+X548 lo_lq_D1qb lsq a_41178_713# VSS nfet_03v3 ad=1p pd=4u as=0.28p ps=1.56u w=1u l=0.28u
+X549 lq_ln lq_gcn lq_ln lq_ln pfet_03v3 ad=12.285p pd=26.57u as=24.57p ps=53.14u w=12.285u l=10u
+X550 bbq_mRp3b bbq_mRp3b bbq_vb bbq_vb pfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=1u
+X551 VDD lo_bq_Ny0 lo_bq_Ny1 VDD pfet_03v3 ad=2p pd=6u as=2p ps=6u w=2u l=0.28u
+X552 bbq_t1 bq_n bbq_o1p VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X553 lna_x2i_tail lna_outp ri_n VSS nfet_03v3 ad=5p pd=11u as=10p ps=22u w=10u l=0.28u
+X554 lna_outn VDD VSS ppolyf_u r_width=4u r_length=9.14u
+X555 bbi_vb VSS VSS ppolyf_u_1k r_width=1u r_length=99.99u
+X556 lna_tail nb VSS VSS nfet_03v3 ad=5p pd=11u as=2.8p ps=10.56u w=10u l=0.5u
+X557 q_i li_cq VSS VSS nfet_03v3 ad=2p pd=6u as=0.9p ps=4.9u w=2u l=0.28u
+X558 bbq_o2n bbq_g3n bbq_o2n bbq_o2n pfet_03v3 ad=12.285p pd=26.57u as=0 ps=0 w=12.285u l=10u
+X559 bbi_t1 bi_n bbi_o1p VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X560 VDD lo_bq_b lo_bq_Ny0 VDD pfet_03v3 ad=1.25p pd=4.5u as=0.625p ps=2.25u w=1.25u l=0.28u
+X561 lna_tail inp lna_outn VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X562 VSS lq_vb VSS VSS nfet_03v3 ad=6.1425p pd=13.285u as=0 ps=0 w=12.285u l=10u
+X563 VSS VDD VSS VSS nfet_03v3 ad=3.36p pd=12.56u as=0 ps=0 w=12u l=10u
+X564 VSS bbi_o2n VSS VSS nfet_03v3 ad=12.285p pd=25.57u as=0 ps=0 w=24.57u l=10u
+X565 lo_bq_a lo_bq_b VDD VDD pfet_03v3 ad=1.05p pd=4.1u as=1.05p ps=4.1u w=1.05u l=0.28u
+X566 enb en VSS VSS nfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=0.28u
+X567 VSS oq_p VSS VSS nfet_03v3 ad=12.285p pd=25.57u as=0 ps=0 w=24.57u l=10u
+X568 lna_x2q_tail lna_outn rq_p VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X569 bbi_mRp3b bbi_mRp3b bbi_vb bbi_vb pfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=1u
+X570 b_nr VSS VSS ppolyf_u r_width=2u r_length=29.72u
+X571 VSS bq_n VSS VSS nfet_03v3 ad=2.2932p pd=8.75u as=0 ps=0 w=8.19u l=5u
+X572 a_41922_713# lo_lq_D1x lo_lq_D1y VSS nfet_03v3 ad=0.28p pd=1.56u as=1p ps=4u w=1u l=0.28u
+X573 bbi_o2n bbi_g2p bbi_t2 VSS nfet_03v3 ad=4p pd=10u as=2p ps=5u w=4u l=1u
+X574 lna_tail inn lna_outp VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X575 VSS VDD VSS VSS nfet_03v3 ad=3.36p pd=12.56u as=0 ps=0 w=12u l=10u
+X576 VDD lo_bq_Ny2 lob_q VDD pfet_03v3 ad=2.0825p pd=5.165u as=4.165p ps=10.33u w=4.165u l=0.28u
+X577 bbq_o1p bq_n bbq_t1 VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X578 lna_tail inp lna_outn VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X579 VDD bbq_o1p VSS ppolyf_u r_width=2u r_length=57.14u
+X580 lo_q lo_bq_Py2 VDD VDD pfet_03v3 ad=2.0825p pd=5.165u as=4.165p ps=10.33u w=4.165u l=0.28u
+X581 ri_n lob_i bi_n VDD pfet_03v3 ad=4p pd=9u as=4p ps=9u w=8u l=0.28u
+X582 b_x VSS b_vh VDD pfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=10u
+X583 bbi_o1p bi_n bbi_t1 VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X584 li_vgr li_vgr li_vb li_vb pfet_03v3 ad=4p pd=10u as=4p ps=10u w=4u l=1u
+X585 VSS nb li_vgr VSS nfet_03v3 ad=0.189p pd=1.74u as=0.42p ps=2.84u w=0.42u l=50u
+X586 lo_bq_b VSS lo_bq_tb VDD pfet_03v3 ad=2.5p pd=7u as=2.5p ps=7u w=2.5u l=0.28u
+X587 VSS nb bbq_t1 VSS nfet_03v3 ad=3.6p pd=16.9u as=4p ps=9u w=8u l=0.5u
+X588 bbq_t1 bq_n bbq_o1p VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X589 VSS li_vb VSS VSS nfet_03v3 ad=12.285p pd=26.57u as=0 ps=0 w=12.285u l=10u
+X590 ri_p lna_outn lna_x2i_tail VSS nfet_03v3 ad=5p pd=11u as=5p ps=11u w=10u l=0.28u
+X591 VDD lo_bq_Ny2 lob_q VDD pfet_03v3 ad=4.165p pd=10.33u as=2.0825p ps=5.165u w=4.165u l=0.28u
+X592 bbq_t1 bq_p bbq_o1n VSS nfet_03v3 ad=10p pd=21u as=10p ps=21u w=20u l=1u
+X593 VSS lo_lq_lf VSS VSS nfet_03v3 ad=7.2p pd=32.9u as=0 ps=0 w=16u l=16u
+X594 VSS en lo_bi_g0s VSS nfet_03v3 ad=0.5p pd=3u as=0.14p ps=1.06u w=0.5u l=0.28u
+X595 VSS lq_vb VSS ppolyf_u_1k r_width=1u r_length=0.10002m
+X596 bbq_mRp2a bbq_mRp2a bbq_g2p bbq_g2p pfet_03v3 ad=0.42p pd=2.84u as=0.42p ps=2.84u w=0.42u l=1u
+C0 lo_lq_lo1 VDD 0
+C1 lo_lq_D1y VDD 0
+C2 li_glp li_mRpLb 0.09894f
+C3 li_gcn li_ca 3.24009f
+C4 bbi_mRp3b VDD 0.14807f
+C5 nb bbi_o1n 0.2255f
+C6 li_vb li_vbt 0.93601f
+C7 lo_q VDD 2.02949f
+C8 nb lna_vt 0.12457f
+C9 bi_n lo_i 1.40751f
+C10 a_41496_1776# lo_lq_D1x 0.14135f
+C11 nb bbq_t2 3.14973f
+C12 bbq_mRp3a bbq_o2p 0.03426f
+C13 bbq_t1 bbq_g2p 0.01213f
+C14 lo_bq_x VDD 0.38491f
+C15 ri_p lna_vcm 0.18755f
+C16 bbi_vb bbi_o1n 0.18862f
+C17 lq_vb lq_lp 0.23357f
+C18 bq_p bbq_o2n 1.03194f
+C19 bbi_vb bbi_mRp2a 3.04322f
+C20 bq_n bq_p 12.07f
+C21 b_nr VDD 0.0911f
+C22 bbq_mRp2b bbq_g2p 0.62517f
+C23 lo_bq_g0s lo_bq_t 0
+C24 b_x b_n2 1.00468f
+C25 lo_bq_Ny1 VDD 0.58939f
+C26 b_x nb 3.46277f
+C27 oi_n li_lp 0.18871f
+C28 lo_lq_lf lo_lq_D1qb 0.00156f
+C29 lo_bi_tb VDD 1.55503f
+C30 lo_bq_Ny0 en 0.81999f
+C31 bbq_vgr bq_p 0.00265f
+C32 lna_tail enb 0
+C33 b_x en 0.08631f
+C34 bbq_o1p bbq_o1n 6.02565f
+C35 aq VDD 0
+C36 li_vgr oi_n 0.03485f
+C37 lo_bi_x en 0.54599f
+C38 ls en 10.6605f
+C39 li_co li_cq 1.38136f
+C40 bbi_g3n bbi_t3 2.927f
+C41 lq_gcp lq_cx 0
+C42 lo_bq_g0s lob_q 0.00261f
+C43 bbq_mRp2b bbq_mRp2a 0.14576f
+C44 enb oq_p 0.13035f
+C45 li_cq VDD 0.36797f
+C46 bbq_g3p bbq_t2 0.01189f
+C47 lq_ca lq_vbt 0.02106f
+C48 lq_vgr lq_glp 1.30234f
+C49 li_lp li_gcp 2.05057f
+C50 lo_bq_Py2 en 0.68738f
+C51 lna_outn inn 5.60849f
+C52 bbq_t1 bbq_g2n 0.01151f
+C53 inp lna_tail 7.17035f
+C54 bq_n bbq_vbt 0.00951f
+C55 bbq_mRp3b oq_p 1.22474f
+C56 bbi_o2n bbi_o2p 4.93961f
+C57 bbi_vgr bbi_g3p 0.17578f
+C58 oi_p VDD 1.65288f
+C59 lq_gcn VDD 1.89677f
+C60 bbq_mRp2b bbq_g2n 0.62129f
+C61 bbq_vgr bbq_vbt 0.08774f
+C62 li_glp li_lp 0.74193f
+C63 lo_bi_Py0 en 0.56363f
+C64 nb bbi_g3p 0.26793f
+C65 li_vgr li_gcp 1.70144f
+C66 lna_x2q_tail rq_n 3.85225f
+C67 lq_gln oq_n 2.16324f
+C68 oi_n bbi_vgr 2.4529f
+C69 li_lp li_gcn 0.00441f
+C70 li_cb li_co 0
+C71 lq_lp lq_gln 4.14396f
+C72 lq_vb VDD 5.21654f
+C73 lo_bi_Pgs en 0.00905f
+C74 li_vgr li_glp 1.30234f
+C75 ri_p enb 0.06723f
+C76 lo_bq_Pgs VDD 0
+C77 bbi_vb bbi_g3p 0.84842f
+C78 li_mRpCb li_gcp 0.65172f
+C79 oi_n nb 9.60873f
+C80 li_cb VDD 1.09148f
+C81 lo_bq_g0s lsq 0.00494f
+C82 bbi_o1p VDD 1.62549f
+C83 enb lq_vbt 0.99337f
+C84 enb bbq_o2p 0.79436f
+C85 lo_lq_D1x lo_lq_vq 0.26831f
+C86 lo_bi_Ny0 en 0.82002f
+C87 lo_q lo_bq_Py0 0.515f
+C88 li_vgr li_gcn 1.26016f
+C89 lq_cb lq_ct 0.22508f
+C90 bbi_o2n bbi_o1n 0.38655f
+C91 lq_ln lq_cb 0.24663f
+C92 nb bq_p 0.05276f
+C93 a_41922_713# lo_lq_D1qb 0.0061f
+C94 bbq_g2p bbq_t2 2.90297f
+C95 li_vb VDD 5.21654f
+C96 lo_lq_lo2 VDD 0
+C97 oi_n bbi_vb 0.35632f
+C98 lo_bq_Ny2 VDD 0.91605f
+C99 lo_q lo_bq_Py1 0.12532f
+C100 rq_p rq_n 0.81288f
+C101 bbi_t2 bbi_vgr 0
+C102 lq_glp nb 0.10638f
+C103 bq_p en 0.87947f
+C104 li_co li_cx 0.30108f
+C105 lna_x2q_tail lna_vcm 0.00345f
+C106 lq_gcn lq_mRpCa 0.42828f
+C107 nb li_gcp 0.47167f
+C108 li_cx VDD 0.26191f
+C109 lo_q lo_bq_t 0.0177f
+C110 bbi_t2 nb 3.14973f
+C111 lo_bi_x lob_i 0.08157f
+C112 li_mRpCb li_gcn 1.63858f
+C113 ls lob_i 1.04827f
+C114 bbq_g3n oq_n 0.10389f
+C115 bbi_g3n bbi_o2p 0.19553f
+C116 bi_p bbi_vgr 0.00265f
+C117 lna_outn lna_outp 3.9644f
+C118 inn lna_outp 10.251f
+C119 lo_bq_x lo_bq_t 1.77867f
+C120 li_glp nb 0.10638f
+C121 nb bi_p 0.06445f
+C122 lo_bi_Py2 en 0.68977f
+C123 lq_gln lq_tL 0.69379f
+C124 lq_vb lq_mRpCa 2.65704f
+C125 li_gln li_vbt 0.36652f
+C126 bq_n bi_n 0
+C127 bi_p en 0.06157f
+C128 lo_q lob_q 1.4393f
+C129 lo_bi_t lo_bi_a 0
+C130 lo_bi_Py0 lob_i 0.00184f
+C131 li_gcn nb 0.25069f
+C132 enb bbq_o1n 0.32203f
+C133 en lo_i 2.27197f
+C134 rq_p lna_vcm 0.24483f
+C135 lq_gln VDD 1.67688f
+C136 li_lp li_ca 0.94964f
+C137 lo_bq_x lob_q 0.08157f
+C138 bbq_g2n bbq_t2 2.93218f
+C139 lo_bi_x lo_bi_b 0.06191f
+C140 ls lo_bi_b 1.6034f
+C141 lo_bq_Ny1 lob_q 0.20682f
+C142 bbi_mRp2a bbi_vbt 0.00601f
+C143 bbi_vbt bbi_o1n 1.19688f
+C144 lq_vgr lq_gcp 1.70144f
+C145 lo_bq_Ny0 lo_bq_b 1.41643f
+C146 ri_n VDD 4.39334f
+C147 lob_i lo_bi_Ny0 0.5145f
+C148 bbi_o2n bbi_g3p 0.12772f
+C149 bbq_vb bbq_vbt 0.28747f
+C150 bbq_t3 bbq_o2n 0.30481f
+C151 lo_bq_Py0 lo_bq_Pgs 0.07271f
+C152 lo_lq_lo1 lsq 0.12133f
+C153 lo_lq_D1y lsq 1.40306f
+C154 li_vgr li_mRpLb 1.38046f
+C155 lo_lq_lf VDD 0.0017f
+C156 lo_bi_Py0 lo_bi_b 0.17687f
+C157 lo_q lsq 0.09231f
+C158 bq_n bbq_o2n 0.99043f
+C159 bbq_g3n VDD 3.99802f
+C160 oi_n bbi_o2n 1.61543f
+C161 lq_gcn lq_vbt 0
+C162 bbq_t1 oq_n 0.03767f
+C163 bbq_g2p bq_p 0.01844f
+C164 lo_bq_x lsq 1.38153f
+C165 bbq_vgr bbq_o2n 1.36404f
+C166 lna_outn nb 0.20354f
+C167 lo_q lo_bq_a 0.44766f
+C168 lq_ca lq_co 0.34422f
+C169 nb inn 0.09082f
+C170 nb li_ca 0.51718f
+C171 lob_i bi_p 3.27741f
+C172 lo_bi_Ny0 lo_bi_b 1.41643f
+C173 lq_vb lq_vbt 0.93601f
+C174 lo_lq_lo1 lo_lq_lg 0.20859f
+C175 lo_bq_x lo_bq_a 0
+C176 bbi_t2 bbi_o2n 0.56895f
+C177 lq_gcp nb 0.47167f
+C178 rq_p enb 4.67034f
+C179 nb bi_n 0.05604f
+C180 lob_i lo_i 1.47177f
+C181 bi_p bbi_o2n 1.03194f
+C182 bi_n en 10.9337f
+C183 bbi_g3n bbi_g3p 0.34872f
+C184 lq_cb lq_lp 0.8057f
+C185 bbi_g2p bbi_t1 0.01213f
+C186 q_i li_cq 1.46447f
+C187 bbq_g2p bbq_vbt 1.35765f
+C188 li_gln VDD 1.67688f
+C189 a_41496_1776# lo_lq_D1qb 0.01794f
+C190 lo_bi_Ngs lo_bi_Ny0 0.07147f
+C191 lq_gln oq_p 0.30002f
+C192 rq_n lna_vcm 0.43052f
+C193 lo_lq_D1y lo_lq_q1 0.00721f
+C194 bbq_g2n bq_p 0.02054f
+C195 lo_bq_Ny2 lob_q 4.35651f
+C196 lna_outn lna_x2i_tail 5.49393f
+C197 oi_n bbi_g3n 0.10389f
+C198 lna_x2i_tail inn 0
+C199 bi_p lo_bi_b 0
+C200 li_vgr li_lp 0.18006f
+C201 li_gcp li_mRpCa 0.49639f
+C202 lq_ln lq_glp 2.65861f
+C203 VDD lo_bi_Ny2 0.91601f
+C204 aq lo_lq_lg 1.98512f
+C205 bbq_t3 nb 3.13673f
+C206 lo_q rq_p 1.10179f
+C207 bbq_t1 VDD 0.46847f
+C208 lo_i lo_bi_b 0.11767f
+C209 bbq_vbt bbq_mRp2a 0.00601f
+C210 lo_bq_Pgs lsq 0.00248f
+C211 li_cb q_i 0
+C212 nb bbq_o2n 0.76234f
+C213 bq_n nb 0.0458f
+C214 nb lna_outp 0.21791f
+C215 bbq_mRp2b VDD 1.27896f
+C216 lo_bi_Py1 lo_bi_a 0
+C217 lo_bq_x lo_bq_tb 0.17958f
+C218 lo_bq_Ngs en 0.00905f
+C219 bbq_g3n oq_p 3.27704f
+C220 lq_gln lq_vbt 0.36652f
+C221 bbi_g3n bbi_t2 0
+C222 bq_n en 0.0458f
+C223 li_gcn li_mRpCa 0.42828f
+C224 bbq_vgr nb 0.68599f
+C225 q_q VDD 1.58981f
+C226 oq_n bbq_t2 1.43221f
+C227 li_vb q_i 0.81333f
+C228 li_vgr li_mRpCb 0.0027f
+C229 lo_lq_lo2 lsq 0.96379f
+C230 bbi_t1 bbi_g2n 0.01151f
+C231 lo_bq_a lo_bq_Pgs 0.00896f
+C232 bbq_vb bbq_t3 0.15494f
+C233 bbi_vbt bi_p 0.00152f
+C234 ri_p ri_n 1.28352f
+C235 li_lp nb 0.05286f
+C236 bbi_g2p bbi_mRp2b 0.62517f
+C237 q_i li_cx 0.00495f
+C238 lq_cb VDD 1.09155f
+C239 lq_vgr nb 0.09488f
+C240 lo_bi_t enb 0
+C241 bbq_vb bbq_o2n 0.349f
+C242 lob_i bi_n 3.31244f
+C243 bbq_t3 bbq_g3p 2.91775f
+C244 bbi_o2p VDD 2.48827f
+C245 lo_lq_D1y a_41178_713# 0.01134f
+C246 enb bbi_t1 0.21873f
+C247 lq_mRpLb lq_mRpLa 0.08501f
+C248 li_vgr nb 0.09488f
+C249 lna_x2i_tail lna_outp 4.78521f
+C250 bbq_vb bbq_vgr 8.80617f
+C251 enb rq_n 0.01671f
+C252 enb bbq_o1p 0.20141f
+C253 bbq_g3p bbq_o2n 0.12772f
+C254 li_tL VDD 0.15691f
+C255 bbq_g3n bbq_o2p 0.19553f
+C256 lo_lq_lo2 lo_lq_lg 0.00588f
+C257 bbi_o2n bi_n 0.99043f
+C258 lo_lq_D1qb lo_lq_vq 0.59062f
+C259 bbq_vgr bbq_g3p 0.17578f
+C260 lq_cq VDD 0.36797f
+C261 bbi_g2p bbi_g2n 4.72021f
+C262 q_q lq_mRpCa 0.062f
+C263 bi_n lo_bi_b 0
+C264 lq_gcn lq_co 0.00689f
+C265 bbi_mRp2a VDD 0.04832f
+C266 bbi_o1n VDD 1.62614f
+C267 nb bbi_vgr 0.68599f
+C268 bbi_g2p enb 0.00127f
+C269 lna_vt VDD 0.26026f
+C270 bbi_mRp2b bbi_g2n 0.62129f
+C271 b_n2 nb 2.72095f
+C272 bbq_mRp3a bbq_mRp3b 0.08704f
+C273 enb lna_vcm 2.73623f
+C274 lo_q rq_n 2.83249f
+C275 li_vbt li_gcp 0.00317f
+C276 b_n2 en 0.13872f
+C277 lq_gcp lq_ct 1.49061f
+C278 bbi_vb bbi_vgr 8.80617f
+C279 nb en 8.1835f
+C280 bbq_g2p bbq_o2n 3.24823f
+C281 lo_lq_lf lsq 0.33461f
+C282 lo_bq_Ny0 VDD 0.36909f
+C283 bq_n bbq_g2p 0.02671f
+C284 lq_ln lq_gcp 2.31943f
+C285 lo_bi_x lo_bi_ta 0.00503f
+C286 lo_bi_tb lo_bi_t 1.34876f
+C287 b_x VDD 0.05397f
+C288 ls lo_bi_ta 0.05564f
+C289 bbi_vb nb 0.24004f
+C290 li_glp li_vbt 0.86401f
+C291 bbq_vgr bbq_g2p 0.18791f
+C292 bq_p oq_n 0.01544f
+C293 inp lna_vcm 0.18531f
+C294 lo_bi_x VDD 0.38482f
+C295 ls VDD 0.5284f
+C296 lq_glp oq_n 0.15026f
+C297 bbi_vbt bi_n 0.00951f
+C298 bbq_vb nb 0.24004f
+C299 lq_glp lq_lp 0.74193f
+C300 enb lq_ca 0.01232f
+C301 li_gcn li_vbt 0
+C302 lo_bq_Py2 VDD 0.84771f
+C303 bbq_t1 bbq_o2p 0.41474f
+C304 enb lo_bi_Ny1 0
+C305 nb lna_x2i_tail 4.33675f
+C306 lo_lq_lf lo_lq_lg 0.22692f
+C307 nb bbq_g3p 0.26793f
+C308 lq_vb lq_mRpLa 0.99437f
+C309 bbq_mRp2b bbq_o2p 0.58102f
+C310 bbq_vgr bbq_mRp2a 0.05312f
+C311 lo_bi_Py0 VDD 0.44304f
+C312 bbi_mRp3a bbi_mRp3b 0.08704f
+C313 bbq_g2n bbq_o2n 0.63341f
+C314 bq_n bbq_g2n 0.02783f
+C315 lo_bq_Ngs lo_bq_b 0.00888f
+C316 bbi_g3p VDD 4.33045f
+C317 lo_bi_Pgs VDD 0
+C318 bbq_vgr bbq_g2n 1.61644f
+C319 b_vh enb 0.25426f
+C320 lo_bq_x lo_bq_g0s 0.03739f
+C321 lq_gcp lq_mRpCb 0.65172f
+C322 lo_lq_lf lo_lq_q1 0
+C323 lq_cb lq_vbt 0.00161f
+C324 bbq_vb bbq_g3p 0.84842f
+C325 oi_n VDD 1.92798f
+C326 lo_bi_Ny0 VDD 0.36898f
+C327 bbi_o1p bbi_t1 10.4824f
+C328 lq_glp lq_tL 0.67186f
+C329 li_ln enb 0.10666f
+C330 a_41922_713# lsq 0.01348f
+C331 li_ln li_mRpLa 0.05539f
+C332 bbq_t2 oq_p 0.45205f
+C333 lo_bq_ta en 0.1424f
+C334 lob_i en 0.08076f
+C335 bq_p VDD 0.82402f
+C336 bbq_t1 bbq_o1n 10.8992f
+C337 bbi_o2n bbi_vgr 1.36404f
+C338 li_vgr li_mRpCa 0.15627f
+C339 bbq_g2p nb 0.24468f
+C340 lq_ln lq_vgr 2.78384f
+C341 bbi_g2p oi_p 0.10829f
+C342 lq_glp VDD 1.04801f
+C343 li_vbt li_ca 0.02106f
+C344 nb bbi_o2n 0.76234f
+C345 li_gcp VDD 1.67431f
+C346 lo_bi_g0s lo_bi_x 0.03739f
+C347 lo_bi_g0s ls 0.00494f
+C348 lo_bi_ta bi_p 0
+C349 li_mRpCb li_mRpCa 0.1012f
+C350 lo_bi_Py2 VDD 0.84771f
+C351 lq_gln lq_mRpLa 0.1297f
+C352 bbi_mRp3a oi_p 2.19053f
+C353 bi_p VDD 4.88112f
+C354 li_glp VDD 1.04801f
+C355 bbi_vb bbi_o2n 0.349f
+C356 lo_bi_ta lo_i 0.11678f
+C357 lo_lq_vq VDD 2.08283f
+C358 VDD lo_lq_tt 0.00269f
+C359 b_vh b_nr 0.00432f
+C360 li_gcn li_co 0.00689f
+C361 bbq_vb bbq_g2p 0.66867f
+C362 bbi_g2p bbi_o1p 4.53819f
+C363 enb b_nr 0.15069f
+C364 en lo_bi_b 2.94913f
+C365 lo_bq_Py0 lo_bq_Py2 0
+C366 bbq_t2 bbq_o2p 0.3005f
+C367 VDD lo_i 2.02854f
+C368 bbq_vbt VDD 1.66897f
+C369 li_gcn VDD 1.88895f
+C370 lq_gcn lq_ca 3.24009f
+C371 bbq_g2p bbq_g3p 0.01549f
+C372 lo_lq_lo1 lo_lq_D1y 0
+C373 lo_bq_Py1 lo_bq_Py2 2.44938f
+C374 nb bbq_g2n 0.24448f
+C375 lq_lp lq_gcp 2.05057f
+C376 lq_ct nb 1.42544f
+C377 lo_bq_Ny0 lob_q 0.5145f
+C378 lq_ln nb 0.22789f
+C379 lq_vgr lq_mRpCb 0.0027f
+C380 lo_lq_D1x lo_lq_D1qb 0.70987f
+C381 oi_p bbi_g2n 0.06647f
+C382 bbi_g3n bbi_vgr 0.06347f
+C383 bbq_vb bbq_mRp2a 3.04322f
+C384 en lo_bq_b 2.94909f
+C385 bbi_vbt bbi_vgr 0.08774f
+C386 lo_bi_Ngs en 0.00905f
+C387 bbi_g3n nb 0.25688f
+C388 lo_q lo_bq_x 0.00185f
+C389 lq_gcn enb 0.00683f
+C390 oi_p enb 0.07462f
+C391 bbq_vb bbq_g2n 0.51815f
+C392 lq_cx VDD 0.26191f
+C393 bbi_g3n bbi_vb 0.62722f
+C394 bbq_t3 oq_n 0.87498f
+C395 bbi_vb bbi_vbt 0.28747f
+C396 bbi_o1p bbi_g2n 0.02964f
+C397 li_lp li_vbt 0.14942f
+C398 li_ln oi_p 0.46647f
+C399 bbq_g3p bbq_g2n 0.00924f
+C400 lq_glp oq_p 2.08264f
+C401 bq_n oq_n 0.01688f
+C402 oq_n bbq_o2n 1.61543f
+C403 li_co li_ca 0.34422f
+C404 lna_outn VDD 1.18722f
+C405 li_cb enb 0.00427f
+C406 inn VDD 0.44763f
+C407 bbi_o1p enb 0.20141f
+C408 li_ca VDD 0.90713f
+C409 li_vgr li_vbt 0.84123f
+C410 lo_bi_ta bi_n 0
+C411 bbq_vgr oq_n 2.4529f
+C412 lob_i lo_bi_b 0.26716f
+C413 ri_n lna_vcm 3.39538f
+C414 oi_p bbi_mRp3b 1.22474f
+C415 lq_gcp VDD 1.67645f
+C416 q_q lq_co 0.02598f
+C417 bi_n VDD 3.67411f
+C418 li_cb li_ln 0.24663f
+C419 bbq_g3n bbq_mRp3a 0.1479f
+C420 li_vb li_mRpLa 0.99437f
+C421 li_mRpLb VDD 0.03325f
+C422 lq_vb lq_mRpLb 0.70349f
+C423 bbq_g2p bbq_mRp2a 2.71538f
+C424 a_41496_1776# lsq 0.02603f
+C425 lo_bq_Py2 lsq 0.67619f
+C426 lq_vgr oq_n 0.03485f
+C427 bq_p bbq_o2p 1.0729f
+C428 li_vb li_ln 0.22435f
+C429 lq_vgr lq_lp 0.18006f
+C430 lq_cb lq_co 0
+C431 lo_bq_ta lo_bq_b 0.06137f
+C432 lq_glp lq_vbt 0.86401f
+C433 bq_p lob_q 3.22561f
+C434 lo_q lo_bq_Pgs 0
+C435 lo_bi_Ngs lob_i 0.00392f
+C436 bbq_g2p bbq_g2n 4.72021f
+C437 lo_bq_a lo_bq_Py2 0
+C438 ri_p bi_p 4.95649f
+C439 nb li_vbt 0.13617f
+C440 lo_lq_lo1 lo_lq_lo2 1.04229f
+C441 lo_lq_lo2 lo_lq_D1y 0.003f
+C442 ri_p lo_i 1.10179f
+C443 rq_p lna_vt 0.0591f
+C444 lq_cq lq_co 1.38136f
+C445 lq_gln enb 0.01156f
+C446 lo_bq_Ngs VDD 0.00217f
+C447 bbq_t1 bbq_o1p 10.4824f
+C448 bbq_o2n VDD 1.98988f
+C449 VDD lna_outp 4.50806f
+C450 lq_gcp lq_mRpCa 0.49639f
+C451 bbi_g3n bbi_o2n 6.81759f
+C452 bq_n VDD 0.54201f
+C453 bbq_g2n bbq_mRp2a 0.13427f
+C454 lna_tail lna_outn 14.68f
+C455 bbq_vgr VDD 8.33325f
+C456 lna_tail inn 12.2271f
+C457 lo_bq_Ny0 lo_bq_tb 0.06857f
+C458 lo_bi_Ngs lo_bi_b 0.00888f
+C459 lo_bq_Ny1 lo_bq_Ny2 2.32672f
+C460 bq_p lsq 0.24863f
+C461 nb oq_n 20.2993f
+C462 bq_p bbq_o1n 9.18763f
+C463 ri_n enb 0.0932f
+C464 lq_lp nb 0.05286f
+C465 lq_gln lq_mRpLb 0.55439f
+C466 q_i li_gcp 0.05927f
+C467 li_lp VDD 1.64949f
+C468 li_cb li_cq 0
+C469 lq_vgr VDD 2.06493f
+C470 lq_gcn lq_vb 2.48838f
+C471 lq_ln lq_ct 0.12331f
+C472 bbi_t1 bbi_o2p 0.41474f
+C473 li_vgr VDD 2.06493f
+C474 lo_lq_D1x VDD 0
+C475 bbq_g3n bbq_mRp3b 0.50302f
+C476 lsq lo_lq_vq 2.04665f
+C477 bbq_vb oq_n 0.35632f
+C478 lsq lo_lq_tt 0.83329f
+C479 li_gcn q_i 0.0493f
+C480 li_cq li_cx 0
+C481 ri_p lna_outn 5.97421f
+C482 bbq_vbt bbq_o1n 1.19688f
+C483 li_mRpCb VDD 0.28387f
+C484 bbq_g3p oq_n 3.04668f
+C485 lo_lq_lf lo_lq_D1y 0
+C486 lo_lq_lo1 lo_lq_lf 0.00642f
+C487 nb lq_tL 0.96547f
+C488 lo_bi_x lo_bi_a 0
+C489 ls lo_bi_a 0.14537f
+C490 ri_p bi_n 2.1618f
+C491 lo_bi_Ny1 lo_bi_Ny2 2.32672f
+C492 bbi_t1 bbi_o1n 10.8992f
+C493 lna_tail lna_outp 14.6174f
+C494 bbi_vgr VDD 8.33325f
+C495 lq_gcp lq_vbt 0.00317f
+C496 bbi_g2p bbi_o2p 2.6676f
+C497 bbq_t3 oq_p 0.49739f
+C498 lo_lq_lg lo_lq_vq 0.33992f
+C499 li_gln enb 0.01156f
+C500 lo_bi_ta en 0.14243f
+C501 lq_vgr lq_mRpCa 0.15627f
+C502 b_n2 VDD 1.20507f
+C503 nb VDD 7.46174f
+C504 lna_vt rq_n 0.13876f
+C505 li_gln li_mRpLa 0.1297f
+C506 bbq_o2n oq_p 2.5434f
+C507 rq_p bq_p 4.93411f
+C508 lo_bi_Py0 lo_bi_a 1.44346f
+C509 en VDD 2.55835f
+C510 li_cb li_cx 0.17701f
+C511 q_q lq_ca 0.0045f
+C512 bbi_mRp3a bbi_o2p 0.03426f
+C513 bbi_mRp2b bbi_o2p 0.58102f
+C514 li_ln li_gln 0.9762f
+C515 lq_gcn lq_gln 0
+C516 bbq_vgr oq_p 0.11983f
+C517 bbi_vb VDD 5.60601f
+C518 enb lo_bi_Ny2 0
+C519 lo_bi_Pgs lo_bi_a 0.00896f
+C520 lo_bi_x lo_bi_t 1.77867f
+C521 ls lo_bi_t 0.08591f
+C522 aq lo_lq_lf 0.00489f
+C523 bbq_t1 enb 0.21873f
+C524 bbq_g2p oq_n 0.2394f
+C525 lq_cb lq_ca 1.75008f
+C526 lo_lq_q1 lo_lq_vq 0.21914f
+C527 bbq_vb VDD 5.60601f
+C528 lq_vb lq_gln 2.67169f
+C529 bbi_mRp2a bbi_g2p 2.71538f
+C530 bbi_g2p bbi_o1n 2.57561f
+C531 lq_vgr oq_p 0.27163f
+C532 bbq_t3 bbq_o2p 0
+C533 q_i li_ca 0.0045f
+C534 ri_p lna_outp 0.20541f
+C535 lna_x2i_tail VDD 0.4499f
+C536 lna_vt lna_vcm 0.07779f
+C537 bbq_g3p VDD 4.33045f
+C538 bq_n bbq_o2p 1.11728f
+C539 bbq_o2p bbq_o2n 4.93961f
+C540 bbi_g2n bbi_o2p 4.3121f
+C541 lo_bq_Ngs lob_q 0.00392f
+C542 li_ct enb 0.06023f
+C543 bbi_mRp2a bbi_mRp2b 0.14576f
+C544 lq_cq lq_ca 0
+C545 bq_n lob_q 3.31244f
+C546 lo_lq_lo1 a_41922_713# 0
+C547 a_41922_713# lo_lq_D1y 0.07136f
+C548 bbq_vgr bbq_o2p 0.2326f
+C549 lq_cb enb 0.00427f
+C550 li_ct li_ln 0.12331f
+C551 enb bbi_o2p 0.79436f
+C552 lo_bi_ta lob_i 0.08215f
+C553 bbq_g2n oq_n 0.18234f
+C554 lo_bi_Py2 lo_bi_a 0
+C555 lna_tail nb 7.84156f
+C556 lna_outn lna_x2q_tail 8.15817f
+C557 lq_glp lq_mRpLa 2.67965f
+C558 lq_vgr lq_vbt 0.84123f
+C559 lo_bi_a bi_p 0
+C560 lq_lp lq_ct 0.00147f
+C561 oi_n bbi_t1 0.03767f
+C562 lq_ln oq_n 0.93344f
+C563 lo_bq_ta VDD 0.39446f
+C564 lob_i VDD 1.95291f
+C565 lq_ln lq_lp 0.86658f
+C566 lo_lq_lo2 lo_lq_lf 0
+C567 lo_bi_g0s en 0.00471f
+C568 a_41178_713# lo_lq_vq 0.00198f
+C569 lo_bi_a lo_i 0.44766f
+C570 bbi_mRp2a bbi_g2n 0.13427f
+C571 nb oq_p 5.54824f
+C572 bbi_g2n bbi_o1n 6.65711f
+C573 oi_p bbi_t3 0.49739f
+C574 bbq_g2p VDD 2.40668f
+C575 li_tL li_ln 0.51679f
+C576 bq_p rq_n 1.95505f
+C577 bq_n lsq 0.05543f
+C578 oi_p li_gln 0.30002f
+C579 bq_p bbq_o1p 0.43338f
+C580 bbi_o2n VDD 1.98988f
+C581 bbq_o2n bbq_o1n 0.38655f
+C582 bq_n bbq_o1n 0.54853f
+C583 lo_bq_Py0 en 0.56361f
+C584 bbi_g2p bbi_g3p 0.01549f
+C585 bbi_t2 bbi_t1 0.003f
+C586 enb bbi_o1n 0.32203f
+C587 lna_outn rq_p 8.87468f
+C588 lq_cx lq_co 0.30108f
+C589 lo_bi_ta lo_bi_b 0.06137f
+C590 bbq_vgr bbq_o1n 2.75167f
+C591 lo_bq_Py1 en 0.09661f
+C592 enb lna_vt 0.39792f
+C593 lo_bi_t bi_p 0
+C594 bbi_t1 bi_p 15.0186f
+C595 bbq_vb oq_p 1.63881f
+C596 ri_p nb 0.78514f
+C597 bbq_mRp2a VDD 0.04832f
+C598 bbi_mRp3a bbi_g3p 2.77518f
+C599 lo_bq_t en 1.04578f
+C600 VDD lo_bi_b 1.52218f
+C601 oi_n bbi_g2p 0.2394f
+C602 lo_bi_t lo_i 0.0177f
+C603 nb lq_vbt 0.13617f
+C604 lq_ln lq_tL 0.51679f
+C605 nb bbq_o2p 0.12272f
+C606 b_x b_vh 0.04565f
+C607 b_x enb 0.38913f
+C608 bbq_g3p oq_p 1.06878f
+C609 li_vgr q_i 0.1075f
+C610 li_mRpCa VDD 0.22931f
+C611 lna_x2q_tail lna_outp 7.58097f
+C612 oi_n bbi_mRp3a 0.00909f
+C613 bbq_vbt bbq_o1p 1.6832f
+C614 li_vb li_gln 2.67169f
+C615 bbq_g2n VDD 1.86961f
+C616 lo_lq_D1x lsq 0.65684f
+C617 en lob_q 0.08076f
+C618 VDD lo_bq_b 1.52239f
+C619 lq_gcn q_q 0.0493f
+C620 lq_ln VDD 1.63197f
+C621 lo_bi_Ngs VDD 0.00217f
+C622 bbi_t2 bbi_g2p 2.90297f
+C623 ls lo_bi_Py1 0.44552f
+C624 bbi_g2n bbi_g3p 0.00924f
+C625 lo_bi_g0s lob_i 0.00261f
+C626 bbq_vb bbq_o2p 1.28732f
+C627 bbi_g3n VDD 3.99802f
+C628 lq_gcn lq_cb 2.07261f
+C629 ri_p lna_x2i_tail 4.02866f
+C630 bbi_g2p bi_p 0.01844f
+C631 bbi_vbt VDD 1.66897f
+C632 lo_bi_Ny0 lo_bi_Ny1 1.27426f
+C633 lq_vb q_q 0.81333f
+C634 oi_p bbi_o2p 0.29088f
+C635 lo_bi_a bi_n 0
+C636 bq_n rq_p 2.1618f
+C637 bbq_g3p bbq_o2p 5.93947f
+C638 rq_p lna_outp 0.13193f
+C639 lo_bi_Py1 lo_bi_Py0 1.27643f
+C640 oi_n bbi_g2n 0.18234f
+C641 li_ct li_cb 0.22508f
+C642 li_tL oi_p 0.00244f
+C643 bbq_g2p oq_p 0.10829f
+C644 nb bbq_o1n 0.2255f
+C645 a_41496_1776# lo_lq_D1y 0.00509f
+C646 lo_bq_Ny1 lo_bq_Ny0 1.27426f
+C647 b_x b_nr 2.01867f
+C648 lq_gcn lq_cq 0
+C649 lo_lq_D1qb VDD 0
+C650 lsq en 1.99391f
+C651 lo_bq_t lo_bq_ta 1.27118f
+C652 enb lo_bi_Ny0 0
+C653 oi_n enb 0.00369f
+C654 lo_q lo_bq_Py2 3.2581f
+C655 bbi_o1p bbi_o2p 0.17851f
+C656 lna_outn rq_n 0.20838f
+C657 lo_bi_g0s lo_bi_b 0
+C658 lq_mRpCb VDD 0.28387f
+C659 ri_p lob_i 1.89273f
+C660 lo_lq_D1x lo_lq_q1 0
+C661 bi_p lo_bi_Ny1 0
+C662 lo_bi_t bi_n 0
+C663 lq_lp oq_n 0.18871f
+C664 bq_p enb 0.39919f
+C665 bbi_t2 bbi_g2n 2.93218f
+C666 lo_bi_x lo_bi_tb 0.17958f
+C667 bbi_t1 bi_n 15.1293f
+C668 oi_n li_ln 0.93344f
+C669 ls lo_bi_tb 0.03717f
+C670 lo_bq_a en 0.55078f
+C671 bbi_mRp3b bbi_g3p 0.14588f
+C672 lq_glp enb 0.00176f
+C673 lo_bq_ta lob_q 0.08215f
+C674 bbq_vb bbq_o1n 0.18862f
+C675 bi_p bbi_g2n 0.02054f
+C676 enb li_gcp 0.00724f
+C677 nb lna_x2q_tail 6.97815f
+C678 bbq_g2p bbq_o2p 2.6676f
+C679 bbq_g2n oq_p 0.06647f
+C680 enb bi_p 2.06809f
+C681 li_glp enb 0.00176f
+C682 bbi_o1p bbi_o1n 6.02565f
+C683 lq_ln oq_p 0.46647f
+C684 li_ln li_gcp 2.31943f
+C685 li_glp li_mRpLa 2.67965f
+C686 lo_bi_Py1 lo_bi_Py2 2.44938f
+C687 lo_bq_Py0 lo_bq_b 0.17687f
+C688 lna_outn lna_vcm 0.34711f
+C689 lq_glp lq_mRpLb 0.09894f
+C690 lo_bi_Py1 bi_p 0
+C691 li_vbt VDD 0.67795f
+C692 inn lna_vcm 0.20267f
+C693 bbq_vbt enb 0.62326f
+C694 li_glp li_ln 2.65861f
+C695 lo_bq_Py1 lo_bq_b 0
+C696 li_gcn enb 0.00683f
+C697 lo_q bq_p 1.2059f
+C698 bbq_mRp2a bbq_o2p 0.02666f
+C699 lq_cx lq_ca 0.19535f
+C700 bbi_g2p bi_n 0.02671f
+C701 lq_mRpCb lq_mRpCa 0.1012f
+C702 lo_bi_Py1 lo_i 0.12532f
+C703 oq_n lq_tL 0.77998f
+C704 lo_bq_t lo_bq_b 0.21425f
+C705 nb rq_p 0.3882f
+C706 lq_lp lq_tL 0.40982f
+C707 lo_bi_tb lo_bi_Ny0 0.06857f
+C708 lo_bq_ta lsq 0.05564f
+C709 li_gcn li_ln 4.21825f
+C710 lq_vgr lq_mRpLa 0.17634f
+C711 bq_n rq_n 2.45457f
+C712 rq_n lna_outp 4.85285f
+C713 bbq_o2n bbq_o1p 0.0821f
+C714 bq_n bbq_o1p 15.6107f
+C715 lo_bq_Ny2 lo_bq_Ny0 0.00506f
+C716 lo_bq_tb en 0.06062f
+C717 bbq_g2n bbq_o2p 4.3121f
+C718 oq_n VDD 2.26098f
+C719 lo_lq_lo1 lo_lq_vq 0.28227f
+C720 lo_lq_D1y lo_lq_vq 0.51666f
+C721 lq_ln lq_vbt 0.8843f
+C722 lq_lp VDD 1.64949f
+C723 bbq_vgr bbq_o1p 0.31673f
+C724 bbq_g2p bbq_o1n 2.57561f
+C725 oi_p bbi_g3p 1.06878f
+C726 lo_bq_a lo_bq_ta 1.27965f
+C727 lo_bq_b lob_q 0.26716f
+C728 lq_gcp lq_ca 1.65407f
+C729 oi_n oi_p 9.95852f
+C730 lo_bi_Ny1 bi_n 0
+C731 bbq_vgr bbq_mRp3a 0.05207f
+C732 bbq_mRp2a bbq_o1n 0.04266f
+C733 lna_vcm lna_outp 3.3929f
+C734 bbi_g2n bi_n 0.02783f
+C735 lo_bi_a en 0.55083f
+C736 enb li_ca 0.01232f
+C737 aq lo_lq_vq 0.03342f
+C738 q_i li_mRpCa 0.062f
+C739 lq_gcp enb 0.00724f
+C740 bbi_t2 oi_p 0.45205f
+C741 oi_n bbi_o1p 0.00139f
+C742 bbq_g2n bbq_o1n 6.65711f
+C743 enb bi_n 2.26947f
+C744 lq_tL VDD 0.15691f
+C745 lsq lo_bq_b 1.6034f
+C746 li_ln li_ca 0.33477f
+C747 bbi_o2p bbi_t3 0
+C748 li_mRpLb li_mRpLa 0.08501f
+C749 lo_bi_ta VDD 0.39434f
+C750 bbi_t1 bbi_vgr 0.02393f
+C751 li_glp oi_p 2.08264f
+C752 lq_vb lq_glp 3.11f
+C753 lo_bi_Py1 bi_n 0
+C754 li_co VDD 0.40425f
+C755 inp lna_outn 18.7991f
+C756 inp inn 2.32288f
+C757 li_gcn li_cq 0
+C758 bbq_g3n bbq_t2 0
+C759 nb bbi_t1 3.7328f
+C760 lo_bi_t en 1.04585f
+C761 lo_bq_a lo_bq_b 2.84076f
+C762 li_cb li_gcp 0.40538f
+C763 nb rq_n 2.50628f
+C764 nb bbq_o1p 0
+C765 li_tL li_gln 0.69379f
+C766 oq_n oq_p 11.2271f
+C767 li_vb li_gcp 0.79633f
+C768 bbi_o1p bi_p 0.43338f
+C769 lq_lp oq_p 0.15192f
+C770 lo_lq_D1qb lsq 1.76399f
+C771 a_41496_1776# lo_lq_lf 0
+C772 li_vb li_glp 3.11f
+C773 enb bbq_o2n 0.78638f
+C774 bq_n enb 0.32081f
+C775 li_gcp li_cx 0
+C776 li_cb li_gcn 2.07261f
+C777 bbi_g2p bbi_vgr 0.18791f
+C778 lo_lq_lo2 lo_lq_vq 0.39275f
+C779 lq_cb q_q 0
+C780 lo_bi_a lob_i 0.06283f
+C781 bbq_vb bbq_o1p 0.14015f
+C782 li_vb li_gcn 2.48838f
+C783 nb bbi_g2p 0.24468f
+C784 lq_gcn lq_cx 0.01262f
+C785 nb lna_vcm 5.49697f
+C786 lq_mRpCa VDD 0.22931f
+C787 bbi_mRp3a bbi_vgr 0.05207f
+C788 bbq_vgr bbq_mRp3b 0.0027f
+C789 bbi_mRp2b bbi_vgr 0.00978f
+C790 li_lp enb 0.05f
+C791 lq_glp lq_gln 0.84179f
+C792 inp lna_outp 6.18554f
+C793 li_gcn li_cx 0.01262f
+C794 oq_n bbq_o2p 1.57379f
+C795 bbi_vb bbi_g2p 0.66867f
+C796 lq_lp lq_vbt 0.14942f
+C797 lo_bq_tb lo_bq_b 0.80645f
+C798 li_ca li_cq 0
+C799 lq_cq q_q 1.46447f
+C800 bbq_vb bbq_mRp3a 0.68743f
+C801 lq_tL oq_p 0.00244f
+C802 li_lp li_ln 0.86658f
+C803 lna_tail VDD 0.95721f
+C804 lo_bq_g0s en 0.00471f
+C805 bbq_t1 bbq_t2 0.003f
+C806 lo_q bq_n 1.39957f
+C807 li_vgr li_mRpLa 0.17634f
+C808 lo_bi_t lob_i 0.11325f
+C809 bbi_mRp3a bbi_vb 0.68743f
+C810 lo_bi_g0s VDD 0
+C811 lo_bi_a lo_bi_b 2.84076f
+C812 bbq_g3p bbq_mRp3a 2.77518f
+C813 nb lq_ca 0.51718f
+C814 bbi_vb bbi_mRp2b 0.57255f
+C815 lq_cb lq_cq 0
+C816 lq_gcn lq_gcp 1.5058f
+C817 li_vgr li_ln 2.78384f
+C818 oq_p VDD 1.65327f
+C819 lna_x2i_tail lna_vcm 0.00751f
+C820 lq_vgr lq_mRpLb 1.38046f
+C821 lo_lq_q1 lo_lq_D1qb 0.74328f
+C822 bbi_g2n bbi_vgr 1.61644f
+C823 lo_bq_Py0 VDD 0.44314f
+C824 lo_bi_Ny1 en 0.00109f
+C825 ri_n bi_p 1.93687f
+C826 nb bbi_g2n 0.24448f
+C827 li_cb li_ca 1.75008f
+C828 bbi_t1 bbi_o2n 0.48826f
+C829 bbi_t3 bbi_g3p 2.91775f
+C830 bbq_g2p bbq_o1p 4.53819f
+C831 bbi_mRp2a bbi_o2p 0.02666f
+C832 lq_vb lq_gcp 0.79633f
+C833 bbi_o1n bbi_o2p 0.37415f
+C834 lo_bq_Py1 VDD 0.56616f
+C835 lo_lq_lo1 lo_lq_D1x 0
+C836 ri_n lo_i 2.83249f
+C837 lo_lq_D1y lo_lq_D1x 0.88042f
+C838 b_vh b_n2 2.36305f
+C839 lo_bq_t VDD 0.58937f
+C840 bbi_o1p bi_n 15.6107f
+C841 b_n2 enb 0.23355f
+C842 lo_lq_lf lo_lq_vq 3.24477f
+C843 oq_n bbq_o1n 0.01468f
+C844 b_vh nb 0.50199f
+C845 bbi_vb bbi_g2n 0.51815f
+C846 oi_n bbi_t3 0.87498f
+C847 lo_bi_t lo_bi_b 0.21425f
+C848 nb enb 33.7383f
+C849 ri_p VDD 2.72835f
+C850 lq_ln lq_mRpLa 0.05539f
+C851 oi_n li_gln 2.16324f
+C852 b_vh en 0.01039f
+C853 enb en 13.7859f
+C854 li_vb li_mRpLb 0.70349f
+C855 li_ca li_cx 0.19535f
+C856 lq_vbt VDD 0.67795f
+C857 nb li_ln 0.22789f
+C858 bbq_o2p VDD 2.48859f
+C859 lo_bi_Py1 en 0.09667f
+C860 VDD lob_q 1.95387f
+C861 inp nb 0.18399f
+C862 bbi_mRp2a bbi_o1n 0.04266f
+C863 lo_bi_Ny0 lo_bi_Ny2 0.00506f
+C864 bbi_g2p bbi_o2n 3.24823f
+C865 bbi_t2 bbi_t3 0.00372f
+C866 bbi_vgr bbi_mRp3b 0.0027f
+C867 bbq_g2n bbq_o1p 0.02964f
+C868 li_gln li_gcp 0
+C869 lo_lq_D1qb a_41178_713# 0.07726f
+C870 li_lp oi_p 0.15192f
+C871 bbq_vb bbq_mRp3b 0.42363f
+C872 bbi_t1 bbi_vbt 0.00159f
+C873 lq_gcn lq_vgr 1.26016f
+C874 bbq_t1 bq_p 15.0186f
+C875 bbi_mRp2b bbi_o2n 0.00107f
+C876 li_glp li_gln 0.84179f
+C877 lo_q en 2.26431f
+C878 lob_i lo_bi_Ny1 0.20682f
+C879 lq_gcp lq_gln 0
+C880 bbi_vb bbi_mRp3b 0.42363f
+C881 li_co q_i 0.02598f
+C882 bbq_g3p bbq_mRp3b 0.14588f
+C883 b_n2 b_nr 1.70971f
+C884 nb b_nr 1.95029f
+C885 li_vgr oi_p 0.27163f
+C886 lna_outn ri_n 0.33025f
+C887 bbi_o2p bbi_g3p 5.93947f
+C888 lo_bq_x en 0.54597f
+C889 li_gcn li_gln 0
+C890 q_i VDD 1.58452f
+C891 inp lna_x2i_tail 0
+C892 lsq VDD 1.85382f
+C893 b_nr en 0.08924f
+C894 lq_vb lq_vgr 9.84229f
+C895 li_cb li_lp 0.8057f
+C896 bi_p lo_bi_Ny2 0
+C897 bbq_o1n VDD 1.62614f
+C898 lo_bq_Ny1 en 0.00102f
+C899 ri_n bi_n 2.45457f
+C900 a_41922_713# lo_lq_vq 0.00409f
+C901 oi_n bbi_o2p 1.57379f
+C902 lo_bi_tb en 0.06062f
+C903 lo_bq_Py0 lo_bq_Py1 1.27643f
+C904 li_vb li_lp 0.23357f
+C905 bbi_g2n bbi_o2n 0.63341f
+C906 li_ct li_gcp 1.49061f
+C907 lo_bq_a VDD 0.98262f
+C908 bbq_t1 bbq_vbt 0.00159f
+C909 oi_n li_tL 0.77998f
+C910 bbi_g2p bbi_vbt 1.35765f
+C911 lo_bi_Ny1 lo_bi_b 0.00411f
+C912 lo_bq_g0s lo_bq_b 0
+C913 bbq_g2p enb 0.00127f
+C914 oi_p bbi_vgr 0.11983f
+C915 li_vb li_vgr 9.84229f
+C916 lo_lq_lg VDD 0.00201f
+C917 lq_gcn nb 0.25069f
+C918 lo_bi_x ls 1.38153f
+C919 lq_vbt oq_p 0.42431f
+C920 enb bbi_o2n 0.78638f
+C921 nb oi_p 5.83282f
+C922 bbq_o2p oq_p 0.29088f
+C923 lo_lq_lo2 lo_lq_D1x 0.08987f
+C924 lna_x2q_tail VDD 0.4423f
+C925 bbi_t2 bbi_o2p 0.3005f
+C926 bbi_g3n bbi_mRp3a 0.1479f
+C927 lq_ct lq_ca 0.37966f
+C928 lq_ln lq_ca 0.33477f
+C929 lo_bq_Py0 lob_q 0.00184f
+C930 li_ct li_gcn 1.15064f
+C931 oi_n bbi_o1n 0.01468f
+C932 li_vb li_mRpCb 0.45824f
+C933 bi_p bbi_o2p 1.0729f
+C934 bbi_vb oi_p 1.63881f
+C935 bbi_o1p bbi_vgr 0.31673f
+C936 lo_q lo_bq_ta 0.11678f
+C937 ri_n lna_outp 2.04127f
+C938 ls lo_bi_Py0 0.0923f
+C939 li_glp li_tL 0.67186f
+C940 li_cb nb 0.10584f
+C941 nb bbi_o1p 0
+C942 lo_bq_Pgs en 0.00905f
+C943 lo_bq_x lo_bq_ta 0.00503f
+C944 lo_bi_Py1 lo_bi_b 0
+C945 bbq_t3 bbq_g3n 2.927f
+C946 lq_vgr lq_gln 2.33978f
+C947 lo_bq_t lob_q 0.11325f
+C948 lo_bi_Pgs ls 0.00248f
+C949 rq_p VDD 2.27397f
+C950 lq_ct enb 0.06023f
+C951 li_gln li_mRpLb 0.55439f
+C952 bbq_g3n bbq_o2n 6.81759f
+C953 lo_bq_tb VDD 1.55535f
+C954 bbi_vb bbi_o1p 0.14015f
+C955 lq_ln enb 0.10666f
+C956 lo_bi_tb lob_i 0.48724f
+C957 q_q lq_cx 0.00495f
+C958 lo_bq_Ny2 en 0
+C959 bbq_vgr bbq_g3n 0.06347f
+C960 bi_p bbi_o1n 9.18763f
+C961 lo_bq_Py0 lsq 0.0923f
+C962 bi_n lo_bi_Ny2 0
+C963 lo_bi_Pgs lo_bi_Py0 0.07271f
+C964 enb bbi_vbt 0.62326f
+C965 lq_co VDD 0.40436f
+C966 ls bq_p 0.07777f
+C967 oq_n bbq_o1p 0.00139f
+C968 lq_cb lq_cx 0.17701f
+C969 lo_bq_Py1 lsq 0.44552f
+C970 lo_bi_ta lo_bi_a 1.27965f
+C971 lo_bq_t lsq 0.08591f
+C972 lo_bq_Py0 lo_bq_a 1.44346f
+C973 li_ct li_ca 0.37966f
+C974 lq_gcp q_q 0.05927f
+C975 lo_bi_a VDD 0.98241f
+C976 oi_n bbi_g3p 3.04668f
+C977 lo_q lo_bq_b 0.11767f
+C978 ls lo_bi_Py2 0.67998f
+C979 nb lq_gln 0.08015f
+C980 lo_bi_tb lo_bi_b 0.80645f
+C981 lo_bq_Py1 lo_bq_a 0
+C982 bbq_mRp3a oq_n 0.00909f
+C983 lo_bi_x bi_p 0
+C984 lq_cq lq_cx 0
+C985 ls bi_p 0
+C986 lo_bq_x lo_bq_b 0.06191f
+C987 bbi_g3n bbi_mRp3b 0.50302f
+C988 lo_bq_t lo_bq_a 0
+C989 bbq_o2p bbq_o1n 0.37415f
+C990 oi_p bbi_o2n 2.5434f
+C991 lq_cb lq_gcp 0.40538f
+C992 lq_mRpLa VDD 0.23785f
+C993 lsq lob_q 1.04827f
+C994 lo_bi_x lo_i 0.00185f
+C995 ls lo_i 0.08971f
+C996 a_41496_1776# lo_lq_vq 0.23085f
+C997 lo_bq_Ny1 lo_bq_b 0.00411f
+C998 bbi_o2p bi_n 1.11728f
+C999 ri_n nb 1.17884f
+C1000 lo_bi_Py2 lo_bi_Py0 0
+C1001 lo_bi_ta lo_bi_t 1.27118f
+C1002 bbq_t1 bbq_o2n 0.48826f
+C1003 li_lp li_gln 4.14396f
+C1004 bbi_t2 bbi_g3p 0.01189f
+C1005 bbq_t1 bq_n 15.1293f
+C1006 lo_bi_Py0 bi_p 0
+C1007 lo_bi_t VDD 0.58917f
+C1008 lo_bq_a lob_q 0.06283f
+C1009 lo_lq_lo1 lo_lq_D1qb 0
+C1010 lo_lq_D1y lo_lq_D1qb 0.74379f
+C1011 bbq_mRp2b bbq_o2n 0.00107f
+C1012 bbq_t1 bbq_vgr 0.02393f
+C1013 nb bbq_g3n 0.25688f
+C1014 bbi_t1 VDD 0.46847f
+C1015 bbi_o1p bbi_o2n 0.0821f
+C1016 li_vgr li_gln 2.33978f
+C1017 lo_bi_Py0 lo_i 0.515f
+C1018 oi_n bbi_t2 1.43221f
+C1019 rq_n VDD 4.58366f
+C1020 bbq_mRp2b bbq_vgr 0.00978f
+C1021 bbq_o1p VDD 1.62549f
+C1022 lq_lp lq_ca 0.94964f
+C1023 lo_bi_Pgs lo_i 0
+C1024 lq_gcn lq_ct 1.15064f
+C1025 enb li_vbt 0.99337f
+C1026 lo_bi_Ny0 bi_p 0
+C1027 oi_n bi_p 0.01544f
+C1028 oi_n li_glp 0.15026f
+C1029 li_mRpLa li_vbt 0.06822f
+C1030 bbi_o1n bi_n 0.54853f
+C1031 lq_ln lq_gcn 4.21825f
+C1032 ri_n lna_x2i_tail 3.92909f
+C1033 a_41922_713# lo_lq_D1x 0.00911f
+C1034 bbq_vb bbq_g3n 0.62722f
+C1035 lo_bq_t lo_bq_tb 1.34876f
+C1036 li_ln li_vbt 0.8843f
+C1037 bbi_g3n oi_p 3.27704f
+C1038 bbq_mRp3a VDD 0.1197f
+C1039 lq_vgr q_q 0.1075f
+C1040 li_ct li_lp 0.00147f
+C1041 nb bbi_t3 3.13673f
+C1042 lo_bq_a lsq 0.14537f
+C1043 lq_ln lq_vb 0.22435f
+C1044 bq_p lo_i 0
+C1045 bq_p bbq_vbt 0.00152f
+C1046 bbq_g3p bbq_g3n 0.34872f
+C1047 li_glp li_gcp 0
+C1048 bbi_g2p VDD 2.40668f
+C1049 enb oq_n 1.2005f
+C1050 nb li_gln 0.08015f
+C1051 lna_vcm VDD 1.73599f
+C1052 lq_lp enb 0.05f
+C1053 li_vb li_mRpCa 2.65704f
+C1054 rq_p lob_q 1.89273f
+C1055 lo_bq_tb lob_q 0.48724f
+C1056 lo_lq_lg lsq 0
+C1057 lo_bi_x bi_n 0
+C1058 bbi_vb bbi_t3 0.15494f
+C1059 li_gcn li_gcp 1.5058f
+C1060 ls bi_n 0.41067f
+C1061 bbi_mRp3a VDD 0.1197f
+C1062 ri_n lob_i 1.70994f
+C1063 bbi_mRp2b VDD 1.27896f
+C1064 lo_bi_Py2 lo_i 3.2581f
+C1065 lo_bq_g0s VDD 0
+C1066 bbi_o1p bbi_vbt 1.6832f
+C1067 lo_lq_vq lo_lq_tt 0.16377f
+C1068 li_tL li_lp 0.40982f
+C1069 bi_p lo_i 1.25673f
+C1070 bbq_t3 bbq_t2 0.00372f
+C1071 lo_bi_g0s lo_bi_t 0
+C1072 bbq_t1 nb 3.7328f
+C1073 en lo_bi_Ny2 0
+C1074 lq_gcn lq_mRpCb 1.63858f
+C1075 lq_ca VDD 0.90757f
+C1076 bbq_t2 bbq_o2n 0.56895f
+C1077 lo_bi_Py0 bi_n 0
+C1078 lo_lq_q1 lsq 0.04689f
+C1079 lo_bi_Ny1 VDD 0.58938f
+C1080 lo_bq_Ngs lo_bq_Ny0 0.07147f
+C1081 bbq_vgr bbq_t2 0
+C1082 lq_vb lq_mRpCb 0.45824f
+C1083 lo_bq_tb lsq 0.03717f
+C1084 li_ct nb 1.42544f
+C1085 bbi_g2n VDD 1.86961f
+C1086 lq_mRpLa lq_vbt 0.06822f
+C1087 lo_lq_lo2 lo_lq_D1qb 0.02485f
+C1088 bbi_o2p bbi_vgr 0.2326f
+C1089 lo_bi_ta enb 0
+C1090 lq_ln lq_gln 0.9762f
+C1091 ls bq_n 0.04559f
+C1092 lo_bi_Ny0 bi_n 0
+C1093 lq_cb nb 0.10584f
+C1094 oi_n bi_n 0.01688f
+C1095 nb bbi_o2p 0.12272f
+C1096 bbq_mRp2b bbq_vb 0.57255f
+C1097 b_vh VDD 0.89241f
+C1098 enb VDD 11.8124f
+C1099 lna_tail lna_vcm 0.28139f
+C1100 oi_p li_vbt 0.42431f
+C1101 li_mRpLa VDD 0.23785f
+C1102 bq_p bi_n 0.16056f
+C1103 li_ca li_gcp 1.65407f
+C1104 bbq_mRp3a oq_p 2.19053f
+C1105 lo_bi_Py1 VDD 0.56611f
+C1106 bbq_mRp3b VDD 0.14807f
+C1107 lq_glp lq_gcp 0
+C1108 li_tL nb 0.96547f
+C1109 li_ln VDD 1.63197f
+C1110 bbi_vb bbi_o2p 1.28732f
+C1111 rq_p lna_x2q_tail 4.09819f
+C1112 bbq_o2p bbq_o1p 0.17851f
+C1113 bbi_o2n bbi_t3 0.30481f
+C1114 inp VDD 0.46098f
+C1115 rq_n lob_q 1.70994f
+C1116 li_cb li_vbt 0.00161f
+C1117 lq_mRpLb VDD 0.03325f
+C1118 lo_bi_Py2 bi_n 0.00639f
+C1119 bbi_o1n bbi_vgr 2.75167f
+C1120 bbi_mRp2a bbi_vgr 0.05312f
+C1121 lsq a_41178_713# 0.01386f
+C1122 lob_i lo_bi_Ny2 4.35651f
+C1123 bi_p bi_n 7.95312f
+C1124 lq_gcn lq_lp 0.00441f
+C1125 aq VSS 4.79941f
+C1126 inn VSS 6.76029f
+C1127 inp VSS 8.39097f
+C1128 ls VSS 8.26961f
+C1129 en VSS 15.8314f
+C1130 q_q VSS 3.92865f
+C1131 q_i VSS 3.93395f
+C1132 VDD VSS 1.09874p
+C1133 a_41922_713# VSS 0.14599f
+C1134 a_41178_713# VSS 0.14869f
+C1135 lo_lq_lg VSS 1.43421f
+C1136 lo_lq_lo1 VSS 0.65273f
+C1137 lo_lq_D1x VSS 0.56779f
+C1138 a_41496_1776# VSS 0.01195f
+C1139 lo_lq_tt VSS 0.3924f
+C1140 lo_lq_q1 VSS 0.35733f
+C1141 lo_lq_D1y VSS 0.53224f
+C1142 lo_lq_D1qb VSS 1.02163f
+C1143 lo_lq_lo2 VSS 0.69056f
+C1144 lna_x2q_tail VSS 6.46619f
+C1145 lna_vt VSS 0.67237f
+C1146 lo_lq_lf VSS 7.51591f
+C1147 rq_n VSS 9.56517f
+C1148 rq_p VSS 8.75274f
+C1149 lo_bq_Pgs VSS 0.10589f
+C1150 lo_bq_g0s VSS 0.06752f
+C1151 lo_bq_Ngs VSS 0.10696f
+C1152 lo_q VSS 3.27143f
+C1153 lo_bq_Py0 VSS 0.79487f
+C1154 lo_bq_a VSS 1.53085f
+C1155 lsq VSS 9.37608f
+C1156 lo_bq_x VSS 0.76199f
+C1157 lo_bq_Py1 VSS 1.17539f
+C1158 lo_bq_ta VSS 0.79023f
+C1159 lo_bq_b VSS 2.08196f
+C1160 lo_bq_Ny0 VSS 0.84811f
+C1161 lo_bq_tb VSS 1.17359f
+C1162 lo_bq_Ny1 VSS 1.11824f
+C1163 lo_bq_t VSS 1.28948f
+C1164 lna_tail VSS 19.2801f
+C1165 lob_q VSS 4.07893f
+C1166 lo_bq_Py2 VSS 1.58236f
+C1167 lo_bq_Ny2 VSS 1.67776f
+C1168 lna_vcm VSS 25.662f
+C1169 lna_x2i_tail VSS 6.52016f
+C1170 lna_outn VSS 9.92949f
+C1171 lna_outp VSS 9.64368f
+C1172 ri_n VSS 8.59397f
+C1173 ri_p VSS 8.94403f
+C1174 lo_bi_Pgs VSS 0.10589f
+C1175 lo_bi_g0s VSS 0.06752f
+C1176 lo_bi_Ngs VSS 0.10696f
+C1177 b_nr VSS 2.21322f
+C1178 b_x VSS 1.58537f
+C1179 b_vh VSS 0.61522f
+C1180 b_n2 VSS 1.95636f
+C1181 lo_i VSS 3.27655f
+C1182 lo_bi_Py0 VSS 0.79493f
+C1183 lo_bi_a VSS 1.53095f
+C1184 lo_bi_x VSS 0.76204f
+C1185 lo_bi_Py1 VSS 1.1754f
+C1186 lo_bi_ta VSS 0.79029f
+C1187 lo_bi_b VSS 2.08206f
+C1188 lo_bi_Ny0 VSS 0.84817f
+C1189 lo_bi_tb VSS 1.17359f
+C1190 lo_bi_Ny1 VSS 1.11824f
+C1191 lo_bi_t VSS 1.28954f
+C1192 lob_i VSS 4.09084f
+C1193 lo_bi_Py2 VSS 1.57631f
+C1194 lo_bi_Ny2 VSS 1.67769f
+C1195 bbq_t3 VSS 2.7495f
+C1196 bbq_t2 VSS 2.36151f
+C1197 bbq_t1 VSS 5.22957f
+C1198 bq_n VSS 24.6856f
+C1199 bbi_t3 VSS 2.7495f
+C1200 bbi_t2 VSS 2.36151f
+C1201 bq_p VSS 21.525f
+C1202 bbi_t1 VSS 5.22957f
+C1203 bi_n VSS 23.6253f
+C1204 bi_p VSS 28.5229f
+C1205 bbq_mRp3b VSS 0.70445f
+C1206 bbq_mRp3a VSS 0.87833f
+C1207 bbq_mRp2b VSS 0.92869f
+C1208 bbq_mRp2a VSS 0.74262f
+C1209 bbq_vgr VSS 7.754f
+C1210 bbi_mRp3b VSS 0.70445f
+C1211 bbi_mRp3a VSS 0.87833f
+C1212 bbi_mRp2b VSS 0.92869f
+C1213 bbi_mRp2a VSS 0.74262f
+C1214 bbi_vgr VSS 7.754f
+C1215 bbq_vbt VSS 1.69129f
+C1216 bbi_vbt VSS 1.69129f
+C1217 lq_ct VSS 0.76041f
+C1218 lq_tL VSS 0.74576f
+C1219 li_ct VSS 0.76041f
+C1220 li_tL VSS 0.74576f
+C1221 nb VSS 0.13515p
+C1222 lq_co VSS 0.93272f
+C1223 lq_cx VSS 1.22685f
+C1224 lq_ca VSS 2.16242f
+C1225 lq_cb VSS 1.48288f
+C1226 lq_cq VSS 0.85781f
+C1227 li_co VSS 0.93283f
+C1228 li_cx VSS 1.22685f
+C1229 li_ca VSS 2.16286f
+C1230 li_cb VSS 1.48294f
+C1231 li_cq VSS 0.85781f
+C1232 enb VSS 40.242f
+C1233 lq_mRpCb VSS 1.49266f
+C1234 lq_mRpCa VSS 0.90894f
+C1235 lq_mRpLb VSS 1.62302f
+C1236 lq_mRpLa VSS 0.73025f
+C1237 lq_vgr VSS 7.3726f
+C1238 li_mRpCb VSS 1.49463f
+C1239 li_mRpCa VSS 0.90894f
+C1240 li_mRpLb VSS 1.62302f
+C1241 li_mRpLa VSS 0.73025f
+C1242 li_vgr VSS 7.3726f
+C1243 lq_vbt VSS 1.06713f
+C1244 li_vbt VSS 1.06713f
+C1245 lo_lq_vq VSS 46.0818f
+C1246 bbq_o2n VSS 68.40939f
+C1247 bbq_o2p VSS 65.7888f
+C1248 bbq_o1n VSS 47.9715f
+C1249 bbq_o1p VSS 42.8538f
+C1250 bbi_o2n VSS 68.40939f
+C1251 bbi_o2p VSS 65.7884f
+C1252 bbi_o1n VSS 47.9715f
+C1253 bbi_o1p VSS 42.8538f
+C1254 bbq_g3n VSS 8.44603f
+C1255 bbq_g3p VSS 7.0443f
+C1256 bbq_g2n VSS 7.99495f
+C1257 bbq_g2p VSS 8.02654f
+C1258 bbq_vb VSS 64.0017f
+C1259 bbi_g3n VSS 8.44603f
+C1260 bbi_g3p VSS 7.0443f
+C1261 bbi_g2n VSS 7.99495f
+C1262 bbi_g2p VSS 8.02654f
+C1263 bbi_vb VSS 64.0017f
+C1264 lq_ln VSS 26.477f
+C1265 lq_lp VSS 23.7765f
+C1266 oq_p VSS 54.7371f
+C1267 oq_n VSS 71.2572f
+C1268 li_ln VSS 26.477f
+C1269 li_lp VSS 23.7751f
+C1270 oi_p VSS 53.5688f
+C1271 oi_n VSS 53.4456f
+C1272 lq_gcn VSS 4.95247f
+C1273 lq_gcp VSS 6.66381f
+C1274 lq_gln VSS 4.42613f
+C1275 lq_glp VSS 3.93482f
+C1276 lq_vb VSS 64.4526f
+C1277 li_gcn VSS 4.96028f
+C1278 li_gcp VSS 6.66595f
+C1279 li_gln VSS 4.42606f
+C1280 li_glp VSS 3.93474f
+C1281 li_vb VSS 64.4526f
+.ends

@@ -26,6 +26,16 @@ system transient would have taken years.
 - Use short paired runs (stimulus on/off) with **shared** noise (numpy + filesource) to measure small
   differences. State the remaining coverage gap explicitly.
 
+- **Compare a transistor-level result with a transistor-level bench, not the behavioural model.** A joined
+  run's −90 dBm swing looked +70 % off against the model; the model reads ~1.3× low near the noise floor, and
+  the transistor-level noise bench agreed with the run.
+- **Near the noise floor one noise realisation proves nothing.** Four realisations of one joined run spread
+  ±0.55 mV (±23 %) at −90 dBm, and one of them was flagged as a change. Run three or more, compare means,
+  and split each run by window (chip by chip) to see its own spread first.
+- **When an extracted block brings its own copy of a modelled stage** (a detector), don't map its level
+  through the schematic stage's curve: that read as +6.6 dB of gain. Calibrate on the *change* instead, e.g.
+  the ratio of its signal-induced drops to the schematic's, folded in as a higher NF.
+
 ## What to sweep (and what each one caught)
 | Check | Caught |
 |---|---|
@@ -36,12 +46,21 @@ system transient would have taken years.
 | real bias generator instead of ideal sources | −0.6–0.9 dB at hot corners |
 | a point outside the spec range (e.g. 85 °C) | where the cliff is |
 | stability kick at the highest-gain corner (ss, cold, high VDD) | coupling budget half the tt one |
+| stability (and every margin check) also at the corner where *that* margin is smallest | a gain-step condition whose worst corner (sf) wasn't in the stability list |
+| the merged block extracted, not just its parts | a detector's inputs and tap wiring (9.7 fF against 1.4 fF in the schematic) taking 4.7 dB off the chain |
+| both possible supply-strap orientations of the platform, every rerun | a re-route checked in one only (TT: tile N or FS, pin order) |
 | power-up: 10 µs and 10 ms ramps × 3 corners | bias start-up, no output glitch |
 | each one-supply-missing state | outputs floating to the other rail |
 | overload: large input then small at several gaps, large signals at the pads | recovery time getting worse after an unrelated fix |
 | formal with all inputs free, reset at any time | a 1-clock reset shortening a non-overlap dead time |
 | structural bus check + mutation | a reversed trim bus that still "worked" |
 | TT-wrapper-level cocotb through the real pins | `project.v` had been a stub; `uio_oe` (0 in reset, then exactly the outputs) |
+
+## Mixed-signal detection near threshold
+- A mixed run starts its burst at a fixed instant against the RTL's sample clock, so every seed at one level
+  shares the same timing luck: counts can be non-monotonic in level (7/20 at −88 dBm, 16/20 at −90). Replay the
+  digital decision at every sample alignment from the finished runs (a Python replay of the slicer and
+  correlator, checked against the event pin) and quote detection averaged over burst timing.
 
 ## Monte Carlo practice
 - One sample per ngspice process with its own `.options seed`. Check for duplicate rows.
@@ -95,9 +114,17 @@ system transient would have taken years.
 | SymbiYosys PDR | 13–45 min, varies run to run |
 | power-grid variant (DC R + IR + EM) | ~45–50 min |
 | full re-verification (~270 jobs) | ~410 thread-hours, ~14 h on 28 CPUs |
+| the next full rerun (~470 jobs, merged chain + detector extracted) | 1286 thread-hours, 41 h on 28 CPUs |
+| extracted chain + detector, PWL noise, 3 µs (3 threads) | ~7 h on a quiet machine, 13–15 h at full load |
+| the same with the chain-only extraction / schematic | ~2 h / 1.5 min |
+| extracted stability, one case (chain + detector) | 35–55 min |
+| extracted chain MC, one sample batch | 4–9 h (schematic 10–14 min) |
+| joined schematic RX, 400 µs, trnoise (2 threads) | 3.5–4.3 h |
 
 Extracted vs schematic slowdown: about 10× for a block, 250× for a long high-gain path with noise.
-Plan short stand-ins early.
+Plan short stand-ins early. Merging a block into the extraction (chain + detector) cost 3.6× over the chain
+alone, and a full machine roughly doubles every long run: time probes on a quiet machine aren't the batch
+estimate. Run noise levels on the smaller extraction and the merged one only where its own stage matters.
 
 ## Silicon vs sim
 - Ring oscillators: silicon / extracted-tt = 0.843–0.866, the same at two ring lengths (it isn't

@@ -81,7 +81,11 @@ def mn_group_x(x0, n, L):
     return rx, gx, x + endw
 
 
-def build(sets=()):
+def build(sets=(), variant="tile"):
+    """variant "tile" (default, layout/cgm_ref.gds since 2026-11-17): vbnf and vctrl also on M3 risers to the top
+    edge's left end, M3 straps over the VDD and VSS rails (via2 arrays) for the tile's Metal4 stripes, no left-edge
+    vbnf / right-edge vctrl labels. variant "top": the cell as vco_top (layout/vco_top.gds) was built with."""
+    assert variant in ("tile", "top"), variant
     for kv in sets:
         k, v = kv.split("=")
         S[k] = type(S[k])(float(v))
@@ -151,7 +155,8 @@ def build(sets=()):
     c.r("m2", 0, VBNF_Y - 190, 1380, VBNF_Y + 190)
     c.r("m2", 1000, VBNF_Y - 190, 1380, Y["cfs_b"] + 400)
     c.via1(1190, Y["cfs_b"] + 400)
-    c.label("vbnf", "m2", 100, VBNF_Y, port=True)
+    if variant == "top":
+        c.label("vbnf", "m2", 100, VBNF_Y, port=True)
 
     # ---------------- column B: MN array ----------------
     xt = colA_x1 + 1300                      # left VSS strap + p+ tap (also a shield between filter and array)
@@ -388,7 +393,8 @@ def build(sets=()):
     c.label("vbn", "m2", W_bb - 100, yvp, port=True)
     # vctrl feed-through
     c.r("m2", 0, VCTRL_Y - 190, W_bb, VCTRL_Y + 190)
-    c.label("vctrl", "m2", W_bb - 100, VCTRL_Y, port=True)
+    if variant == "top":
+        c.label("vctrl", "m2", W_bb - 100, VCTRL_Y, port=True)
     # VSS M1 shield under vctrl across the CF (joins the CF's VSS S/D columns): keeps vctrl off the vbnf gate poly
     c.r("m1", cf["rx"][0] - 190, VCTRL_Y - 2000, cf["rx"][-1] + 190, VCTRL_Y + 2000)
 
@@ -421,6 +427,35 @@ def build(sets=()):
         c.label(name, "m2", x0 + 1000, (yb + yt) // 2, port=True)
     rail(0, W_bb, Y["vss_b"], Y["vss_t"], "VSS", True)
     rail(nw_x0, W_bb, Y["vdd_b"], Y["vdd_t"], "VDD", False)
+    tile = {}
+    if variant == "tile":
+        ytop = max(r[4] for r in c.rects)                 # the cell's top edge (all shapes so far)
+        # vctrl: via2 on the feed-through's left end, M3 riser over the CF's first (VSS) S/D column to the top edge
+        vx = 490
+        c.via2(vx, VCTRL_Y)
+        c.r("m3", vx - 190, VCTRL_Y - 190, vx + 190, ytop)
+        c.label("vctrl", "m3", vx, ytop - 200, port=True)
+        # vbnf: M2 jog right off the top of the vbnf M2 riser (x 1.0 ... 1.38), via2, M3 riser to the top edge
+        bx, by = 2190, Y["cfs_b"] + 400
+        c.r("m2", 1000, by - 190, bx + 190, by + 190)
+        c.via2(bx, by)
+        c.r("m3", bx - 190, by - 190, bx + 190, ytop)
+        c.label("vbnf", "m3", bx, ytop - 200, port=True)
+        # M3 straps over the supply rails (2.4 um, the rails' height), via2s between the rails' via1s
+        for (x0, x1, yb, yt) in ((nw_x0, W_bb, Y["vdd_b"], Y["vdd_t"]), (1000, W_bb, Y["vss_b"], Y["vss_t"])):
+            c.r("m3", x0, yb, x1, yt)
+            x = x0 + 1400
+            while x + 400 < x1:
+                y = yb + 300 + 130
+                while y + 130 + 300 <= yt:
+                    c.via2(x, y)
+                    y += 600
+                x += 2000
+        # the VDD strap runs on left on M3 alone (no via2: the M2 under it is not VDD) to 1 um past the vbnf riser,
+        # so a VAPWR stripe can land on it left of the macro's x range in the tile (the cell sits under the macro)
+        c.r("m3", bx + 190 + 1000, Y["vdd_b"], nw_x0 + 10, Y["vdd_t"])
+        tile = dict(ytop=ytop, vctrl=(vx, ytop), vbnf=(bx, ytop), m3_vdd=(bx + 1190, Y["vdd_b"], W_bb, Y["vdd_t"]),
+                    m3_vss=(1000, Y["vss_b"], W_bb, Y["vss_t"]))
     for n, xx, yy in (("net1", mp["rx"][3], Y["ps_b"] + 190), ("net3", bterm[0], rcy),
                       ("net4", bterm[1], rcy), ("net2", g3x, g3y)):
         c.label(n, "m1", xx, yy)
@@ -429,7 +464,7 @@ def build(sets=()):
     meta = dict(Y=Y, bbox=bbox, ybar=ybar, rows=rows, groups=[(g["dev"], g["n"], g["x0"], g["x1"]) for g in grp],
                 dummies=dum, mp=dict(x0=mpx0, x1=mp_x1, pat=pat), rf=dict(xa=xa, xb=xb, Ls=Ls, D0=D0, D8=D8, n=nrs,
                 y0=ry0), cf=dict(x0=cfx0, x1=cf_x1), rbw=dict(x0=bx0, lnw=lnw), rbn=dict(x0=nx0, lnp=lnp),
-                rnw=[bx0 + 800, ry_b, bx0 + 800 + lnw, ry_t], colC=xc, tracks={f"{k[0]}{k[1]}": v for k, v in tracks.items()}, vbn_pin_y=yvp, S=S)
+                rnw=[bx0 + 800, ry_b, bx0 + 800 + lnw, ry_t], colC=xc, tracks={f"{k[0]}{k[1]}": v for k, v in tracks.items()}, vbn_pin_y=yvp, S=S, variant=variant, tile=tile)
     return [c], meta
 
 
@@ -439,8 +474,10 @@ def main():
     ap.add_argument("--out", default=str(REPO / "build" / "layout_cgm_ref"))
     ap.add_argument("--gds", default=str(REPO / "layout" / "cgm_ref.gds"))
     ap.add_argument("--no-magic", action="store_true")
+    ap.add_argument("--variant", default="tile", choices=["tile", "top"],
+                    help="tile: pins for the split tile (default); top: as placed in vco_top")
     a = ap.parse_args()
-    cells, meta = build(a.set)
+    cells, meta = build(a.set, a.variant)
     out = Path(a.out)
     out.mkdir(parents=True, exist_ok=True)
     for old in out.glob("*.mag"):

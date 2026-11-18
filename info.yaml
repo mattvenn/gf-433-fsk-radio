@@ -3,7 +3,7 @@ project:
   title:        "433 MHz VCO for an FM radio toolkit"      # Project title
   author:       "Matt Venn"      # Your name
   discord:      ""      # Your discord username, for communication and automatically assigning you a Tapeout role (optional)
-  description:  "433.92 MHz current-fed ring VCO with dipole TX driver, on-chip fine tuning (10-bit DAC + sigma-delta, SPI) and 2-FSK"      # One line description of what your project does
+  description:  "433.92 MHz FM radio toolkit: current-fed ring VCO, dipole TX driver, on-chip fine tuning (10-bit DAC + sigma-delta, SPI), 2-FSK, and a zero-IF I/Q receiver with limiters (analog on VAPWR = 3.3 V)"      # One line description of what your project does
   language:     "Analog" # other examples include Verilog, Amaranth, VHDL, etc
   clock_hz:     25000000       # SPI register and sigma-delta clock: 10-50 MHz works, 25 MHz recommended (docs/tx_fine_tune.md)
 
@@ -11,8 +11,8 @@ project:
   tiles: "2x2"          # Valid values for analog projects: 1x2, 2x2, 3x2, 4x2
 
   # How many analog pins does your project use?
-  analog_pins: 4        # Valid values: 0 to 6
-  uses_vapwr: false     # Set to true if your project uses the second analog power supply (VAPWR) in addition to VDPWR (3.3V)
+  analog_pins: 6        # Valid values: 0 to 6
+  uses_vapwr: true      # Set to true if your project uses the second analog power supply (VAPWR) in addition to VDPWR (3.3V)
 
   # Your top module name must start with "tt_um_". Make it unique by including your github username:
   top_module:  "tt_um_mattvenn_gf433_vco"
@@ -39,8 +39,8 @@ pinout:
   uo[1]: "f / 16 (27 MHz)"
   uo[2]: "f / 64 (6.8 MHz)"
   uo[3]: "f / 1024 (424 kHz)"
-  uo[4]: ""
-  uo[5]: ""
+  uo[4]: "RX q_i: in-phase limiter output (CTRL.RX_EN)"
+  uo[5]: "RX q_q: quadrature limiter output"
   uo[6]: ""
   uo[7]: ""
 
@@ -55,12 +55,12 @@ pinout:
   uio[7]: ""
 
   # Analog pins - make sure to also set "analog_pins" above, else the pins won't be connected
-  ua[0]: "vctrl: bench override of the fine leg (200 kOhm to GND on chip; leave open)"
-  ua[1]: "vbn: bias monitor"
+  ua[0]: "debug mux (DBG_SEL, one at a time): [0] RX baseband I, [1] RX baseband Q, [2] RX bias nb, [3] vctrl (also the bench override of the fine leg; 200 kOhm to GND on chip)"
+  ua[1]: "on-chip ground sense (VGND): the Kelvin reference for readings on ua[0]; do not drive"
   ua[2]: "TX out_n: 433 MHz dipole arm (antiphase to ua[3])"
   ua[3]: "TX out_p: 433 MHz dipole arm"
-  ua[4]: ""
-  ua[5]: ""
+  ua[4]: "RX in_p: 433 MHz receive dipole arm"
+  ua[5]: "RX in_n: 433 MHz receive dipole arm"
 
 # Do not change!
 yaml_version: 6
@@ -68,4 +68,5 @@ yaml_version: 6
 # Register map (SPI mode 0, 16-bit frames: [15] 1 = read, [14:12] address, [11:0] data; docs/tx_fine_tune.md)
 #   0 MED_INT [9:0] medium DAC word (reset 512)    1 MED_FRAC [7:0] sigma-delta fraction (0)
 #   2 FSK_DEV [11:0] FSK deviation, 4.8 fixed point in DAC LSBs (0)
-#   3 CTRL [0] SD_EN [1] CK_EN [2] FSK_EN [3] FSK_INV (all 0)    4 EFF_INT [9:0] read only    7 ID = 0x433 read only
+#   3 CTRL [0] SD_EN [1] CK_EN [2] FSK_EN [3] FSK_INV [4] RX_EN (all 0)    4 EFF_INT [9:0] read only
+#   5 DBG_SEL [3:0] debug switches onto ua[0] (0)    7 ID = 0x433 read only

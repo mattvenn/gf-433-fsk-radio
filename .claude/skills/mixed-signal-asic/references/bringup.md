@@ -12,6 +12,12 @@
 - A ring oscillator (or any free-running block) on a pin is a cheap speed calibration point for the
   next chip.
 
+- For a transmitter: set the platform's "dangerous project" flag (Tiny Tapeout has one) so it isn't
+  enabled casually, keep public demos cabled with attenuators or in a shielded room, and book an EM chamber
+  for air-link tests.
+- A rescue path for an amplifier that might oscillate: an adapter board with unpopulated shunt and series
+  footprints (0402 / 0603) on the input pins, 0 Ω links by default, plus SMA and balun footprints.
+
 ## Plan
 - Stage the order: power + digital alone → each analog function alone → everything together. Each
   stage uses only parts already checked; stop on a failure.
@@ -26,6 +32,12 @@
   patterns generated from the bit-exact model.
 - Measure the real board supplies (3 TT boards were 1.80–1.81 / 3.30 V) and feed them back into the
   verification limits.
+
+## Long runs that can't finish before tape-out
+- A whole code through the extracted receiver unbroken would take months. Plan it as pieces run in parallel
+  (the RF side only remembers a few hundred ns: slices of one numpy noise waveform, a few µs of warm-up each)
+  feeding one baseband run, plus one short unbroken run whose span contains piece boundaries, to check the
+  split. Time the extracted decks first; these run during fab.
 
 ## Feeding silicon back into design
 - The workflow was measure → model → schematic/RTL → ASIC. Real waveforms captured on a scope can be

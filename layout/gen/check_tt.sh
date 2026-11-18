@@ -1,6 +1,6 @@
 #!/bin/bash
-# LVS of the Tiny Tapeout wrapper (gds/tt_um_mattvenn_gf433_vco.gds) against lvs/tt_um_mattvenn_gf433_vco.spice
-# (lvs/make_source.py: the xschem vco_top netlist with the documented edits + inv_1 / tiel / antenna + the TT top).
+# LVS of the Tiny Tapeout tile (gds/tt_um_mattvenn_gf433_vco.gds, layout/gen/tile.py) against
+# lvs/tt_um_mattvenn_gf433_vco.spice (lvs/make_source.py: every block its own subcircuit, wired by layout/gen/tile_nets.py).
 # Runs locally (in the image) and in CI (.github/workflows/lvs.yaml); repo-relative, PDK from $PDK_ROOT.
 #   1. magic: gds read; repaint the n-well resistor as rnw in cell cgm_ref from NWELL & RES_MK (magic's gf180mcuD
 #      cifinput has no rnw rule, docs/ref_layout.md; boxes taken from the GDS with KLayout's Python module);
@@ -8,12 +8,12 @@
 #      VDD and VDD_LS by name), extract, ext2spice lvs.
 #   2. netgen LVS, flat layout vs the source: pass = "Final result: Circuits match uniquely." with no property
 #      errors, no pin-matching failure and no "do not match".
-#   3. resistor sizes (netgen black-boxes the PDK resistors): each nwell / nplus_u / ppolyf_u_1k in the source
-#      matched to one in the layout by model and size (W 0.1 %, L 1 %).
-#   4. mutations, each must FAIL: (a) ui_in[0] and ui_in[1] swapped at the inverters, (b) the macro's ck_o and div16
-#      outputs swapped (uo_out[0] <-> uo_out[1]), (c) the VDD_LS decap m 5 -> 4 (property error), (d) the TX
-#      driver's outputs swapped (ua[2] <-> ua[3]), (e) its enables swapped (ui_in[5] <-> ui_in[6]), (f) the SPI
-#      SCLK / MOSI pins swapped at the macro, (g) two medium-DAC control lines swapped (b4 <-> s1, 16 vs 32 units).
+#   3. resistor sizes (netgen black-boxes the PDK resistors): the total drawn length of every nwell / nplus_u /
+#      ppolyf_u_1k per model and width, source against layout (0.5 %); series strips allowed (the receiver cells').
+#   4. mutations, each must FAIL (14, listed at the end of this script): the old tile's seven where they still apply
+#      (code inverter inputs, macro outputs, SPI pins, a DAC line, the VDD_LS decap size, the TX outputs, its enables)
+#      and six for the new tile (LNA inputs, q_i / q_q, two debug selects, a2 / ls, a receiver cell's supply,
+#      vbnf / vctrl at cgm_ref).
 # Usage: bash layout/gen/check_tt.sh [gds] [source] [outdir]
 #   defaults gds/tt_um_mattvenn_gf433_vco.gds lvs/tt_um_mattvenn_gf433_vco.spice build/check/tt
 #   env: PDK_ROOT (default /foss/pdks), MAGIC (default: magic; use 8.3.642, see CLAUDE.md), NETGEN (default netgen)
@@ -62,6 +62,7 @@ extract do local
 extract all
 ext2spice lvs
 ext2spice cthresh infinite
+ext2spice short resistor
 ext2spice -o ${T}_lay.spice
 quit -noprompt
 TCL
@@ -114,14 +115,53 @@ def res(path):
             kv = dict(x.split("=", 1) for x in t if "=" in x)
             out.append((model, num(kv["r_width"]), num(kv["r_length"])))
     return sorted(out)
-src, lay = res(sys.argv[1]), res(sys.argv[2])
-ok = len(src) == len(lay) > 0
+def res_flat(path, top="tt_um_mattvenn_gf433_vco"):
+    """The source is hierarchical: every resistor once per instance of its subcircuit, down from the top."""
+    txt = re.sub(r"\n\+", " ", open(path).read())
+    body, cur = {}, None
+    for ln in txt.splitlines():
+        t = ln.split()
+        if t and t[0].lower() == ".subckt":
+            cur = t[1]; body[cur] = []
+        elif t and t[0].lower() == ".ends":
+            cur = None
+        elif cur and t:
+            body[cur].append(t)
+    memo = {}
+    def walk(c):
+        if c in memo:
+            return memo[c]
+        out = []
+        for t in body.get(c, []):
+            if t[0][:1] not in "Xx":
+                continue
+            model = [x for x in t[1:] if "=" not in x][-1]
+            if model in MODELS:
+                kv = dict(x.split("=", 1) for x in t if "=" in x)
+                out.append((model, num(kv["r_width"]), num(kv["r_length"])))
+            elif model in body:
+                out += walk(model)
+        memo[c] = out
+        return out
+    return sorted(walk(top))
+src, lay = res_flat(sys.argv[1]), res(sys.argv[2])
+# total drawn length per (model, width): the receiver cells draw some resistors as series strips, which netgen
+# merges (each cell's own check compares them one by one); a missing or resized resistor still shows up here
+def tot(lst):
+    d = {}
+    for m, w, l in lst:
+        k = (m, round(w * 1e9))
+        d[k] = d.get(k, 0) + l
+    return d
+S, Lt = tot(src), tot(lay)
+ok = bool(S) and set(S) == set(Lt)
 txt = []
-for s, l in zip(src, lay):
-    good = s[0] == l[0] and abs(s[1] / l[1] - 1) < 1e-3 and abs(s[2] / l[2] - 1) < 0.01
+for k in sorted(set(S) | set(Lt)):
+    a, b = S.get(k, 0), Lt.get(k, 0)
+    good = a > 0 and b > 0 and abs(a / b - 1) < 0.005
     ok &= good
-    txt.append(f"{s[0]} {s[1]*1e6:.4g}/{s[2]*1e6:.6g} vs {l[1]*1e6:.4g}/{l[2]*1e6:.6g} um" + ("" if good else " BAD"))
-print(("PASS" if ok else "FAIL") + f"  {len(src)} source / {len(lay)} layout: " + "; ".join(txt))
+    txt.append(f"{k[0]} W {k[1]/1000:.4g}: {a*1e6:.6g} vs {b*1e6:.6g} um" + ("" if good else " BAD"))
+print(("PASS" if ok else "FAIL") + f"  {len(src)} source / {len(lay)} layout resistors; total L per model / W: " + "; ".join(txt))
 PYEOF
 )
 log "== resistor sizes: $rs"
@@ -136,17 +176,29 @@ mutate() {  # mutate <tag> <description> <sed expr>...
   if lvs mut/$tag.spice mut/$tag; then log "== mutation $desc: PASS (BAD: not caught)"; mut_ok=0
   else log "== mutation $desc: FAIL (expected)  [$(why mut/$tag)]"; fi
 }
-mutate swap "ui_in[0] <-> ui_in[1] at the inverters" \
-  '/^xinv0 /s/^xinv0 ui_in\[0\]/xinv0 ui_in[1]/' '/^xinv1 /s/^xinv1 ui_in\[1\]/xinv1 ui_in[0]/'
+# the old tile's seven, as they apply to the new source (lvs/make_source.py, 2026-11-17)
+mutate swap "ui_in[0] <-> ui_in[1] at the code inverters" \
+  '/^xxbits /s/ ui_in\[0\] ui_in\[1\] / ui_in[1] ui_in[0] /'
 mutate ck "macro ck_o <-> div16 (uo_out[0] <-> uo_out[1])" \
-  '/^xmac /s/ uo_out\[0\] / TMP /' '/^xmac /s/ uo_out\[1\] / uo_out[0] /' '/^xmac /s/ TMP / uo_out[1] /'
+  '/^xxmac /s/ uo_out\[0\] / TMP /' '/^xxmac /s/ uo_out\[1\] / uo_out[0] /' '/^xxmac /s/ TMP / uo_out[1] /'
 mutate spi "SPI SCLK <-> MOSI at the macro (uio_in[0] <-> uio_in[1])" \
-  '/^xmac /s/ uio_in\[0\] / TMP /' '/^xmac /s/ uio_in\[1\] / uio_in[0] /' '/^xmac /s/ TMP / uio_in[1] /'
+  '/^xxmac /s/ uio_in\[0\] / TMP /' '/^xxmac /s/ uio_in\[1\] / uio_in[0] /' '/^xxmac /s/ TMP / uio_in[1] /'
 mutate dacbit "DAC line b4 <-> s1 at mdac (dac_bn[4] <-> dac_tn[0])" \
-  '/^xmdac /s/ dac_bn\[4\] / TMP /' '/^xmdac /s/ dac_tn\[0\] / dac_bn[4] /' '/^xmdac /s/ TMP / dac_tn[0] /'
-mutate dcls "VDD_LS decap m 5 -> 4" '/^XDCLS /s/m=5$/m=4/'
-mutate txout "tx_drv out_p <-> out_n (ua[3] <-> ua[2])" '/^xtx /s/ ua\[3\] ua\[2\] / ua[2] ua[3] /'
-mutate txen "tx_drv en_p <-> en_n (ui_in[5] <-> ui_in[6])" '/^xtx /s/ ui_in\[5\] ui_in\[6\] / ui_in[6] ui_in[5] /'
+  '/^xxmdac /s/ dac_bn\[4\] / TMP /' '/^xxmdac /s/ dac_tn\[0\] / dac_bn[4] /' '/^xxmdac /s/ TMP / dac_tn[0] /'
+mutate dcls "VDD_LS decap (decap_ls) m 3 -> 2" '/^\.subckt decap_ls/,/^\.ends/s/m=3$/m=2/'
+mutate txout "tx_drv out_p <-> out_n (ua[3] <-> ua[2])" '/^xxtxd /s/ ua\[3\] ua\[2\] / ua[2] ua[3] /'
+mutate txen "tx_drv en_p <-> en_n (ui_in[5] <-> ui_in[6])" '/^xxtxd /s/ ui_in\[5\] ui_in\[6\] / ui_in[6] ui_in[5] /'
+# the receiver, the debug mux, the split VCO (docs/handoff_tile_layout.md step 5)
+mutate rxin "ua[4] <-> ua[5] at the LNA" '/^xrx_lna /s/ ua\[4\] ua\[5\] / ua[5] ua[4] /'
+mutate qiq "q_i <-> q_q at uo[4] / uo[5]" '/^xrx_lim_i /s/ uo_out\[4\] / uo_out[5] /' '/^xrx_lim_q /s/ uo_out\[5\] / uo_out[4] /'
+mutate dbgsel "dbg_sel[0] <-> dbg_sel[1] at the baseband switches" \
+  '/^xxdbg_bbi /s/ dbg_sel\[0\] / dbg_sel[1] /' '/^xxdbg_bbq /s/ dbg_sel\[1\] / dbg_sel[0] /'
+mutate a2ls "a2 <-> ls at the receiver (rx_lsq aq, LO buffer I in)" \
+  '/^xrx_lsq /s/ a2 / ls /' '/^xrx_lobuf_i /s/ ls / a2 /'
+mutate rxsup "mixer Q on VDPWR instead of VAPWR" '/^xrx_mix_q /s/^xrx_mix_q VAPWR /xrx_mix_q VDPWR /'
+mutate bias "vbnf <-> vctrl at cgm_ref" '/^xvco_ref /s/ vbnf / vctrl /'
+# ua[1] is the VGND sense pin (tile_nets.SUPPLY_PINS): with the strap gone from the source it must fail
+mutate gsense "ua[1] not strapped to VGND" '/^Rshort_ua1 /d'
 
 ok=0; [[ $r == PASS && $rs == PASS* && $mut_ok == 1 ]] && ok=1
 log "CHECK $([ $ok = 1 ] && echo OK || echo FAIL)  (LVS $r, resistor sizes ${rs%% *}, mutations caught $mut_ok)"
