@@ -42,6 +42,13 @@ ngspice-44.2 (`2025.07`) raises a bogus `Pclm ... is not positive` fatal error.
   good run (another temperature, the C-only netlist), then `.nodeset` the node.
 - "timestep too small" at the very end: check how many points were written before you throw the run
   away.
+- **PULSE sources whose breakpoints nearly coincide stop a long transient**: two ideal LO pulse sources ran
+  ~6600 periods, then every run died at the same 15.26 µs with "timestep too small". Use smooth sources
+  (e.g. VDD/2 × (1 + tanh(20 sin ωt)), ~55 ps edges) or periods exact to full precision.
+- Some operating points only converge with `option rshunt=1e12` (sometimes plus `gmin=1e-10`). If one run of a
+  compared pair needs it, run the other with the same options.
+- **Measure an oscillator's frequency at mid-swing, not VDD/2,** when it doesn't swing rail to rail: a
+  current-fed ring swings vg…VDD and never crosses VDD/2.
 
 ## Watching and killing runs
 - Progress: `tr '\r' '\n' < run.log | grep Reference | tail -1`. No line yet means it's still loading
@@ -76,6 +83,9 @@ ngspice-44.2 (`2025.07`) raises a bogus `Pclm ... is not positive` fatal error.
   instance properties.
 - Generate schematics from Python (`scripts/xsch.py`): place symbols, put `lab_pin`s exactly on the pin
   coordinates, netlist to check. Repeatable, diffable, sweepable.
+- **xschem-viewer** (xschem-viewer.com) only knows the xschem, sky130 and IHP symbol libraries. For another PDK
+  (gf180), copy the PDK symbols you use next to the schematics (e.g. `xschem/symbols/`) and reference them by
+  that relative name, or the viewer shows empty boxes.
 
 ## sky130 device modelling traps
 - `W` is the total width over `nf`. **Write folded devices as W-per-finger × `mult`**, the way magic

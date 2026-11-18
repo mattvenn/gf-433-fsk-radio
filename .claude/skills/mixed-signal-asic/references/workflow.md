@@ -65,6 +65,8 @@ The previous chip was built by several sessions at once (Mac, cloud pod, big Lin
   reserve threads. Use `prio` (start order) and `reserve: False` (a waiting long job doesn't hold threads).
 - Declare the threads a job really keeps busy: one job running two ngspice at ~3 CPUs each, declared as 4,
   pushed the load to 37–39 on 28 CPUs and slowed everything 5–10 %.
+- An estimate for a set of jobs is its longest job, not the typical one: "about an hour" for a power-delivery
+  pass forgot its 6.6 h TX transient. Read the durations file before quoting.
 - Before blaming a suspect for a slow run, A/B it with short timing runs (old vs fixed input, small vs big
   netlist). A plausible bug (repeated PWL times) turned out to cost nothing; the netlist and the load did.
 - Don't edit a script while it runs. Don't run two copies of a script that rewrites a shared netlist.
@@ -73,6 +75,19 @@ The previous chip was built by several sessions at once (Mac, cloud pod, big Lin
   "never end your turn while runs are pending; wait with a background command that exits when they finish".
 - Wait on a scheduler through its status file (`sched.py --status`, `status.json`), not `pgrep -f <script>`. The
   wait loop's own command line contains the pattern, so `pgrep -f` matches itself and the loop never exits.
+
+### Unattended runs on a sim server (paste into each handoff as "Running unattended")
+Tested on gf-433-oscillator: results pushed under 2 minutes after the last sim, with no human ping.
+1. Start jobs with `run_in_background` (the harness wakes the agent when they exit), never a bare `nohup … &`. If a
+   job must outlive the session, also watch a done-marker with a Monitor.
+2. **One driver script per handoff** chaining every job; corner lists come from a config section in the handoff.
+   Each step writes `status.txt`; the end writes `DONE` or `FAILED` (with the log tail).
+3. Fail early: each step checks its own outputs (files, row counts, no "Transient op", no "singular") before the
+   next starts. Retry at most twice, then write up and stop.
+4. A heartbeat wakeup at ~1.5× the estimate (20-60 min, re-armed), in case a notification is missed.
+5. Push a `> Running: step N/M since HH:MM, ETA HH:MM` line at the top of the handoff at each step change, and the
+   `Done` line at the end.
+6. Write up, commit and push in the same session, straight after the driver ends.
 
 ## Estimates
 - Quote run times from the timestamps of the same jobs (`ls -lT build/...`), with every chained step

@@ -97,6 +97,11 @@ property errors, and PEX close to the schematic on what the block must do.
 - **Pin the magic version** (8.3.684 dropped substrate C) and sanity-check one known node's C after any
   upgrade. Committed extractions go stale: re-extract before comparing.
 - Extract a block in its real surroundings before trusting its parasitic loss.
+- **magic `rc` extraction double-counts coupling C** on ports (labelled nets) and on nets extresist splits: each
+  gets its whole lumped C, coupling included, as a cap to VSS, *and* the coupling caps stay. An extracted VCO read
+  0.87× the schematic; the truth was 0.98×. Fix the netlist (scale each such net's C to VSS by (S − K) / S, S its
+  C to VSS, K its coupling to other non-VSS nets) and check every net's total C against the C-only extraction.
+  Always simulate the fixed netlist. Seen on magic 8.3.642 (gf180); check sky130 decks the same way.
 
 ## Antenna and density
 - magic `antennacheck` finds nothing on a hierarchy (it misses gates inside pcells) or in the same

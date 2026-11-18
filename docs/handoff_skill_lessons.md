@@ -1,4 +1,4 @@
-> Not started.
+> Done (2026-11-18): claude-config c0633c2 (lessons added; GF180 facts in references/gf180.md). Lessons already covered were skipped.
 
 # Handoff: carry this project's lessons into the mixed-signal-asic skill (an agent with `claude-config` checked out)
 

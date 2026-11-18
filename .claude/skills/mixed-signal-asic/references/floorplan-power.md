@@ -22,6 +22,10 @@
 - Show strap lanes on the page and flag blocks with met4/MIM obstructions, since full-height met4
   straps can't cross MIM top plates.
 - Keep an area budget from day one. At 92 % use, decap was the only lever left.
+- **Match the pitch of blocks that tap each other.** A detector at a 20.8 µm cell pitch fed from a chain
+  whose taps sit at 11.7 µm needed tap runs up to ~60 µm: 14–32 fF to ground per tap, ~0.035 dB per fF per
+  stage, 4.2 dB in all on the block (~1.1 dB on the tile). Turn or re-pin the receiving cells so their
+  inputs line up with the taps before routing, and price every RF tap's C at floorplan time.
 - A macro's pin edge needs a routing channel (~12 µm for 42 tracks).
 - Clock harmonics land wherever they land: check them against every sensitive band. Keep sensitive
   inputs far from the digital macro, and rank aggressors by what actually switches in each mode.

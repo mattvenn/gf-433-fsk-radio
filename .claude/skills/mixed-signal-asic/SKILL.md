@@ -22,6 +22,7 @@ Read the reference that matches the work in hand. Don't load them all:
 | digital macro, cocotb, formal, TT tile rules, CI, pinout | [references/digital-tt.md](references/digital-tt.md) |
 | several sessions or machines, handoffs, docs, estimates | [references/workflow.md](references/workflow.md) |
 | bring-up plan, design for test, silicon vs sim | [references/bringup.md](references/bringup.md) |
+| GF180MCU (gf180mcuD) and Tiny Tapeout GF: process facts, tile, pins, tool traps | [references/gf180.md](references/gf180.md) |
 | background: Harald Pretl's IIC-JKU courses (analog design and etiquette, complex-IC layout, RF ICs) | [references/further-reading.md](references/further-reading.md) |
 
 Reusable scripts are in [scripts/](scripts/README.md). Copy them into the new repo and adapt the paths.
@@ -91,6 +92,15 @@ bit-exact digital model ─vectors─► RTL (cocotb) ─► harden ─► GL   
 - LVS can pass while device sizes are wrong. netgen prints "Circuits match uniquely" *and*
   "Property errors were found". Fail on property errors. Also make sure the LVS source is the real
   schematic and not the generator's own parameter copy (that was a circular check).
+- **netgen treats PDK resistors as black boxes:** it doesn't compare their W / L, so a wrong-size resistor passes
+  LVS even with "fail on property errors". Run a device-by-device size diff (every MOS W / L / m, every resistor
+  W / L) of the layout netlist against the schematic next to LVS, and mutation-test it.
+- **A copy of a block's schematic is not a match.** Two level shifters from one schematic delayed 119° and 55° at
+  434 MHz: the laid-out one had 1.4 fF on its input node against 0.4 fF. Anything that must match (I / Q paths,
+  replicas) copies the **layout and its load**, not just the schematic, and is checked on the extraction.
+- **MOS caps: check the DC bias and which terminal faces the sensitive node.** An NMOS AC-coupling cap's S/D
+  junction leakage fought a > 1 GΩ pseudo-resistor and biased the next stage off (0.56 V instead of 1.30 V). A
+  PMOS with its gate (oxide only) on the high-Z node fixed it.
 - An impossible PEX result (a DC shift that capacitors can't cause) is usually a failed operating
   point: ngspice silently fell back to a "transient op". Grep for `Transient op started`, and tie
   floating pin stubs to ground through 1 GΩ.

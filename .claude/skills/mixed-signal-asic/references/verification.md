@@ -45,6 +45,12 @@ system transient would have taken years.
   through the schematic stage's curve: that read as +6.6 dB of gain. Calibrate on the *change* instead, e.g.
   the ratio of its signal-induced drops to the schematic's, folded in as a higher NF.
 
+- **To find where an extracted block loses gain, swap one piece at a time.** Same bench, one deck per
+  version: schematic, block A extracted alone, A extracted + B's schematic (ideal wires), the whole thing
+  extracted. Then put each net's extra extracted C (whole − parts, summed over the net's segments) back as lumped
+  C, all at once and one net at a time. The all-at-once lumped deck should land close to the full extraction
+  (3.6 of 4.15 dB here); the one-net decks rank the culprits. Twelve AC decks, minutes.
+
 ## What to sweep (and what each one caught)
 | Check | Caught |
 |---|---|
@@ -56,7 +62,7 @@ system transient would have taken years.
 | a point outside the spec range (e.g. 85 °C) | where the cliff is |
 | stability kick at the highest-gain corner (ss, cold, high VDD) | coupling budget half the tt one |
 | stability (and every margin check) also at the corner where *that* margin is smallest | a gain-step condition whose worst corner (sf) wasn't in the stability list |
-| the merged block extracted, not just its parts | a detector's inputs and tap wiring (9.7 fF against 1.4 fF in the schematic) taking 4.7 dB off the chain |
+| the merged block extracted, not just its parts | the tap wiring between a chain and its detector (14–32 fF to ground per tap) taking 4.2 dB off the chain |
 | both possible supply-strap orientations of the platform, every rerun | a re-route checked in one only (TT: tile N or FS, pin order) |
 | power-up: 10 µs and 10 ms ramps × 3 corners | bias start-up, no output glitch |
 | each one-supply-missing state | outputs floating to the other rail |
@@ -94,6 +100,10 @@ system transient would have taken years.
 - Bias OTA loops: Middlebrook voltage injection, all corners × temperatures, real loads.
 
 ## Process
+- **Corner policy:** run the full corner set once per circuit change to find the 3-4 bounding corners (which corner
+  sets each limit), iterate only on those, and run full PVT plus Monte Carlo only at sign-off, on the extracted
+  layout. List in each handoff which corners each job uses and why. Check what the user's operating range
+  really is (gf-433-oscillator: room temperature only, so 0 / 70 °C only for start-up robustness and sign-off).
 - Close gaps in phases (cheap fixes → block statistics and supply → system on the extracted chip →
   full rerun), with a human review gate after each. **A failing check opens a design change; don't
   patch it inside the verification plan.**
