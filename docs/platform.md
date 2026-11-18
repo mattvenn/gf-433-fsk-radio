@@ -43,8 +43,9 @@ it, but there are two standard-cell rings:
 silicon/sim 0.993–1.001, between the sf and tt corners; the 5× inv_1 ring gives 0.935, the least certain
 bench point (re-measure it). So the ×0.7–×1.4 margin carried over from sky130 is no longer needed: even at
 0.935 the extracted VCO range (193–851 MHz over the corners) becomes about 180–796 MHz and still covers
-433.92 MHz. Permanent slowdowns from loading the ring (for example the receiver's Q tap, −1.8 %) come out of
-that headroom, so keep a running total.
+433.92 MHz. Permanent slowdowns from loading the ring come out of that headroom, so keep a running total: the
+receiver's Q tap alone is −1.8 %, and on the first-draft extracted tile the ring runs 12.2–12.8 % below the block-level
+extraction (a2 carries 19.88 fF; `docs/verification.md`, open).
 
 ## Simulated GF180 3.3 V ring basics
 [sim] `sim/vco/ring_basic.py`: plain nfet/pfet_03v3 inverters, Wn/Wp = 2/5 µm, L = 0.28 µm, AD/AS from a
