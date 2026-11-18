@@ -20,8 +20,9 @@ It is to become an **FM radio toolkit**:
 The receiver (as its cells), the debug mux on ua[0] and the re-hardened macro (250 × 176.8 µm, RX_EN + DBG_SEL) are
 in; DRC 0 (magic and KLayout), LVS match with 14 / 14 mutations caught, antenna 0. Generator `layout/gen/tile.py`,
 checks `layout/gen/tile_driver.sh`. The real TT precheck passes in CI. Open: decap only about 7.4 pF.
-**Tile simulated (2026-11-17, `sim/top/tile_results.md`):** TX, RX at -70 dBm, power-up, debug mux, supplies pass;
-10 / 10 mutations. **The ring runs 11.6-12.3 % slow** (19 fF on a2): 433.92 MHz still reached at every corner
+**Tile simulated (2026-11-18, fca76de, `sim/top/tile_results.md`):** TX (+6.16 dBm at code 13; +5.97 dBm with the
+supply grid's R), RX settled at -70 ... -100 dBm, power-up, debug mux, supplies pass; power IR / EM pass
+(`sim/power/results.md`); 10 / 10 mutations. **The ring runs 12.2-12.8 % slow** (19.9 fF on a2): 433.92 MHz still reached at every corner
 (tt code 12-13); accept or re-lay out rx_lsq is Matt's call. Every test: `docs/verification.md`.
 
 **The oscillator topology is chosen: a current-fed ring with a 5-bit current DAC.**

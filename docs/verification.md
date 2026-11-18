@@ -47,11 +47,11 @@ and the skewed sf / fs (slow NMOS / fast PMOS and the reverse).
 | | The real TT precheck (tt-support-tools) and GDS viewer | CI only (`gds.yaml`) | first run failed the analog pin check (ua[1]); fixed in 27ca4ab, passing since (run 44089936326 on 93b3ddf) | - | [layout step 5](tile_layout.md#step-5-the-checks) | gds |
 | | TT documentation build | CI only (`docs.yaml`) | pass (run 44089936433 on 93b3ddf) | - | - | docs |
 | | Schematics: xschem netlists against the simulated circuits and the layout's LVS source (netgen plus a device-size diff) | `python3 xschem/gen/check.py` | match uniquely, no size differences | broken copies caught (cfed_dac leg m, lsdiv R1 +10 %, 2 in tx_drv, 4 in the receiver) | [schematics](schematics.md#checks-python3-xschemgencheckpy-results-in-buildxschchecktxt) | no |
-| **Extracted tile analog** (C-only extraction, `tb_tile_verdict.py`) | VCO frequency against the block-level extraction, 5 corners | see [Reproduce](#reproduce) (`sim/top/`) | consistent shift PASS; **11.6-12.3 % below the block** (tt code 9: 370.52 against 420.50 MHz): FAIL against the 5 % estimate, open | code bits swapped: caught | [tile §1](../sim/top/tile_results.md#1-vco-on-the-tile) | no |
+| **Extracted tile analog** (C-only extraction, `tb_tile_verdict.py`) | VCO frequency against the block-level extraction, 5 corners | see [Reproduce](#reproduce) (`sim/top/`) | consistent shift PASS; **12.2-12.8 % below the block** at fca76de (tt code 9: 368.05 against 420.50 MHz; a2 19.88 fF): FAIL against the 5 % estimate, open | code bits swapped: caught | [tile §1](../sim/top/tile_results.md#1-vco-on-the-tile) | no |
 | | Tuning range and medium DAC range | as above | tt 190.8-691.3 MHz; DAC 1.59 coarse steps; 433.92 MHz at code 12-13 (tt), about 20 (sf) | (as above) | [tile §1](../sim/top/tile_results.md#1-vco-on-the-tile) | no |
-| | TX into the 73 Ω dipole through the pad models | as above | +4.72 (ss) to +7.57 (ff) dBm, within 0.5 dB of the block bench; off -91 dBm: PASS | 2 / 2 (enables low, 10 Ω supply switches) | [tile §2](../sim/top/tile_results.md#2-tx-into-the-dipole) | no |
+| | TX into the 73 Ω dipole through the pad models | as above | +4.73 (ss) to +7.58 (ff) dBm at fca76de, +6.16 dBm at code 13; R+C extraction (supply grid in the loop) +5.97 dBm, -0.19 dB; off -91 dBm: PASS | 2 / 2 (enables low, 10 Ω supply switches) | [tile §2](../sim/top/tile_results.md#2-tx-into-the-dipole) | no |
 | | RX, -70 dBm tone 200 kHz from the LO | as above | q_i / q_q toggle at tt, ss, ff; I/Q phase +70 to +76°, sign follows the offset: PASS | 3 / 3 (RX off, q_i / q_q swapped twice) | [tile §3](../sim/top/tile_results.md#3-rx-a-tone-through-the-pads-to-q_i--q_q) | no |
-| | RX, -95 dBm | as above | **FAIL on settling, not sensitivity** (14 µs run, the receiver needs about 1 ms) | - | [tile §3](../sim/top/tile_results.md#3-rx-a-tone-through-the-pads-to-q_i--q_q) | no |
+| | RX, -70 / -90 / -95 / -100 dBm, high-pass preset settled | as above | q_i / q_q toggle at 198-201 kHz, duty 47-49 %, I/Q +77 to +79°: PASS (no noise in transient: a working chain, not a sensitivity figure) | (as above) | [tile §3](../sim/top/tile_results.md#3-rx-a-tone-through-the-pads-to-q_i--q_q) | no |
 | | Power-up, ramped supplies | as above | ring runs from 15 µs, no TX output (0.03 mV p-p): PASS | 1 / 1 (TX on during power-up) | [tile §4](../sim/top/tile_results.md#4-power-up) | no |
 | | Debug mux on ua[0] | as above | each select within 0.4 mV, 0.86-1.63 kΩ; ua[1] = VGND: PASS | 2 / 2 | [tile §5](../sim/top/tile_results.md#5-debug-mux-on-ua0) | no |
 | | Supplies: ±4.5 %, impedance, ripple during TX | as above | f +0.32 / -0.30 %; VAPWR ripple 1.0 mV p-p with TX on: PASS | 1 / 1 | [tile §6](../sim/top/tile_results.md#6-supplies) | no |
@@ -70,7 +70,7 @@ the GDS and runs the real TT precheck; `docs` builds the TT documentation.
 
 ## Open items at the time of writing
 
-- **The a2 shift.** The ring on the extracted tile runs 11.6-12.3 % below the block-level extraction at every corner,
+- **The a2 shift.** The ring on the extracted tile runs 12.2-12.8 % below the block-level extraction (fca76de; 11.6-12.3 % before the supply straps added 0.9 fF of coupling to a2) at every corner,
   code and word. The a2 net carries 19.0 fF against about 3.3 fF on the other ring nodes; `vco_top` with 15.7 fF added
   on one ring node reproduces the tile within 0.3 %. 433.92 MHz is still reached (tt code 12-13, sf about 20), but
   the frequency map no longer holds and a2 couples into the baseband. Matt is deciding whether to accept it or to
@@ -81,9 +81,9 @@ the GDS and runs the real TT precheck; `docs` builds the TT documentation.
 - **io_ss: the first SPI write (CTRL = RX_EN) did not reach `rx_en`** in the mixed-signal run, on every rerun. The
   same deck with a build that exports more internal signals takes the write normally, so it is believed to be a
   `d_cosim` artefact, but it is not root-caused.
-- **RX at -95 dBm fails on settling, not sensitivity.** The LO start-up puts a -3 mV offset on the mixer output, and
-  the 8.5 kHz high-pass needs 0.5-0.9 ms to remove it; a settled sensitivity run would need about 1 ms of simulated
-  time, out of reach at the time of writing.
+- **RX at -95 dBm: settled run passes (2026-11-18).** The LO start-up offset (-3 mV) needs 0.5-0.9 ms to clear the
+  8.5 kHz high-pass, so the runs preset stage 1's coupling nodes with `.ic` from a 3 µs pre-run; q_i / q_q then toggle
+  down to -100 dBm. Transient has no noise, so the noise-limited sensitivity is still not simulated.
 - **No TX / RX interlock.** The TX enables come from ui_in[5] / ui_in[6] and RX_EN from CTRL[4]; nothing on chip
   stops both being on. Decided 2026-11-17: no hardware interlock; the firmware rules are in `bringup.md`. Firmware must also keep DBG_SEL one-hot and raise CS_n after each 16-bit frame (formal `dbg`
   and `long`).
