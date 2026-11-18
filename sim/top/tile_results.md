@@ -18,7 +18,8 @@ runs and this write-up were done by Claude (Claude Code), working from Matt's br
 | 1 tuning range | codes 0-31 span 190.8-691.3 MHz at tt (block 217.6-782.1); medium DAC range 28.25 MHz = 1.59 coarse steps of 17.80 MHz (block 31.86 / 20.06 MHz); 433.92 MHz at code 12-13 at tt (block: 9) and about 20 at sf | extracted `vco_top` + DAC | PASS |
 | 2 TX | fundamental into the 73 Ω dipole +4.72 (ss) to +7.57 (ff) dBm, within 0.5 dB of the block bench; TX off -91 dBm | `sim/tx/results/top.md` (case pg) | PASS |
 | 3 RX, -70 dBm | q_i / q_q toggle at the 200 kHz offset at tt, ss and ff; limiter I/Q phase +70 to +76°, its sign follows the sign of the offset; LO I/Q phase 74.6° | `sim/rx/results/summary.md` (72-73°) | PASS |
-| 3 RX, -95 dBm | no toggles in the 14 µs run: the 8.5 kHz high-pass has not yet removed the -3 mV mixer offset that appears when the local oscillator (LO) starts | `docs/rx_design.md`: 0.5-0.9 ms recovery after an offset step | FAIL (settling, not sensitivity) |
+| 3 RX, -90 to -100 dBm, settled | with the high-pass preset to its steady state (update below): q_i / q_q toggle at the 200 kHz offset down to -100 dBm, duty 47-49 %, limiter I/Q +77 to +79° (baseband +75°), noiseless | - | PASS |
+| 3 RX, -95 dBm, from the LO's start | no toggles in 14 µs: the 8.5 kHz high-pass has not yet removed the -3 mV mixer offset that appears when the local oscillator (LO) starts | `docs/rx_design.md`: 0.5-0.9 ms recovery after an offset step | FAIL (settling, as designed) |
 | 4 power-up | ring oscillates from 15 µs, 89.7 MHz at 25 µs and rising with the bias filter; no output on the dipole (0.03 mV p-p) | `sim/top/results.md` start-up | PASS |
 | 5 debug mux | each select reads its node within 0.4 mV, 0.86-1.63 kΩ pin to node, off switches move no node; ua[1] = VGND | `docs/tile_layout.md` (dbg_tg 0.84-1.25 kΩ) | PASS |
 | 6 supply | f +0.32 % / -0.30 % at 3.15 / 3.45 V (both supplies); ring supply (VAPWR) ripple 1.0 mV p-p with the TX on (VDPWR 13.7 mV); VDPWR 18.5 pF, VAPWR 86 pF effective at 1 MHz | `sim/tx/results/top.md` (13-15 mV) | PASS |
@@ -32,6 +33,74 @@ The 433.92 MHz coarse code moves up by three to four at tt, and 433.92 MHz is st
 slowest corner), so the chip works with firmware calibration. But a2 also couples into the baseband, the ring's
 phase noise was never checked with this load, and the frequency map in `docs/remap_results.md` no longer holds, so
 the a2 wire should be shortened or buffered before tape-out.
+
+## Update 2026-11-18: after the supply-strap changes (d606bd4, fca76de)
+
+The layout gained supply straps over the turned TX driver's and LNA's rails (d606bd4) and a wider TX VDPWR strap
+(fca76de). The tile was re-extracted at fca76de (`layout/pex/tile_*.spice`, same 126 ports) and the VCO and TX benches
+rerun on it (`vco3_*`, `tx3_*`); `vco2_*` are the same VCO runs on the d606bd4 extraction.
+
+**VCO.** The shift against the block-level reference did not shrink: it grew by about 0.5-0.7 % (Table U1), as a2's
+extracted load grew from 19.0 to 19.71 fF (d606bd4) and 19.88 fF (fca76de). The new straps pass near the a2 wire: it
+now couples 0.92 fF to ui_in[6], 0.59 fF to ui_in[5] (the TX enables) and 0.63 fF to dbg_sel[0]. At -0.77 % per fF
+the extra 0.88 fF predicts -0.68 %; measured -0.66 to -0.67 %.
+
+**Table U1.** Ring frequency at word 512 (MHz) and the shift against the block-level reference.
+
+| corner, code | block | first layout | d606bd4 | fca76de | fca76de / block |
+|---|---|---|---|---|---|
+| tt, 9 | 420.50 | 370.52 (-11.89 %) | 368.53 (-12.36 %) | 368.05 | -12.47 % |
+| ss, 11 | 425.12 | 375.71 (-11.62 %) | 373.71 (-12.09 %) | 373.23 | -12.21 % |
+| ff, 7 | 414.63 | 364.22 (-12.16 %) | 362.26 (-12.63 %) | 361.78 | -12.75 % |
+
+**TX** (fca76de, C-only, both supplies behind TT switches). The C-only netlist has no supply resistance, so the power
+barely moves (Table U2); the RC extraction puts the supply grid's resistance in the loop. At tt code 13 the
+rcx tile (`tx3_rcx_tt_on_k13`, 150 ns on four threads, 2.0 hours, measured over the last 60 ns) gives
++5.97 dBm of fundamental at 432.56 MHz, -0.19 dB against the C-only tile; VDPWR at the tile's port
+averages 3.283 V (the TT switch) and ripples 14.1 mV p-p, and the VAPWR port 3.6 mV p-p (C-only
+1.1 mV). The ring is -0.64 % slower in rcx, as in the VCO's rcx run.
+
+**Table U2.** TX into the dipole after fca76de (fundamental, dBm).
+
+| run | f (MHz) | fundamental (dBm) | first layout (dBm) | I(VDPWR) (mA) | ripple VDPWR / VAPWR (mV p-p) |
+|---|---|---|---|---|---|
+| tx3_c_tt_on | 368.02 | +6.41 | +6.40 | 12.48 | 13.6 / 1.0 |
+| tx3_c_ss_on | 373.19 | +4.73 | +4.72 | 10.39 | 13.8 / 0.9 |
+| tx3_c_ff_on | 361.75 | +7.58 | +7.57 | 14.56 | 15.1 / 0.9 |
+| tx3_c_tt_on_k13 | 435.34 | +6.16 | +6.15 | 12.90 | 13.4 / 1.1 |
+| tx3_rcx_tt_on_k13 (rcx) | 432.56 | +5.97 | - | 12.59 | 14.1 / 3.6 |
+
+**RX settled at -70 to -100 dBm.** The 14 µs runs could not show sensitivity: the -3 mV mixer offset when the LO
+starts needs 0.5-0.9 ms to clear the 8.5 kHz high-pass, about 110 hours of simulation at the measured 6.5 min per µs.
+Instead the run starts with the high-pass in its steady state. Only the first AC coupling per arm sees the offset:
+stage 1 of `rx_bb` is DC-coupled to the mixer, and every later coupling follows a settled high-pass. In
+`tile_c.spice` the four stage-1 outputs are the drains of the nfets gated by bi_* / bq_*, each the upstream side of an
+L = 10 µm pfet coupling capacitor (`S1_NODES` in `tb_tile.py`). A 3 µs pre-run with the receiver on and no RF
+(`rxset_c_tt`, vbnf held) gives their running means: the I pair 2.2932 / 2.2397 V,
+a 53 mV differential (0 V in the operating point with the LO static); differential drift under 0.01 mV/µs. The RX runs
+(`rxs_c_tt_*`, on the d606bd4 extraction, 22 µs) set those nodes and the mixer outputs to these means with `.ic`. In the
+operating point the coupling capacitor is open, so its charge then equals the settled value; the gate side stays at
+its bias.
+
+**Evidence.** The baseband DC stays at zero (oi mean +0.2 mV at -95 dBm, against -0.9 V in the unsettled run), the
+limiter duty is 47-49 %, and q_i / q_q toggle at the 200 kHz offset at every level down to -100 dBm, with Q leading
+I by +77 to +79° (Table U3, Fig. U1). These runs have no noise source (ngspice's transient has no device noise), so
+they show the settled chain working at these levels, not the noise-limited sensitivity (`sim/rx/results/`: the noise
+runs use the model's noise figure). At -70 dBm the limiter phase is +77.9°, close to the 14 µs run's +71.8°.
+
+**Table U3.** RX, settled high-pass, tt, tone 200 kHz above the LO, last 16 µs of 22 µs.
+
+| level (dBm) | q_i / q_q (kHz) | edges i / q | duty q_i | I/Q limiter / baseband (deg) | baseband I / Q (V) | baseband DC I (mV) | LO I/Q (deg) |
+|---|---|---|---|---|---|---|---|
+| -70 | 197.9 / 199.8 | 6 / 6 | 48.7 % | +77.9 / +74.5 | 1.610 / 1.611 | +32.1 | 74.6 |
+| -90 | 197.9 / 199.7 | 6 / 6 | 48.4 % | +78.6 / +74.8 | 0.341 / 0.347 | +2.0 | 74.6 |
+| -95 | 198.0 / 199.4 | 6 / 6 | 48.4 % | +77.6 / +75.0 | 0.193 / 0.197 | +0.2 | 74.6 |
+| -100 | 201.4 / 198.4 | 7 / 6 | 47.3 % | +77.0 / +75.2 | 0.109 / 0.111 | -0.9 | 74.6 |
+
+![RX settled](../../docs/img/tile_sims/rx_settled_tt_m95.png)
+
+**Fig. U1.** Baseband and limiter outputs at -95 dBm with the high-pass preset to its steady state, tt: q_q leads q_i
+by +77.6°, 48.4 % duty, the baseband centred on 0 V (0.19 V amplitude). The thicker Q trace is LO ripple.
 
 ## Method
 
@@ -345,14 +414,14 @@ Mutations caught: 10 / 10; missed: none; pending: none
 - **Process corners.** VCO and TX at tt, ss, ff, sf and fs; RX at tt, ss and ff; power-up, debug mux and supply
   impedance at tt only. No 0 / 70 °C or Monte Carlo runs: those are sign-off, after the a2 fix.
 - **RC.** One rcx run (wire resistance included) at tt code 9 word 512, 300 ns (6.9 hours on one thread): 368.05 MHz,
-  -0.67 % against the C-only tile (-12.47 % against the block). Everything else is C-only. The rcx TX run was stopped
-  (about 70 s of CPU per simulated ns); the `tx_drv` block bench gives 0.15 dB between its rcx and C-only
-  extractions. The rcx debug-mux run was stopped after 97 minutes (one operating point fell back to a transient op);
+  -0.67 % against the C-only tile (-12.47 % against the block), and one rcx TX run after fca76de (update above:
+  -0.19 dB against C-only). Everything else is C-only. The rcx debug-mux run was stopped after 97 minutes (one operating point fell back to a transient op);
   its first three selects agree with the C-only run within 0.2 kΩ.
 - **The macro is not in the netlist.** Its outputs are ideal sources and its clock and supply current are absent; the
   macro's own supply noise is covered by `docs/tx_fine_tune.md` (digital supply coupling).
 - **VAPWR's power switch** is modelled as VDPWR's (`tt_pg_3v3_hp_2`); the real `_pgvaa` switch was not checked.
-- **RX sensitivity** is not shown on the tile: the receiver needs about a millisecond to settle after the LO starts.
+- **RX sensitivity** is shown only as a settled, noiseless chain (update above): the receiver needs about a millisecond
+  to settle after the LO starts, which was preset rather than simulated.
 - **TX power** was measured at 370 MHz for the corner runs (the tile's ring is 12 % slow at the block-level codes);
   the code-13 run at 438.26 MHz gives +6.15 dBm at tt, 0.25 dB below code 9.
 - **Power-up** stops at 25 µs, before the ring settles (block level: up to 138 µs).
