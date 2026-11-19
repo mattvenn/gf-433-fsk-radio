@@ -195,10 +195,10 @@ def net(s, pts, y, extra=()):
     return sorted(set(taps))
 
 
-def mos_dev(s, cell, name, x, y, flip=0, supplies_=True):
+def mos_dev(s, cell, name, x, y, flip=0, supplies_=True, **kw):
     """Place a MOS from the block with its bulk tied to the rail named in the netlist (VDD / VSS: a supply symbol;
-    any other net: the caller wires the bulk stub, returned as the second value)."""
-    m = place(s, cell, name, x, y, flip=flip)
+    any other net: the caller wires the bulk stub, returned as the second value). kw goes to place() (e.g. val)."""
+    m = place(s, cell, name, x, y, flip=flip, **kw)
     b = m.nets['B']
     if b in ('VDD', 'VSS'):
         from common import bulk as _bulk

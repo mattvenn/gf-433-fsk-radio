@@ -5,6 +5,8 @@ K {}
 V {}
 S {}
 E {}
+T {diode loads C3, C4: 1/0.5} 2610 -368 0 0 0.3 0.3 {}
+T {cross-coupled C5, C6: 1.7/0.5} 2610 -343 0 0 0.3 0.3 {}
 T {ca} 2610 -174 0 0 0.3 0.3 {}
 T {cb} 3220 -174 0 0 0.3 0.3 {}
 T {cx} 3530 -60 0 0 0.3 0.3 {}
@@ -842,7 +844,7 @@ sb=0
 sd=0
 model=pfet_03v3
 spiceprefix=X
-val="1/0.5"}
+val=""}
 C {symbols/vdd.sym} 2680 -250 0 0 {name=l21
 lab=VDD}
 C {symbols/pfet_03v3.sym} 2780 -250 0 1 {name=C5
@@ -861,7 +863,7 @@ sb=0
 sd=0
 model=pfet_03v3
 spiceprefix=X
-val="1.7/0.5"}
+val=""}
 C {symbols/vdd.sym} 2740 -250 0 0 {name=l22
 lab=VDD}
 C {symbols/pfet_03v3.sym} 3160 -250 0 1 {name=C4
@@ -880,7 +882,7 @@ sb=0
 sd=0
 model=pfet_03v3
 spiceprefix=X
-val="1/0.5"}
+val=""}
 C {symbols/vdd.sym} 3120 -250 0 0 {name=l23
 lab=VDD}
 C {symbols/pfet_03v3.sym} 3020 -250 0 0 {name=C6
@@ -899,7 +901,7 @@ sb=0
 sd=0
 model=pfet_03v3
 spiceprefix=X
-val="1.7/0.5"}
+val=""}
 C {symbols/vdd.sym} 3060 -250 0 0 {name=l24
 lab=VDD}
 C {symbols/vdd.sym} 2660 -280 0 0 {name=l25

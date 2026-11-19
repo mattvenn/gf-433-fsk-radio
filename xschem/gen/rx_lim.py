@@ -45,10 +45,15 @@ def build():
     s.route(ct.pin('G'), (xc - 60, 200), (xc - 60, ynb))
     s.route(gca, c1.pin('G'))
     s.route(gcb, (c2.pin('G')[0] + 80, gcb[1]), (c2.pin('G')[0] + 80, 0), c2.pin('G'))
-    c3, _ = mos_dev(s, C, 'C3', xc - 260, -250)
-    c5, _ = mos_dev(s, C, 'C5', xc - 120, -250, flip=1)
-    c4, _ = mos_dev(s, C, 'C4', xc + 260, -250, flip=1)
-    c6, _ = mos_dev(s, C, 'C6', xc + 120, -250)
+    # the four loads sit close together, so their sizes go in one note above them (the symbols' own size texts
+    # overlapped pairwise)
+    c3, _ = mos_dev(s, C, 'C3', xc - 260, -250, val='')
+    c5, _ = mos_dev(s, C, 'C5', xc - 120, -250, flip=1, val='')
+    c4, _ = mos_dev(s, C, 'C4', xc + 260, -250, flip=1, val='')
+    c6, _ = mos_dev(s, C, 'C6', xc + 120, -250, val='')
+    dl = DEV[C]
+    s.text(xc - 290, -368, f"diode loads C3, C4: {wl(dl['C3'])}", 0.3)
+    s.text(xc - 290, -343, f"cross-coupled C5, C6: {wl(dl['C5'])}", 0.3)
     check(c3, D='ca', G='ca', S='VDD', B='VDD'); check(c5, D='ca', G='cb', S='VDD', B='VDD')
     check(c4, D='cb', G='cb', S='VDD', B='VDD'); check(c6, D='cb', G='ca', S='VDD', B='VDD')
     for m in (c3, c4, c5, c6):
