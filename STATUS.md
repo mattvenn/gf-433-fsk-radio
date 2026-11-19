@@ -58,6 +58,10 @@ supply grid's R), RX settled at -70 ... -100 dBm, power-up, debug mux, supplies 
 5. **Sizing, PVT map, PVT noise, v3 layout, MC and start-up** (the docs in the table above).
 
 ## Next steps
+**Decision 2026-11-19 (Matt):** the I and Q LO taps must match. a2's long wire skews the I/Q phase by +8-9° as well as
+slowing the ring 12.5 % (`sim/top/a2_load/results.md`). Fix on branch `iq-symmetry`: the Q level shifter moves against
+the ring as a mirror of lsdiv; the tile's I/Q LO phase gets a 72 ± 3° check. The TX final-stage shrink is dropped.
+
 **Decision 2026-11-17 (Matt):** no TX/RX hardware interlock. Firmware keeps RX_EN off while transmitting and waits
 about 1 ms after TX before trusting `q_i` / `q_q` (`docs/bringup.md`, firmware rules).
 
@@ -137,8 +141,8 @@ SoftSPI; the demo board's hardware SPI1 on GPIO25-28 has the order CSn, SCK, TX,
      dipole, standard values per line 4.7 pF / 18 nH / 15 pF / 18 nH / 4.7 pF (caps to ground, so the common mode is
      filtered too; `sim/tx/board_lpf.py`): H3 -55.7…-60.1 dBc, H5 below -77 dBc at 5 corners x 15/60 ohm x n_off 0/3
      (today -14 / -23; pass line -36). The filter transforms the load and raises the power, so the pad current would
-     reach 13.8 mA rms at ff / 15 ohm with the 40 um final stage. **Proposed chip change: final stage 40 -> 20-22 um**
-     (pad current <= 9.3 / 9.9 mA, fundamental +2.0…+6.6 / +2.5…+7.2 dBm, supply 6.5-10.5 mA). Not done yet. Short
+     reach 13.8 mA rms at ff / 15 ohm with the 40 um final stage. A final stage of 20-22 um was proposed
+     (pad current <= 9.3 / 9.9 mA); **dropped (Matt, 2026-11-19): the 40 um stage stays.** Short
      experiments can run without the filter (harmonics as today).
    - In the 2x2 tile above lsdiv; wrapper LVS passes (5 mutations caught), KLayout DRC clean except fill rules.
    - CI on 6503f1c: TT precheck, LVS and docs workflows pass.
