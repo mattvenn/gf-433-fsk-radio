@@ -38,7 +38,7 @@ XSCH = ['rx_bias', 'rx_lna', 'rx_lsq', 'rx_lobuf', 'rx_mix', 'rx_bb', 'rx_lim', 
 # floorplan instance -> cell (subcircuit name)
 CELL = {'vco.core': 'vco_core', 'vco.ref': 'cgm_ref', 'vco.decap': 'decap_ls', 'xmdac': 'mdac', 'xvpd': 'vctrl_pd',
         'xbits': 'bits_inv', 'xtxd': 'tx_drv', 'xmac': 'tx_fine', 'rx.lna': 'rx_lna', 'rx.bias': 'rx_bias',
-        'rx.lsq': 'rx_lsq', 'rx.lobuf_i': 'rx_lobuf', 'rx.lobuf_q': 'rx_lobuf', 'rx.mix_i': 'rx_mix',
+        'rx.lsqh': 'rx_lsq_hdr', 'rx.lobuf_i': 'rx_lobuf', 'rx.lobuf_q': 'rx_lobuf', 'rx.mix_i': 'rx_mix',
         'rx.mix_q': 'rx_mix', 'rx.bb_i': 'rx_bb', 'rx.bb_q': 'rx_bb', 'rx.lim_i': 'rx_lim', 'rx.lim_q': 'rx_lim',
         'rx.decap': 'rx_decap', 'xdbg_bbi': 'dbg_tg', 'xdbg_bbq': 'dbg_tg', 'xdbg_nb': 'dbg_tg',
         'xdbg_vctrl': 'dbg_tg', 'xant_tx': 'ant_row2', 'xant_rx': 'ant_row1', 'xant_dbg': 'ant_row4'}
@@ -98,10 +98,13 @@ def main():
     S = {}
     sys.path.insert(0, str(REPO / 'layout/gen'))
     import vco_core
+    import rx_lsq
     for c in XSCH:
         t = (d / f'{c}.spice').read_text()
-        if c == 'vco_top':                       # the ring + lsdiv unit, cut from vco_top (layout/gen/vco_core.py)
-            t = vco_core.lvs_source(re.sub(r'\n\+', ' ', t))
+        if c == 'vco_top':                       # the ring + lsdiv + Q level shifter unit (layout/gen/vco_core.py)
+            t = vco_core.lvs_source(re.sub(r'\n\+', ' ', t), (d / 'rx_lsq.spice').read_text())
+        if c == 'rx_lsq':                        # rx_lsq_ls (in vco_core) and rx_lsq_hdr (the tile's rx.lsqh)
+            t = rx_lsq.split_source(t)
         for name, (pl, txt) in subckts(lvs_edits(c, t)).items():
             if name in S:
                 assert S[name][1].split('\n')[1:] == txt.split('\n')[1:] or name == 'rx_top', \

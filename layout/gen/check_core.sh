@@ -1,18 +1,19 @@
 #!/bin/bash
-# vco_core (ring_core_v3 + lsdiv + the under-lsdiv VDD_LS decap; the tile's split of vco_top) checks. A copy of
-# check_top.sh with the LVS source cut down from the same xschem vco_top netlist:
-#   1. netlist xschem/vco_top.sch headless -> <outdir>/xsch/vco_top.spice; LVS source vco_core_lvs.spice = that file
-#      with the vco_top subckt replaced by vco_core (ports VDD VDD_LS VSS vctrl bit0-4 bitb0-4 ck vg ls vbnf a2;
-#      xcore and xls as in vco_top; the VDD_LS decap as the drawn under-lsdiv group, 3 x W 26.0 / L 10 um: XDCU m=3;
-#      no xref, no main decap group), the cgm_ref subckt dropped, and lsdiv's "Cc a0 net1 2e-15" removed (metal
-#      fingers, parasitic C; check_lsdiv.sh). No n-well resistor in this cell, so no rnw repaint.
+# vco_core (ring_core_v3 + lsdiv + the Q-tap level shifter rx_lsq_ls + the VDD_LS decap fingers; the tile's split of
+# vco_top) checks. A copy of check_top.sh with the LVS source cut down from the same xschem vco_top netlist:
+#   1. netlist xschem/vco_top.sch and xschem/rx_lsq.sch headless -> <outdir>/xsch/; LVS source vco_core_lvs.spice =
+#      vco_top's netlist with the vco_top subckt replaced by vco_core (ports VDD VDD_LS VSS vctrl bit0-4 bitb0-4 ck vg
+#      ls vbnf lsq vq; xcore and xls as in vco_top; xlsq = rx_lsq_ls on a2 (rx_lsq.split_source()); the VDD_LS
+#      decap as drawn, 6 x W 13.0 / L 10 um: XDCU m=6; no xref, no main decap group), the cgm_ref subckt dropped, and
+#      ls_ac's "Cc a0 net1 2e-15" removed (metal fingers, parasitic C; check_lsdiv.sh). No n-well resistor here.
 #   2. magic DRC (hierarchical), flattened LVS extraction (flatten -dotoplabels: only vco_core's labels, so the blocks'
 #      VDD labels can't merge VDD and VDD_LS), antenna on a flattened copy, KLayout DRC (feol + beol, rules run > 0).
 #   3. netgen LVS; 4. lsdiv R1 size; 5. no Metal4/5;
-#   6. mutations (each must FAIL): XDCU m 3 -> 2, xls supply VDD_LS -> VDD, xls ck <-> ls, xcore vbnf <-> vctrl,
-#      XR1 r_length 159.125 -> 140 um (resistor check);
-#   7. the block port map from a hierarchical extraction (a2 on the ring's a2, a0 abutment, supplies), with four
-#      wrong expectations that must FAIL. netgen can't place a2: the ring is rotation-symmetric without lsdiv's Cc.
+#   6. mutations (each must FAIL): XDCU m 6 -> 5, xls supply VDD_LS -> VDD, xls ck <-> ls, xcore vbnf <-> vctrl,
+#      xlsq vq <-> lsq, XR1 r_length 159.125 -> 140 um (resistor check);
+#   7. the block port map from a hierarchical extraction (the Q level shifter's aq on the ring's a2, lsdiv's a0
+#      abutment, supplies), with six wrong expectations that must FAIL. netgen can't place a2: without ls_ac's Cc the
+#      ring is rotation-symmetric (no device of either level shifter is on its input).
 # Usage: bash layout/gen/check_core.sh [gds] [outdir]     defaults: layout/vco_core.gds build/vco_tile/check_core
 set -u
 REPO=$(pwd)
@@ -26,17 +27,17 @@ SETUP=$PDK_ROOT/$PDK/libs.tech/netgen/${PDK}_setup.tcl
 RC=$PDK_ROOT/$PDK/libs.tech/magic/$PDK.magicrc
 
 # ---- 1. schematic netlist + LVS copy ----
-NL=$(bash xschem/gen/netlist.sh xschem "$OUT/xsch" vco_top) || { echo "netlist failed: $NL"; exit 1; }
+NL=$(bash xschem/gen/netlist.sh xschem "$OUT/xsch" vco_top rx_lsq) || { echo "netlist failed: $NL"; exit 1; }
 SRC0=$OUT/xsch/vco_top.spice
 SRC=$OUT/xsch/vco_core_lvs.spice
-python3 -c "import sys; sys.path.insert(0, 'layout/gen'); import vco_core; open(sys.argv[2], 'w').write(vco_core.lvs_source(open(sys.argv[1]).read()))" "$SRC0" "$SRC"
+python3 -c "import sys; sys.path.insert(0, 'layout/gen'); import vco_core; open(sys.argv[3], 'w').write(vco_core.lvs_source(open(sys.argv[1]).read(), open(sys.argv[2]).read()))" "$SRC0" "$OUT/xsch/rx_lsq.spice" "$SRC"
 [ $? -eq 0 ] || { echo "LVS copy edits did not apply"; exit 1; }
 
 cd "$OUT"
 : > summary.txt
 log() { echo "$*" | tee -a summary.txt; }
 log "gds $GDS  top $B  magic $(magic --version)  netgen $(netgen -batch quit 2>/dev/null | grep -o 'Netgen [0-9.]*' | head -1)  klayout $(klayout -v)"
-log "== schematic: xschem/vco_top.sch; $NL; LVS source: vco_core cut from vco_top ($(grep -c '^Cc a0 ' "$SRC") Cc lines left, $(grep -c '^xref' "$SRC") xref, $(grep -c '^XDCU' "$SRC") XDCU)"
+log "== schematic: xschem/vco_top.sch + rx_lsq.sch; $NL; LVS source: vco_core cut from vco_top ($(grep -c '^Cc a0 ' "$SRC") Cc lines left, $(grep -c '^xref' "$SRC") xref, $(grep -c '^XDCU' "$SRC") XDCU, $(grep -c '^xlsq' "$SRC") xlsq)"
 
 echo "load vco_core" > rnwfix.tcl   # (no rnw here; makes vco_core the current cell after gds read)
 
@@ -160,17 +161,29 @@ def num(v):
     m = re.fullmatch(r"([-+\d.eE]+?)([munpf]?)", v.strip())
     return float(m.group(1)) * SUF.get(m.group(2), 1)
 def res(path):
+    """Every resistor of the netlist, flattened from its first .subckt named vco_core (each subckt instance counts:
+    lsdiv and the Q level shifter rx_lsq_ls each hold one ls_ac with its R1)."""
     txt = re.sub(r"\n\+", " ", open(path).read())
-    out = []
+    subs, cur = {}, None
     for ln in txt.splitlines():
         t = ln.split()
-        if not t or t[0][:1] not in "Xx":
-            continue
-        model = [x for x in t[1:] if "=" not in x][-1]
-        if model in MODELS:
-            kv = dict(x.split("=", 1) for x in t if "=" in x)
-            out.append((model, num(kv["r_width"]), num(kv["r_length"])))
-    return sorted(out)
+        if t and t[0].lower() == ".subckt":
+            cur = subs.setdefault(t[1], [])
+        elif t and t[0].lower() == ".ends":
+            cur = None
+        elif cur is not None and t and t[0][:1] in "Xx":
+            cur.append(t)
+    def walk(name):
+        out = []
+        for t in subs.get(name, []):
+            model = [x for x in t[1:] if "=" not in x][-1]
+            if model in MODELS:
+                kv = dict(x.split("=", 1) for x in t if "=" in x)
+                out.append((model, num(kv["r_width"]), num(kv["r_length"])))
+            elif model in subs:
+                out += walk(model)
+        return out
+    return sorted(walk("vco_core"))
 src, lay = res(sys.argv[1]), res(sys.argv[2])
 ok = len(src) == len(lay)
 txt = []
@@ -195,7 +208,8 @@ mutate() {  # mutate <tag> <sed expr> <description>
     log "== mutation $3: PASS (BAD: not caught)"; mut_ok=0
   else log "== mutation $3: FAIL (expected)  [$(why $1)]"; fi
 }
-mutate lvs_mut_m   '/^XDCU /s/m=3$/m=2/'                      "XDCU m 3 -> 2 (one VDD_LS decap finger)"
+mutate lvs_mut_m   '/^XDCU /s/m=6$/m=5/'                      "XDCU m 6 -> 5 (one VDD_LS decap finger)"
+mutate lvs_mut_q   '/^xlsq /s/^xlsq vq VSS a2 lsq /xlsq lsq VSS a2 vq /' "xlsq vq <-> lsq (Q level shifter supply / output)"
 mutate lvs_mut_sup '/^xls /s/^xls VDD_LS /xls VDD /'          "xls supply VDD_LS -> VDD (supplies merged)"
 mutate lvs_mut_a2  '/^xls /s/ a0 ck ls lsdiv$/ a0 ls ck lsdiv/' "xls ck <-> ls"
 mutate lvs_mut_vb  '/^xcore /s/^xcore VDD VSS vbnf vctrl /xcore VDD VSS vctrl vbnf /' "xcore vbnf <-> vctrl"
@@ -242,11 +256,11 @@ for e in sys.argv[2].split():
 print(("PASS" if not bad else "FAIL") + "  " + ("; ".join(bad) if bad else sys.argv[2]))
 PYEOF
 }
-EXP="ring_core.a2=a2 ring_core.a0=lsdiv_0/a0 lsdiv.a0=lsdiv_0/a0 ring_core.vctrl=vctrl ring_core.vbn=vbnf ring_core.vg=vg ring_core.VDD=VDD lsdiv.VDD=VDD_LS lsdiv.ck=ck lsdiv.ls=ls ring_core.bit2=bit2 ring_core.bitb2=bitb2"
+EXP="ring_core.a2=a2 rx_lsq_ls.aq=a2 ring_core.a0=a0 lsdiv.a0=a0 rx_lsq_ls.vq=vq rx_lsq_ls.lsq=lsq rx_lsq_ls.VSS=VSS ring_core.vctrl=vctrl ring_core.vbn=vbnf ring_core.vg=vg ring_core.VDD=VDD lsdiv.VDD=VDD_LS lsdiv.ck=ck lsdiv.ls=ls ring_core.bit2=bit2 ring_core.bitb2=bitb2"
 pm=$(pmap "$EXP")
 log "== block port map (hierarchical extraction): $pm"
 pm_ok=0; [[ $pm == PASS* ]] && pm_ok=1
-for wrong in "ring_core.a1=a2" "ring_core.a3=a2" "ring_core.a4=a2" "lsdiv.VDD=VDD"; do
+for wrong in "ring_core.a1=a2" "ring_core.a3=a2" "ring_core.a4=a2" "lsdiv.VDD=VDD" "rx_lsq_ls.aq=a0" "rx_lsq_ls.vq=VDD_LS"; do
   r=$(pmap "$wrong")
   if [[ $r == PASS* ]]; then log "== mutation port map $wrong: PASS (BAD: not caught)"; mut_ok=0
   else log "== mutation port map $wrong: FAIL (expected)  [$r]"; fi

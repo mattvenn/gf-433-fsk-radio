@@ -24,7 +24,16 @@ RC=$PDK_ROOT/$PDK/libs.tech/magic/$PDK.magicrc
 SETUP=$PDK_ROOT/$PDK/libs.tech/netgen/${PDK}_setup.tcl
 NICE="nice -n 19"
 
-NL=$(bash xschem/gen/netlist.sh xschem "$OUT/xsch" $B) || { echo "netlist failed: $NL"; exit 1; }
+case $B in
+  # the I/Q-symmetric split of rx_lsq (layout/gen/rx_lsq.py --part ls / hdr): the source is xschem's rx_lsq cut in two
+  # by rx_lsq.split_source() (the level shifter rx_lsq_ls goes into vco_core, the header rx_lsq_hdr stays in the tile)
+  rx_lsq_ls|rx_lsq_hdr)
+    NL=$(bash xschem/gen/netlist.sh xschem "$OUT/xsch" rx_lsq) || { echo "netlist failed: $NL"; exit 1; }
+    python3 -c "import sys; sys.path.insert(0, 'layout/gen'); import rx_lsq; open(sys.argv[2], 'w').write(rx_lsq.split_source(open(sys.argv[1]).read()))" \
+      "$OUT/xsch/rx_lsq.spice" "$OUT/xsch/$B.spice" || { echo "split_source failed"; exit 1; }
+    NL="$NL; split by rx_lsq.split_source()" ;;
+  *) NL=$(bash xschem/gen/netlist.sh xschem "$OUT/xsch" $B) || { echo "netlist failed: $NL"; exit 1; } ;;
+esac
 SRC=$OUT/xsch/${B}_lvs.spice
 # one line per device (for the mutations); lsdiv's level shifter (ls_ac) has "Cc a0 net1 2e-15": Cc is drawn as
 # M2 / M3 metal fingers, which extract as parasitic C, not a device, so (as layout/gen/check_lsdiv.sh) the LVS copy

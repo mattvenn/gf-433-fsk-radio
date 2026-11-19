@@ -19,7 +19,7 @@
    "rot": 0,
    "mirror": true,
    "w": 110.58,
-   "h": 69.76,
+   "h": 70.71,
    "supply": "VAPWR"
   },
   {
@@ -180,16 +180,17 @@
    "supply": "VAPWR"
   },
   {
-   "inst": "rx.lsq",
-   "cell": "rx_lsq",
+   "inst": "rx.lsqh",
+   "cell": "rx_lsq_hdr",
    "x": 216.45,
-   "y": 107.2,
-   "orient": "MX",
-   "rot": 0,
-   "mirror": true,
+   "y": 141.525,
+   "orient": "R180",
+   "rot": 180,
+   "mirror": false,
    "w": 40.49,
-   "h": 54.75,
-   "supply": "VAPWR"
+   "h": 20.425,
+   "supply": "VAPWR",
+   "note": "the Q-tap header (Hq + Cq) only: the Q level shifter moved into vco.core (branch iq-symmetry, 2026-11-19)"
   },
   {
    "inst": "rx.lobuf_q",

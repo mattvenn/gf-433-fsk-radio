@@ -2,7 +2,7 @@
 * from layout/gen/tile_nets.py, the xschem block schematics, the macro netlist and the PDK standard cells. Do not edit by hand.
 
 .subckt tt_um_mattvenn_gf433_vco VGND VDPWR VAPWR ui_in[0] ui_in[1] ui_in[2] ui_in[3] ui_in[4] ui_in[5] ui_in[6] ui_in[7] uo_out[0] uo_out[1] uo_out[2] uo_out[3] uo_out[4] uo_out[5] uo_out[6] uo_out[7] uio_in[0] uio_in[1] uio_in[2] uio_in[3] uio_in[4] uio_in[5] uio_in[6] uio_in[7] uio_out[0] uio_out[1] uio_out[2] uio_out[3] uio_out[4] uio_out[5] uio_out[6] uio_out[7] uio_oe[0] uio_oe[1] uio_oe[2] uio_oe[3] uio_oe[4] uio_oe[5] uio_oe[6] uio_oe[7] ua[0] ua[1] ua[2] ua[3] ua[4] ua[5] ua[6] ua[7] ena clk rst_n
-xvco_core VAPWR VAPWR VGND vctrl ui_in[0] ui_in[1] ui_in[2] ui_in[3] ui_in[4] bitb0 bitb1 bitb2 bitb3 bitb4 ck vg ls vbnf a2 vco_core
+xvco_core VAPWR VAPWR VGND vctrl ui_in[0] ui_in[1] ui_in[2] ui_in[3] ui_in[4] bitb0 bitb1 bitb2 bitb3 bitb4 ck vg ls vbnf lsq vq vco_core
 xvco_ref VAPWR VGND nc_vco_ref_vbn vbnf cgm_ref
 xvco_decap VAPWR VGND decap_ls
 xxmdac VAPWR VGND vg vbnf dac_tn[29] dac_tn[27] dac_tn[25] dac_tn[23] dac_tn[21] dac_tn[19] dac_tn[17] dac_tn[15] dac_tn[13] dac_tn[11] dac_tn[9] dac_tn[7] dac_tn[5] dac_tn[3] dac_tn[1] dac_bn[4] dac_bn[2] dac_bn[0] dac_sdn dac_bn[1] dac_bn[3] dac_tn[0] dac_tn[2] dac_tn[4] dac_tn[6] dac_tn[8] dac_tn[10] dac_tn[12] dac_tn[14] dac_tn[16] dac_tn[18] dac_tn[20] dac_tn[22] dac_tn[24] dac_tn[26] dac_tn[28] dac_tn[30] mdac
@@ -12,7 +12,7 @@ xxtxd VDPWR VGND ls ui_in[5] ui_in[6] ua[3] ua[2] tx_drv
 xxmac ck uo_out[0] clk uio_in[2] dac_sdn uo_out[3] uo_out[1] uo_out[2] ui_in[7] uio_out[3] uio_in[1] rst_n rx_en uio_in[0] VDPWR VGND dac_bn[4] dac_bn[3] dac_bn[2] dac_bn[1] dac_bn[0] dac_tn[30] dac_tn[29] dac_tn[28] dac_tn[27] dac_tn[26] dac_tn[25] dac_tn[24] dac_tn[23] dac_tn[22] dac_tn[21] dac_tn[20] dac_tn[19] dac_tn[18] dac_tn[17] dac_tn[16] dac_tn[15] dac_tn[14] dac_tn[13] dac_tn[12] dac_tn[11] dac_tn[10] dac_tn[9] dac_tn[8] dac_tn[7] dac_tn[6] dac_tn[5] dac_tn[4] dac_tn[3] dac_tn[2] dac_tn[1] dac_tn[0] dbg_sel[3] dbg_sel[2] dbg_sel[1] dbg_sel[0] tx_fine
 xrx_lna VAPWR VGND ua[4] ua[5] ri_p ri_n rq_p rq_n nb enb rx_lna
 xrx_bias VAPWR VGND rx_en enb nb rx_bias
-xrx_lsq VAPWR VGND a2 VGND lsq rx_lsq
+xrx_lsqh VAPWR VGND VGND vq rx_lsq_hdr
 xrx_lobuf_i VAPWR VGND ls rx_en lo_i lob_i rx_lobuf
 xrx_lobuf_q VAPWR VGND lsq rx_en lo_q lob_q rx_lobuf
 xrx_mix_i VAPWR VGND ri_p ri_n bi_p bi_n lo_i lob_i rx_mix
@@ -67,14 +67,12 @@ xdcu34 VDPWR VGND decap_u
 xdcu35 VDPWR VGND decap_u
 xdcu36 VDPWR VGND decap_u
 xdcu37 VDPWR VGND decap_u
-xdcu38 VDPWR VGND decap_u
-xdcu39 VDPWR VGND decap_u
+xdcu38 VAPWR VGND decap_u
+xdcu39 VAPWR VGND decap_u
 xdcu40 VAPWR VGND decap_u
 xdcu41 VAPWR VGND decap_u
 xdcu42 VAPWR VGND decap_u
 xdcu43 VAPWR VGND decap_u
-xdcu44 VAPWR VGND decap_u
-xdcu45 VAPWR VGND decap_u
 xtie_uo_out_6 uo_out[6] VAPWR VAPWR VGND VGND gf180mcu_fd_sc_mcu7t5v0__tiel
 xtie_uo_out_7 uo_out[7] VAPWR VAPWR VGND VGND gf180mcu_fd_sc_mcu7t5v0__tiel
 xtie_uio_out_0 uio_out[0] VAPWR VAPWR VGND VGND gf180mcu_fd_sc_mcu7t5v0__tiel
@@ -1945,6 +1943,19 @@ XTTp net1 lsq net2 net2 pfet_03v3 L=0.28u W=1.0499999999999998u nf=1 ad=0.524999
 XTTn net1 lsq VSS VSS nfet_03v3 L=0.28u W=0.41999999999999993u nf=1 ad=0.20999999999999996p as=0.20999999999999996p  pd=1.8399999999999999u ps=1.8399999999999999u nrd=0 nrs=0 sa=0 sb=0 sd=0
 XDq lsq qenb VSS VSS nfet_03v3 L=0.28u W=0.41999999999999993u nf=1 ad=0.20999999999999996p as=0.20999999999999996p  pd=1.8399999999999999u ps=1.8399999999999999u nrd=0 nrs=0 sa=0 sb=0 sd=0
 .ends rx_lsq
+
+.subckt rx_lsq_hdr VDD VSS qenb vq
+XHq vq qenb VDD VDD pfet_03v3 L=0.28u W=10.0u nf=1 ad=5.0p as=5.0p pd=21.0u ps=21.0u nrd=0 nrs=0 sa=0 sb=0 sd=0 m=2
+XCq VSS vq VSS VSS nfet_03v3 L=10.0u W=24.57u nf=1 ad=12.285p as=12.285p pd=50.14u ps=50.14u nrd=0 nrs=0 sa=0 sb=0 sd=0
+.ends rx_lsq_hdr
+
+.subckt rx_lsq_ls vq VSS aq lsq
+xls vq VSS aq lsq ls_ac
+xd1 vq VSS lsq net3 tspc_t1
+XTTp net1 lsq vq vq pfet_03v3 L=0.28u W=1.0499999999999998u nf=1 ad=0.5249999999999999p as=0.5249999999999999p pd=3.0999999999999996u ps=3.0999999999999996u nrd=0 nrs=0 sa=0 sb=0 sd=0
+XTTn net1 lsq VSS VSS nfet_03v3 L=0.28u W=0.41999999999999993u nf=1 ad=0.20999999999999996p as=0.20999999999999996p pd=1.8399999999999999u ps=1.8399999999999999u nrd=0 nrs=0 sa=0 sb=0 sd=0
+XDq lsq VSS VSS VSS nfet_03v3 L=0.28u W=0.41999999999999993u nf=1 ad=0.20999999999999996p as=0.20999999999999996p pd=1.8399999999999999u ps=1.8399999999999999u nrd=0 nrs=0 sa=0 sb=0 sd=0
+.ends rx_lsq_ls
 
 .subckt rx_mix VDD VSS rfp rfn bbp bbn lo lob
 *.iopin VDD
@@ -3898,10 +3909,11 @@ XXAp a b VDD VDD pfet_03v3 L=0.28u W=1.0499999999999998u nf=1 ad=0.5249999999999
 XXAn a b VSS VSS nfet_03v3 L=0.28u W=0.41999999999999993u nf=1 ad=0.20999999999999996p as=0.20999999999999996p  pd=1.8399999999999999u ps=1.8399999999999999u nrd=0 nrs=0 sa=0 sb=0 sd=0
 .ends tx_split
 
-.subckt vco_core VDD VDD_LS VSS vctrl bit0 bit1 bit2 bit3 bit4 bitb0 bitb1 bitb2 bitb3 bitb4 ck vg ls vbnf a2
+.subckt vco_core VDD VDD_LS VSS vctrl bit0 bit1 bit2 bit3 bit4 bitb0 bitb1 bitb2 bitb3 bitb4 ck vg ls vbnf lsq vq
 xcore VDD VSS vbnf vctrl bit0 bit1 bit2 bit3 bit4 bitb0 bitb1 bitb2 bitb3 bitb4 vg a0 net1 a2 net2 net3 ring_core_v3
 xls VDD_LS VSS a0 ck ls lsdiv
-XDCU VSS VDD_LS VSS VSS nfet_03v3 L=10.0u W=26.0u nf=1 ad=0 as=0 pd=0 ps=0 nrd=0 nrs=0 sa=0 sb=0 sd=0 m=3
+xlsq vq VSS a2 lsq rx_lsq_ls
+XDCU VSS VDD_LS VSS VSS nfet_03v3 L=10.0u W=13.0u nf=1 ad=0 as=0 pd=0 ps=0 nrd=0 nrs=0 sa=0 sb=0 sd=0 m=6
 .ends vco_core
 
 .subckt vctrl_pd a b

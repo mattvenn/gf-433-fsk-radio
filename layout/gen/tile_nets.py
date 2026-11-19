@@ -16,7 +16,7 @@ SUPPLY = {
     'xtxd': VD, 'xmac': VD, 'xties': VA,   # tile.py ties(): the tie row sits on the VAPWR rail
     'xant_tx': VA, 'xant_rx': VA, 'xant_dbg': VA,
     'xdbg_bbi': VA, 'xdbg_bbq': VA, 'xdbg_nb': VA, 'xdbg_vctrl': VA,
-    'rx.lna': VA, 'rx.bias': VA, 'rx.lsq': dict(VA, qenb='VGND'),   # qenb tied to VSS (open review item)
+    'rx.lna': VA, 'rx.bias': VA, 'rx.lsqh': dict(VA, qenb='VGND'),  # qenb tied to VSS (open review item)
     'rx.lobuf_i': VA, 'rx.lobuf_q': VA, 'rx.mix_i': VA, 'rx.mix_q': VA,
     'rx.bb_i': VA, 'rx.bb_q': VA, 'rx.lim_i': VA, 'rx.lim_q': VA, 'rx.decap': VA,
 }
@@ -50,8 +50,9 @@ def nets():
         'tx_outn': [('xtxd', 'out_n'), ('PIN', 'ua[2]')],
         # LO
         'ls': [('vco.core', 'ls'), ('xtxd', 'ls'), ('rx.lobuf_i', 'in')],
-        'a2': [('vco.core', 'a2'), ('rx.lsq', 'aq')],
-        'lsq': [('rx.lsq', 'lsq'), ('rx.lobuf_q', 'in')],
+        # the Q tap (branch iq-symmetry): its level shifter is inside vco.core on a2, its header rx.lsqh supplies vq
+        'lsq': [('vco.core', 'lsq'), ('rx.lobuf_q', 'in')],
+        'vq': [('rx.lsqh', 'vq'), ('vco.core', 'vq')],
         # VCO bias, fine tuning
         'vg': [('xmdac', 'vg'), ('vco.core', 'vg')],
         'vbnf': [('vco.ref', 'vbnf'), ('vco.core', 'vbnf'), ('xmdac', 'vbnf')],

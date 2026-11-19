@@ -193,8 +193,8 @@ mutate rxin "ua[4] <-> ua[5] at the LNA" '/^xrx_lna /s/ ua\[4\] ua\[5\] / ua[5] 
 mutate qiq "q_i <-> q_q at uo[4] / uo[5]" '/^xrx_lim_i /s/ uo_out\[4\] / uo_out[5] /' '/^xrx_lim_q /s/ uo_out\[5\] / uo_out[4] /'
 mutate dbgsel "dbg_sel[0] <-> dbg_sel[1] at the baseband switches" \
   '/^xxdbg_bbi /s/ dbg_sel\[0\] / dbg_sel[1] /' '/^xxdbg_bbq /s/ dbg_sel\[1\] / dbg_sel[0] /'
-mutate a2ls "a2 <-> ls at the receiver (rx_lsq aq, LO buffer I in)" \
-  '/^xrx_lsq /s/ a2 / ls /' '/^xrx_lobuf_i /s/ ls / a2 /'
+mutate lslsq "ls <-> lsq at the LO buffers (I / Q LO taps swapped)" \
+  '/^xrx_lobuf_i /s/ ls / lsq /' '/^xrx_lobuf_q /s/ lsq / ls /'
 mutate rxsup "mixer Q on VDPWR instead of VAPWR" '/^xrx_mix_q /s/^xrx_mix_q VAPWR /xrx_mix_q VDPWR /'
 mutate bias "vbnf <-> vctrl at cgm_ref" '/^xvco_ref /s/ vbnf / vctrl /'
 # ua[1] is the VGND sense pin (tile_nets.SUPPLY_PINS): with the strap gone from the source it must fail

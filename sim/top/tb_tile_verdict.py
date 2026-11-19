@@ -29,6 +29,10 @@ Pass criteria (and why):
           override within 20 mV of 1.65 V, ua[1] < 1 mV with 1 mA in (the ground-sense pin).
   6 Supply  f moves < 0.5 % at VAPWR = VDPWR = 3.15 / 3.45 V; during TX the VAPWR ripple < 3 mV (3 x the 1.0 mV
           with the TX off) and the VDPWR ripple < 30 mV.
+  7 I/Q LO (iq-symmetry, 2026-11-19) the LO phase at the mixers, Q lagging I, 72 +- 3 deg at tt / ss / ff (the
+          symmetric taps on the block bench give 71.0-72.2 deg, sim/top/a2_load/results.md; +0.5 deg per fF on a2);
+          ring sane. Mutation: + 16.6 fF on a2 (the old layout's a2 load, about +8 deg) must fail.
+Results directory: TILE_SIMS_OUT (default build/tile_sims; the iq-symmetry runs are in build/tile_sims_iq).
 """
 import json
 import sys
@@ -361,6 +365,28 @@ def check_supply(mut=False):
     return out
 
 
+# ------------------------------------------------------------------------------------------------ 7 I/Q LO phase
+IQ_DEG, IQ_TOL = 72.0, 3.0
+
+
+def check_iq(mut=False):
+    out = []
+    for n in (['mut_iq_a2c'] if mut else ['iq_c_tt', 'iq_c_ss', 'iq_c_ff']):
+        r = res(n)
+        b = bad(r)
+        if b:
+            out.append((f'7 I/Q LO {n}', None if b == 'pending' else False, b))
+            continue
+        okr, why = ring_ok(r)
+        ph = r.get('lo_iq_phase', float('nan'))
+        ok = okr and abs(ph - IQ_DEG) <= IQ_TOL
+        out.append((f'7 I/Q LO {n}', ok, f"lo_q lags lo_i {ph:.1f} deg (want {IQ_DEG:.0f} +- {IQ_TOL:.0f}; spread "
+                    f"{r.get('lo_iq_phase_spread', float('nan')):.1f}), lsq lags ls {r.get('ls_lsq_phase', float('nan')):.1f} "
+                    f"deg, a0 -> a2 {r.get('a0_a2_phase', float('nan')):.1f} deg, f {r['f_a2'] / 1e6:.2f} MHz"
+                    + ('' if okr else f'; ring: {why}')))
+    return out
+
+
 def all_ok(xs):
     if any(x is False for x in xs):
         return False
@@ -374,7 +400,7 @@ def main():
     checks = []
     v, rows = check_vco(mut)
     checks += v
-    for f in (check_tx, check_rx, check_pwr, check_dbg, check_supply):
+    for f in (check_tx, check_rx, check_pwr, check_dbg, check_supply, check_iq):
         checks += f(mut)
     sym = {True: 'PASS', False: 'FAIL', None: 'pending'}
     for name, ok, why in checks:
@@ -382,7 +408,7 @@ def main():
     if mut:
         # every mutated check must fail (the supply impedance rows don't take mutants)
         mc = [(n, ok) for n, ok, _ in checks if n.startswith(('1b', '2 TX on mut', '3 RX mut', '3 RX I/Q', '4 power-up mut',
-                                                              '5 debug mux mut', '6 ring supply'))]
+                                                              '5 debug mux mut', '6 ring supply', '7 I/Q LO mut'))]
         caught = [n for n, ok in mc if ok is False]
         miss = [n for n, ok in mc if ok is True]
         pend = [n for n, ok in mc if ok is None]
