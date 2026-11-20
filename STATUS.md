@@ -68,9 +68,11 @@ receiver bias nb (10.55 fF), giving the Q mixer a one-sided start-up offset. nb 
 (`tile_nets.KEEP_AWAY`); lsq - nb 0.13 fF, all tile checks clean. Rerun (`sim/top/tile_results.md`, "Update
 2026-11-20"): both arms' mixer offsets equal again (-3.4 ... -3.9 mV), nb at f_LO 0.34 mV (was 7.1), I/Q LO 72.9 /
 74.1 / 72.8° at tt / ss / ff (now all pass), RX settled -95 dBm pass, TX +6.28 dBm code 9, 11 / 11 mutations. The
-per-arm start-up offset is closed. **Open:** the unsettled 14 µs +offset run (`rxh_c_tt_-70_p`) still fails its
-frequency check (q_i / q_q 233 / 240 kHz vs 202, 4 edges) on the now common start-up offset (about -1.1 V on both
-baseband arms, bigger than fca76de's -0.83 V); the -offset run and the settled run pass.
+per-arm start-up offset is closed. **Decision 2026-11-20 (Matt):** the unsettled 14 µs RX runs (`rxh_*`) check phase
+and sign only; frequency is checked on the settled runs (`rxs_*`). The +offset run read q_i / q_q 233 / 240 kHz vs 202
+from 4 edges on the common start-up offset, while the settled run reads 198 / 200 kHz. Verdict: all pass, 12 / 12
+mutations (new: settled f_qi +30 %). Still unexplained (minor): the common start-up offset is about -1.1 V on both
+baseband arms against -0.83 V at fca76de.
 
 **Decision 2026-11-17 (Matt):** no TX/RX hardware interlock. Firmware keeps RX_EN off while transmitting and waits
 about 1 ms after TX before trusting `q_i` / `q_q` (`docs/bringup.md`, firmware rules).

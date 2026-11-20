@@ -79,6 +79,12 @@ MHz): why the offset is larger with the LO at 405 MHz has not been checked. The 
 one that shows the receiver working, and it passes; on the bench the same settling shows as the receiver's
 recovery time of about 1 ms (`docs/bringup.md`, R11 and the firmware rules). The check was not loosened.
 
+**Check changed (Matt, 2026-11-20).** Four edges at 20-25 % duty can't give a frequency, so the unsettled runs
+(`rxh_*`) now check toggling, the limiter I/Q phase (50-110°), its agreement with the baseband phase and the sign flip
+with the offset; the ±15 % frequency limit applies to the settled runs (`rxs_*`), which read 198 / 200 kHz for 200.4.
+A new analysis mutation (the settled run's f_qi +30 %) is caught: `tb_tile_verdict.py` now passes every check, and
+catches 12 / 12 mutations.
+
 ## Update 2026-11-19: I/Q-symmetric LO taps (branch `iq-symmetry`)
 
 The receiver's Q level shifter moved into `vco_core` as a mirror image of lsdiv, so both ring taps drive a level
