@@ -10,14 +10,14 @@
 module vco_core (input wire VDD, input wire VDD_LS, input wire VSS, input wire vctrl,
                  input wire bit0, input wire bit1, input wire bit2, input wire bit3, input wire bit4,
                  input wire bitb0, input wire bitb1, input wire bitb2, input wire bitb3, input wire bitb4,
-                 output wire ck, input wire vg, output wire ls, input wire vbnf, output wire a2);
+                 output wire ck, input wire vg, output wire ls, input wire vbnf, output wire lsq, input wire vq);
     reg osc = 1'b0;
     wire [4:0] code  = {bit4, bit3, bit2, bit1, bit0};
     wire [4:0] codeb = {bitb4, bitb3, bitb2, bitb1, bitb0};
     wire       code_ok = (codeb === ~code);     // the coarse DAC's switch pairs see complementary drive
     assign ck = osc;
     assign ls = osc;
-    assign a2 = osc;
+    assign lsq = vq & osc;                       // the Q level shifter (rx_lsq_ls) runs from vq, the Q header's output
 endmodule
 
 module cgm_ref (input wire VDD, input wire VSS, inout wire vbn, output wire vbnf);
@@ -84,8 +84,10 @@ module rx_lna (input wire VDD, input wire VSS, input wire inp, input wire inn, o
     assign {oip, oin, oqp, oqn} = enb ? 4'b0000 : {inp, inn, inp, inn};
 endmodule
 
-module rx_lsq (input wire VDD, input wire VSS, input wire aq, input wire qenb, output wire lsq);
-    assign lsq = ~qenb & aq;
+// the Q level shifter's supply header (the level shifter itself is inside vco_core since iq-symmetry): vq is up
+// while qenb is low
+module rx_lsq_hdr (input wire VDD, input wire VSS, input wire qenb, output wire vq);
+    assign vq = ~qenb;
 endmodule
 
 module rx_lobuf (input wire VDD, input wire VSS, input wire in, input wire en, output wire lo, output wire lob);
