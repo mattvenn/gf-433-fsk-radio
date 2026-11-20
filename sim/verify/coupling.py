@@ -64,13 +64,13 @@ def ac_deck(vic):
     body = re.sub(r'(?m)^B(lobi|lobq) (\S+) 0 V=.*$', r'V\1 \2 0 0', body)
     inj = ''.join(f'Ij{k} 0 {n} dc 0 ac 0\n' for k, (n, _, _) in enumerate(vic))
     inj += 'Isp 0 bi_p dc 0 ac 0\nIsn bi_n 0 dc 0 ac 0\n'
-    loop = ''
+    loop = 'set appendwrite\n'
     for k in range(len(vic)):
         loop += (f'alter ij{k} acmag=1\nac lin 1 {F} {F}\n'
-                 f'let zi = mag(v(xli.gcp)-v(xli.gcn))\nlet zq = mag(v(xlq.gcp)-v(xlq.gcn))\n'
-                 f'echo "ZT {k} $&zi[0] $&zq[0]"\nalter ij{k} acmag=0\ndestroy all\n')
+                 f'let zi = v(xli.gcp)-v(xli.gcn)\nlet zq = v(xlq.gcp)-v(xlq.gcn)\n'
+                 f'wrdata zt.txt zi zq\nalter ij{k} acmag=0\ndestroy all\n')
     loop += (f'alter isp acmag=1\nalter isn acmag=1\nac lin 1 {F} {F}\n'
-             'let h = mag(v(xli.gcp)-v(xli.gcn))/mag(v(bi_p)-v(bi_n))\necho "HSIG $&h[0]"\n')
+             'let h = v(xli.gcp)-v(xli.gcn)\nlet bd = v(bi_p)-v(bi_n)\nwrdata hs.txt h bd\n')
     deck = f"""* coupling budget: transimpedance to the comparator inputs, extracted blocks, LO held
 {rxc.hdr('typical', pad=True)}{rx_top.block()}
 VDD VDD 0 {rxc.VDD}
@@ -126,7 +126,8 @@ def tile_caps():
     caps = []
     for m in re.finditer(r'(?m)^C\S+ (\S+) (\S+) (\S+)', txt):
         a, b, v = m.groups()
-        v = float(v.rstrip('f')) * 1e-15 if v.endswith('f') else float(v)
+        sc = {'a': 1e-18, 'f': 1e-15, 'p': 1e-12, 'n': 1e-9}
+        v = float(v[:-1]) * sc[v[-1]] if v[-1] in sc else float(v)
         caps.append((a, b, v))
     sub = re.search(r'(?ms)^\.subckt \S+ (.*?)$(.*?)^\.ends', re.sub(r'\n\+', ' ', txt))
     return caps, signatures(parse_devs(sub.group(2)))
@@ -138,9 +139,17 @@ def main():
     a = ap.parse_args()
     OUT.mkdir(parents=True, exist_ok=True)
     vic = victims()
+    dd = OUT / 'ac'
+    for f in ('zt.txt', 'hs.txt'):
+        (dd / f).unlink(missing_ok=True)
     d, log, fl = X.run('../coupling/ac', ac_deck(vic))
-    zt = {int(r[0]): (r[1], r[2]) for r in rxc.tag(log, 'ZT')}
-    h = rxc.tag(log, 'HSIG')
+    try:
+        z = np.atleast_2d(np.loadtxt(d / 'zt.txt'))
+        zt = {k: (float(abs(z[k, 1] + 1j * z[k, 2])), float(abs(z[k, 4] + 1j * z[k, 5]))) for k in range(len(z))}
+        hs = np.loadtxt(d / 'hs.txt')
+        h = [[float(abs(hs[1] + 1j * hs[2]) / abs(hs[4] + 1j * hs[5]))]]
+    except (OSError, ValueError, IndexError):
+        zt, h = {}, []
     r = dict(flags=fl, f_hz=F, vq1=VQ1)
     if len(zt) != len(vic) or not h:
         r['error'] = f'ac: {len(zt)} of {len(vic)} nodes, HSIG {bool(h)}'
