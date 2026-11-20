@@ -199,8 +199,13 @@ Written so the work can resume from git alone (the smoke outputs are in `build/v
    offset the second rising switching point fell outside the run, ngspice logged "Error: measure ... out of
    interval" and the log flag marked the run bad (and the fallback to the first switching point gave a wrong
    offset). The bench now runs 3 periods and reads only the second switching points; `chain_x.py mc --only cmp`
-   redoes the comparator part of an existing sample. To do: redo it for every sample whose `cmp/deck.cir` still has
-   the 2-period `tran`, then `python3 sim/verify/mc_report.py`.
+   redoes the comparator part of an existing sample. Done for every sample: the MC smoke now passes at tt / ss / ff
+   (N = 20 / 10 / 10, extracted blocks): comparator offset sigma 6.3-7.5 mV, |offset| + hysteresis at most 61 mV
+   against the 124 mV limit; stage-1 offset at most 130 mV against 0.5 V; mixer offset -4.0 ... -4.5 mV (sigma
+   0.05 mV: mostly LO self-mixing); I/Q conversion phase sigma 0.3-0.4°; model sensitivity -110.5 dBm nominal, worst
+   +0.28 dB. Supply current 5.7 ± 0.7-0.9 mA (the bias reference's spread; the model's NF does not follow it).
+   Mutations caught: mismatch off gives identical numbers for two seeds; the merged stage-1 fingers are flagged
+   by the static check, and their stage-1 offset sigma is 26.6 mV against 10.2 mV (F 6.8, p 5e-4).
 3. *TX -> RX 1.47 ms against the 1 ms firmware wait*: a real result, not a design error: the baseband's AC couplings
    recover slowly after rx_en (0.5-0.9 ms after a 10 mV step in `rx_design.md`; from the fully-off state here 1.47 ms;
    after an in-band overload 1.90 ms). Proposed (not applied): change `bringup.md` firmware rule 2 to "wait 2 ms after
@@ -208,8 +213,9 @@ Written so the work can resume from git alone (the smoke outputs are in `build/v
    faster coupling (more replica current) is the design-side option already listed as open in `rx_design.md`.
 4. *power EM p0.5_ss / ff 26.7x*: stale results: `build/power/res_p0.5_ss` / `_ff` were solved at 21:48 on 2026-11-17
    on the mesh from before the strap fix (re-meshed and `res_p0.5` re-solved at 22:38; `p0.25` at 22:25 is also
-   older than the mesh). The full run moves `build/power` away and solves everything fresh. (A local re-solve of
-   ss / ff was started to confirm.)
+   older than the mesh). The full run moves `build/power` away and solves everything fresh. Confirmed: re-solved
+   locally on the current mesh, ss and ff give 2.74x (0.88x the 85 °C limit), the same as tt; the mutation results
+   in that directory are stale in the same way.
 
 **Still running when this was written** (smoke, this machine): tile `fsk_c_tt_-95_n2` (ETA about 01:00),
 `fskn_c_tt_-105_n2_s1` (about 03:00), `rx0_c_tt` (about 17:30), `pvt_ss_70_3.15_{set,rxs,tx,pu}` (until about 19:30);
