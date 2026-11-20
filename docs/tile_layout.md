@@ -23,6 +23,39 @@ re-layouts in parallel.
 | Antenna | KLayout antenna deck: 0 (24 rules); a planted violation is caught |
 | TT precheck | local structural checks pass (`layout/gen/tile_precheck.py`); the real TT precheck runs in CI on push (not run here, below) |
 
+## Update 2026-11-20: nb kept away from the LO wires (branch `iq-symmetry`)
+
+**Problem.** After the I/Q-symmetry change the router put the Q local-oscillator (LO) wire `lsq` (full swing, from
+the Q level shifter in `vco_core` to `rx.lobuf_q`) on Metal2 on the track next to the receiver bias net `nb` (from
+`rx_bias` to every tail current source in the receiver) for about 120 µm (x 129-250 µm, y 161-164 µm). The C-only
+extraction gave 10.55 fF from lsq to nb, which put 7.1 mV of LO onto nb (0.8 mV before) and a one-sided offset into
+the Q mixer: the unsettled -70 dBm runs failed their limiter checks (`sim/top/tile_results.md`, "Update 2026-11-20").
+
+**Fix.** `layout/gen/tile_nets.py` KEEP_AWAY gains `'nb': ['ls', 'lsq', 'lo_i', 'lob_i', 'lo_q', 'lob_q']`: when
+the router lays nb, every track within 3 of an already-routed LO wire costs extra (the LO nets route before nb).
+Nothing else in the layout changed. The router still finishes in 3 rounds with every net routed.
+
+**Table U2.** Extracted coupling capacitance (C-only, magic 8.3.642, `layout/pex/tile_c.spice`) before and after.
+
+| Pair | Before | After |
+|---|---|---|
+| lsq - nb | 10.550 fF | 0.128 fF |
+| ls - nb | 0.002 fF | 0.003 fF |
+| lo_i - nb | 0.000 fF | 0.002 fF |
+| lsq - bi_n / bi_p | 0.048 / 0.048 fF | 0.053 / 0.052 fF |
+| ls - oq_n / oq_p | 0.087 / 0.750 fF | 0.091 / 0.757 fF |
+| every other LO net (ls, lsq, lo_i, lob_i, lo_q, lob_q, a0, a2) to nb, ri_*, rq_*, bi_*, bq_*, oi_*, oq_*, vbnf, vctrl | - | unchanged within 0.005 fF |
+
+Total capacitance: a0 5.84 fF and a2 7.91 fF (unchanged), ls 56.23 -> 54.64 fF, lsq 59.00 -> 53.27 fF, nb 367.8 ->
+365.3 fF. The largest LO-to-baseband couplings left are the ones the change did not touch: ls - oi_p 6.46 fF, lsq -
+oq_n 7.45 fF and ls - oi_n 4.53 fF.
+
+**Checks** (`layout/gen/tile_driver.sh` with magic 8.3.642, 2026-11-20): 14 / 14 block checks OK; tile DRC magic 0
+and KLayout 0 (768 rules run); LVS match (10 537 devices, 5712 nets), resistor totals match, 14 / 14 mutations
+caught; antenna 0 (24 rules), the planted violation caught; supply landing OK with its mutation caught; local
+precheck OK. Re-extracted: `tile_c`, `tile_rc`, `tile_rcx` (`rcfix.py`). Layout change and checks by Claude (Claude
+Code).
+
 ## Update 2026-11-19: I/Q-symmetric LO taps (branch `iq-symmetry`)
 
 **Problem.** The receiver's Q local-oscillator (LO) tap was not a copy of the I tap. I: ring node a0 into lsdiv's

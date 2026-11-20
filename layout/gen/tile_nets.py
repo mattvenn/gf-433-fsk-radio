@@ -109,7 +109,10 @@ RX_M4_OK = {'rx_inp', 'rx_inn', 'ri_p', 'ri_n', 'rq_p', 'rq_n', 'bi_p', 'bi_n', 
 # guarded nets: VGND shield wires on the free tracks beside them (the handoff: the baseband -> limiter pairs, and
 # vbnf / vctrl from cgm_ref to the ring); KEEP_AWAY: aggressors that pay to come near the guarded ones
 SHIELDED = {'vbnf', 'vctrl', 'oi_p', 'oi_n', 'oq_p', 'oq_n'}
-KEEP_AWAY = {'ck': ['vbnf', 'vctrl'], 'q_i': ['oi_p', 'oi_n', 'oq_p', 'oq_n'], 'q_q': ['oi_p', 'oi_n', 'oq_p', 'oq_n']}
+KEEP_AWAY = {'ck': ['vbnf', 'vctrl'], 'q_i': ['oi_p', 'oi_n', 'oq_p', 'oq_n'], 'q_q': ['oi_p', 'oi_n', 'oq_p', 'oq_n'],
+             # the receiver bias nb (every tail in the RX) keeps off the full-swing LO wires: 10.5 fF of lsq beside
+             # nb put 13 mV p-p of LO on it and a one-sided Q-mixer offset (2026-11-20)
+             'nb': ['ls', 'lsq', 'lo_i', 'lob_i', 'lo_q', 'lob_q']}
 # nets with an antenna diode (KLayout ANT.16 / ANT.4: long wires into small gates) stay off Metal4, so the diode
 # protects them at every metal level the antenna rules check
 NO_M4_NETS = {'enb'} | {f'dbg_sel[{k}]' for k in range(4)}

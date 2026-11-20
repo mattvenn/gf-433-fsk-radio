@@ -34,6 +34,51 @@ slowest corner), so the chip works with firmware calibration. But a2 also couple
 phase noise was never checked with this load, and the frequency map in `docs/remap_results.md` no longer holds, so
 the a2 wire should be shortened or buffered before tape-out.
 
+## Update 2026-11-20: nb kept away from the LO wires (branch `iq-symmetry`)
+
+**Problem.** In the 2026-11-19 runs the unsettled 14 µs -70 dBm runs failed the limiter checks (limiter I/Q +119.7° /
+-43.3°, q_i duty 17 %). The cause was the layout: the router had laid the Q local-oscillator (LO) wire lsq beside the
+receiver bias net nb for about 120 µm (10.55 fF). nb carried 7.1 mV at the LO frequency (0.8 mV before), which gave
+the Q mixer a different DC offset from the I mixer: only the I arm started with the usual start-up offset. A what-if
+run with only that capacitor moved to ground brought the Q arm's offset back next to the I arm's.
+
+**Fix.** nb is routed with a penalty near the LO wires (`tile_nets.KEEP_AWAY`, `docs/tile_layout.md` "Update
+2026-11-20"): lsq - nb is now 0.128 fF. The tile was re-extracted and the same jobs rerun on the C-only netlist
+(`sim/top/jobs_tile_nb.py`, `build/tile_sims_nb`, verdicts with `TILE_SIMS_OUT=build/tile_sims_nb`), without the
+header what-ifs. No run logged "singular", "timestep too small" or "Transient op started". Runs and write-up by
+Claude (Claude Code).
+
+**Table N1.** The 2026-11-19 runs against the rerun (tt unless stated).
+
+| Quantity | 2026-11-19 | 2026-11-20 |
+|---|---|---|
+| nb at f_LO (rxh -70 dBm, +offset) | 7.13 mV | 0.34 mV |
+| mixer DC offset I / Q, +offset (`mix_i` / `mix_q`) | -3.68 / -0.83 mV | -3.43 / -3.89 mV |
+| mixer DC offset I / Q, -offset | -3.71 / -0.47 mV | -3.45 / -3.54 mV |
+| baseband output mean I / Q, +offset | -1.20 / -0.15 V | -1.10 / -1.22 V |
+| rxh -70 dBm +offset: limiter I/Q, q_i / q_q, q_i duty | +119.7°, 239.9 / 202.2 kHz, 17 % | +64.6°, 232.6 / 239.6 kHz, 23 % |
+| rxh -70 dBm -offset: limiter I/Q, q_i / q_q | -43.3° (FAIL) | -81.5°, 221 / 227 kHz (PASS) |
+| rxs -95 dBm settled: q_i / q_q, duty, limiter I/Q (baseband) | 198 / 201 kHz, 48.7 %, +81.2° (+75.0°) | 198 / 200 kHz, 48.7 %, +77.0° (+74.7°): PASS |
+| I/Q LO phase lo_i -> lo_q, tt / ss / ff | 74.7 / 76.1 / 74.3° | **72.9 / 74.1 / 72.8°: all PASS** |
+| lsq lags ls, tt / ss / ff | 74.1 / 74.7 / 73.5° | 72.6 / 73.0 / 72.5° |
+| VCO shift against the block reference | -3.55 ... -3.90 % | -3.55 ... -3.90 % |
+| TX fundamental, code 9 / code 13; TX off | +6.28 / +5.99 dBm; -90.1 dBm | +6.28 / +5.99 dBm; -90.0 dBm |
+| mutations caught | 11 / 11 | 11 / 11 (+16.6 fF on a2: 80.5°) |
+
+Both arms now start with the same offset (mixer -3.4 to -3.9 mV, baseband about -1.1 V), so the one-sided Q offset is
+gone and the limiter phase has the right sign and size in both runs (+64.6° / -81.5°, check: 50-110°). The I/Q LO
+phase also improved at every corner: lsq lost 5.7 fF of total capacitance, which was most of the Q path's extra lag,
+so the ss corner (76.1°, which Matt accepted on 2026-11-20) is now inside 72 ± 3°.
+
+**Still failing: the +offset unsettled run's frequency check.** `rxh_c_tt_-70_p` reads q_i at 232.6 kHz and q_q at
+239.6 kHz against 202.0 kHz (limit ±15 %): with both arms 1.1-1.2 V off centre in the 9 µs window, each limiter
+gives only 4 edges at 23 % duty, and the frequency read from 4 edges is off. This is the start-up offset this page
+already calls a settling artefact (the 8.5 kHz high-pass needs 0.5-0.9 ms), now on both arms. At fca76de the same
+run passed at 219 kHz with a smaller common offset (-2.9 mV at the mixer, -0.83 / -0.94 V at the baseband, LO 370
+MHz): why the offset is larger with the LO at 405 MHz has not been checked. The settled run (`rxs_c_tt_-95_p`) is the
+one that shows the receiver working, and it passes; on the bench the same settling shows as the receiver's
+recovery time of about 1 ms (`docs/bringup.md`, R11 and the firmware rules). The check was not loosened.
+
 ## Update 2026-11-19: I/Q-symmetric LO taps (branch `iq-symmetry`)
 
 The receiver's Q level shifter moved into `vco_core` as a mirror image of lsdiv, so both ring taps drive a level

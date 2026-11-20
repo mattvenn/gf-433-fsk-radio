@@ -62,6 +62,16 @@ supply grid's R), RX settled at -70 ... -100 dBm, power-up, debug mux, supplies 
 slowing the ring 12.5 % (`sim/top/a2_load/results.md`). Fix on branch `iq-symmetry`: the Q level shifter moves against
 the ring as a mirror of lsdiv; the tile's I/Q LO phase gets a 72 ± 3° check. The TX final-stage shrink is dropped.
 
+**Decision 2026-11-20 (Matt):** the ss I/Q LO phase of 76.1° (0.13° outside 72 ± 3°) is accepted: the receiver's
+quadrature decoding works at 50-110°. **Same day, nb fix (branch `iq-symmetry`):** the router had put lsq beside the
+receiver bias nb (10.55 fF), giving the Q mixer a one-sided start-up offset. nb now keeps away from the LO wires
+(`tile_nets.KEEP_AWAY`); lsq - nb 0.13 fF, all tile checks clean. Rerun (`sim/top/tile_results.md`, "Update
+2026-11-20"): both arms' mixer offsets equal again (-3.4 ... -3.9 mV), nb at f_LO 0.34 mV (was 7.1), I/Q LO 72.9 /
+74.1 / 72.8° at tt / ss / ff (now all pass), RX settled -95 dBm pass, TX +6.28 dBm code 9, 11 / 11 mutations. The
+per-arm start-up offset is closed. **Open:** the unsettled 14 µs +offset run (`rxh_c_tt_-70_p`) still fails its
+frequency check (q_i / q_q 233 / 240 kHz vs 202, 4 edges) on the now common start-up offset (about -1.1 V on both
+baseband arms, bigger than fca76de's -0.83 V); the -offset run and the settled run pass.
+
 **Decision 2026-11-17 (Matt):** no TX/RX hardware interlock. Firmware keeps RX_EN off while transmitting and waits
 about 1 ms after TX before trusting `q_i` / `q_q` (`docs/bringup.md`, firmware rules).
 
