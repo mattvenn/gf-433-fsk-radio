@@ -254,6 +254,10 @@ OK); the tile FSK smoke runs need `build/verify/tile/rxset_c_tt` (a link to `bui
    yet oscillating (a2 swing 10-50 mV). At tt the existing check saw oscillation from 15 µs. The power-up runs are now
    50 µs (4 threads); the smoke point is being rerun to see when it starts. If it does not start by 50 µs, that is a
    design finding to report.
+Reruns in progress at 22:55 (detached, machine loaded to about 40 threads): the 8 settled gap-2 chain runs and a
+noiseless -95 dBm 2-bit chain run (`build/verify/chain/fsk_pex_tt_*`, about 05:00), the 50 µs power-up
+(`build/verify/tile/pvt_ss_70_3.15_pu`, about 03:30); tile `fsk_c_tt_-95_n2` (about 01:00) and
+`fskn_c_tt_-105_n2_s1` (about 03:00) left running. Then `python3 sim/verify/verdict.py --smoke`.
 4. *Gap 3 RX at ss / 70 °C / 3.15 V:* PASS (q_i / q_q 200 / 204 kHz for 200 kHz, limiter I/Q +69.2°, baseband +75.2°).
 
 **Next steps:** finish the smoke runs; fill the `SMOKE_G*` placeholders in `verification.md` and a "Smoke-run results"
