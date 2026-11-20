@@ -58,12 +58,12 @@ supply grid's R), RX settled at -70 ... -100 dBm, power-up, debug mux, supplies 
 5. **Sizing, PVT map, PVT noise, v3 layout, MC and start-up** (the docs in the table above).
 
 ## Next steps
-**In progress 2026-11-20 (branch `verify-gaps`):** the receiver / system gap tests 1-6 from `docs/plan_verify_gaps.md`
-are built on the extracted design (Matt: every gap test runs on the extracted design). Phase 1-2 smoke runs are
-partly done. Snapshot of the smoke verdict at 14:54: `docs/verify_smoke_2026-11-20.md`. Open FAILs to explain before
-the full run: rx_en at ss (nb reads 0 V with rx_en on), gap 1 MC tt 7 / 16 runs bad, TX -> RX decodes 1.47 ms after
-rx_en against the firmware's 1.0 ms wait, power EM at ss / ff 26.7x (likely a broken solve). Still pending: tile
-FSK / noise / PVT (gaps 2, 3, 6) and the existing tile verdict. The full run has **not** been started.
+**In progress 2026-11-20 (branch `verify-gaps`):** the receiver / system gap tests 1-6 (`docs/plan_verify_gaps.md`)
+are built on the extracted design; phases 1-2 done. Smoke verdict: 73 PASS, 1 FAIL (mixed rx_en at ss: a stale
+2026-11-17 result, the known co-simulation SPI issue), 7 pending (tile runs for gaps 2, 3, 6, finishing overnight);
+18 / 18 planted errors caught. **Decisions (Matt):** firmware rule 2 is now a 2 ms wait after rx_en / TX (the
+extracted design needs 1.47 ms after rx_en, 1.90 ms after an in-band burst); no trims; the full run
+(`docs/handoff_full_verification.md`, about 66 h) runs here on the sim server once the smoke runs are checked.
 
 **Decision 2026-11-19 (Matt):** the I and Q LO taps must match. a2's long wire skews the I/Q phase by +8-9° as well as
 slowing the ring 12.5 % (`sim/top/a2_load/results.md`). Fix on branch `iq-symmetry`: the Q level shifter moves against

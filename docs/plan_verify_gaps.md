@@ -151,7 +151,7 @@ times below are loaded times:
 | gap 1 MC (525 jobs) | 47 | |
 | everything else (gaps 4 and 5, existing digital / layout / mixed / power) | about 60 | |
 
-**Wall time:** about 66 h on 28 CPUs (the sim server) and 62 h on 30 (this machine), CPU-bound; the 16-bit tile
+**Wall time:** about 66 h on the sim server (this machine: 30 CPUs, 28 given to the scheduler), CPU-bound; the 16-bit tile
 packet alone takes about 43 h, so trimming CPU below about 1200 CPU-hours does not shorten the run further.
 
 ## Decisions for Matt (before the full run)
@@ -161,11 +161,11 @@ packet alone takes about 43 h, so trimming CPU below about 1200 CPU-hours does n
    - gap 2 on the chain at 3 levels (-108 / -112 / -114 dBm) instead of 5: -85 CPU-hours;
    - the 16-bit tile packet split into 4 runs of 4 bits (same bits, each from the settled state): the critical path
      drops from about 43 h to about 16 h, but it is then not one whole packet.
-2. **Where it runs:** the sim server (28 CPUs) or this machine (30): about the same time. The sim server needs
-   `GITHUB_TOKEN` for the driver's own status pushes, or the agent pushes them.
+2. **Where it runs:** the sim server, which is the machine these tests were built on (decided 2026-11-20).
 3. **Two findings from the smoke runs that bear on the firmware rules** (below, "Smoke-run results"): the receiver
    needs about 1.5 ms after rx_en (from off) and about 1.9 ms after a strong in-band burst before -95 dBm decodes,
-   against the 1 ms wait in `bringup.md`. The full run repeats both; the rule could be changed to 2 ms now.
+   against the 1 ms wait in `bringup.md`. **Decided 2026-11-20 (Matt): rule 2 is now 2 ms** (`FW_WAIT_MS = 2.0`).
+   No trims: the full job set runs, with the 16-bit packet kept whole.
 
 ## Where the phase-1 agent got to (2026-11-20, 15:20) and next steps
 

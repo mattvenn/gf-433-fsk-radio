@@ -1,6 +1,6 @@
 # Handoff: the full verification run (existing checks + receiver / system gaps 1-6)
 
-> Not started: Matt starts it (sim server or this machine); the driver rewrites this line as it goes.
+> Not started: starts on the sim server once the smoke runs have finished and been checked; the driver rewrites this line as it goes.
 
 [![Made with Claude](https://img.shields.io/badge/Made%20with-Claude-D97757?logo=anthropic&logoColor=white)](https://claude.com/claude-code)
 
@@ -34,13 +34,13 @@ first guesses), `python3 sim/verify/jobs_full.py` prints them.
 | `ovl1_*`, `rate_*`, `bbrec_*`, `txrx_c_tt` | 16 | gap 4: overload and recovery, +6 dBm rating, TX -> RX turnaround | `build/verify/chain/`, `build/verify/tile/` | `verdict.py` |
 | `coupling_*`, `rx0_c_tt`, `mut_rx0_ccoup` | 4 | gap 5: the q_i / q_q coupling budget, the no-input tile run and its mutation | `build/verify/coupling/`, `build/verify/tile/` | `verdict.py` |
 
-967 jobs, about 1860 CPU-hours: about 66 h on 28 CPUs, 62 h on 30 (CPU-bound). The longest single job is the tile's
+967 jobs, about 1860 CPU-hours: about 66 h on the sim server (28 of its 30 CPUs, CPU-bound). The longest single job is the tile's
 16-bit packet (about 43 h on 8 threads). Trims are listed in `plan_verify_gaps.md`, "Decisions for Matt".
 
 ## Config (edit here; the driver reads environment variables of the same names)
 
 ```
-BUDGET=28        # CPUs for the scheduler (sim server: 28; this machine: 30, keep 2 free)
+BUDGET=28        # CPUs for the scheduler (the sim server has 30: keep 2 free)
 LOAD=30          # the scheduler starts no job while the 1-minute load is above this
 TOUT_H=96        # the scheduler's give-up time (h)
 ```

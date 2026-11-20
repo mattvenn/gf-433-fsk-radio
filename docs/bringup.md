@@ -109,7 +109,7 @@ oscillator (LO) is the ring itself, so the LO frequency is the counted f. A tone
 | R8 | Baseband | DBG_SEL = 1, then 2 (one bit at a time), Δ = 50 kHz | a 50 kHz signal on `ua[0]` (the positive output of each baseband arm, `oi_p` / `oq_p`); DC level and amplitude TBD | tile LVS source | |
 | R9 | Sensitivity | Step the level down at Δ = 50 kHz; then 2-FSK ±100 kHz from the generator, if it can | `q_i` / `q_q` clean down to about −95 dBm at the antenna (FSK decoded with no errors at −95 and −70 dBm); model sensitivity −110.4 dBm (bit error rate 1e-3, 10 kbit/s) | `rx_design.md` | |
 | R10 | Overload | Raise the level to −20 dBm | input 1 dB compression about −23.5 dBm (the baseband limits much earlier, by design); decoding at this level TBD | `rx_design.md` | |
-| R11 | Recovery | Switch a strong tone on and off | blanked for about 1 ms (the AC couplings recover in 0.5-0.9 ms after a 10 mV step) | `rx_design.md` | |
+| R11 | Recovery | Switch a strong tone on and off | blanked for up to about 2 ms (0.5-0.9 ms after a 10 mV step; 1.90 ms simulated after a 1 ms in-band burst) | `rx_design.md` | |
 | R12 | LO leakage | SDR cabled to `ua[4]` (DC block, attenuator), RX_EN = 1, TX off | the ring's line at about −108.7 dBm into a 73 Ω dipole | `rx_design.md` | |
 
 Notes:
@@ -126,8 +126,9 @@ oscillator, so the radio is half-duplex. Both on together does no harm: the supp
 (`sim/power/results.md`), and a coupled TX only overloads the LNA's 3.3 V inputs. But the receiver then hears only
 its own carrier, at 0 Hz.
 1. Keep CTRL.RX_EN (bit 4) off while transmitting (`ui[5]` / `ui[6]` high).
-2. After TX ends, wait about 1 ms before trusting `q_i` / `q_q`: the baseband high-pass recovers from an offset step
-   in 0.5-0.9 ms (`rx_design.md`), longer if RX was left on through the transmission.
+2. After RX_EN rises, after TX ends, or after a strong in-band signal, wait 2 ms before trusting `q_i` / `q_q`: the
+   baseband high-pass recovers slowly. The extracted design decodes -95 dBm 1.47 ms after RX_EN rises (from fully off)
+   and 1.90 ms after a 1 ms burst of -10 to +6 dBm (`plan_verify_gaps.md`, gap 4; decision 2026-11-20, was 1 ms).
 3. Set only one DBG_SEL bit at a time, and raise CS_n after every 16-bit SPI frame (`tx_fine_tune.md`).
 
 ## 5. Two boards
@@ -136,7 +137,7 @@ Board A transmits, board B receives. Both run the `tuning.md` procedure against 
 
 | # | Test | How | Expected | Source | Result |
 |---|---|---|---|---|---|
-| L0 | TX and RX together | One board: TX on, then RX_EN; then TX off, and time how long until a weak tone from board A decodes | nothing odd (supply currents add, no lock-up); turnaround about 1 ms | `rx_design.md` | |
+| L0 | TX and RX together | One board: TX on, then RX_EN; then TX off, and time how long until a weak tone from board A decodes | nothing odd (supply currents add, no lock-up); turnaround under 2 ms (1.47 ms simulated) | `rx_design.md` | |
 | L1 | Offset | A: TX on, no FSK. B: RX_EN. Count both | B's `q_i` / `q_q` toggle at |f_A − f_B|, up to ±26 kHz from the two crystals (±13 kHz each) | `tuning.md` | |
 | L2 | Set the offset | Move B's MED_INT / MED_FRAC until L1's toggle rate is the chosen offset (e.g. 0 or 20 kHz) | the rate follows B's word at its LSB (about 31 kHz per word) | Table VII | |
 | L3 | FSK | A: FSK_DEV for ±100 kHz, `ui[7]` sends a known pattern | B's quadrature steps reverse direction with each bit; about 8 quadrant steps per bit at 50 kbit/s | `rx_design.md` Table VI | |

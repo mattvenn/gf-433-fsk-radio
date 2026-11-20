@@ -48,7 +48,7 @@ SAVE_FSK = 'v(uo_out4) v(uo_out5) v(oi_p) v(oi_n) v(oq_p) v(oq_n) v(bi_p) v(bi_n
 CORNERS3 = ('typical', 'ss', 'ff')
 TEMPS = (0, 27, 70)
 VDDS = (3.15, 3.3, 3.45)
-FW_WAIT_MS = 1.0                              # docs/bringup.md, firmware rule 2: wait about 1 ms after TX
+FW_WAIT_MS = 2.0                              # docs/bringup.md, firmware rule 2: wait 2 ms after rx_en / TX (was 1 ms; Matt 2026-11-20)
 
 
 def fsk_case(level, pre, data, nf=None, seed=None, threads=6, est=None):
