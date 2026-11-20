@@ -413,7 +413,7 @@ def gap4():
             ok = r.get('rec_after_ref_ms') is not None and r['rec_after_ref_ms'] <= 2.0
         chk('gap 4 overload', f'{lv:+d} dBm burst of 1 ms, then -95 dBm FSK: decodes within 2 ms', ok,
             bad(r) or f"recovery {r.get('rec_after_ref_ms')} ms after the burst ({r.get('why', '')})")
-    r = jload(B / 'chain' / 'bbrec_tt_-10_1ms_burston' / 'result.json')
+    r = jload(B / 'chain' / 'bbrec_tt_-10_0.1ms_burston' / 'result.json')
     mut('gap 4 overload', 'burst left on: no recovery may be found', None if okb(r) is None else
         (okb(r) and r.get('t_rec') is None), bad(r) or f"t_rec {r.get('t_rec')}")
     t = jload(B / 'tile' / 'txrx_c_tt' / 'result.json')

@@ -89,7 +89,7 @@ for lv in (-10, 0, 6):
         prio=2)
 job("bbrec_tt_-10_0.1ms", X + "bbrec --src ovl1_tt_-10 --tburst 1e-4", 1800, deps=["ovl1_tt_-10", "ovl1_tt_-95"],
     prio=2)                                         # a shorter burst: is the 1 ms state saturated?
-job("bbrec_tt_-10_1ms_burston", X + "bbrec --src ovl1_tt_-10 --tburst 1e-3 --mut burston", 1800,
+job("bbrec_tt_-10_0.1ms_burston", X + "bbrec --src ovl1_tt_-10 --tburst 1e-4 --tstop 5e-4 --mut burston", 1800,
     deps=["ovl1_tt_-10", "ovl1_tt_-95"])
 job("bbrec_tt_-95_0ms", X + "bbrec --src ovl1_tt_-95 --tburst 0", 1800, deps=["ovl1_tt_-95"], prio=2)   # no burst: reference
 if SET != "smoke":                                  # (smoke: run by hand once txrx_c_tt is done)

@@ -506,9 +506,9 @@ def bbrec(a):
         s1 = json.loads((OUT / a.src / 'result.json').read_text())
         st = s1['state']
         tb = max(a.tburst - s1['t_end'], 0.0)       # the rest of the burst, after the phase-1 run
-        if a.mut == 'burston':
-            tb = tstop + 1e-3
         t_ev, t_fsk = tb, tb
+        if a.mut == 'burston':          # the burst never ends: the bits are sent from the same time, under the burst
+            tb, t_ev = tstop + t_fsk + 1e-3, t_fsk
         src = {}
         for arm in ('i', 'q'):
             src[f'cmpwl_{arm}'] = (f"0 {s1[f'mix_{arm}_cm_v']} {max(tb, 1e-9)} {s1[f'mix_{arm}_cm_v']} "
