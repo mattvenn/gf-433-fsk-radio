@@ -23,6 +23,63 @@ re-layouts in parallel.
 | Antenna | KLayout antenna deck: 0 (24 rules); a planted violation is caught |
 | TT precheck | local structural checks pass (`layout/gen/tile_precheck.py`); the real TT precheck runs in CI on push (not run here, below) |
 
+## Update 2026-11-19: I/Q-symmetric LO taps (branch `iq-symmetry`)
+
+**Problem.** The receiver's Q local-oscillator (LO) tap was not a copy of the I tap. I: ring node a0 into lsdiv's
+level shifter, abutted to the ring. Q: ring node a2 through about 80 µm of small-swing wire into `rx_lsq` in the
+tile. a2 carried 19.88 fF in the extracted tile against about 3.3 fF on the other ring nodes, which skews the I/Q
+phase by about +0.5° and slows the ring by 0.75 % per fF (`sim/top/a2_load/results.md`): +8-9° and -12.5 %. The
+largest part was inside `vco_core`: 51 µm of Metal2 in a 1.4 µm lane between two supply rails (Fig. 1a below).
+
+**Fix (Matt's decision, 2026-11-19).** The Q level shifter moved against the ring, as a mirror image of lsdiv:
+- `rx_lsq` is split (`layout/gen/rx_lsq.py --part ls / hdr`, the device geometry unchanged): `rx_lsq_ls`, lsdiv's
+  level shifter with the TT / Dq column (40.49 × 36.70 µm), and `rx_lsq_hdr`, the header Hq and its decap Cq
+  (40.49 × 20.43 µm). Their LVS sources are xschem's `rx_lsq` cut in two (`rx_lsq.split_source()`).
+- `rx_lsq_ls` sits in `vco_core` in the slot under lsdiv, mirrored (MX) so the two share lsdiv's bottom VSS rail,
+  against the ring's west edge. Its input aq reaches a2 through 11.1 µm of Metal2 over the ring's left edge and a
+  13.0 µm Metal3 riser to the ring's a2 wire: about 24 µm, with no supply rail alongside. It is on the same ring node
+  as before (two stages after a0): `check_core.sh` checks the instance port map (`rx_lsq_ls.aq` on a2) and fails on
+  a0 / a1 / a3 / a4.
+- The VDD_LS decap fingers that were under lsdiv (3 × 26 / 10 µm) moved to the free strip above the ring: 6 × 13 /
+  10 µm, the same 780 µm² of gate, so the same 3.2 pF. They hang from lsdiv's top VSS rail carried east; the code-bit,
+  vbnf and ck Metal2 tracks pass over them.
+- Dq's gate (qenb, the copy's enable) is tied to VSS inside `rx_lsq_ls`. The brief asked for qenb routed to the Q
+  level shifter, but a 0.42 / 0.28 µm gate on a 35 µm routed tie broke KLayout's antenna rule (ANT.16 / ANT.4). The
+  tile always tied qenb to VGND; the header's qenb (large Hq gates) is still a pin tied by the router. Gating the copy
+  later (qenb to enb, `docs/rx_design.md`) now needs that one via moved as well.
+- The header goes into the tile as `rx.lsqh` (R180 at x 216.45, y 141.525, in the top of the slot `rx_lsq` left).
+  vq (the level shifter's supply, about 0.26 mA) is a 46.9 µm routed wire from the header to `vco_core`'s west edge;
+  lsq (full swing) is 219 µm to the Q LO buffer, ls 156 µm.
+
+**Sizes.** `vco_core` is 110.58 × 70.71 µm (0.95 µm taller): its top in the tile moves from y 203.26 to 204.21, 2.79
+µm under `xmdac`. No block moved. The tile's decap fill lost two units to the new routes (8.6 pF placed).
+
+**Table U1.** Extracted capacitance (C-only, magic 8.3.642, `layout/pex/tile_c.spice`, total to every net).
+
+| Net | Before (fca76de) | Now |
+|---|---|---|
+| a2 (Q tap, ring node) | 19.88 fF | 7.91 fF |
+| a0 (I tap, ring node) | - (not a port then) | 5.84 fF |
+| ls (I LO, level shifter to the TX driver and the I LO buffer) | 62.46 fF | 56.23 fF |
+| lsq (Q LO, level shifter to the Q LO buffer) | 47.97 fF | 59.00 fF |
+| vq (Q level shifter supply, incl. its rail) | - | 66.42 fF |
+
+a2 is now 2.07 fF above a0 (each carries its level shifter's 2 fF input capacitor): about +1° and -1.5 % expected.
+
+**Checks** (`layout/gen/tile_driver.sh`, 2026-11-19): 14 / 14 block checks OK, including `vco_core` (DRC, LVS,
+antenna, both ppolyf R1 sizes, six LVS / size mutations, the port map with six wrong expectations) and the two new
+cells; tile DRC magic 0 and KLayout 0 (768 rules); LVS match, 10 537 devices and 5712 nets, 14 / 14 mutations caught
+(the a2 ↔ ls mutation is replaced by ls ↔ lsq at the LO buffers, since a2 is no longer a tile net); antenna 0 with the
+planted violation caught; supply landing OK (its allow-list swaps `rx.lsq.qenb` for `rx.lsqh.qenb`); local precheck
+OK. The extraction keeps a0 and a2 as probe ports (labels in `vco_core`, `tile.py` net_points).
+
+![I/Q taps](img/iq_taps.png)
+
+**Fig. 1b.** The I/Q taps after the change (`layout/gen/fig/a2_trace.py`, `iq_taps_plot.py`). Top: ls (orange) and
+lsq (olive) run to the TX driver / I LO buffer and to the Q LO buffer; vq (purple) from the header `rx.lsqh`. Bottom:
+in `vco_core` a0 (blue, 5.84 fF) is lsdiv's abutment and a2 (red, 7.91 fF) the short route to the mirrored Q level
+shifter.
+
 ## Step 1: the digital macro
 
 **What changed.** `src/tx_fine.v` gets CTRL[4] = RX_EN (output `rx_en`, the receiver's enable) and a new register at

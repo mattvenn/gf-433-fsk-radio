@@ -24,7 +24,7 @@ NAMES = ([n for n in C if n.startswith("vco_c_") and not n.endswith("_rx")]
          + ["iq_c_tt", "iq_c_ss", "iq_c_ff", "mut_iq_a2c",
             "tx_c_tt_on", "tx_c_tt_off", "tx_c_tt_on_k13", "mut_tx_noen", "mut_tx_rsw10",
             "rxhpre_c_tt", "rxh_c_tt_-70_p", "rxh_c_tt_-70_n", "mut_rx_off", "rxset_c_tt", "rxs_c_tt_-95_p",
-            "dbg_c_tt", "mut_dbg_swap01", "mut_dbg_c_rxoff", "mut_vco_code", "mut_pwrup_txon"])
+            "dbg_c_tt", "mut_dbg_swap01", "mut_dbg_c_rxoff", "mut_vco_code", "mut_pwrup_txon", "iqx_vq_c_tt", "iqx_vq_c_ss"])
 OLD = Path(REPO) / "build" / "tile_sims"
 
 

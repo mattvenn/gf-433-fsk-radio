@@ -78,7 +78,7 @@ def ports(pex):
 # ------------------------------------------------------------------------------------------------ deck
 DEF = dict(pex='c', corner='typical', temp=27, code=None, word=512, sd=0, rx_en=0, dbg=0, tx=0, supply='ideal',
            vap=VDD, vdp=VDD, tstop=1.2e-6, tstart=None, step=5e-12, ramp=None, rf=None, ua0='probe', ic='ring',
-           save=None, ac=None, kind='ring', hold=None, settle=False, tskip=None, rsw=None, iinj=None, swap=None, rfdf=None, pre=None, mut=False, cadd=None)
+           save=None, ac=None, kind='ring', hold=None, settle=False, tskip=None, rsw=None, iinj=None, swap=None, rfdf=None, pre=None, mut=False, cadd=None, vshort=None)
 
 
 def supplies(c):
@@ -230,6 +230,9 @@ def deck(c):
     if c['cadd']:                   # an extra capacitor node -> ground (the I/Q check's mutation: + C on a2)
         nd, cv = c['cadd']
         body += f'Cadd_{nd} {nd} 0 {cv:g}\n'
+    if c['vshort']:                 # what-if: two nodes joined by a 0 V source (e.g. the Q header bypassed)
+        na, nb = c['vshort']
+        body += f'Vshort_{na} {na} {nb} 0\n'
     if c['kind'] == 'dbg':          # a current into ua[1] (the ground-sense pin check)
         body += 'Iinj 0 ua1 0\n'
     ic = ''
@@ -378,6 +381,10 @@ def cases():
             save=SAVE['ring'] + ' v(lo_i) v(lo_q) v(nb) v(a0)')
     add('mut_iq_a2c', 'ring', 1500, rx_en=1, step=20e-12, tstop=1.2e-6, hold=VBNF_RX['typical'], cadd=('a2', 16.6e-15),
         save=SAVE['ring'] + ' v(lo_i) v(lo_q) v(nb) v(a0)', mut=True)
+    # what-if (diagnosis of the residual I/Q skew): the Q level shifter's supply vq tied to VAPWR (header Hq bypassed)
+    for corner in ('typical', 'ss'):
+        add(f'iqx_vq_c_{CN[corner]}', 'ring', 3000, corner=corner, rx_en=1, step=20e-12, tstop=1.2e-6,
+            hold=VBNF_RX[corner], vshort=('vq', 'vap'), save=SAVE['ring'] + ' v(lo_i) v(lo_q) v(nb) v(a0) v(vq)')
     # mutations: the checks must fail on these
     add('mut_dbg_swap01', 'dbg', 1800, rx_en=1, ic=None, swap=('dbg_sel[0]', 'dbg_sel[1]'), mut=True)
     add('mut_dbg_c_rxoff', 'dbg', 1800, rx_en=0, ic=None, mut=True)                     # receiver bias off
