@@ -187,6 +187,11 @@ Written so the work can resume from git alone (the smoke outputs are in `build/v
   uo_out[5] -> bi_p 315 aF against 2744 aF, 8.7x; smallest budget 48 aF at the stage-2 inputs); the 10x mutation is
   caught. Not in the baseband but worth noting: uo_out[4] - ua[0] is 24 fF, 0.6 of oi_p's budget when DBG_SEL[0] puts
   oi_p on ua[0] (debug mode only).
+- gap 3, ss / 70 °C / 3.15 V (the smoke point): TX +3.24 dBm against the +3 dBm limit (PASS, 0.24 dB margin: the
+  tightest point is likely here), divide-by-4 exact at the operating code (409.2 MHz), I/Q LO phase 73.9°; the
+  settled -95 dBm RX run and power-up still running.
+- power grid: re-solved on the current mesh, worst EM 2.74-2.80x the LEF figure (0.88-0.90x the 85 °C limit) at
+  tt / ss / ff and the finer mesh: PASS.
 - gap 3 mutations (3.0 V for 3.45 V; 70 °C not in the deck) caught. ss / 70 °C / 3.15 V: 433.92 MHz in reach
   (687 MHz at code 31), but the divide-by-4 reads f / f(ck) = 10.85 at 687 MHz there (information: the check is at the
   operating code, still running).
@@ -217,10 +222,14 @@ Written so the work can resume from git alone (the smoke outputs are in `build/v
    locally on the current mesh, ss and ff give 2.74x (0.88x the 85 °C limit), the same as tt; the mutation results
    in that directory are stale in the same way.
 
-**Still running when this was written** (smoke, this machine): tile `fsk_c_tt_-95_n2` (ETA about 01:00),
-`fskn_c_tt_-105_n2_s1` (about 03:00), `rx0_c_tt` (about 17:30), `pvt_ss_70_3.15_{set,rxs,tx,pu}` (until about 19:30);
-extracted chain: the 8 gap-2 FSK runs (`fsk_pex_tt_*`, 4.5 h each), the merge / schematic MC samples,
-`bbrec_tt_-10_1ms_burston`. Restart: `VERIFY_SET=smoke` with `sim/sched.py sim/verify/jobs_tile_verify.py --out
+**Still running at hand-back (2026-11-20 15:30, smoke, this machine; the schedulers run detached and keep going):**
+tile `fsk_c_tt_-95_n2` (gap 6, ETA about 01:00), `fskn_c_tt_-105_n2_s1` (gap 2, about 03:00), `rx0_c_tt` (gap 5,
+about 17:30), `pvt_ss_70_3.15_rxs` and `_pu` (gap 3, about 19:30); extracted chain: the 8 gap-2 FSK runs
+(`fsk_pex_tt_*`: -114 dBm NF 7.3 / NF 0 × 3 seeds, -105 dBm NF 7.3 / noise × 10, about 20:00) and the 10
+schematic MC samples (an extra). Done since: the burst-left-on mutation (caught: no recovery) and the budget
+mutation (caught). To collect: `python3 sim/verify/verdict.py --smoke`. The two schedulers exit only once
+`sim/verify/jobs_tile_verify.py.final` / `jobs_chain.py.final` exist (touch them when nothing more is to be added;
+don't commit them). Restart: `VERIFY_SET=smoke` with `sim/sched.py sim/verify/jobs_tile_verify.py --out
 build/verify/tile` and `sim/verify/jobs_chain.py --out build/verify/chain` (a restarted scheduler skips jobs already
 OK); the tile FSK smoke runs need `build/verify/tile/rxset_c_tt` (a link to `build/tile_sims_nb/rxset_c_tt`).
 
