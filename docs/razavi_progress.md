@@ -87,3 +87,4 @@ notes, then the score below. Each card is answered in one line; the answers are 
 | Date | Cards | Score | Slipped on |
 |---|---|---|---|
 | 2026-11-20 | 3, 10, 9, 11, 6 | 2.5 / 5 | 10: wrote A·C, not C·(1+A); 9: the pole is f = 1/(2πRC); 6: gm × R_D, not ÷ |
+| 2026-11-20 (retry) | 10, 9, 6 | 2.5 / 3 | 10: put −10 into C(1 + A); A is the gain's size, so 11 fF. 9 and 6 right (6: remember the minus sign) |
