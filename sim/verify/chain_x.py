@@ -150,8 +150,9 @@ def mc_decks(corner, seed, kind, mut):
     mm = 0 if mut == 'mmoff' else 1
     lim_pex = re.sub(r'(?m)^(\.subckt rx_lim .*)$', r'\1 gcp gcn', pex('rx_lim'), count=1)
     # (A) comparators: a slow +-150 mV triangle on gcp / gcn of both arms' comparators
-    T = 1 / 20e3
-    tri = f'pwl(0 0 {T / 4} 0.15 {3 * T / 4} -0.15 {5 * T / 4} 0.15 {7 * T / 4} -0.15 {2 * T} 0)'
+    T = 1 / 20e3       # three periods: the second rising / falling switching points are always inside the run
+    tri = (f'pwl(0 0 {T / 4} 0.15 {3 * T / 4} -0.15 {5 * T / 4} 0.15 {7 * T / 4} -0.15 {9 * T / 4} 0.15 '
+           f'{11 * T / 4} -0.15 {3 * T} 0)')
     if kind == 'pex':
         cmp_sub = rx_bias.block() + lim_pex
         inst = ''.join(f'Xl{k} VDD VSS inp{k} inn{k} q{k} nb enb gcp{k} gcn{k} rx_lim\nvi{k} inp{k} inn{k} 0\n'
@@ -172,7 +173,7 @@ Xb VDD VSS en enb nb rx_bias
 vd d 0 {tri}
 {inst}.control
 option temp=27
-tran {T / 4000} {2 * T}
+tran {T / 4000} {3 * T}
 let dd = v(d)
 {meas}.endc
 .end
@@ -238,15 +239,21 @@ def mc(a):
     da, db, dc = mc_decks(a.corner, a.seed, a.kind, a.mut)
     r = dict(name=tag, corner=rxc.CN[a.corner], seed=a.seed, kind=a.kind, mut=a.mut, flags=[])
     r['merged_fets'] = sorted(set(merged_fets(da) + merged_fets(db) + merged_fets(dc)))
+    if a.only == 'cmp':                      # redo the comparator part of an existing sample
+        r = json.loads((OUT / tag / 'result.json').read_text())
+        r['flags'] = [f for f in r['flags'] if f != 'error:']
+        r.pop('error', None)
     d, log, fl = run(tag + '/cmp', da)
     r['flags'] += fl
     mv = rxc.meas(log)
     for k, arm in ((1, 'i'), (2, 'q')):
-        up, dn = mv.get(f'up{k}b', mv.get(f'up{k}')), mv.get(f'dn{k}b', mv.get(f'dn{k}'))
-        if up is None or dn is None:
+        up, dn = mv.get(f'up{k}b'), mv.get(f'dn{k}b')      # the second switching points (the first rise can be
+        if up is None or dn is None:                        # the start-up settling at t = 0)
             r['error'] = f'comparator {arm}: no switching in +-150 mV'
             continue
         r[f'vos_{arm}_mv'], r[f'hyst_{arm}_mv'] = (up + dn) / 2 * 1e3, (up - dn) / 2 * 1e3
+    if a.only == 'cmp':
+        return finish(OUT / tag, r)
     d, log, fl = run(tag + '/fe', db)
     r['flags'] += fl
     try:
@@ -552,6 +559,7 @@ def main():
     ap.add_argument('--tburst', type=float, default=1e-3)
     ap.add_argument('--tstop', type=float, default=2.5e-3)
     ap.add_argument('--analyse', action='store_true', help='rate: re-analyse an existing run')
+    ap.add_argument('--only', default=None, help='mc: redo only this part (cmp) of an existing sample')
     a = ap.parse_args()
     r = dict(mc=mc, fsk=fsk, ovl1=ovl1, rate=rate, bbrec=bbrec)[a.mode](a)
     sys.exit(1 if ('error' in r or r.get('flags')) else 0)

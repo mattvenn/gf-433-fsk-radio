@@ -320,7 +320,7 @@ def gap3():
         cn, tc, v = tag.split('_')[1], float(tag.split('_')[2]), float(tag.split('_')[3])
         p, det = [], []
         for k, r in res.items():
-            if f'{tag}_{k}' not in C:
+            if f'{tag}_{k}' not in C or r is None:
                 continue
             b = bad(r)
             if b:
@@ -331,9 +331,14 @@ def gap3():
             if r.get('deck_vsa') is not None and abs(r['deck_vsa'] - v) > 0.01 * v:
                 p.append(f"{k}: VAPWR {r['deck_vsa']} vs {v}")
         F = 433.92e6
+        for k in ('set', 'tx'):            # the divide-by-4 at the 433.92 MHz code (at code 31 it is information only)
+            r = res.get(k)
+            if r and not bad(r) and r.get('div') == r.get('div'):
+                if not abs(r['div'] / 4 - 1) < 1e-3:
+                    p.append(f"{k}: f / f(ck) {r['div']:.3f} at {r['f_a2'] / 1e6:.1f} MHz")
         if res['k31'] and not bad(res['k31']):
             ok = res['k31']['f_a2'] > F
-            det.append(f"k31 {res['k31']['f_a2'] / 1e6:.1f} MHz")
+            det.append(f"k31 {res['k31']['f_a2'] / 1e6:.1f} MHz (f / f(ck) {res['k31'].get('div', float('nan')):.2f})")
             if not ok:
                 p.append('433.92 MHz above code 31')
         if res['k0'] and not bad(res['k0']):

@@ -113,17 +113,59 @@ The phase-1 agent (Claude) built the tests against the code and changed the plan
 3. **The full verification run** (sim server, Matt starts it): through `docs/handoff_full_verification.md`, following
    `docs/handoff_autonomy.md` (status and DONE / FAILED files, `Running: step N/M`, heartbeat).
 
-## Run-time estimates
+## What was built (phases 1 and 2, 2026-11-20)
 
-The C-only tile runs at about 470 s per simulated µs on 3 threads (`rxh_c_tt_-70_p`: 14 µs in 6627 s). One bit at
-50 kbit/s is 20 µs, about 2.6 h; 16 bits plus a preamble about 2 days per run. So:
-- gaps 2 and 6 on the tile: a few runs of 16 bits (about 2 days each, in parallel), and the longer bit counts at
-  schematic level (`rx_chain.py` runs about 15 times faster);
-- gap 1: about 400 block-level samples × a few minutes;
-- gap 3: 3 × 3 × 3 (+ sf / fs) points × the tile's short VCO / TX / CW runs (about 1 h each);
-- gap 4: schematic runs of a few ms (hours each), one tile run for (c).
+**Table II.** The new benches and checks (all under `sim/verify/`, run outputs under `build/verify/`, not committed).
 
-The phase-1 agent refines these from its smoke runs and writes them into the job files.
+| File | What |
+|---|---|
+| `tile_verify.py`, `jobs_tile_verify.py` | the tile cases of gaps 2-6 (`tb_tile.py`'s deck with new options: a CPFSK source, `trnoise` at the antenna, stepped logic lines, a coupling cap, the temperature mutation) and their analyses |
+| `chain_x.py`, `jobs_chain.py` | the extracted receiver blocks as a chain: MC samples, FSK with noise, overload phase 1, the +6 dBm rating, the baseband recovery bench (phase 2) |
+| `mc_report.py` | gap 1's yields, spreads, model sensitivities and mutation checks |
+| `coupling.py` | gap 5's transimpedances, budgets, tile capacitor matching and its mutation |
+| `rxm.py`, `decode.py` | the measured receiver model at 50 kbit/s with offsets / imbalance; the preamble-learning decoder and the recovery-time finder |
+| `existing.sh` | one existing digital or layout check, judged from the tool's own output (`RESULT` line) |
+| `verdict.py` | the single verdict: every existing and new check PASS / FAIL / pending, every mutation caught / missed / pending |
+| `jobs_full.py`, `full_run.sh` | the full run's job file (967 jobs) and its driver; brief in [`handoff_full_verification.md`](handoff_full_verification.md) |
+
+## Run-time estimates (from the smoke runs)
+
+The smoke runs ran with the machine full (about 30 threads busy on 30 cores), as the full run will be, so the
+times below are loaded times:
+- **Tile (C-only):** about 440 s per simulated µs on 6 threads, 610 s on 4 threads, 3500 s on 1 thread (the ring
+  alone); the operating point 5 s. One FSK bit (20 µs) is about 2.5 h on 6 threads, so the 16-bit packet with a 4-bit
+  preamble (412 µs) is about 1.8 days on 8 threads: the critical path of the full run.
+- **Extracted receiver chain (ideal LO):** about 60 s per simulated µs on 1 thread (an 8-bit FSK run with a 4-bit
+  preamble, 270 µs, is about 4.5 h); one MC sample (comparators, 4 µs front end, .ac) 4.7 min; overload phase 1
+  (12 µs) 13 min; the baseband recovery bench (3.5 ms of baseband) 3.5 min.
+- **Existing checks:** digital checks 1-30 s each, formal `prove` 72 s, `gates_bmc` 12 min, `formal/mutate.sh`
+  20 min, `tile_driver.sh` 20 min; the existing tile set about 200 CPU-hours (its job file's estimates).
+
+**Table III.** The full run (`python3 sim/verify/jobs_full.py`): 967 jobs, about 1860 CPU-hours.
+
+| Group | CPU-hours | Note |
+|---|---|---|
+| gap 3 PVT on the tile (216 jobs) | 640 | the settled -95 dBm RX run at 27 points is 405 of it |
+| gap 6 / 2 FSK on the tile (4 runs) + gap 2 on the chain (48 runs) | 660 + 250 | the whole packet alone is about 350 |
+| existing tile set (97 jobs) | 200 | |
+| gap 1 MC (525 jobs) | 47 | |
+| everything else (gaps 4 and 5, existing digital / layout / mixed / power) | about 60 | |
+
+**Wall time:** about 66 h on 28 CPUs (the sim server) and 62 h on 30 (this machine), CPU-bound; the 16-bit tile
+packet alone takes about 43 h, so trimming CPU below about 1200 CPU-hours does not shorten the run further.
+
+## Decisions for Matt (before the full run)
+
+1. **Run length, about 2.5-3 days.** Trims, if wanted (each is one edit in the job files):
+   - the gap-3 RX run only at the supply extremes (3.15 / 3.45 V) at 0 / 70 °C: -90 CPU-hours;
+   - gap 2 on the chain at 3 levels (-108 / -112 / -114 dBm) instead of 5: -85 CPU-hours;
+   - the 16-bit tile packet split into 4 runs of 4 bits (same bits, each from the settled state): the critical path
+     drops from about 43 h to about 16 h, but it is then not one whole packet.
+2. **Where it runs:** the sim server (28 CPUs) or this machine (30): about the same time. The sim server needs
+   `GITHUB_TOKEN` for the driver's own status pushes, or the agent pushes them.
+3. **Two findings from the smoke runs that bear on the firmware rules** (below, "Smoke-run results"): the receiver
+   needs about 1.5 ms after rx_en (from off) and about 1.9 ms after a strong in-band burst before -95 dBm decodes,
+   against the 1 ms wait in `bringup.md`. The full run repeats both; the rule could be changed to 2 ms now.
 
 ## Limits at the time of writing
 
