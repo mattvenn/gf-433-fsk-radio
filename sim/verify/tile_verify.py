@@ -36,7 +36,9 @@ import decode as D  # noqa: E402
 
 OUT = T.OUT
 RATE, DEV = 50e3, 100e3
-LEAD = 2e-6                                   # bits start 2 us after the settled start
+LEAD = 2e-6 + 3.7e-11                         # bits start 2 us after the settled start; every bit edge off the
+                                              # trnoise 0.25 ns grid (an edge on a noise breakpoint stopped the
+                                              # first smoke run at 2.0 us with 'timestep too small')
 PRE4 = [1, 0, 1, 0]
 DATA16 = [1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1, 0]
 PRE2, DATA2 = [1, 0], [0, 1]                  # the smoke runs: 2 preamble + 2 data bits
@@ -56,7 +58,7 @@ def fsk_case(level, pre, data, nf=None, seed=None, threads=6, est=None):
     c = dict(kind='fsk', rx_en=1, step=20e-12, outstep=5e-9, tstop=tstop, pre='rxset_c_tt',
              hold=T.VBNF_RX['typical'], save=SAVE_FSK, threads=threads, npre=len(pre),
              fsk=dict(bits=bits, rate=RATE, dev=DEV, level=level, lead=LEAD), nf=nf, nseed=seed,
-             est=est or int(tstop * 1e6 * 230))   # ~230 s per simulated us on 6 threads (smoke runs)
+             est=est or int(tstop * 1e6 * 440))   # ~440 s per simulated us on 6 threads (smoke runs, machine loaded)
     return c
 
 
@@ -65,21 +67,24 @@ def cases():
     # gap 6: noiseless FSK through the whole tile; gap 2: with noise
     C['fsk_c_tt_-95_n2'] = fsk_case(-95, PRE2, DATA2)
     C['fskn_c_tt_-105_n2_s1'] = fsk_case(-105, PRE2, DATA2, nf=NF_TT, seed=1)
-    for lv in (-70, -95):
-        C[f'fsk_c_tt_{lv}_n16'] = fsk_case(lv, PRE4, DATA16)
-    for lv in (-100, -105, -108):
-        C[f'fskn_c_tt_{lv}_n16_s1'] = fsk_case(lv, PRE4, DATA16, nf=NF_TT, seed=1)
+    # full run (smoke-run speed with the machine loaded: about 440 s per simulated us on 6 threads): one whole packet
+    # (4-bit preamble + 16 bits, 412 us, about 2 days on 8 threads: the run's critical path); -70 dBm and the noise
+    # runs shorter (2-bit preamble), the bit-error statistics are on the extracted chain (jobs_chain.py)
+    C['fsk_c_tt_-95_n16'] = fsk_case(-95, PRE4, DATA16, threads=8, est=int(412 * 380))
+    C['fsk_c_tt_-70_n4'] = fsk_case(-70, PRE2, DATA16[:4])
+    for s_ in (1, 2):
+        C[f'fskn_c_tt_-105_n6_s{s_}'] = fsk_case(-105, PRE2, DATA16[4:10], nf=NF_TT, seed=s_)
     # gap 5: no RF input, settled: the limiters must not toggle; the mutation adds a coupling cap from q_i
     # (uo_out[4]) to the most sensitive baseband node at 10x its budget (sim/verify/coupling.py)
     base0 = dict(kind='rx0', rx0=True, rx_en=1, step=20e-12, tstop=22e-6, tskip=6e-6, pre='rxset_c_tt',
-                 hold=T.VBNF_RX['typical'], save=SAVE_FSK + ' v(a2)', threads=4, est=6000)
+                 hold=T.VBNF_RX['typical'], save=SAVE_FSK + ' v(a2)', threads=4, est=13500)
     C['rx0_c_tt'] = dict(base0)
     C['mut_rx0_ccoup'] = dict(base0, ccoup_from='budget', mut=True)
     # gap 4c: TX on (RX off) for 1.5 us, then TX off and rx_en on (the firmware order): the RX state after
     C['txrx_c_tt'] = dict(kind='txrx', tx=1, rx_en=0, supply='pg', step=20e-12, tstop=6e-6, hold=T.VBNF_RX['typical'],
                           steps={'ui_in5': [(1.5e-6, 0)], 'ui_in6': [(1.5e-6, 0)], 'rx_en': [(1.5e-6, 1)]},
                           save=T.SAVE['rx'] + ' v(ua4) v(ua5) v(ua2) v(ua3) v(pin3) v(dmid) v(vdp) '
-                          + ' '.join(f'v({k})' for k in T.S1_NODES), threads=4, est=4000)
+                          + ' '.join(f'v({k})' for k in T.S1_NODES), threads=4, est=3300)
     # gap 3: PVT
     for corner in CORNERS3 + ('sf', 'fs'):
         cn = T.CN[corner]
@@ -87,27 +92,27 @@ def cases():
             for v in VDDS:
                 tag = f'pvt_{cn}_{tc}_{v:.2f}'
                 pt = dict(corner=corner, temp=tc, vap=v, vdp=v, vnom=v)
-                C[f'{tag}_op'] = dict(pt, kind='op', tstop=0, rx_en=1, ic=None, est=600)
-                C[f'{tag}_k31'] = dict(pt, kind='ring', code=31, tstop=T.VCO_TSTOP, icop=f'{tag}_op', est=3600)
+                C[f'{tag}_op'] = dict(pt, kind='op', tstop=0, rx_en=1, ic=None, est=60)
+                C[f'{tag}_k31'] = dict(pt, kind='ring', code=31, tstop=T.VCO_TSTOP, icop=f'{tag}_op', est=2100)
                 if corner in ('ff', 'fs'):     # the bottom of the range: highest where the devices are fast
-                    C[f'{tag}_k0'] = dict(pt, kind='ring', code=0, tstop=T.VCO_TSTOP, icop=f'{tag}_op', est=3600)
+                    C[f'{tag}_k0'] = dict(pt, kind='ring', code=0, tstop=T.VCO_TSTOP, icop=f'{tag}_op', est=2100)
                 if corner not in CORNERS3:
                     continue
                 sv = T.SAVE['ring'] + ' v(lo_i) v(lo_q) v(nb) ' + ' '.join(f'v({k})' for k in T.SETTLE)
                 C[f'{tag}_set'] = dict(pt, kind='ring', rx_en=1, step=20e-12, tstop=3e-6, hold='op', icop=f'{tag}_op',
-                                       settle=True, save=sv, threads=4, est=3000)
+                                       settle=True, save=sv, threads=4, est=2000)
                 C[f'{tag}_rxs'] = dict(pt, kind='rx', rx_en=1, step=20e-12, tstop=22e-6, tskip=6e-6, rfdf=(200e3, -95),
-                                       pre=f'{tag}_set', hold='op', icop=f'{tag}_op', threads=4, est=6500,
+                                       pre=f'{tag}_set', hold='op', icop=f'{tag}_op', threads=4, est=13500,
                                        save=T.SAVE['rx'] + ' ' + ' '.join(f'v({k})' for k in T.S1_NODES))
                 C[f'{tag}_tx'] = dict(pt, kind='tx', tx=1, supply='pg', icop=f'{tag}_op', save=T.SAVE['tx'],
-                                      code=T.CODE[corner], est=7000)
+                                      code=T.CODE[corner], est=4200)
                 C[f'{tag}_pu'] = dict(pt, kind='pwr', supply='ideal', ramp=10e-6, ic='uic', step=20e-12, tstop=16e-6,
                                       save=T.SAVE['pwr'], est=14000)
     # gap 3 mutations: a 3.45 V point run at 3.0 V (the supply check must flag it); 70 C not passed to the deck
     C['mut_pvt_v300'] = dict(corner='typical', temp=27, vap=3.0, vdp=3.0, vnom=3.45, kind='ring', code=31,
-                             tstop=T.VCO_TSTOP, icop='pvt_tt_27_3.45_op', mut=True, est=3600)
+                             tstop=T.VCO_TSTOP, icop='pvt_tt_27_3.45_op', mut=True, est=2100)
     C['mut_pvt_notemp'] = dict(corner='typical', temp=70, vap=3.3, vdp=3.3, vnom=3.3, kind='op', tstop=0, rx_en=1,
-                               ic=None, notemp=True, mut=True, est=600)
+                               ic=None, notemp=True, mut=True, est=60)
     return C
 
 

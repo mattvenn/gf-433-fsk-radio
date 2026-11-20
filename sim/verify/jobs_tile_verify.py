@@ -27,12 +27,14 @@ try:
 except (OSError, ValueError):
     EST = {}
 E = f"cd {REPO} && TILE_SIMS_OUT={OUT} "
+RERUN = {"fskn_c_tt_-105_n2_s1": 1}     # bump to re-run a failed job (the scheduler re-runs it when its command changes)
 JOBS = []
 if SET != "smoke":
     JOBS.append(dict(name="rxset_c_tt", cmd=E + "python3 sim/top/tb_tile.py run rxset_c_tt", threads=4, est=2600, prio=1))
 for n in NAMES:
     c = C[n]
-    j = dict(name=n, cmd=E + f"python3 sim/verify/tile_verify.py run {n}", threads=c.get("threads", 1),
+    j = dict(name=n, cmd=E + f"python3 sim/verify/tile_verify.py run {n}" + (f"  # rerun {RERUN[n]}" if n in RERUN else ""),
+             threads=c.get("threads", 1),
              est=int(EST.get(n, c["est"] / 1.1) * 1.1), deps=[d for d in V.deps(n, c) if d in NAMES or d == "rxset_c_tt"])
     if SET == "smoke":
         j["deps"] = [d for d in j["deps"] if d != "rxset_c_tt"]

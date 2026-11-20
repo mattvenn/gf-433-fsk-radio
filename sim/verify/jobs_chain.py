@@ -22,7 +22,12 @@ except (OSError, ValueError):
 JOBS = []
 
 
+RERUN = {"ovl1_tt_-95": 1, "ovl1_tt_-10": 1, "ovl1_tt_0": 1, "ovl1_tt_6": 1, "coupling_budget": 1, "rate_tt_6": 1,
+         "rate_tt_6_vdd4.5": 1}   # bump: re-run a failed job
+
+
 def job(name, cmd, est, deps=(), threads=1, prio=0):
+    cmd += f"  # rerun {RERUN[name]}" if name in RERUN else ""
     JOBS.append(dict(name=name, cmd=cmd, threads=threads, est=int(EST.get(name, est / 1.1) * 1.1), deps=list(deps),
                      prio=prio))
 
@@ -39,18 +44,19 @@ mcjobs = []
 for corner, n in MC.items():
     for s in range(1, n + 1):
         nm = f"mc_pex_{CN[corner]}_s{s}"
-        job(nm, X + f"mc --kind pex --corner {corner} --seed {s}", 270, prio=1)
+        job(nm, X + f"mc --kind pex --corner {corner} --seed {s}; exit 0", 270, prio=1)
         mcjobs.append(nm)
-    nm = f"mc_pex_{CN[corner]}_s1_mmoff"
-    job(nm, X + f"mc --kind pex --corner {corner} --seed 1 --mut mmoff", 270, prio=1)
-    mcjobs.append(nm)
+    for s in ((1, 2) if corner == "typical" else (1,)):      # tt: two seeds, which must give the same numbers
+        nm = f"mc_pex_{CN[corner]}_s{s}_mmoff"
+        job(nm, X + f"mc --kind pex --corner {corner} --seed {s} --mut mmoff", 270, prio=1)
+        mcjobs.append(nm)
 for s in range(1, NMERGE + 1):
     nm = f"mc_pex_tt_s{s}_merge"
-    job(nm, X + f"mc --kind pex --seed {s} --mut merge", 270, prio=1)
+    job(nm, X + f"mc --kind pex --seed {s} --mut merge; exit 0", 270, prio=1)
     mcjobs.append(nm)
 for s in range(1, NSCH + 1):
     nm = f"mc_sch_tt_s{s}"
-    job(nm, X + f"mc --kind sch --seed {s}", 250)
+    job(nm, X + f"mc --kind sch --seed {s}; exit 0", 250)
     mcjobs.append(nm)
 job("mc_report", f"cd {REPO} && python3 sim/verify/mc_report.py", 900 if SET == "smoke" else 3600, deps=mcjobs,
     threads=8)
@@ -65,7 +71,7 @@ else:
         + [(-114, 0.0, s, "nf0") for s in range(1, 5)] + [(-105, 27.3, s, "nfx10") for s in (1, 2)]
 for lv, nf, s, mut in FSK:
     nm = f"fsk_pex_tt_{lv}_n8_nf{nf:g}_s{s}"
-    job(nm, X + f"fsk --level {lv} --nf {nf} --seed {s} --ndata 8", 16000)
+    job(nm, X + f"fsk --level {lv} --nf {nf} --seed {s} --ndata 8; exit 0", 16000)
     fskjobs.append(nm)
 if SET != "smoke":                                  # noiseless 16 bits through the extracted chain (gap 6 extra)
     for lv in (-70, -95):
@@ -76,13 +82,16 @@ if SET != "smoke":                                  # noiseless 16 bits through 
 for lv in (-95, -10, 0, 6):
     job(f"ovl1_tt_{lv}", X + f"ovl1 --level {lv}", 900, prio=1)
 for lv in (6,) if SET == "smoke" else (-10, 0, 6):
-    job(f"rate_tt_{lv}", X + f"rate --level {lv}", 300)
-job("rate_tt_6_vdd4.5", X + "rate --level 6 --vdd 4.5", 300)        # mutation: the checker must flag it
+    job(f"rate_tt_{lv}", X + f"rate --level {lv}", 300, prio=2)
+job("rate_tt_6_vdd4.5", X + "rate --level 6 --vdd 4.5", 300, prio=2)        # mutation: the checker must flag it
 for lv in (-10, 0, 6):
-    job(f"bbrec_tt_{lv}_1ms", X + f"bbrec --src ovl1_tt_{lv} --tburst 1e-3", 1800, deps=[f"ovl1_tt_{lv}", "ovl1_tt_-95"])
+    job(f"bbrec_tt_{lv}_1ms", X + f"bbrec --src ovl1_tt_{lv} --tburst 1e-3", 1800, deps=[f"ovl1_tt_{lv}", "ovl1_tt_-95"],
+        prio=2)
+job("bbrec_tt_-10_0.1ms", X + "bbrec --src ovl1_tt_-10 --tburst 1e-4", 1800, deps=["ovl1_tt_-10", "ovl1_tt_-95"],
+    prio=2)                                         # a shorter burst: is the 1 ms state saturated?
 job("bbrec_tt_-10_1ms_burston", X + "bbrec --src ovl1_tt_-10 --tburst 1e-3 --mut burston", 1800,
     deps=["ovl1_tt_-10", "ovl1_tt_-95"])
-job("bbrec_tt_-95_0ms", X + "bbrec --src ovl1_tt_-95 --tburst 0", 1800, deps=["ovl1_tt_-95"])   # no burst: reference
+job("bbrec_tt_-95_0ms", X + "bbrec --src ovl1_tt_-95 --tburst 0", 1800, deps=["ovl1_tt_-95"], prio=2)   # no burst: reference
 if SET != "smoke":                                  # (smoke: run by hand once txrx_c_tt is done)
     job("bbrec_tt_txrx", X + "bbrec --src tile --tstop 2.5e-3", 1800, deps=["ovl1_tt_-95"])
 

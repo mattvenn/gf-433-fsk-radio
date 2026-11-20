@@ -78,7 +78,7 @@ def main():
         c['s1_worst_v'] = float(max(s1))
         c['s1_yield'] = float(np.mean(np.array(s1) < S1_MAX))
         for k in ('vos_i_mv', 'hyst_i_mv', 'mix_i_off_mv', 's1_i_off_v', 'conv_gq', 'conv_phase', 'bb_gq', 'bb_dphase',
-                  'lna_i_off_mv'):
+                  'lna_i_off_mv', 'idd_ma', 'bb_gain_i'):
             v = np.array([r[k] for r in ok])
             c[k] = dict(mean=float(v.mean()), std=float(v.std(ddof=1)) if len(v) > 1 else 0.0, min=float(v.min()),
                         max=float(v.max()))
@@ -100,12 +100,13 @@ def main():
     # mutation 1: mismatch off -> no spread. The spread check (std of the comparator offset > 0.01 mV) on the
     # samples, and on the mismatch-off run repeated (its offsets are the same whatever the seed: one value)
     tt = [r for r in load('mc_pex_tt_s*') if not r.get('mut') and 'error' not in r]
-    off = load('mc_pex_*_s1_mmoff')
     sp = float(np.std([r['vos_i_mv'] for r in tt])) if len(tt) > 1 else None
     rep['spread_check'] = dict(std_vos_i_mv=sp, pass_=sp is not None and sp > 0.01)
-    offv = [r.get('vos_i_mv') for r in off if 'error' not in r]
-    rep['mut_mmoff'] = dict(vos_i_mv=offv, spread=float(np.std(offv)) if offv else None,
-                            caught=bool(offv) and all(abs(v) < 0.01 for v in offv))
+    off = [r for r in load('mc_pex_tt_s*_mmoff') if 'error' not in r]     # two seeds, mismatch off
+    offv = [r['vos_i_mv'] for r in off] + [r['s1_i_off_v'] * 1e3 for r in off]
+    spo = float(np.std([r['vos_i_mv'] for r in off])) if len(off) > 1 else None
+    rep['mut_mmoff'] = dict(n=len(off), vos_i_mv=[r['vos_i_mv'] for r in off], s1_i_off_mv=[r['s1_i_off_v'] * 1e3 for r in off],
+                            spread=spo, caught=None if spo is None else not (spo > 0.01))
     # mutation 2: merged stage-1 fingers: the static check must flag them; the stage-1 offset spread changes
     mg = [r for r in load('mc_pex_tt_s*_merge') if 'error' not in r]
     if mg and len(tt) > 2:

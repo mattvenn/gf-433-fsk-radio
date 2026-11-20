@@ -64,6 +64,11 @@ case $c in
     [ "$f" = 0 ] && [ "$bad" = 0 ] && res PASS "every sheet matches; mutations caught" || res FAIL "$f FAIL lines, $bad mutations not caught" ;;
   layout)
     bash layout/gen/tile_driver.sh > "$L" 2>&1
+    # tile_driver.sh step 3 regenerates gds/ lef/ lvs/ (the GDS differs at least in its timestamp): record, then
+    # restore the committed files so the run leaves the tree clean (the checks above ran on the regenerated copy)
+    ch=$(git status --short gds lef lvs | tr '\n' ' ')
+    echo "regenerated, differing from the commit: ${ch:-none}" >> "$L"
+    git checkout -q -- gds lef lvs 2>/dev/null
     if [ -f build/tile/run/DONE ] && [ ! -f build/tile/run/FAILED ]; then res PASS "$(tr '\n' ' ' < build/tile/run/status.txt | tail -c 400)"
     else res FAIL "$(head -3 build/tile/run/FAILED 2>/dev/null | tr '\n' ' ')"; fi ;;
   *) echo "unknown check $c"; exit 2 ;;

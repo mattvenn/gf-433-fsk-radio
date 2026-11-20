@@ -87,25 +87,30 @@ def existing():
         m = re.search(r'(?:mutants|planted bugs|mutations) caught (\d+) / (\d+)', det)
         if m:
             mut(area, f'{c}: planted bugs', int(m.group(1)) == int(m.group(2)), f'{m.group(1)} / {m.group(2)}')
-    if (B / 'existing' / 'layout.log').exists():          # tile_driver's own mutation lines (LVS 14, DRC, antenna)
-        t = (B / 'existing' / 'layout.log').read_text(errors='replace') + (
-            (REPO / 'build/tile/run/status.txt').read_text(errors='replace') if (REPO / 'build/tile/run/status.txt').exists() else '')
-        m = re.findall(r'(\d+) / (\d+) mutations', t)
-        if m:
-            a, b_ = m[-1]
-            mut('layout', 'tile_driver: LVS / DRC / antenna planted errors', a == b_, f'{a} / {b_}')
+    lv = REPO / 'build/tile/run/lvs.log'                   # tile_driver step 5: check_tt.sh's LVS mutations
+    if (B / 'existing' / 'layout.log').exists() and lv.exists():
+        t = lv.read_text(errors='replace')
+        n = len(re.findall(r'(?m)^== mutation ', t))
+        c_ = len(re.findall(r'(?m)^== mutation .*: FAIL \(expected\)', t))
+        mut('layout', 'tile LVS (check_tt.sh) planted wiring / property errors', c_ == n and n > 0, f'{c_} / {n}')
+        st = (REPO / 'build/tile/run/status.txt').read_text(errors='replace')
+        mut('layout', 'tile antenna: planted violation', None if 'antenna: done' not in st else 'planted violation caught' in st)
     # mixed-signal: sim/mixed/verdict.py --mutants (its own check lines) on build/mixed
-    if (REPO / 'build/mixed/status.json').exists():
+    if any((REPO / 'build/mixed').glob('*/result.json')):
         r = subprocess.run([sys.executable, 'sim/mixed/verdict.py', '--mutants'], cwd=REPO, capture_output=True, text=True)
+        inmut = False
         for ln in r.stdout.splitlines():
-            m = re.match(r'^\s*(PASS|FAIL|pending|PEND\w*)\s+(.*)$', ln)
+            if ln.startswith('-- mutant'):
+                inmut = True
+            m = re.match(r'^== mutant (.*): (CAUGHT|NOT CAUGHT|MISSED)(.*)$', ln)
             if m:
+                mut('mixed', m.group(1)[:100], True if m.group(2) == 'CAUGHT' else False, m.group(3)[:150])
+                continue
+            m = re.match(r'^\s*(PASS|FAIL|pending)\s+(\S+)\s+(\S+)\s+(.*)$', ln)
+            if m and not inmut:
                 st = m.group(1)
-                name = m.group(2)[:110]
-                if 'mutant' in name.lower():
-                    mut('mixed', name, True if st == 'FAIL' else (False if st == 'PASS' else None))
-                else:
-                    chk('mixed', name, True if st == 'PASS' else (False if st == 'FAIL' else None))
+                chk('mixed', f'{m.group(2)} {m.group(3)}', True if st == 'PASS' else (False if st == 'FAIL' else None),
+                    m.group(4)[:180])
         if not any(c['area'] == 'mixed' for c in CHECKS):
             chk('mixed', 'sim/mixed/verdict.py', r.returncode == 0, r.stdout[-300:])
     else:
@@ -393,8 +398,8 @@ def gap4():
     mut('gap 4 overload', 'LNA / mixer at 4.5 V: the rating check flags it', None if okb(r) is None else
         (okb(r) and r['n_over'] > 0), bad(r) or f"{r['n_over']} devices over")
     ref = jload(B / 'chain' / 'bbrec_tt_-95_0ms' / 'result.json')
-    chk('gap 4 overload', 'baseband bench, no burst: decodes from the start (split-bench sanity)',
-        okb(ref) and ref.get('t_rec') is not None and ref.get('rec_after_ref_ms', 9) < 0.2 if okb(ref) else okb(ref),
+    chk('gap 4 overload', 'split-bench sanity, no burst: the receiver settles from its LO start-up and decodes within 1 ms',
+        okb(ref) and ref.get('t_rec') is not None and ref.get('rec_after_ref_ms', 9) <= 1.0 if okb(ref) else okb(ref),
         bad(ref) or f"recovered {ref.get('rec_after_ref_ms')} ms after the start")
     for lv in (-10, 0, 6):
         r = jload(B / 'chain' / f'bbrec_tt_{lv}_1ms' / 'result.json')

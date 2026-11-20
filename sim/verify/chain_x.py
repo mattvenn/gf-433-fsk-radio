@@ -288,6 +288,10 @@ def fsk(a):
     nf = a.nf
     tstop = (len(bits) - 0.5) / rx_chain.RATE + 3.7e-11
     deck = rx_chain.fsk_deck(a.corner, a.level, tstop, nf, 20e-12, np.array(bits))
+    # every bit edge 37 ps off the trnoise 0.25 ns grid (an edge on a noise breakpoint: 'timestep too small')
+    deck = re.sub(r'(?m)^(vph ph 0 pwl\()(.*)\)$', lambda m: m.group(1) + ' '.join(
+        f'{float(x) + (3.7e-11 if i % 2 == 0 and float(x) > 0 else 0):.12e}' if i % 2 == 0 else x
+        for i, x in enumerate(m.group(2).split())) + ')', deck)
     deck = deck.replace('tran 2e-11', 'tran 5e-09', 1).replace('.control\n', '.control\noption interp\n', 1)
     deck = swap_pex(deck) if a.kind == 'pex' else deck
     tag = f"fsk_{a.kind}_{rxc.CN[a.corner]}_{a.level:g}_n{a.ndata}" + (f'_nf{nf:g}_s{a.seed}' if nf is not None else '') \
@@ -296,7 +300,7 @@ def fsk(a):
     r = dict(name=tag, kind=a.kind, level=a.level, nf=nf, seed=a.seed, flags=fl, bits=bits[1:-1], npre=len(pre))
     try:
         pl = raw(d)
-        r.update(D.decode(pl['time'], pl['v(q_i)'], pl['v(q_q)'], bits[1:-1], len(pre), 1 / rx_chain.RATE))
+        r.update(D.decode(pl['time'], pl['v(q_i)'], pl['v(q_q)'], bits[1:-1], len(pre), 1 / rx_chain.RATE + 3.7e-11))
     except Exception as e:  # noqa: BLE001
         r['error'] = str(e)
     return finish(d, r)
@@ -353,7 +357,7 @@ Ven en 0 {vdd}
 save {s}
 tran {step} {tstop} 0 20p
 set filetype=binary
-write out.raw {s}
+write out.raw
 .endc
 .end
 """), sv
@@ -387,8 +391,12 @@ def ovl1(a):
 def rate(a):
     """+6 dBm (or other) burst for 2 us: max |Vgs|, |Vgd|, |Vds|, |Vgb| of every LNA / mixer device (3.3 V devices)."""
     tag = f'rate_{rxc.CN[a.corner]}_{a.level:g}' + (f'_vdd{a.vdd:g}' if a.vdd != VDD else '')
-    deck, sv = ovl1_deck(a.corner, a.level, 2e-6, vdd=a.vdd, save_lna=True)
-    d, log, fl = run(tag, deck)
+    if a.analyse:
+        d = OUT / tag
+        fl = [w for w in BAD if w in (d / 'deck.log').read_text(errors='replace').lower()]
+    else:
+        deck, sv = ovl1_deck(a.corner, a.level, 2e-6, vdd=a.vdd, save_lna=True)
+        d, log, fl = run(tag, deck)
     r = dict(name=tag, level=a.level, vdd=a.vdd, flags=fl, rating_v=RATING)
     try:
         pl = raw(d)
@@ -406,7 +414,7 @@ def rate(a):
                 if n in ('VSS', '0'):
                     return np.zeros(m.sum())
                 k = f'v({n})' if n in outer.values() or n == 'VDD' else f'v({inst}.{n})'
-                return pl[k][m]
+                return pl[k.lower()][m]
             for ln in sub.group(2).splitlines():
                 if not ln.startswith('X') or 'fet_03v3' not in ln:
                     continue
@@ -431,10 +439,10 @@ def bbrec_deck(corner, st, src, tstop, en_step=None):
     """Extracted rx_bias + 2 x rx_bb + 2 x rx_lim; bi/bq from sources: cm + offset(t)/2 + signal; .ic from st."""
     lines = []
     for arm, ph0 in (('i', 0.0), ('q', -72.0)):
-        cm, off, amp = src[f'cm_{arm}'], src[f'off_{arm}'], src[f'amp_{arm}']
-        lines.append(f'B{arm}p b{arm}_p 0 V={cm}+v(off{arm})/2+v(env)*{amp / 2}*cos(v(ph)+{np.deg2rad(ph0):.6f})\n'
-                     f'B{arm}n b{arm}_n 0 V={cm}-v(off{arm})/2-v(env)*{amp / 2}*cos(v(ph)+{np.deg2rad(ph0):.6f})\n'
-                     f'voff{arm} off{arm} 0 pwl({src[f"offpwl_{arm}"]})\n')
+        amp = src[f'amp_{arm}']
+        lines.append(f'B{arm}p b{arm}_p 0 V=v(cm{arm})+v(off{arm})/2+v(env)*{amp / 2}*cos(v(ph)+{np.deg2rad(ph0):.6f})\n'
+                     f'B{arm}n b{arm}_n 0 V=v(cm{arm})-v(off{arm})/2-v(env)*{amp / 2}*cos(v(ph)+{np.deg2rad(ph0):.6f})\n'
+                     f'voff{arm} off{arm} 0 pwl({src[f"offpwl_{arm}"]})\nvcm{arm} cm{arm} 0 pwl({src[f"cmpwl_{arm}"]})\n')
     en = f'pwl(0 0 {en_step} 0 {en_step + 1e-8} {VDD})' if en_step is not None else f'{VDD}'
     ic = ('.ic ' + ' '.join(f'v({k})={v:.6f}' for k, v in st.items()) + '\n') if st else ''
     return swap_pex(f"""* baseband recovery {corner}
@@ -478,8 +486,8 @@ def bbrec(a):
         src = {}
         for arm in ('i', 'q'):
             b = f'b{arm}'
-            src[f'cm_{arm}'] = tv[f'{b}_cm_after']
-            src[f'off_{arm}'] = 1.0
+            src[f'cmpwl_{arm}'] = (f"0 {tv[f'{b}_cm_before']} {t_ev} {tv[f'{b}_cm_before']} {t_ev + 1e-6} "
+                                   f"{tv[f'{b}_cm_after']}")
             # before rx_en the mixer output carries what the tile had with RX off; after, the tile's offset
             src[f'offpwl_{arm}'] = (f"0 {tv[f'{b}_off_mv_before'] * 1e-3} {t_ev} {tv[f'{b}_off_mv_before'] * 1e-3} "
                                     f"{t_ev + 50e-9} {tv[f'{b}_off_mv_after'] * 1e-3}")
@@ -490,21 +498,21 @@ def bbrec(a):
     else:
         s1 = json.loads((OUT / a.src / 'result.json').read_text())
         st = s1['state']
-        tb = a.tburst - s1['t_end']                 # the rest of the burst, after the phase-1 run
+        tb = max(a.tburst - s1['t_end'], 0.0)       # the rest of the burst, after the phase-1 run
         if a.mut == 'burston':
             tb = tstop + 1e-3
         t_ev, t_fsk = tb, tb
         src = {}
         for arm in ('i', 'q'):
-            src[f'cm_{arm}'] = s1[f'mix_{arm}_cm_v']
-            src[f'off_{arm}'] = 1.0
+            src[f'cmpwl_{arm}'] = (f"0 {s1[f'mix_{arm}_cm_v']} {max(tb, 1e-9)} {s1[f'mix_{arm}_cm_v']} "
+                                   f"{max(tb, 1e-9) + 1e-6} {ref[f'mix_{arm}_cm_v']}")
             src[f'offpwl_{arm}'] = (f"0 {s1[f'mix_{arm}_dc_v']} {max(tb, 1e-9)} {s1[f'mix_{arm}_dc_v']} "
                                     f"{max(tb, 1e-9) + 50e-9} {ref[f'mix_{arm}_dc_v']}")
             src[f'amp_{arm}'] = ref[f'mix_{arm}_amp_v']
         k = s1['mix_i_amp_v'] / ref['mix_i_amp_v']          # the burst tone, relative to the -95 dBm signal
         env = f'0 {k} {max(tb, 1e-9)} {k} {max(tb, 1e-9) + 50e-9} 1 {tstop} 1'
         en_step = None
-        tag = f'bbrec_{rxc.CN[a.corner]}_{a.src[5:]}_{a.tburst * 1e3:g}ms' + (f'_{a.mut}' if a.mut else '')
+        tag = f'bbrec_{a.src[5:]}_{a.tburst * 1e3:g}ms' + (f'_{a.mut}' if a.mut else '')
     # phase: during the burst a steady +100 kHz rotation (the CW burst); from t_fsk CPFSK on `bits`
     pts, ph, tt = [(0.0, 0.0)], 0.0, 0.0
     if t_fsk > 0:
@@ -543,6 +551,7 @@ def main():
     ap.add_argument('--src', default='ovl1_tt_-10')
     ap.add_argument('--tburst', type=float, default=1e-3)
     ap.add_argument('--tstop', type=float, default=2.5e-3)
+    ap.add_argument('--analyse', action='store_true', help='rate: re-analyse an existing run')
     a = ap.parse_args()
     r = dict(mc=mc, fsk=fsk, ovl1=ovl1, rate=rate, bbrec=bbrec)[a.mode](a)
     sys.exit(1 if ('error' in r or r.get('flags')) else 0)
