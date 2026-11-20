@@ -66,3 +66,23 @@ Score: — = not tried yet; otherwise the best score so far (0–4), with the da
 **Tally:** 2 of 50 tried, 0 at 4/4.
 
 **To ask again:** part1-002, part1-016.
+
+## Small-signal drills
+The shorthand most of the questions lean on. At the start of a session: five quick questions drawn from the list, no
+notes, then the score below. Each card is answered in one line; the answers are folded, for self-checking.
+
+1. **gm three ways.** <details><summary>Answer</summary>gm = μC<sub>ox</sub>(W/L)·V<sub>ov</sub> = 2I/V<sub>ov</sub> = √(2μC<sub>ox</sub>(W/L)·I). Which one "applies" depends on what is held fixed (W/L or I).</details>
+2. **gm in weak inversion.** <details><summary>Answer</summary>gm ≈ I / (n·kT/q) ≈ I / 34 mV: the most gm per µA, independent of W/L.</details>
+3. **Resistance looking into a diode-connected transistor, or into a source.** <details><summary>Answer</summary>About 1/gm.</details>
+4. **Resistance looking into a drain.** <details><summary>Answer</summary>r<sub>o</sub> = 1/(λI); with a source resistor R<sub>S</sub>, about r<sub>o</sub>(1 + gm·R<sub>S</sub>).</details>
+5. **Intrinsic gain.** <details><summary>Answer</summary>gm·r<sub>o</sub>: the most gain one transistor can give.</details>
+6. **Common-source gain** (resistor load, diode load, current-source load). <details><summary>Answer</summary>−gm·(R<sub>D</sub> ∥ r<sub>o</sub>); −gm1/gm2; −gm·(r<sub>o1</sub> ∥ r<sub>o2</sub>).</details>
+7. **Source-follower gain and output resistance.** <details><summary>Answer</summary>Gain gm·R/(1 + gm·R), just under 1; output resistance about 1/gm.</details>
+8. **Common-gate input resistance and gain.** <details><summary>Answer</summary>Input about 1/gm; gain about +gm·R<sub>D</sub> (non-inverting).</details>
+9. **A node's pole.** <details><summary>Answer</summary>f = 1/(2π·R·C), with R and C the total resistance and capacitance at that node; roughly one pole per high-impedance node.</details>
+10. **The Miller effect.** <details><summary>Answer</summary>A capacitor C from the input to an output with gain −A looks like C·(1 + A) at the input.</details>
+11. **A differential pair's tail limits the output to …** <details><summary>Answer</summary>±I<sub>tail</sub>·R<sub>D</sub> (differential): the whole tail current steered to one side.</details>
+12. **gm × R prefixes.** <details><summary>Answer</summary>mS × kΩ is a plain number (8 mS × 1.2 kΩ = 9.6).</details>
+
+| Date | Cards | Score | Slipped on |
+|---|---|---|---|
