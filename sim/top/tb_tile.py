@@ -78,7 +78,12 @@ def ports(pex):
 # ------------------------------------------------------------------------------------------------ deck
 DEF = dict(pex='c', corner='typical', temp=27, code=None, word=512, sd=0, rx_en=0, dbg=0, tx=0, supply='ideal',
            vap=VDD, vdp=VDD, tstop=1.2e-6, tstart=None, step=5e-12, ramp=None, rf=None, ua0='probe', ic='ring',
-           save=None, ac=None, kind='ring', hold=None, settle=False, tskip=None, rsw=None, iinj=None, swap=None, rfdf=None, pre=None, mut=False, cadd=None, vshort=None)
+           save=None, ac=None, kind='ring', hold=None, settle=False, tskip=None, rsw=None, iinj=None, swap=None, rfdf=None, pre=None, mut=False, cadd=None, vshort=None,
+           fsk=None, nf=None, nseed=None, steps=None, notemp=False, ccoup=None, rx0=False, vnom=None)
+# (verification, sim/verify/tile_verify.py: fsk = dict(bits, rate, dev, level, lead) CPFSK around the pre-run's ring f;
+#  nf = antenna-referred noise figure (dB) as a white trnoise EMF source, nseed its seed; steps = {source: [(t, 0|1)]}
+#  logic steps; notemp = the temperature mutation (the deck keeps 27 C); ccoup = (node a, node b, C) a coupling cap;
+#  rx0 = a settled RX run with no RF; vnom = the supply the case stands for (the supply mutation's label))
 
 
 def supplies(c):
@@ -105,6 +110,12 @@ def supplies(c):
 
 def logic(name, on, c, vsup='vdp'):
     """A VDPWR-level logic source (follows the supply ramp in power-up runs)."""
+    if c.get('steps') and name in c['steps']:     # stepped: [(t, 0|1), ...] from the initial state 'on'
+        v, pts = (c['vdp'] if on else 0), [f'0 {c["vdp"] if on else 0}']
+        for t, x in c['steps'][name]:
+            pts += [f'{t:.9e} {v}', f'{t + 1e-9:.9e} {c["vdp"] if x else 0}']
+            v = c['vdp'] if x else 0
+        return f'v{name} {name} 0 PWL({" ".join(pts)})\n'
     if not on:
         return f'v{name} {name} 0 0\n'
     if c['ramp']:
@@ -132,12 +143,25 @@ def stimuli(c):
 
 def rf_in(c):
     """RX dipole: EMF source (dp - dn) through 36.5 ohm per arm into the pads (rx_chain.front())."""
-    if not c['rf']:
-        src = 'Vsig dp dn 0\n'
+    dn = 'dnz' if c.get('nf') is not None else 'dn'
+    if c.get('fsk'):                 # CPFSK around the pre-run's ring f (sim/rx/rx_chain.py phase_pwl)
+        fk = c['fsk']
+        emf = 2 * np.sqrt(2 * 73 * 1e-3 * 10 ** (fk['level'] / 10))
+        ph, pts, T = 0.0, [(0.0, 0.0), (fk.get('lead', 0.0), 0.0)], 1 / fk['rate']
+        for k, b in enumerate(fk['bits']):
+            ph += 2 * np.pi * (fk['dev'] if b else -fk['dev']) * T
+            pts.append((fk.get('lead', 0.0) + (k + 1) * T, ph))
+        src = (f'vph ph 0 pwl({" ".join(f"{t:.9e} {p:.9f}" for t, p in pts)})\n'
+               f'Bsig dp {dn} V={emf:.6e}*sin(2*pi*{fk["f0"]:.3f}*time+v(ph))\n')
+    elif not c['rf']:
+        src = f'Vsig dp {dn} 0\n'
     else:
         f, dbm = c['rf']
         emf = 2 * np.sqrt(2 * 73 * 1e-3 * 10 ** (dbm / 10))     # available power into a matched 73 ohm load
-        src = f'Bsig dp dn V={emf:.6e}*sin(2*pi*{f:.3f}*time)\n'
+        src = f'Bsig dp {dn} V={emf:.6e}*sin(2*pi*{f:.3f}*time)\n'
+    if c.get('nf') is not None:      # the receiver's antenna-referred noise: 4kT x 73 ohm x F, white to 2 GHz (0.25 ns)
+        vn = np.sqrt(4 * 1.380649e-23 * 300.15 * 73 * 10 ** (c['nf'] / 10) * 2e9)
+        src += f'vnz dnz dn dc 0 trnoise({vn:.4e} 0.25n 0 0)\n'
     return src + 'Rsp dp pinp 36.5\nRsn dn pinn 36.5\nRdc dn 0 1e9\n'
 
 
@@ -212,9 +236,12 @@ def pre_result(name):
 def deck(c):
     c = dict(DEF, **c)
     corner = c['corner']
-    if c['rfdf']:                    # the tone at the pre-run's ring f + df; start from its settled bias
+    if c['rfdf'] or c['fsk'] or c['rx0']:   # the tone (FSK, nothing) at the pre-run's ring f (+ df); its settled bias
         pr = pre_result(c['pre'])
-        c['rf'] = (pr['f_a2'] + c['rfdf'][0], c['rfdf'][1])
+        if c['rfdf']:
+            c['rf'] = (pr['f_a2'] + c['rfdf'][0], c['rfdf'][1])
+        if c['fsk']:
+            c['fsk'] = dict(c['fsk'], f0=pr['f_a2'])
         c['ic'] = dict(a2=0, vg=round(pr['vg'], 5)) if c['hold'] is not None else \
             dict(a2=0, vbnf=round(pr['vbnf'], 5), vg=round(pr['vg'], 5))
         if pr.get('settle'):         # the high-pass starts settled: the stage-1 outputs and the mixer outputs at
@@ -230,6 +257,9 @@ def deck(c):
     if c['cadd']:                   # an extra capacitor node -> ground (the I/Q check's mutation: + C on a2)
         nd, cv = c['cadd']
         body += f'Cadd_{nd} {nd} 0 {cv:g}\n'
+    if c['ccoup']:                  # a coupling capacitor between two nodes (gap 5's mutation: q_i -> a baseband node)
+        na, nb2, cv = c['ccoup']
+        body += f'Ccoup {na} {nb2} {cv:g}\n'
     if c['vshort']:                 # what-if: two nodes joined by a 0 V source (e.g. the Q header bypassed)
         na, nb = c['vshort']
         body += f'Vshort_{na} {na} {nb} 0\n'
@@ -260,7 +290,7 @@ def deck(c):
         save_w = save
     return f"""* tb_tile {json.dumps({k: v for k, v in c.items() if v != DEF.get(k)})}
 {hdr}{body}{ic}.control
-option temp={c['temp']}
+option temp={27 if c['notemp'] else c['temp']}
 {ana}set filetype=binary
 write out.raw {save_w}
 quit
