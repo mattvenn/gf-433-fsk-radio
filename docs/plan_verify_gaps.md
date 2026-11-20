@@ -167,6 +167,60 @@ packet alone takes about 43 h, so trimming CPU below about 1200 CPU-hours does n
    needs about 1.5 ms after rx_en (from off) and about 1.9 ms after a strong in-band burst before -95 dBm decodes,
    against the 1 ms wait in `bringup.md`. The full run repeats both; the rule could be changed to 2 ms now.
 
+## Where the phase-1 agent got to (2026-11-20, 15:20) and next steps
+
+Written so the work can resume from git alone (the smoke outputs are in `build/verify/`, not committed).
+
+**Done and committed:** every gap's bench, checker and mutation (Table II); the full-run job file
+(`sim/verify/jobs_full.py`, 967 jobs), driver (`sim/verify/full_run.sh`, dry-run tested: `DRY=1` -> DONE,
+`DRY=fail` -> FAILED at setup) and brief ([`handoff_full_verification.md`](handoff_full_verification.md)).
+
+**Smoke results so far** (`python3 sim/verify/verdict.py --smoke` -> `build/verify/verdict_smoke.md`):
+- existing digital / layout: all PASS (pinout, cocotb macro / TT on RTL and GL, formal prove and gates_bmc, eqy,
+  floorplan, xschem, `tile_driver.sh`); planted errors caught: `test/mutations.sh` 15 / 15, `formal/mutate.sh` 8 / 8,
+  eqy 5 / 5, tile LVS 14 / 14, antenna 1 / 1.
+- gap 4: +6 dBm at the RX pins, worst device 3.35 V (LNA input-pair Vgs) against 3.63 V: PASS (4.5 V mutation: 55
+  devices flagged). A 1 ms burst at -10 / 0 / +6 dBm: -95 dBm decodes again 1.90 ms after the burst (a 0.1 ms burst
+  gives the same 1.90 ms: the baseband saturates within 0.1 ms); no-burst reference 0.28 ms. TX -> RX: 1.47 ms after
+  rx_en. On the tile the TX puts under 1 µV p-p on the LNA pins with the RX off. Burst-left-on mutation: pending.
+- gap 5: every one of 50 extracted q_i / q_q couplings into baseband nets within its budget (tightest
+  uo_out[5] -> bi_p 315 aF against 2744 aF, 8.7x; smallest budget 48 aF at the stage-2 inputs); the 10x mutation is
+  caught. Not in the baseband but worth noting: uo_out[4] - ua[0] is 24 fF, 0.6 of oi_p's budget when DBG_SEL[0] puts
+  oi_p on ua[0] (debug mode only).
+- gap 3 mutations (3.0 V for 3.45 V; 70 °C not in the deck) caught. ss / 70 °C / 3.15 V: 433.92 MHz in reach
+  (687 MHz at code 31), but the divide-by-4 reads f / f(ck) = 10.85 at 687 MHz there (information: the check is at the
+  operating code, still running).
+
+**Smoke-verdict FAILs and what they are:**
+1. *mixed rx_en ss* (nb 0.000 V with rx_en on): the known open item of `verification.md` ("io_ss: the first SPI write
+   (CTRL = RX_EN) did not reach rx_en ... believed to be a d_cosim artefact"); the result is from the stale
+   `build/mixed` of 2026-11-17, not a new run. The full run reruns it.
+2. *gap 1 MC tt, 7 of 16 runs bad*: a bench artefact, fixed. The comparator bench's triangle ran 2 periods; with an
+   offset the second rising switching point fell outside the run, ngspice logged "Error: measure ... out of
+   interval" and the log flag marked the run bad (and the fallback to the first switching point gave a wrong
+   offset). The bench now runs 3 periods and reads only the second switching points; `chain_x.py mc --only cmp`
+   redoes the comparator part of an existing sample. To do: redo it for every sample whose `cmp/deck.cir` still has
+   the 2-period `tran`, then `python3 sim/verify/mc_report.py`.
+3. *TX -> RX 1.47 ms against the 1 ms firmware wait*: a real result, not a design error: the baseband's AC couplings
+   recover slowly after rx_en (0.5-0.9 ms after a 10 mV step in `rx_design.md`; from the fully-off state here 1.47 ms;
+   after an in-band overload 1.90 ms). Proposed (not applied): change `bringup.md` firmware rule 2 to "wait 2 ms after
+   rx_en rises or after TX ends" and keep the check's limit as the firmware wait, so the check tracks the rule. A
+   faster coupling (more replica current) is the design-side option already listed as open in `rx_design.md`.
+4. *power EM p0.5_ss / ff 26.7x*: stale results: `build/power/res_p0.5_ss` / `_ff` were solved at 21:48 on 2026-11-17
+   on the mesh from before the strap fix (re-meshed and `res_p0.5` re-solved at 22:38; `p0.25` at 22:25 is also
+   older than the mesh). The full run moves `build/power` away and solves everything fresh. (A local re-solve of
+   ss / ff was started to confirm.)
+
+**Still running when this was written** (smoke, this machine): tile `fsk_c_tt_-95_n2` (ETA about 01:00),
+`fskn_c_tt_-105_n2_s1` (about 03:00), `rx0_c_tt` (about 17:30), `pvt_ss_70_3.15_{set,rxs,tx,pu}` (until about 19:30);
+extracted chain: the 8 gap-2 FSK runs (`fsk_pex_tt_*`, 4.5 h each), the merge / schematic MC samples,
+`bbrec_tt_-10_1ms_burston`. Restart: `VERIFY_SET=smoke` with `sim/sched.py sim/verify/jobs_tile_verify.py --out
+build/verify/tile` and `sim/verify/jobs_chain.py --out build/verify/chain` (a restarted scheduler skips jobs already
+OK); the tile FSK smoke runs need `build/verify/tile/rxset_c_tt` (a link to `build/tile_sims_nb/rxset_c_tt`).
+
+**Next steps:** finish the smoke runs; fill the `SMOKE_G*` placeholders in `verification.md` and a "Smoke-run results"
+table here; Matt decides the run length (above) and starts the full run.
+
 ## Limits at the time of writing
 
 - Transient noise injected at the antenna lumps all device noise at the input. It misses noise that drives a later
