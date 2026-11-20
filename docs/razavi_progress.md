@@ -86,3 +86,4 @@ notes, then the score below. Each card is answered in one line; the answers are 
 
 | Date | Cards | Score | Slipped on |
 |---|---|---|---|
+| 2026-11-20 | 3, 10, 9, 11, 6 | 2.5 / 5 | 10: wrote A·C, not C·(1+A); 9: the pole is f = 1/(2πRC); 6: gm × R_D, not ÷ |
