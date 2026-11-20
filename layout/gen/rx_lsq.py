@@ -23,8 +23,23 @@ Pins: VDD (top rail), VSS (rails), aq (M2, right edge, lsdiv's a0 pin), qenb (M3
 (default, the tile floorplan) M2 on the left edge at the bottom (lsdiv's ls M3 vertical goes down instead of up, to
 an M2 run under the N row, just over the bottom VSS rail); build(pins='rx_top') M3 on the top edge (rx_top.py).
 Nothing of lsdiv's level shifter (aq to lsq) moves: only the lsq wire past lsdiv's ls vertical changes.
+
+The I/Q-symmetric split (branch iq-symmetry, 2026-11-19): the level shifter goes into vco_core against the ring, as
+a mirror image of lsdiv (layout/gen/vco_core.py), and the header band stays in the tile. build(part=...):
+  part='ls'  -> rx_lsq_ls: the lsdiv copy only (no header band); its supply rail is the port vq; pins on the left
+                edge: lsq (M2, y 0.7, as 'tile'), vq (M2, the rail's left end); aq on the right edge as before.
+                Dq's gate (qenb) is tied to VSS here: an M3 riser from its gate track up to y 20, M2 west onto
+                the left M3 VSS strap (a 0.42 / 0.28 um gate on a routed tie to a stripe broke KLayout's ANT.16 /
+                ANT.4 in the tile). To gate the Q copy later (qenb to enb), cut that via2 and bring qenb out.
+                lsdiv's ls M3 vertical stops at its upper via (y 14.2): the stub on up to lsdiv's ls port would
+                be dead wire on lsq.
+  part='hdr' -> rx_lsq_hdr: the header band alone (Hq over Cq) on its own VSS rail (the copy of lsdiv's top rail),
+                VDD rail on top; pins vq and qenb on M3 at the bottom edge.
+  split_source(): rx_lsq's netlist (xschem or the sim netlister) -> the two subckts rx_lsq_ls (vq VSS aq lsq, qenb
+                tied to VSS inside) and rx_lsq_hdr (VDD VSS qenb vq), for the LVS sources and the size diff.
 """
 import argparse
+import re
 import sys
 from pathlib import Path
 
@@ -65,8 +80,32 @@ def lsdiv_build(patch):
     return cells[0], meta, log
 
 
-def build(pins='tile'):
+def split_source(text):
+    """The rx_lsq subckt of a netlist -> rx_lsq_ls (vq VSS aq lsq: everything but the header and its decap, Dq's gate
+    qenb tied to VSS as drawn) and rx_lsq_hdr (VDD VSS qenb vq: Hq and Cq), with the header's output net named vq in
+    both. Other subckts unchanged."""
+    text = re.sub(r'\n\+', ' ', text)
+    m = re.search(r'^\.subckt rx_lsq (.*?)\n(.*?)^\.ends[^\n]*\n?', text, flags=re.M | re.S | re.I)
+    assert m, 'no rx_lsq subckt'
+    assert m.group(1).split() == ['VDD', 'VSS', 'aq', 'qenb', 'lsq'], m.group(1)
+    body = [ln for ln in m.group(2).splitlines() if ln.strip() and not ln.startswith('*')]
+    hq = [ln for ln in body if re.match(r'X?Hq\b', ln, flags=re.I)]
+    cq = [ln for ln in body if re.match(r'X?Cq\b', ln, flags=re.I)]
+    assert len(hq) == 1 and len(cq) == 1, (hq, cq)
+    vq = hq[0].split()[1]
+
+    def ren(ln, tie=False):
+        return ' '.join('vq' if t == vq else ('VSS' if tie and t == 'qenb' else t) for t in ln.split())
+    ls = [ren(ln, tie=True) for ln in body if ln not in hq + cq]
+    assert all(t != 'VDD' for ln in ls for t in ln.split()), 'rx_lsq_ls: a device on VDD'
+    new = ('.subckt rx_lsq_ls vq VSS aq lsq\n' + '\n'.join(ls) + '\n.ends\n'
+           '.subckt rx_lsq_hdr VDD VSS qenb vq\n' + ren(hq[0]) + '\n' + ren(cq[0]) + '\n.ends\n')
+    return text[:m.start()] + new + text[m.end():]
+
+
+def build(pins='tile', part='all'):
     assert pins in ('tile', 'rx_top'), pins
+    assert part in ('all', 'ls', 'hdr'), part
     c0, m0, log0 = lsdiv_build(False)
     cell, m, log1 = lsdiv_build(True)
     # the copy: every strip from D1 rightwards and the passive band at lsdiv's coordinates
@@ -106,6 +145,8 @@ def build(pins='tile'):
     cell.r('m3', ls_x - 190, y_lsx - 190, ls_x + 190, y_ls + 190)
     cell.r('v2', b - 140, y_lsx - 140, b + 140, y_lsx + 140)
     cell.label('lsq', 'm3', (b + ls_x) // 2 // 5 * 5, y_lsx)
+    if part == 'ls':
+        return build_ls(cell, m, T, Y, xr, ls_x, y_lsx)
     # ---- the header band above lsdiv's top VSS rail: Hq (P row), Cq (N row), real VDD rail on top ----
     D = {d['name']: d for d in R.flat_devs(R.sim_cells(), 'rx_lsq')}
     hq, cq = D['Hq'], D['Cq']
@@ -114,12 +155,15 @@ def build(pins='tile'):
     # (2026-11-16)
     cols = [('HQ', [R.mos(hq['w'] / 3, hq['l'], ['VDD'] + ['qenb', 'vq', 'qenb', 'VDD'] * 3, 'VDD')],
              [R.from_dev(cq, nf=3)])]                 # Hq over Cq, one column
-    band = R.Band('lsq_hdr', cols, ports=['vq', 'qenb'], pins=['qenb'], x0=2900, search=True)
+    band = R.Band('lsq_hdr', cols, ports=['vq', 'qenb'], pins=['qenb'] + (['vq'] if part == 'hdr' else []),
+                  x0=2900, search=True)
     band.place()
     assert band.xend <= xr - 500, (band.xend, xr)
     xq = T['qenb'][2][0]                         # qenb riser at Dq's gate (its track is one point)
     xv = xq + 2600                                # vq riser
     assert abs(xv - ls_x) > R.M3P and xv < m['c1']['x1']
+    if part == 'hdr':
+        return build_hdr(band, Y, xr, xq, xv)
     meta_b = band.finish(cell, xr, y0=Y['vss2_t'], exits=dict(qenb=('through', xq), vq=('bottom', xv)),
                          m3_used=[ls_x], xmin=2500)
     for net, ys, skip in meta_b['rails']:        # lsdiv's own M3 VSS strap (x 0.3-1.3 um) has its via2s there
@@ -156,15 +200,62 @@ def build(pins='tile'):
     return [cell], meta
 
 
+def build_ls(cell, m, T, Y, xr, ls_x, y_lsx):
+    """rx_lsq_ls: the lsdiv copy without the header band (part='ls'); see the module docstring."""
+    cell.name = 'rx_lsq_ls'
+    n0 = len(cell.rects)
+    cell.rects = [r for r in cell.rects if r != ('m3', ls_x - 190, 13995, ls_x + 190, m['bbox'][3])]
+    assert len(cell.rects) == n0 - 1, 'lsdiv ls M3 vertical not found'
+    # lsq: as pins='tile' (ls M3 vertical down to y 0.7, via2, M2 to the left edge)
+    yp = 700
+    cell.r('m3', ls_x - 190, yp - 190, ls_x + 190, y_lsx + 190)
+    cell.r('v2', ls_x - 140, yp - 140, ls_x + 140, yp + 140)
+    cell.r('m2', 0, yp - 190, ls_x + 190, yp + 190)
+    cell.label('lsq', 'm2', 150, yp, port=True)
+    # vq: lsdiv's VDD rail (M1 + M2 from x 0.3) on to the left edge
+    yv = (Y['vdd_b'] + Y['vdd_t']) // 2
+    cell.r('m2', 0, Y['vdd_b'], 400, Y['vdd_t'])
+    cell.label('vq', 'm2', 150, yv, port=True)
+    # qenb tied to VSS: via2 on Dq's gate track, M3 up past the vq rail, via2, M2 west onto the left M3 VSS strap
+    # (x 0.3 ... 1.3, via2 at x 0.8)
+    xq, yq0 = T['qenb'][2][0], T['qenb'][1]
+    yq = 20000
+    cell.r('v2', xq - 140, yq0 - 140, xq + 140, yq0 + 140)
+    cell.r('m2', xq - 190, yq0 - 190, xq + 190, yq0 + 190)
+    cell.r('m3', xq - 190, yq0 - 190, xq + 190, yq + 190)
+    cell.r('v2', xq - 140, yq - 140, xq + 140, yq + 140)
+    cell.r('m2', 300, yq - 190, xq + 190, yq + 190)
+    cell.r('v2', 800 - 140, yq - 140, 800 + 140, yq + 140)
+    labels = [(t, l, x, y, p) for (t, l, x, y, p) in cell.labels if not (t == 'vq' and p and x != 150) and t != 'qenb']
+    cell.labels = [(t, l, x, y, p and t in ('VSS', 'aq', 'lsq', 'vq')) for (t, l, x, y, p) in labels]
+    bb = (0, m['bbox'][1], xr, Y['vss2_t'])          # (the top is lsdiv's top VSS rail: the ls port stub is gone)
+    pins_own = [('lsq', 0, yp, 'left'), ('vq', 0, yv, 'left'), ('aq', xr, R.LL.A0_Y, 'right')]
+    return [cell], dict(bbox=bb, lsdiv=m, ls_x=ls_x, xq=xq, yq=yq, pins_own=pins_own, part='ls')
+
+
+def build_hdr(band, Y, xr, xq, xv):
+    """rx_lsq_hdr: the header band (Hq over Cq) on its own VSS rail (part='hdr'); see the module docstring."""
+    cell = Cell('rx_lsq_hdr')
+    meta_b = band.finish(cell, xr, y0=Y['vss2_b'], exits=dict(qenb=('throughb', xq), vq=('bottom', xv)), xmin=2500)
+    R.draw_rails(cell, [meta_b], xr)
+    bb = (0, meta_b['y'][0], xr, meta_b['y'][1])
+    pins_own = [('vq', xv, bb[1], 'bottom'), ('qenb', xq, bb[1], 'bottom')]
+    return [cell], dict(bbox=bb, band=meta_b, xq=xq, xv=xv, pins_own=pins_own, part='hdr')
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument('--out', default=str(R.REPO / 'build' / 'rx_layout' / 'gen' / 'rx_lsq'))
-    ap.add_argument('--gds', default=str(R.REPO / 'layout' / 'rx_lsq.gds'))
+    ap.add_argument('--part', default='all', choices=['all', 'ls', 'hdr'])
+    ap.add_argument('--out', default=None)
+    ap.add_argument('--gds', default=None)
     a = ap.parse_args()
-    cells, meta = build()
-    R.save_meta(a.out, meta)
-    log = R.write(cells, 'rx_lsq', a.gds, a.out)
-    print('rx_lsq', R.bbox_str(meta['bbox']), 'magic log', log)
+    name = dict(all='rx_lsq', ls='rx_lsq_ls', hdr='rx_lsq_hdr')[a.part]
+    out = a.out or str(R.REPO / 'build' / 'rx_layout' / 'gen' / name)
+    gds = a.gds or str(R.REPO / 'layout' / f'{name}.gds')
+    cells, meta = build(part=a.part)
+    R.save_meta(out, meta)
+    log = R.write(cells, name, gds, out)
+    print(name, R.bbox_str(meta['bbox']), 'magic log', log)
 
 
 if __name__ == '__main__':

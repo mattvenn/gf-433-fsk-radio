@@ -16,8 +16,11 @@ Pass criteria (and why):
           pg) and >= +3 dBm, arm phase error < 10 deg, VDPWR ripple < 30 mV (2 x the 13-15 mV of that bench behind the
           same switch); off: < -60 dBm, ua[2] / ua[3] < 50 mV p-p;
           the ring (VAPWR) moves < 0.2 % with the TX on against off.
-  3 RX    q_i and q_q both toggle at the baseband frequency (rising + falling edges >= 80 % of 2 x f_bb x window, f
-          within 15 %: the 9 us window holds under two baseband periods; the baseband DFT and the phases are taken at
+  3 RX    q_i and q_q both toggle at the baseband frequency (rising + falling edges >= 80 % of 2 x f_bb x window; f
+          within 15 % on the settled runs only (rxs_*, high-pass preset): the unsettled 14 us runs (rxh_*) hold under two
+          baseband periods in 9 us on the LO's start-up offset, about 4 edges at 20-25 % duty, too few to read f
+          (2026-11-20: rxh +offset read 233 kHz for 202 while settled read 198 / 200), so they check phase and sign
+          only; the baseband DFT and the phases are taken at
           |f_tone - f_ring| of the run); |I/Q phase| 50 ... 110 deg (the taps are 72 deg
           apart by design), the limiter phase agrees in sign with the analog baseband phase, and flips sign with the
           sign of the offset.
@@ -29,6 +32,10 @@ Pass criteria (and why):
           override within 20 mV of 1.65 V, ua[1] < 1 mV with 1 mA in (the ground-sense pin).
   6 Supply  f moves < 0.5 % at VAPWR = VDPWR = 3.15 / 3.45 V; during TX the VAPWR ripple < 3 mV (3 x the 1.0 mV
           with the TX off) and the VDPWR ripple < 30 mV.
+  7 I/Q LO (iq-symmetry, 2026-11-19) the LO phase at the mixers, Q lagging I, 72 +- 3 deg at tt / ss / ff (the
+          symmetric taps on the block bench give 71.0-72.2 deg, sim/top/a2_load/results.md; +0.5 deg per fF on a2);
+          ring sane. Mutation: + 16.6 fF on a2 (the old layout's a2 load, about +8 deg) must fail.
+Results directory: TILE_SIMS_OUT (default build/tile_sims; the iq-symmetry runs are in build/tile_sims_iq).
 """
 import json
 import sys
@@ -228,7 +235,8 @@ def rx_one(r):
     need = 0.8 * 2 * r['f_bb_expect'] * win          # rising + falling edges
     if not (r['qi_edges'] >= need and r['qq_edges'] >= need):
         p.append(f"edges {r['qi_edges']} / {r['qq_edges']} (need {need:.0f})")
-    for k in ('f_qi', 'f_qq'):
+    settled = str(cs.get('pre', '')).startswith('rxset')     # the unsettled runs can't read f (docstring, 3 RX)
+    for k in (('f_qi', 'f_qq') if settled else ()):
         if not abs(r[k] / r['f_bb_expect'] - 1) < 0.15:
             p.append(f"{k} {r[k] / 1e3:.1f} kHz vs {r['f_bb_expect'] / 1e3:.1f}")
     q = r['q_iq_phase']
@@ -245,8 +253,11 @@ def check_rx(mut=False):
     names = [n for n, c in T.cases().items() if c['kind'] == 'rx' and n.startswith(('rxh_', 'rxs_'))]
     rs = {n: res(n) for n in names}
     if mut:
-        names = ['mut_rx_off', 'mut_rx_swapout']
+        names = ['mut_rx_off', 'mut_rx_swapout', 'rxs_c_tt_-95_p (f_qi +30 %)']
         rs = {'mut_rx_off': res('mut_rx_off')}
+        s = res('rxs_c_tt_-95_p')          # analysis mutation: the settled run's q_i frequency off by 30 %
+        rs['rxs_c_tt_-95_p (f_qi +30 %)'] = (dict(s, name='rxs_c_tt_-95_p (f_qi +30 %)', f_qi=s['f_qi'] * 1.3)
+                                             if s is not None and not bad(s) else s)
         r = res('rxh_c_tt_-70_p')
         if r is not None and 'error' not in r:      # q_i / q_q exchanged: re-analysed from the same raw
             rs['mut_rx_swapout'] = T.analyse_with('rxh_c_tt_-70_p', swap_out=True)
@@ -361,6 +372,28 @@ def check_supply(mut=False):
     return out
 
 
+# ------------------------------------------------------------------------------------------------ 7 I/Q LO phase
+IQ_DEG, IQ_TOL = 72.0, 3.0
+
+
+def check_iq(mut=False):
+    out = []
+    for n in (['mut_iq_a2c'] if mut else ['iq_c_tt', 'iq_c_ss', 'iq_c_ff']):
+        r = res(n)
+        b = bad(r)
+        if b:
+            out.append((f'7 I/Q LO {n}', None if b == 'pending' else False, b))
+            continue
+        okr, why = ring_ok(r)
+        ph = r.get('lo_iq_phase', float('nan'))
+        ok = okr and abs(ph - IQ_DEG) <= IQ_TOL
+        out.append((f'7 I/Q LO {n}', ok, f"lo_q lags lo_i {ph:.1f} deg (want {IQ_DEG:.0f} +- {IQ_TOL:.0f}; spread "
+                    f"{r.get('lo_iq_phase_spread', float('nan')):.1f}), lsq lags ls {r.get('ls_lsq_phase', float('nan')):.1f} "
+                    f"deg, a0 -> a2 {r.get('a0_a2_phase', float('nan')):.1f} deg, f {r['f_a2'] / 1e6:.2f} MHz"
+                    + ('' if okr else f'; ring: {why}')))
+    return out
+
+
 def all_ok(xs):
     if any(x is False for x in xs):
         return False
@@ -374,15 +407,15 @@ def main():
     checks = []
     v, rows = check_vco(mut)
     checks += v
-    for f in (check_tx, check_rx, check_pwr, check_dbg, check_supply):
+    for f in (check_tx, check_rx, check_pwr, check_dbg, check_supply, check_iq):
         checks += f(mut)
     sym = {True: 'PASS', False: 'FAIL', None: 'pending'}
     for name, ok, why in checks:
         print(f'{sym[ok]:8s} {name}: {why}')
     if mut:
         # every mutated check must fail (the supply impedance rows don't take mutants)
-        mc = [(n, ok) for n, ok, _ in checks if n.startswith(('1b', '2 TX on mut', '3 RX mut', '3 RX I/Q', '4 power-up mut',
-                                                              '5 debug mux mut', '6 ring supply'))]
+        mc = [(n, ok) for n, ok, _ in checks if n.startswith(('1b', '2 TX on mut', '3 RX mut', '3 RX rxs_c_tt_-95_p (f_qi', '3 RX I/Q', '4 power-up mut',
+                                                              '5 debug mux mut', '6 ring supply', '7 I/Q LO mut'))]
         caught = [n for n, ok in mc if ok is False]
         miss = [n for n, ok in mc if ok is True]
         pend = [n for n, ok in mc if ok is None]

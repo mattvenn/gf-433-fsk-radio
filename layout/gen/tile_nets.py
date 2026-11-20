@@ -16,7 +16,7 @@ SUPPLY = {
     'xtxd': VD, 'xmac': VD, 'xties': VA,   # tile.py ties(): the tie row sits on the VAPWR rail
     'xant_tx': VA, 'xant_rx': VA, 'xant_dbg': VA,
     'xdbg_bbi': VA, 'xdbg_bbq': VA, 'xdbg_nb': VA, 'xdbg_vctrl': VA,
-    'rx.lna': VA, 'rx.bias': VA, 'rx.lsq': dict(VA, qenb='VGND'),   # qenb tied to VSS (open review item)
+    'rx.lna': VA, 'rx.bias': VA, 'rx.lsqh': dict(VA, qenb='VGND'),  # qenb tied to VSS (open review item)
     'rx.lobuf_i': VA, 'rx.lobuf_q': VA, 'rx.mix_i': VA, 'rx.mix_q': VA,
     'rx.bb_i': VA, 'rx.bb_q': VA, 'rx.lim_i': VA, 'rx.lim_q': VA, 'rx.decap': VA,
 }
@@ -50,8 +50,9 @@ def nets():
         'tx_outn': [('xtxd', 'out_n'), ('PIN', 'ua[2]')],
         # LO
         'ls': [('vco.core', 'ls'), ('xtxd', 'ls'), ('rx.lobuf_i', 'in')],
-        'a2': [('vco.core', 'a2'), ('rx.lsq', 'aq')],
-        'lsq': [('rx.lsq', 'lsq'), ('rx.lobuf_q', 'in')],
+        # the Q tap (branch iq-symmetry): its level shifter is inside vco.core on a2, its header rx.lsqh supplies vq
+        'lsq': [('vco.core', 'lsq'), ('rx.lobuf_q', 'in')],
+        'vq': [('rx.lsqh', 'vq'), ('vco.core', 'vq')],
         # VCO bias, fine tuning
         'vg': [('xmdac', 'vg'), ('vco.core', 'vg')],
         'vbnf': [('vco.ref', 'vbnf'), ('vco.core', 'vbnf'), ('xmdac', 'vbnf')],
@@ -108,7 +109,10 @@ RX_M4_OK = {'rx_inp', 'rx_inn', 'ri_p', 'ri_n', 'rq_p', 'rq_n', 'bi_p', 'bi_n', 
 # guarded nets: VGND shield wires on the free tracks beside them (the handoff: the baseband -> limiter pairs, and
 # vbnf / vctrl from cgm_ref to the ring); KEEP_AWAY: aggressors that pay to come near the guarded ones
 SHIELDED = {'vbnf', 'vctrl', 'oi_p', 'oi_n', 'oq_p', 'oq_n'}
-KEEP_AWAY = {'ck': ['vbnf', 'vctrl'], 'q_i': ['oi_p', 'oi_n', 'oq_p', 'oq_n'], 'q_q': ['oi_p', 'oi_n', 'oq_p', 'oq_n']}
+KEEP_AWAY = {'ck': ['vbnf', 'vctrl'], 'q_i': ['oi_p', 'oi_n', 'oq_p', 'oq_n'], 'q_q': ['oi_p', 'oi_n', 'oq_p', 'oq_n'],
+             # the receiver bias nb (every tail in the RX) keeps off the full-swing LO wires: 10.5 fF of lsq beside
+             # nb put 13 mV p-p of LO on it and a one-sided Q-mixer offset (2026-11-20)
+             'nb': ['ls', 'lsq', 'lo_i', 'lob_i', 'lo_q', 'lob_q']}
 # nets with an antenna diode (KLayout ANT.16 / ANT.4: long wires into small gates) stay off Metal4, so the diode
 # protects them at every metal level the antenna rules check
 NO_M4_NETS = {'enb'} | {f'dbg_sel[{k}]' for k in range(4)}

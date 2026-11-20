@@ -61,7 +61,7 @@ blk() {  # blk <name> <command...>
   [ -z "$r" ] && r=$(tail -1 $B/$n.log)
   echo "$n: $r" | tee -a $B/results.txt
 }
-for c in rx_bias rx_lna rx_lsq rx_lobuf rx_mix rx_bb rx_lim; do
+for c in rx_bias rx_lna rx_lsq_ls rx_lsq_hdr rx_lobuf rx_mix rx_bb rx_lim; do
   blk $c bash layout/gen/check_rx_block.sh $c layout/$c.gds $B/$c
 done
 blk dbg_tg bash layout/gen/check_dbg.sh layout/dbg_tg.gds $B/dbg_tg

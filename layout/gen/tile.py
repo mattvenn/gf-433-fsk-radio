@@ -64,7 +64,7 @@ CELLS = {
     'tx_drv': ('layout/tx_drv.gds', 'tx_drv'),
     'tx_fine': ('macro/tx_fine/gds/tx_fine.gds', 'tx_fine'),
     'rx_lna': ('layout/rx_lna.gds', 'rx_lna'), 'rx_bias': ('layout/rx_bias.gds', 'rx_bias'),
-    'rx_lsq': ('layout/rx_lsq.gds', 'rx_lsq'), 'rx_lobuf': ('layout/rx_lobuf.gds', 'rx_lobuf'),
+    'rx_lsq_hdr': ('layout/rx_lsq_hdr.gds', 'rx_lsq_hdr'), 'rx_lobuf': ('layout/rx_lobuf.gds', 'rx_lobuf'),
     'rx_mix': ('layout/rx_mix.gds', 'rx_mix'), 'rx_bb': ('layout/rx_bb.gds', 'rx_bb'),
     'rx_lim': ('layout/rx_lim.gds', 'rx_lim'), 'rx_decap': ('layout/rx_top.gds', 'rx_decap'),
 }
@@ -1285,7 +1285,7 @@ def build(partial, order=None, quiet=False):
             and all(i == 'PIN' or (i in t.inst and p in t.inst[i]['alls']) for i, p in e)}
     t.log['skipped'] = sorted(set(allnets) - set(nets) - special)
     if order is None:
-        first = ['a2', 'ls', 'lsq', 'vg', 'vbnf', 'vctrl', 'ck', 'ri_p', 'ri_n', 'rq_p', 'rq_n', 'lo_i', 'lob_i',
+        first = ['ls', 'lsq', 'vq', 'vg', 'vbnf', 'vctrl', 'ck', 'ri_p', 'ri_n', 'rq_p', 'rq_n', 'lo_i', 'lob_i',
                  'lo_q', 'lob_q', 'rx_inp', 'rx_inn', 'bi_p', 'bi_n', 'bq_p', 'bq_n', 'oi_p', 'oi_n', 'oq_p', 'oq_n']
         order = [n for n in first if n in nets] + sorted((n for n in nets if n not in first),
                                                          key=lambda n: len(nets[n]))
@@ -1300,6 +1300,13 @@ def build(partial, order=None, quiet=False):
                                 t.inst[i]['pins'][p][2] / 1000, f'{i}.{p}')
                                for i, p in e if i != 'PIN' and i in t.inst and p in t.inst[i]['pins']]
                            for n, e in allnets.items()}
+    # probes inside vco_core (its plain labels, not ports): the ring's a0 (lsdiv's tap) and a2 (the Q level
+    # shifter's tap), so the extracted tile's testbench can measure the ring there
+    if 'vco.core' in t.inst:
+        for n in ('a2', 'a0'):
+            if n in t.inst['vco.core']['pins'] and n not in t.log['net_points']:
+                l, x, y = t.inst['vco.core']['pins'][n][:3]
+                t.log['net_points'][n] = [(l, x / 1000, y / 1000, f'vco.core.{n} (probe)')]
     return t
 
 

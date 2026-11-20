@@ -5,6 +5,7 @@ A job file (Python) defines JOBS = [dict(name=, cmd=, threads=, est=, deps=[...]
   est:     expected wall time, s (longest first: the long runs start early)
   deps:    names that must have finished OK first
   lock:    jobs with the same lock never run together (a shared netlist / output file)
+  prio:    start order before est (default 0): e.g. the short first job of a long dependency chain
   stagger: (group, s): a job of the group starts at least s after the previous one (scripts that rewrite
            a shared netlist at start, then only read their own copy)
 A job starts when its deps are done, its lock is free, the threads of the running jobs plus its own stay
@@ -131,7 +132,7 @@ def main():
                 log(f'skip {n} (a dep failed)')
         ready = [n for n, j in jobs.items() if st[n]['state'] == 'wait'
                  and all(st[d]['state'] in ('ok', 'exited') for d in j['deps'])]
-        ready.sort(key=lambda n: -jobs[n]['est'])
+        ready.sort(key=lambda n: (-jobs[n].get('prio', 0), -jobs[n]['est']))   # prio first (a long chain's head)
         reserved = 0                                      # threads held back for a longer job that didn't fit
         for n in ready:
             j = jobs[n]

@@ -25,9 +25,10 @@ import tile_nets as TN  # noqa: E402
 I_CUT = 0.58      # mA per Via3 cut, 85 C DC limit
 MARGIN = 2.0
 # blocks whose supplies may be wired by the router: under 0.3 mA each (antenna diodes, the code inverters, the
-# debug switches, decap, the vctrl pull-down, the Q-tap's qenb tie and the Q LO buffer's VDD, which reaches its
+# debug switches, decap, the vctrl pull-down, the Q-tap header's qenb tie (gates, no current) and the Q LO buffer's
+# VDD, which reaches its
 # stripe through rx_lobuf_i's rail; check sim/power/results.md before adding to this list)
-ROUTED_OK = {'vco.decap', 'xdbg_vctrl', 'xdbg_bbi', 'xdbg_bbq', 'xdbg_nb', 'xvpd', 'xbits', 'rx.lsq.qenb',
+ROUTED_OK = {'vco.decap', 'xdbg_vctrl', 'xdbg_bbi', 'xdbg_bbq', 'xdbg_nb', 'xvpd', 'xbits', 'rx.lsqh.qenb',
              'rx.lobuf_q', 'xant_tx', 'xant_rx', 'xant_dbg', 'xties'}
 
 meta = json.load(open(sys.argv[1] if len(sys.argv) > 1 else REPO / 'build/tile/meta.json'))

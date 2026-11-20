@@ -26,6 +26,7 @@ Frequencies at mid-swing (the ring swings vg ... VDD, CLAUDE.md): a2 at (min + m
 """
 import argparse
 import json
+import os
 import re
 import subprocess
 import sys
@@ -41,7 +42,7 @@ sys.path.insert(0, str(REPO / 'sim/tune'))
 from rawread import read_raw  # noqa: E402
 import mdac_sim as MS  # noqa: E402  (read-only: word_bits)
 
-OUT = REPO / 'build' / 'tile_sims'
+OUT = Path(os.environ.get('TILE_SIMS_OUT', REPO / 'build' / 'tile_sims'))   # (iq-symmetry runs: build/tile_sims_iq)
 PDK = '/foss/pdks/gf180mcuD/libs.tech/ngspice'
 STD = '/foss/pdks/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/spice/gf180mcu_fd_sc_mcu7t5v0.spice'
 PEX = dict(c=REPO / 'layout/pex/tile_c.spice', rcx=REPO / 'layout/pex/tile_rcx.spice')
@@ -77,7 +78,7 @@ def ports(pex):
 # ------------------------------------------------------------------------------------------------ deck
 DEF = dict(pex='c', corner='typical', temp=27, code=None, word=512, sd=0, rx_en=0, dbg=0, tx=0, supply='ideal',
            vap=VDD, vdp=VDD, tstop=1.2e-6, tstart=None, step=5e-12, ramp=None, rf=None, ua0='probe', ic='ring',
-           save=None, ac=None, kind='ring', hold=None, settle=False, tskip=None, rsw=None, iinj=None, swap=None, rfdf=None, pre=None, mut=False)
+           save=None, ac=None, kind='ring', hold=None, settle=False, tskip=None, rsw=None, iinj=None, swap=None, rfdf=None, pre=None, mut=False, cadd=None, vshort=None)
 
 
 def supplies(c):
@@ -226,6 +227,12 @@ def deck(c):
             + 'Cqi uo_out4 0 50f\nCqq uo_out5 0 50f\n')
     if c['hold'] is not None:       # vbnf held (the RX runs): the ring's f doesn't drift with the RC filter
         body += f'vhold vbnf 0 {c["hold"]}\n'
+    if c['cadd']:                   # an extra capacitor node -> ground (the I/Q check's mutation: + C on a2)
+        nd, cv = c['cadd']
+        body += f'Cadd_{nd} {nd} 0 {cv:g}\n'
+    if c['vshort']:                 # what-if: two nodes joined by a 0 V source (e.g. the Q header bypassed)
+        na, nb = c['vshort']
+        body += f'Vshort_{na} {na} {nb} 0\n'
     if c['kind'] == 'dbg':          # a current into ua[1] (the ground-sense pin check)
         body += 'Iinj 0 ua1 0\n'
     ic = ''
@@ -367,6 +374,17 @@ def cases():
         add(f'rxs_c_tt_{dbm:+d}_p', 'rx', 4 * 3600, rx_en=1, step=20e-12, tstop=22e-6, tskip=6e-6, rfdf=(200e3, dbm),
             pre='rxset_c_tt', hold=VBNF_RX['typical'], save=SAVE['rx'] + ' ' + ' '.join(f'v({k})' for k in S1_NODES),
             threads=4)
+    # iq-symmetry (2026-11-19, the Q level shifter inside vco_core): the I/Q LO phase on the tile, receiver on, vbnf
+    # held, at the 433.92 MHz code of each corner; and its mutation, + 16.6 fF on a2 (the a2 load of the old layout)
+    for corner in ('typical', 'ss', 'ff'):
+        add(f'iq_c_{CN[corner]}', 'ring', 1500, corner=corner, rx_en=1, step=20e-12, tstop=1.2e-6, hold=VBNF_RX[corner],
+            save=SAVE['ring'] + ' v(lo_i) v(lo_q) v(nb) v(a0)')
+    add('mut_iq_a2c', 'ring', 1500, rx_en=1, step=20e-12, tstop=1.2e-6, hold=VBNF_RX['typical'], cadd=('a2', 16.6e-15),
+        save=SAVE['ring'] + ' v(lo_i) v(lo_q) v(nb) v(a0)', mut=True)
+    # what-if (diagnosis of the residual I/Q skew): the Q level shifter's supply vq tied to VAPWR (header Hq bypassed)
+    for corner in ('typical', 'ss'):
+        add(f'iqx_vq_c_{CN[corner]}', 'ring', 3000, corner=corner, rx_en=1, step=20e-12, tstop=1.2e-6,
+            hold=VBNF_RX[corner], vshort=('vq', 'vap'), save=SAVE['ring'] + ' v(lo_i) v(lo_q) v(nb) v(a0) v(vq)')
     # mutations: the checks must fail on these
     add('mut_dbg_swap01', 'dbg', 1800, rx_en=1, ic=None, swap=('dbg_sel[0]', 'dbg_sel[1]'), mut=True)
     add('mut_dbg_c_rxoff', 'dbg', 1800, rx_en=0, ic=None, mut=True)                     # receiver bias off
@@ -458,6 +476,20 @@ def ring_meas(t, pl, vsup=VDD):
         per = 1 / r['f_a2']
         ph = [((rl[rl > x][0] - x) / per) % 1 for x in ra[:-2] if (rl > x).any()]
         r['a2_to_ls'] = float(np.median(ph)) if ph else float('nan')
+    # I/Q LO phase (Q's lag behind I, deg of the LO period, rising edges at mid-supply): at the mixers' LO inputs
+    # (lo_i / lo_q, the LO buffers on) and at the level-shifter outputs (ls / lsq)
+    per = 1 / r['f_a2'] if r['f_a2'] == r['f_a2'] and r['f_a2'] > 0 else float('nan')
+    for a, b, k in (('lo_i', 'lo_q', 'lo_iq_phase'), ('ls', 'lsq', 'ls_lsq_phase')):
+        if f'v({a})' in pl and f'v({b})' in pl and per == per:
+            ri, rq = xings(t, pl[f'v({a})'], vsup / 2), xings(t, pl[f'v({b})'], vsup / 2)
+            ph = [((rq[rq > x][0] - x) / per * 360) % 360 for x in ri[:-2] if (rq > x).any()]
+            r[k] = float(np.median(ph)) if ph else float('nan')
+            r[k + '_spread'] = float(np.ptp(ph)) if ph else float('nan')
+    if 'v(a0)' in pl and per == per:                 # the ring's own a0 -> a2 delay (two stages: about 144 deg)
+        a0 = pl['v(a0)']
+        r0, r2 = xings(t, a0, (a0.min() + a0.max()) / 2), xings(t, a2, (lo + hi) / 2)
+        ph = [((r2[r2 > x][0] - x) / per * 360) % 360 for x in r0[:-2] if (r2 > x).any()]
+        r['a0_a2_phase'] = float(np.median(ph)) if ph else float('nan')
     for k in ('vg', 'vbnf', 'vap', 'vdp'):
         if f'v({k})' in pl:
             r[k] = mean(t, pl[f'v({k})'])

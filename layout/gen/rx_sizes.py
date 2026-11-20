@@ -134,7 +134,12 @@ def main():
     ap.add_argument('--tol', type=float, default=0.005)
     a = ap.parse_args()
     import rx_top
-    refd = flat(parse(rx_top.block()), a.cell)
+    ref_text = rx_top.block()
+    if a.cell in ('rx_lsq_ls', 'rx_lsq_hdr'):         # the I/Q-symmetric split of rx_lsq (layout/gen/rx_lsq.py)
+        sys.path.insert(0, str(HERE))
+        import rx_lsq
+        ref_text = rx_lsq.split_source(ref_text)
+    refd = flat(parse(ref_text), a.cell)
     layd, unres = name_auto(flat(parse(Path(a.lay).read_text()), a.cell), refd)
     if unres:
         print('layout nets without a sim name:', ' '.join(unres))

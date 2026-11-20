@@ -34,6 +34,124 @@ slowest corner), so the chip works with firmware calibration. But a2 also couple
 phase noise was never checked with this load, and the frequency map in `docs/remap_results.md` no longer holds, so
 the a2 wire should be shortened or buffered before tape-out.
 
+## Update 2026-11-20: nb kept away from the LO wires (branch `iq-symmetry`)
+
+**Problem.** In the 2026-11-19 runs the unsettled 14 µs -70 dBm runs failed the limiter checks (limiter I/Q +119.7° /
+-43.3°, q_i duty 17 %). The cause was the layout: the router had laid the Q local-oscillator (LO) wire lsq beside the
+receiver bias net nb for about 120 µm (10.55 fF). nb carried 7.1 mV at the LO frequency (0.8 mV before), which gave
+the Q mixer a different DC offset from the I mixer: only the I arm started with the usual start-up offset. A what-if
+run with only that capacitor moved to ground brought the Q arm's offset back next to the I arm's.
+
+**Fix.** nb is routed with a penalty near the LO wires (`tile_nets.KEEP_AWAY`, `docs/tile_layout.md` "Update
+2026-11-20"): lsq - nb is now 0.128 fF. The tile was re-extracted and the same jobs rerun on the C-only netlist
+(`sim/top/jobs_tile_nb.py`, `build/tile_sims_nb`, verdicts with `TILE_SIMS_OUT=build/tile_sims_nb`), without the
+header what-ifs. No run logged "singular", "timestep too small" or "Transient op started". Runs and write-up by
+Claude (Claude Code).
+
+**Table N1.** The 2026-11-19 runs against the rerun (tt unless stated).
+
+| Quantity | 2026-11-19 | 2026-11-20 |
+|---|---|---|
+| nb at f_LO (rxh -70 dBm, +offset) | 7.13 mV | 0.34 mV |
+| mixer DC offset I / Q, +offset (`mix_i` / `mix_q`) | -3.68 / -0.83 mV | -3.43 / -3.89 mV |
+| mixer DC offset I / Q, -offset | -3.71 / -0.47 mV | -3.45 / -3.54 mV |
+| baseband output mean I / Q, +offset | -1.20 / -0.15 V | -1.10 / -1.22 V |
+| rxh -70 dBm +offset: limiter I/Q, q_i / q_q, q_i duty | +119.7°, 239.9 / 202.2 kHz, 17 % | +64.6°, 232.6 / 239.6 kHz, 23 % |
+| rxh -70 dBm -offset: limiter I/Q, q_i / q_q | -43.3° (FAIL) | -81.5°, 221 / 227 kHz (PASS) |
+| rxs -95 dBm settled: q_i / q_q, duty, limiter I/Q (baseband) | 198 / 201 kHz, 48.7 %, +81.2° (+75.0°) | 198 / 200 kHz, 48.7 %, +77.0° (+74.7°): PASS |
+| I/Q LO phase lo_i -> lo_q, tt / ss / ff | 74.7 / 76.1 / 74.3° | **72.9 / 74.1 / 72.8°: all PASS** |
+| lsq lags ls, tt / ss / ff | 74.1 / 74.7 / 73.5° | 72.6 / 73.0 / 72.5° |
+| VCO shift against the block reference | -3.55 ... -3.90 % | -3.55 ... -3.90 % |
+| TX fundamental, code 9 / code 13; TX off | +6.28 / +5.99 dBm; -90.1 dBm | +6.28 / +5.99 dBm; -90.0 dBm |
+| mutations caught | 11 / 11 | 11 / 11 (+16.6 fF on a2: 80.5°) |
+
+Both arms now start with the same offset (mixer -3.4 to -3.9 mV, baseband about -1.1 V), so the one-sided Q offset is
+gone and the limiter phase has the right sign and size in both runs (+64.6° / -81.5°, check: 50-110°). The I/Q LO
+phase also improved at every corner: lsq lost 5.7 fF of total capacitance, which was most of the Q path's extra lag,
+so the ss corner (76.1°, which Matt accepted on 2026-11-20) is now inside 72 ± 3°.
+
+**Still failing: the +offset unsettled run's frequency check.** `rxh_c_tt_-70_p` reads q_i at 232.6 kHz and q_q at
+239.6 kHz against 202.0 kHz (limit ±15 %): with both arms 1.1-1.2 V off centre in the 9 µs window, each limiter
+gives only 4 edges at 23 % duty, and the frequency read from 4 edges is off. This is the start-up offset this page
+already calls a settling artefact (the 8.5 kHz high-pass needs 0.5-0.9 ms), now on both arms. At fca76de the same
+run passed at 219 kHz with a smaller common offset (-2.9 mV at the mixer, -0.83 / -0.94 V at the baseband, LO 370
+MHz): why the offset is larger with the LO at 405 MHz has not been checked. The settled run (`rxs_c_tt_-95_p`) is the
+one that shows the receiver working, and it passes; on the bench the same settling shows as the receiver's
+recovery time of about 1 ms (`docs/bringup.md`, R11 and the firmware rules). The check was not loosened.
+
+**Check changed (Matt, 2026-11-20).** Four edges at 20-25 % duty can't give a frequency, so the unsettled runs
+(`rxh_*`) now check toggling, the limiter I/Q phase (50-110°), its agreement with the baseband phase and the sign flip
+with the offset; the ±15 % frequency limit applies to the settled runs (`rxs_*`), which read 198 / 200 kHz for 200.4.
+A new analysis mutation (the settled run's f_qi +30 %) is caught: `tb_tile_verdict.py` now passes every check, and
+catches 12 / 12 mutations.
+
+## Update 2026-11-19: I/Q-symmetric LO taps (branch `iq-symmetry`)
+
+The receiver's Q level shifter moved into `vco_core` as a mirror image of lsdiv, so both ring taps drive a level
+shifter straight on the ring (`docs/tile_layout.md`, "Update 2026-11-19"). a2 dropped from 19.88 to 7.91 fF (a0:
+5.84 fF). The tile was re-extracted (magic 8.3.642, `layout/pex/tile_c.spice`, `tile_rcx.spice`) and the VCO, TX,
+RX, debug and mutation runs repeated on the C-only netlist, plus a new I/Q local-oscillator (LO) phase check. The runs
+are in `build/tile_sims_iq` (`sim/top/jobs_tile_iq.py`, verdicts with `TILE_SIMS_OUT=build/tile_sims_iq`); the
+block-level references (`ref_*`) were not rerun, as the blocks did not change. Every run ended without "singular",
+"timestep too small" or "Transient op started" in its log. Runs, write-up and checks by Claude (Claude Code).
+
+**VCO.** The shift against the extracted `vco_top` reference shrank from -12.2 ... -12.8 % to -3.55 ... -3.90 % at
+every corner, code and word (Table V1; spread within a corner under 0.3 %, check 1b PASS). The reference has no Q
+tap at all, so the remaining shift is the Q level shifter's own input load on a2 (its 2 fF coupling capacitor and
+what it drives) plus the 2.07 fF a2 still carries over a0: about 5 fF at 0.75 % per fF. The 433.92 MHz code at tt
+moves from 12-13 back to 10 (block: 9): code 10 gives 424.37 MHz at word 512 and the medium DAC spans 30.75 MHz
+(1.59 coarse steps). Codes 0-31 span 209.1-753.8 MHz at tt; at sf code 15 gives 400.0 MHz and code 23 506.5 MHz.
+Supply: +0.31 / -0.29 % at 3.15 / 3.45 V.
+
+**Table V1.** Ring frequency at word 512 (MHz) and the shift against the block-level reference.
+
+| corner, code | block | fca76de (a2 19.88 fF) | iq-symmetry (a2 7.91 fF) | shift now |
+|---|---|---|---|---|
+| tt, 9 | 420.50 | 368.05 (-12.47 %) | 405.12 | -3.66 % |
+| ss, 11 | 425.12 | 373.23 (-12.21 %) | 410.02 | -3.55 % |
+| ff, 7 | 414.63 | 361.78 (-12.75 %) | 398.92 | -3.79 % |
+
+**I/Q LO phase (new check 7).** Receiver on, vbnf held, the 433.92 MHz code of the old map at each corner, 1.2 µs,
+phase over the last 480 ns from rising edges at mid-supply (`iq_c_*`). Pass band 72 ± 3° (Q lags I), from the
+symmetric-tap block bench (71.0-72.2°). Its mutation, 16.6 fF added on a2 (the old layout's a2 load), gives 82.1° and
+fails. Table V2 splits the phase along the LO path.
+
+**Table V2.** I/Q phase along the LO path (deg, Q lagging I).
+
+| run | a0 → a2 (ring) | ls → lsq (level shifters) | lo_i → lo_q (mixer LO inputs) | verdict |
+|---|---|---|---|---|
+| iq_c_tt | 72.85 | 74.11 | 74.71 | PASS |
+| iq_c_ss | 72.98 | 74.68 | 76.13 | **FAIL** (0.13° outside) |
+| iq_c_ff | 72.64 | 73.49 | 74.34 | PASS |
+| iqx_vq_c_tt (header bypassed) | 72.84 | 74.56 | 74.57 | - |
+| iqx_vq_c_ss (header bypassed) | 72.97 | 74.76 | 75.50 | - |
+| mut_iq_a2c (+16.6 fF on a2) | 74.81 | 81.58 | 82.11 | FAIL (as it must) |
+
+The ring taps themselves are within 1° of 72°. Each later stage adds Q lag: the level shifters +0.85 ... +1.7°
+(lsq carries 59.00 fF against ls's 56.23 fF, and its 219 µm wire against 156 µm), the LO buffers and their wires to
+the mixers +0.6 ... +1.45°, most at ss. Bypassing the Q header Hq (vq tied to VAPWR, a what-if) moves the total by
+-0.1° at tt and -0.6° at ss, so the header is not the cause. Before the change the tile measured 74.6° at tt, but
+that was +8° from a2 partly cancelled by the I side's longer ls wire. **Open, Matt's call:** accept 76.1° at ss
+(the receiver's quadrature decoding works at 50-110°), or balance the LO paths: about 1.5 fF on a0 or the same on ls
+takes about 1° off, and the lo_i / lo_q wires (`docs/rx_layout.md`, LO section) carry the ss-dependent part.
+
+**TX** (tt, both supplies behind TT switches). Code 9 now runs at 405.1 MHz and gives +6.28 dBm of fundamental
+(+6.47 dBm total into the dipole; reference +6.31). Code 13 now runs at 478.8 MHz, not 435 MHz: +5.99 dBm (before
++6.16 dBm at 435.3 MHz), arm phase error +0.24°, VDPWR ripple 13.5 mV, VAPWR 1.0 mV p-p. TX off: -90.1 dBm. With the TX
+on, the ring moves -0.001 %.
+
+**RX.** The settled run at -95 dBm (`rxs_c_tt_-95_p`, high-pass preset from `rxset_c_tt`, 22 µs) passes: q_i / q_q
+at 198.4 / 201.2 kHz (offset 200.4 kHz), duty 48.7 %, limiter I/Q +81.2° (before +77.6°), baseband +75.0° (before
++75.0°), baseband 0.174 / 0.180 V. The unsettled 14 µs runs at -70 dBm (`rxh_c_tt_-70_p / _n`), which start with
+the LO and the 8.5 kHz high-pass unsettled, now **fail** the limiter checks (limiter +119.7° / -43.3°, q_i at 240 kHz)
+while their baseband phases are right (+77.2° / -82.3°): the I arm starts with a -1.2 V baseband offset (before
+-0.83 V on both arms) and the Q arm near 0 V, so q_i's duty is 17 %. That is the start-up offset this page already
+calls a settling artefact (0.5-0.9 ms to clear); its I/Q imbalance at the LO's start changed with the new LO wiring.
+The settled run is the one that shows the receiver working; the start-up offset per arm is noted as open.
+
+**Debug, mutations.** The debug mux passes as before (each select within 0.4 mV). The mutation runs were repeated on
+the new extraction: 11 / 11 caught (the 10 of Section 7 plus the I/Q check's).
+
 ## Update 2026-11-18: after the supply-strap changes (d606bd4, fca76de)
 
 The layout gained supply straps over the turned TX driver's and LNA's rails (d606bd4) and a wider TX VDPWR strap
