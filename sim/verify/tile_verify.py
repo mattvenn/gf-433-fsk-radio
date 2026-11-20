@@ -106,8 +106,10 @@ def cases():
                                        save=T.SAVE['rx'] + ' ' + ' '.join(f'v({k})' for k in T.S1_NODES))
                 C[f'{tag}_tx'] = dict(pt, kind='tx', tx=1, supply='pg', icop=f'{tag}_op', save=T.SAVE['tx'],
                                       code=T.CODE[corner], est=4200)
-                C[f'{tag}_pu'] = dict(pt, kind='pwr', supply='ideal', ramp=10e-6, ic='uic', step=20e-12, tstop=16e-6,
-                                      save=T.SAVE['pwr'], est=14000)
+                # 50 us: at ss / 70 C / 3.15 V the ring had not started by 16 us (vbnf still charging through the
+                # reference's 1 Mohm / 20 pF filter, 0.69 of its 1.41 V; first smoke run, 2026-11-20)
+                C[f'{tag}_pu'] = dict(pt, kind='pwr', supply='ideal', ramp=10e-6, ic='uic', step=20e-12, tstop=50e-6,
+                                      save=T.SAVE['pwr'], threads=4, est=16000)
     # gap 3 mutations: a 3.45 V point run at 3.0 V (the supply check must flag it); 70 C not passed to the deck
     C['mut_pvt_v300'] = dict(corner='typical', temp=27, vap=3.0, vdp=3.0, vnom=3.45, kind='ring', code=31,
                              tstop=T.VCO_TSTOP, icop='pvt_tt_27_3.45_op', mut=True, est=2100)

@@ -69,14 +69,17 @@ if SET == "smoke":
 else:
     FSK = [(lv, 7.3, s, None) for lv in (-105, -108, -110, -112, -114) for s in range(1, 9)] \
         + [(-114, 0.0, s, "nf0") for s in range(1, 5)] + [(-105, 27.3, s, "nfx10") for s in (1, 2)]
+job("fskpre_pex_tt", f"cd {REPO} && python3 -c \"import sys; sys.path.insert(0, 'sim/verify'); import chain_x as X; "
+    f"r = X.fskpre('typical', 'pex'); sys.exit(0 if 'settle' in r else 1)\"", 300, prio=3)   # the settled start
 for lv, nf, s, mut in FSK:
     nm = f"fsk_pex_tt_{lv}_n8_nf{nf:g}_s{s}"
-    job(nm, X + f"fsk --level {lv} --nf {nf} --seed {s} --ndata 8; exit 0", 16000)
+    job(nm, X + f"fsk --level {lv} --nf {nf} --seed {s} --ndata 8; exit 0", 16000, deps=["fskpre_pex_tt"])
     fskjobs.append(nm)
+job("fsk_pex_tt_-95_n2", X + "fsk --level -95 --ndata 2; exit 0", 9000, deps=["fskpre_pex_tt"], prio=1)  # noiseless sanity
 if SET != "smoke":                                  # noiseless 16 bits through the extracted chain (gap 6 extra)
     for lv in (-70, -95):
         nm = f"fsk_pex_tt_{lv}_n16"
-        job(nm, X + f"fsk --level {lv} --ndata 16", 26000)
+        job(nm, X + f"fsk --level {lv} --ndata 16", 26000, deps=["fskpre_pex_tt"])
 
 # ---- gap 4: overload phase 1 (RF chain, 12 us of the burst), rating, phase 2 (baseband: 1 ms burst, 2.5 ms FSK)
 for lv in (-95, -10, 0, 6):

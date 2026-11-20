@@ -287,6 +287,39 @@ def mc(a):
 
 
 # ------------------------------------------------------------------------------------------------ gaps 2 / 6: FSK
+SETTLE_X = ('xbbi.o1p', 'xbbi.o1n', 'xbbq.o1p', 'xbbq.o1n', 'bi_p', 'bi_n', 'bq_p', 'bq_n')
+
+
+def fskpre(corner, kind):
+    """The settled baseband for the FSK runs (as tb_tile.py's rxset / S1_NODES on the tile): a 3 us run with the LO on
+    and no RF; the stage-1 outputs and the mixer outputs' running means over the last 1 us. The FSK runs start from
+    them (.ic), so the stage-1 -> stage-2 AC coupling starts charged to the LO start-up offset: without this the
+    baseband sits on that offset (about +-1 V at its outputs, the comparators idle) for 0.3-1 ms, longer than an
+    8-bit run (first smoke run, 2026-11-20: no comparator edges at all, errors at chance whatever the noise)."""
+    tag = f'fskpre_{kind}_{rxc.CN[corner]}'
+    f = OUT / tag / 'result.json'
+    if f.exists():
+        r = json.loads(f.read_text())
+        if not r.get('flags') and 'settle' in r:
+            return r
+    deck = rx_chain.fsk_deck(corner, -200, 3e-6, None, 20e-12, np.array([1]))
+    sv = ' '.join(f'v({n})' for n in SETTLE_X)
+    deck = re.sub(r'(?m)^save .*$', f'save {sv}', deck, count=1)
+    deck = swap_pex(deck) if kind == 'pex' else deck
+    d, log, fl = run(tag, deck)
+    r = dict(name=tag, flags=fl)
+    try:
+        pl = raw(d)
+        t = pl['time']
+        m1, m2 = t >= t[-1] - 1e-6, (t >= t[-1] - 2e-6) & (t < t[-1] - 1e-6)
+        r['settle'] = {n: float(np.mean(pl[f'v({n})'][m1])) for n in SETTLE_X}
+        r['drift_mv'] = {n: (r['settle'][n] - float(np.mean(pl[f'v({n})'][m2]))) * 1e3 for n in SETTLE_X}
+    except Exception as e:  # noqa: BLE001
+        r['error'] = str(e)
+    finish(d, r)
+    return r
+
+
 def fsk(a):
     pre = [1, 0, 1, 0]
     rng = np.random.default_rng(1000 + a.seed)
@@ -301,6 +334,10 @@ def fsk(a):
         for i, x in enumerate(m.group(2).split())) + ')', deck)
     deck = deck.replace('tran 2e-11', 'tran 5e-09', 1).replace('.control\n', '.control\noption interp\n', 1)
     deck = swap_pex(deck) if a.kind == 'pex' else deck
+    st = fskpre(a.corner, a.kind)
+    if 'settle' not in st:
+        return finish(OUT / 'fskpre_fail', dict(name='fsk', error=f"settle pre-run: {st.get('error') or st.get('flags')}"))
+    deck = deck.replace('.control\n', '.ic ' + ' '.join(f'v({k})={v:.6f}' for k, v in st['settle'].items()) + '\n.control\n', 1)
     tag = f"fsk_{a.kind}_{rxc.CN[a.corner]}_{a.level:g}_n{a.ndata}" + (f'_nf{nf:g}_s{a.seed}' if nf is not None else '') \
         + (f'_{a.mut}' if a.mut else '')
     d, log, fl = run(tag, deck, seed=a.seed if nf is not None else None)

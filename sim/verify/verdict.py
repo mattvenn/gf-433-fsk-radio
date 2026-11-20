@@ -260,20 +260,36 @@ def gap2():
         pool.setdefault(key, []).append(r)
     if not pool:
         chk('gap 2 noise', 'extracted chain BER statistics', None, 'pending')
+    res = {}
     for (lv, nf), rs in sorted(pool.items()):
         good = [r for r in rs if okb(r) is True]
         e, n = sum(r['bit_errors'] for r in good), sum(r['n_data'] for r in good)
         gl = sum(r['glitches'] for r in good)
         p = model_p(lv, NF_NOM)                       # the checker always compares with the nominal NF's BER
-        ok, hi, lo = ber_check(e, n, p) if n else (None, 1, 1)
+        ok, hi, lo = ber_check(e, n, p) if n else (None, 1.0, 1.0)
         det = (f'{e} / {n} errors in {len(good)} runs ({len(rs) - len(good)} bad), model BER at NF {NF_NOM} dB {p:.2g} '
                f'(P[>=] {hi:.2g}, P[<=] {lo:.2g}), glitches {gl}')
         okall = (ok and gl == 0 and len(good) == len(rs)) if n else None
+        res[(lv, round(nf, 1))] = dict(ok=okall, e=e, n=n, hi=hi, lo=lo, det=det)
         if abs(nf - NF_NOM) < 0.05:
             chk('gap 2 noise', f'extracted chain {lv} dBm, NF {nf} dB: errors vs the model, no glitches', okall, det)
-        else:
-            what = 'NF 0 dB (errors must fall)' if nf < 1 else 'noise x 10 (errors must rise)'
-            mut('gap 2 noise', f'{what}: {lv} dBm', None if okall is None else (not ok), det)
+    # mutations: caught only if the nominal run at the same level passes AND the mutated run moves the required way,
+    # significantly (one-sided binomial against the nominal NF's BER at 1 %) and beyond the nominal run's error rate
+    for (lv, nf), m in sorted(res.items()):
+        if abs(nf - NF_NOM) < 0.05:
+            continue
+        nom = res.get((lv, NF_NOM))
+        down = nf < NF_NOM
+        what = f'NF {nf:g} dB (errors must fall)' if down else f'noise x {10 ** ((nf - NF_NOM) / 20):.0f} (errors must rise)'
+        if nom is None or m['ok'] is None and m['n'] == 0:
+            mut('gap 2 noise', f'{what}: {lv} dBm', None, 'pending: ' + ('no nominal run' if nom is None else 'no bits'))
+            continue
+        if nom['ok'] is not True:
+            mut('gap 2 noise', f'{what}: {lv} dBm', None, f"not judged: the nominal run at {lv} dBm does not pass ({nom['det']})")
+            continue
+        rate_m, rate_n = m['e'] / max(m['n'], 1), nom['e'] / max(nom['n'], 1)
+        caught = (m['lo'] < 0.01 and rate_m < rate_n) if down else (m['hi'] < 0.01 and rate_m > rate_n)
+        mut('gap 2 noise', f'{what}: {lv} dBm', caught, f"{m['det']}; nominal {nom['e']} / {nom['n']}")
 
 
 def gap6():
