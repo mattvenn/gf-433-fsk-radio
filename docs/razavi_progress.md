@@ -27,7 +27,7 @@ Score: — = not tried yet; otherwise the best score so far (0–4), with the da
 | part1-013 | source follower, current-source load | — | — | | |
 | part1-014 | CMOS inverter | ring stages, lsdiv, rx_lim output buffers | — | | |
 | part1-015 | malformed CMOS inverter | ring stages | — | | |
-| part1-016 | common source, diode-connected load | rx_lim comparator loads C3/C4 | — | | |
+| part1-016 | common source, diode-connected load | rx_lim comparator loads C3/C4 | 1 | 2026-11-20 | Got the large-signal swing and the inversion; not the stage name or the gain. Talked through: diode load looks like 1/gm2, so gain = −gm1/gm2, set by sizes (then answered the 4× W check: 2×). **Ask again later.** |
 | part1-017 | PMOS input, invalid pull-down | — | — | | |
 | part1-018 | finding Rout | current-source output resistance | — | | |
 | part1-019 | keeping a device in saturation | headroom: DAC legs under vg (section 9) | — | | |
@@ -63,6 +63,6 @@ Score: — = not tried yet; otherwise the best score so far (0–4), with the da
 | part2-019 | tail-node capacitance and phase noise | current-fed ring tail (vg decap) | — | | |
 | part2-020 | estimating an oscillation frequency | the VCO ring; section 1 | — | | |
 
-**Tally:** 1 of 50 tried, 0 at 4/4.
+**Tally:** 2 of 50 tried, 0 at 4/4.
 
-**To ask again:** part1-002.
+**To ask again:** part1-002, part1-016.
