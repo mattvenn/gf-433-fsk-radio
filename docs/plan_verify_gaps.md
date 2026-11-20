@@ -233,6 +233,29 @@ don't commit them). Restart: `VERIFY_SET=smoke` with `sim/sched.py sim/verify/jo
 build/verify/tile` and `sim/verify/jobs_chain.py --out build/verify/chain` (a restarted scheduler skips jobs already
 OK); the tile FSK smoke runs need `build/verify/tile/rxset_c_tt` (a link to `build/tile_sims_nb/rxset_c_tt`).
 
+**Second round of smoke FAILs (2026-11-20 evening), root causes:**
+1. *Gap 2 on the extracted chain: errors at chance at every level, the same with NF 0 and with noise × 10.* A bench
+   error. The chain started from its operating point; when the LO starts, its self-mixing offset (-4.2 mV at the
+   extracted mixer) drives the baseband outputs to -1.7 ... +1.2 V and the 8.5 kHz high-pass needs 0.3-1 ms to pull
+   them back, longer than the 270 µs run. Evidence: every run's per-bit step counts were 0 (the comparators never
+   switched; `oi` mean -1.72 V at 20 µs, +0.55 V at 260 µs, signal 0.1-0.27 V p-p), so the decisions were coin flips
+   whatever the noise. The noise was applied (the `trnoise` lines are in the decks: 49 µV at NF 0, 1.14 mV at noise ×
+   10). Fix: `chain_x.fskpre` runs the chain 3 µs with the LO on and no RF and the FSK runs start (`.ic`) from the
+   stage-1 and mixer outputs' running means, as the tile's `rxset` does. Check: a settled noiseless -95 dBm run gives
+   7-8 steps per bit from the first bit, baseband centred (mean ±0.08 V, 0.5 V p-p). The 8 runs are being rerun.
+   The decoder was not at fault (it decodes the model's own comparator bits exactly, and the settled run).
+2. *Gap 2 mutations "caught" on garbage.* The mutation logic accepted any failing check. Now a mutation counts as
+   caught only if the nominal run at the same level passes and the mutated run moves the required way (fewer errors
+   for NF 0, more for noise × 10), significantly (one-sided binomial against the nominal NF's BER at 1 %) and beyond
+   the nominal run's error rate; otherwise it is "not judged".
+3. *Gap 3 power-up at ss / 70 °C / 3.15 V, t_osc None.* The bench was too short, not a start failure seen so far: the
+   ring's bias vbnf charges through the reference's 1 MΩ / 20 pF filter and had reached only 0.69 V of its 1.41 V
+   operating point at 16 µs (rising 0.06 V/µs, no lock-up; ck already toggling slowly, 4.7 MHz), and the ring was not
+   yet oscillating (a2 swing 10-50 mV). At tt the existing check saw oscillation from 15 µs. The power-up runs are now
+   50 µs (4 threads); the smoke point is being rerun to see when it starts. If it does not start by 50 µs, that is a
+   design finding to report.
+4. *Gap 3 RX at ss / 70 °C / 3.15 V:* PASS (q_i / q_q 200 / 204 kHz for 200 kHz, limiter I/Q +69.2°, baseband +75.2°).
+
 **Next steps:** finish the smoke runs; fill the `SMOKE_G*` placeholders in `verification.md` and a "Smoke-run results"
 table here; Matt decides the run length (above) and starts the full run.
 
