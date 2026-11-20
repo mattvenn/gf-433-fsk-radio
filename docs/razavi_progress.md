@@ -13,7 +13,7 @@ Score: — = not tried yet; otherwise the best score so far (0–4), with the da
 | ID | Topic | Where it shows up in this project | Score | Date | Notes |
 |---|---|---|---|---|---|
 | part1-001 | intrinsic gain vs L and W | gm·ro; section 19 (gm), long devices in the bias arrays | — | | |
-| part1-002 | gm vs overdrive | section 19: gm = 2I/Vov vs √(2βI); what is held constant | — | | |
+| part1-002 | gm vs overdrive | section 19: gm = 2I/Vov vs √(2βI); what is held constant | 2 | 2026-11-20 | Right conclusion, but no 'why' and no condition (fixed W/L vs fixed current). **Ask again later.** |
 | part1-003 | PMOS vs NMOS small-signal model | the receiver's PMOS couplings and loads | — | | |
 | part1-004 | I–V sketch of a device connection | diode-connected devices (sections 8, rx_lim) | — | | |
 | part1-005 | I–V sketch of a device connection | diode-connected devices, MOS-bipolar pseudo-resistor | — | | |
@@ -63,4 +63,6 @@ Score: — = not tried yet; otherwise the best score so far (0–4), with the da
 | part2-019 | tail-node capacitance and phase noise | current-fed ring tail (vg decap) | — | | |
 | part2-020 | estimating an oscillation frequency | the VCO ring; section 1 | — | | |
 
-**Tally:** 0 of 50 tried, 0 at 4/4.
+**Tally:** 1 of 50 tried, 0 at 4/4.
+
+**To ask again:** part1-002.
