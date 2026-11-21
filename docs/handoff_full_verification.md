@@ -1,6 +1,6 @@
 # Handoff: the full verification run (existing checks + receiver / system gaps 1-6)
 
-> Not started: starts on the sim server once the smoke runs have finished and been checked; the driver rewrites this line as it goes.
+> Running: step 1/4 setup since 2026-11-21 09:41
 
 [![Made with Claude](https://img.shields.io/badge/Made%20with-Claude-D97757?logo=anthropic&logoColor=white)](https://claude.com/claude-code)
 
