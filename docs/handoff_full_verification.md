@@ -1,6 +1,6 @@
 # Handoff: the full verification run (existing checks + receiver / system gaps 1-6)
 
-> Running: step 2/4 jobs since 2026-11-21 09:41: ok 219, run 28, wait 726
+> Running: step 2/4 jobs since 2026-11-21 09:41: ok 399, run 28, wait 546
 
 [![Made with Claude](https://img.shields.io/badge/Made%20with-Claude-D97757?logo=anthropic&logoColor=white)](https://claude.com/claude-code)
 
