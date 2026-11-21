@@ -22,6 +22,14 @@
 - Show strap lanes on the page and flag blocks with met4/MIM obstructions, since full-height met4
   straps can't cross MIM top plates.
 - Keep an area budget from day one. At 92 % use, decap was the only lever left.
+- **Plan decap as part of the floorplan, not as leftover space.** Give each supply a decap budget in pF at its
+  loads, and draw decap areas that can really be filled: each one crossed by a stripe pair of its supply (or with
+  a planned feed), wider than the decap unit, and kept clear of routing channels. Size the decap unit to those
+  areas. After placement, compare placed against planned per supply. gf-433-oscillator planned about 60 pF of
+  tile decap and placed 8.6 pF: the 12 × 15.7 µm unit only went where a stripe pair crossed, so 6 of 11 areas got
+  none, 3 more lost to routes or narrow width, and about 44,000 µm² (20 % of the tile) ended up as dummy fill.
+  It was fine only because the blocks carried their own decap (VAPWR about 86 pF effective, 1 mV ripple). Adding
+  decap after extraction means re-extracting and re-verifying, so decide it before the long runs.
 - **Match the pitch of blocks that tap each other.** A detector at a 20.8 µm cell pitch fed from a chain
   whose taps sit at 11.7 µm needed tap runs up to ~60 µm: 14–32 fF to ground per tap, ~0.035 dB per fF per
   stage, 4.2 dB in all on the block (~1.1 dB on the tile). Turn or re-pin the receiving cells so their
