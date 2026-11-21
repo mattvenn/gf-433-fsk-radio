@@ -99,3 +99,9 @@ if __name__ == "__main__":
     print(f"longest single job {longest['name']} {longest['est'] / 3600:.1f} h")
     for b in (28, 30):
         print(f"budget {b}: >= {max(cpu / b, longest['est'] / 3600):.1f} h wall (CPU-bound lower limit)")
+
+# 2026-11-21: the scheduler process keeps its first import of tile_verify, so the packet's new thread count
+# (tile_verify.py: 8 -> 3) is set here too, for the running scheduler's reload
+for j in JOBS:
+    if j["name"] == "fsk_c_tt_-95_n16":
+        j["threads"], j["est"] = 3, 412 * 470

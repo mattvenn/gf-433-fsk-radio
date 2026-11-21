@@ -70,7 +70,9 @@ def cases():
     # full run (smoke-run speed with the machine loaded: about 440 s per simulated us on 6 threads): one whole packet
     # (4-bit preamble + 16 bits, 412 us, about 2 days on 8 threads: the run's critical path); -70 dBm and the noise
     # runs shorter (2-bit preamble), the bit-error statistics are on the extracted chain (jobs_chain.py)
-    C['fsk_c_tt_-95_n16'] = fsk_case(-95, PRE4, DATA16, threads=8, est=int(412 * 380))
+    # 3 threads (was 8; 2026-11-21): in the full run the 8-thread job waited behind 6-thread ones for 4.5 h with
+    # 25 of 28 threads busy; at 3 threads it fits now (about 470 s per simulated us, about 54 h)
+    C['fsk_c_tt_-95_n16'] = fsk_case(-95, PRE4, DATA16, threads=3, est=int(412 * 470))
     C['fsk_c_tt_-70_n4'] = fsk_case(-70, PRE2, DATA16[:4])
     for s_ in (1, 2):
         C[f'fskn_c_tt_-105_n6_s{s_}'] = fsk_case(-105, PRE2, DATA16[4:10], nf=NF_TT, seed=s_)
