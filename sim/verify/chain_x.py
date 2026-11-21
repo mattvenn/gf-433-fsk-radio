@@ -320,6 +320,24 @@ def fskpre(corner, kind):
     return r
 
 
+KNOWN_SIGN, KNOWN_DELAY = -1, 1.0e-6   # the chain's rotation sign (rx_design.md Table VI, and every noiseless run) and
+                                       # bit delay (the noiseless -95 dBm run fsk_pex_tt_-95_n2: 1.0-1.5 us)
+
+
+def known_decode(pl, bits, npre):
+    """The bit-error statistic of gap 2: the sign and the bit timing known (as the model's genie timing), so that the
+    count measures the receiver, not the preamble learning (which fails at -114 dBm, where the preamble's own bits
+    are wrong a quarter of the time)."""
+    import rx_model
+    tu, st = D.steps(pl['time'], pl['v(q_i)'], pl['v(q_q)'], 1 / rx_chain.RATE + 3.7e-11)
+    sps = int(round(D.FS / rx_chain.RATE))
+    nb = min(len(bits), int((len(st) - int(KNOWN_DELAY * D.FS)) // sps))
+    c = rx_model.counts(st, sps, nb, int(KNOWN_DELAY * D.FS))
+    dec = (KNOWN_SIGN * c[npre:]) > 0
+    ref = np.asarray(bits[npre:nb]) > 0
+    return dict(bit_errors_known=int(np.sum(dec != ref)), n_data_known=int(len(ref)), counts_known=[int(x) for x in c])
+
+
 def fsk(a):
     pre = [1, 0, 1, 0]
     rng = np.random.default_rng(1000 + a.seed)
@@ -345,6 +363,7 @@ def fsk(a):
     try:
         pl = raw(d)
         r.update(D.decode(pl['time'], pl['v(q_i)'], pl['v(q_q)'], bits[1:-1], len(pre), 1 / rx_chain.RATE + 3.7e-11))
+        r.update(known_decode(pl, bits[1:-1], len(pre)))
     except Exception as e:  # noqa: BLE001
         r['error'] = str(e)
     return finish(d, r)

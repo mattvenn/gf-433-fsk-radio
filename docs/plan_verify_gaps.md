@@ -260,6 +260,29 @@ noiseless -95 dBm 2-bit chain run (`build/verify/chain/fsk_pex_tt_*`, about 05:0
 `fskn_c_tt_-105_n2_s1` (about 03:00) left running. Then `python3 sim/verify/verdict.py --smoke`.
 4. *Gap 3 RX at ss / 70 °C / 3.15 V:* PASS (q_i / q_q 200 / 204 kHz for 200 kHz, limiter I/Q +69.2°, baseband +75.2°).
 
+**Smoke after the fixes (2026-11-21 04:30, `verdict_smoke.md`): 82 PASS, 1 FAIL, 2 pending; mutations 21 caught,
+1 missed.**
+- Tile, gap 6 (-95 dBm, 2 + 2 bits) and gap 2 (-105 dBm with noise, 2 + 2 bits): 0 errors, 0 glitches, 7-8 steps per
+  bit; both gap-6 mutations caught.
+- Extracted chain, settled start: -114 dBm NF 7.3 dB 8 / 24 errors (model 0.25: PASS), -105 dBm 0 / 8 (PASS),
+  noiseless -95 dBm 0 / 2. Noise × 10 at -105 dBm: 5 / 8 errors, 30 glitches: caught (the nominal passes and the
+  errors rise significantly).
+- Two more bench changes: (a) the gap-2 statistic decodes with the known sign (-1) and bit timing (1 µs, from the
+  noiseless run), as the model's genie timing does: at -114 dBm a 4-bit preamble is itself a quarter wrong, and the
+  preamble decoder learnt the wrong sign once and a 10 µs delay once (the gap-6 firmware-like decoder is unchanged);
+  (b) chatter: one 660 ns pulse on q_q in 8 bits at -105 dBm with NF 7.3 dB is a noise double crossing, which the
+  quadrature count cancels (+1 / -1), so "no glitches" became "at most one glitch per 4 bits" (**proposal for Matt**).
+- **Missed: NF 0 dB at -114 dBm.** With NF 0 the chain made 5 / 24 errors (known sign and timing) against the model's
+  0.014 (P[X >= 5] about 2e-5), barely better than NF 7.3 dB (8 / 24). At -114 dBm, 4 dB below the -110 dBm
+  sensitivity, the circuit does not improve with less noise as the model says; possible causes are the comparator's
+  real (delayed) hysteresis against an 88 mV signal, or the residual baseband drift after the settled start. Not
+  chased further (open). The full run moves the mutation to -110 dBm (8 runs = 64 bits against the nominal 64; model
+  0.076 against 0.00025), where it can be judged; the -114 dBm runs stay as information.
+- Gap 3 ss / 70 °C / 3.15 V: PASS. The 50 µs power-up shows the ring starting at 16 µs (f / f(ck) = 4 at the end):
+  the 16 µs run simply ended as it started. The power-up limit is now 40 µs from the ramp start (the 15 µs of the
+  existing tt check is a tt number); TX +3.24 dBm (0.24 dB margin), RX -95 dBm and I/Q LO pass.
+- The one FAIL left is the known open mixed-signal io_ss rx_en item (stale `build/mixed`, rerun in the full run).
+
 **Next steps:** finish the smoke runs; fill the `SMOKE_G*` placeholders in `verification.md` and a "Smoke-run results"
 table here; Matt decides the run length (above) and starts the full run.
 

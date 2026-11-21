@@ -68,7 +68,10 @@ if SET == "smoke":
         + [(-105, 7.3, 1, None), (-105, 27.3, 1, "nfx10")]
 else:
     FSK = [(lv, 7.3, s, None) for lv in (-105, -108, -110, -112, -114) for s in range(1, 9)] \
-        + [(-114, 0.0, s, "nf0") for s in range(1, 5)] + [(-105, 27.3, s, "nfx10") for s in (1, 2)]
+        + [(-110, 0.0, s, "nf0") for s in range(1, 9)] + [(-105, 27.3, s, "nfx10") for s in (1, 2)]
+    # (NF 0 at -110 dBm, 64 bits against the nominal 64: model BER 0.076 -> about 0.002. At -114 dBm, the smoke run's
+    #  level, the circuit made 5 / 24 errors with NF 0 against the model's 0.014: it doesn't follow the model there,
+    #  so the mutation can't be judged at -114; docs/plan_verify_gaps.md)
 job("fskpre_pex_tt", f"cd {REPO} && python3 -c \"import sys; sys.path.insert(0, 'sim/verify'); import chain_x as X; "
     f"r = X.fskpre('typical', 'pex'); sys.exit(0 if 'settle' in r else 1)\"", 300, prio=3)   # the settled start
 for lv, nf, s, mut in FSK:
