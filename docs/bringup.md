@@ -66,8 +66,8 @@ One board. Count `uo[3]` (f / 1024) with the RP2350 or a counter: f = 1024 × th
 
 | # | Test | How | Expected | Source | Result |
 |---|---|---|---|---|---|
-| T1 | Oscillates | Reset, code 9 on `ui[4:0]` | `uo[3]` toggles; about 420.5 MHz × (1 / 1024) = 410.7 kHz at tt, word 512 | `tx_fine_tune.md` Table VII and below it | |
-| T2 | Coarse sweep | Codes 0-31, MED_INT 512, record f per code | monotonic, about 21 MHz per code; 433.92 MHz reached from code 9 (tt), 11 (ss), 7-8 (ff) | `tuning.md`, `STATUS.md` | |
+| T1 | Oscillates | Reset, code 10 on `ui[4:0]` | `uo[3]` toggles; about 424.37 MHz × (1 / 1024) = 414.4 kHz at tt, word 512 (extracted tile). The code may differ by one on silicon | `sim/top/tile_results.md`, "Update 2026-11-19" | |
+| T2 | Coarse sweep | Codes 0-31, MED_INT 512, record f per code | monotonic; 209.1-753.8 MHz at tt, about 19 MHz per code near 433.92 MHz (the medium DAC's 30.75 MHz is 1.59 steps); 433.92 MHz reached from code 10 (tt); at sf code 15 gives 400.0 MHz and code 23 506.5 MHz. Extracted tile, about 3.6 % below the block-level map; other corners not re-mapped on the tile. The codes may differ by one on silicon | `sim/top/tile_results.md`, "Update 2026-11-19" | |
 | T3 | Dividers | Scope `uo[1]`, `uo[2]`, `uo[3]` | ratios 16 : 64 : 1024 exactly (f / 16 = 27.1 MHz, f / 64 = 6.78 MHz at 433.92) | `tx_fine_tune.md` | |
 | T4 | MED_INT | Code fixed, words 0, 256, 512, 768, 1023, then 512 → 513 | LSB 31.1 kHz tt (27.4 ss … 35.6 ff); range 28.0-36.5 MHz, > 1.3 coarse steps | Table VII | |
 | T5 | MED_FRAC | MED_FRAC = 0, 64, 128, 192 with CTRL.SD_EN = 1 | f steps of LSB / 256 (115-150 Hz); monotonic but bowed, up to +0.4 LSB at fraction ½ (ΣΔ cell charge injection) | `tx_fine_tune.md` | |
@@ -184,5 +184,5 @@ to keep in mind when a bench result is hard to explain.
   selects nb or a baseband node. A one-hot decode in the macro (DBG_SEL as a 3-bit index) would remove the first.
 - **Simultaneous TX and RX on one board.** They share the ring, so a board can't receive another board's signal
   while it transmits. Whether the TX pulls the RX LO (T12), and how much TX reaches the RX input, is TBD.
-- **Stale how-to.** `docs/info.md` still says "DBG_SEL = 3" for vctrl (it is 8, bit 3), describes `uo[0]` as
-  ungated f / 4 and vctrl as the fine control. It needs updating before the datasheet is built.
+- **Stale how-to (fixed 2026-11-22).** `docs/info.md` said "DBG_SEL = 3" for vctrl (it is 8, bit 3), described
+  `uo[0]` as ungated f / 4 and vctrl as the fine control. It now follows this plan and `tuning.md`.
