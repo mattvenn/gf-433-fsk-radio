@@ -1,12 +1,10 @@
-*Made with [Claude Code](https://claude.com/claude-code) (the Tiny Tapeout datasheet build only takes local images, so this is a text link rather than the badge).*
-
 This project is a half-duplex 433.92 MHz FSK (frequency-shift keying) transceiver on a 2x2 Tiny Tapeout (TT) analog tile on GF180MCU (GlobalFoundries
 180 nm), for the Zero to ASIC Course. It has a tunable ring voltage-controlled oscillator (VCO), a transmit (TX) driver
 for a dipole, on-chip fine tuning over a Serial Peripheral Interface (SPI), 2-level FSK (2-FSK) and
 a zero intermediate frequency (zero-IF) in-phase / quadrature (I/Q) receiver (RX), with no inductors. The RP2350 on
 the demo board does the digital work: tuning, demodulation and framing. The analog runs from VAPWR = 3.3 V.
 
-**AI-assisted design.** The design, layout, simulations and documentation were done by Claude (Claude Code, an AI)
+**AI-assisted design.** The design, layout, simulations and documentation were done by Claude ([Claude Code](https://claude.com/claude-code), an AI)
 agents working from Matt Venn's briefs, with Matt reviewing the results and making the design decisions. All numbers
 here are from simulation; the chip has not been measured yet.
 
