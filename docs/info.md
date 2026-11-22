@@ -1,4 +1,4 @@
-[![Made with Claude](https://img.shields.io/badge/Made%20with-Claude-D97757?logo=anthropic&logoColor=white)](https://claude.com/claude-code)
+*Made with [Claude Code](https://claude.com/claude-code) (the Tiny Tapeout datasheet build only takes local images, so this is a text link rather than the badge).*
 
 This project is a half-duplex 433.92 MHz FSK (frequency-shift keying) transceiver on a 2x2 Tiny Tapeout (TT) analog tile on GF180MCU (GlobalFoundries
 180 nm), for the Zero to ASIC Course. It has a tunable ring voltage-controlled oscillator (VCO), a transmit (TX) driver
