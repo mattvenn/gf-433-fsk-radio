@@ -2,7 +2,7 @@
 project:
   title:        "433 MHz FSK transceiver"      # Project title
   author:       "Matt Venn"      # Your name
-  discord:      ""      # Your discord username, for communication and automatically assigning you a Tapeout role (optional)
+  discord:      "mattvenn"      # Your discord username, for communication and automatically assigning you a Tapeout role (optional)
   description:  "433.92 MHz 2-FSK transceiver with no inductors: SPI-tuned ring oscillator, dipole TX driver and zero-IF I/Q receiver with limiters; the RP2350 demodulates (analog on VAPWR = 3.3 V)"      # One line description of what your project does
   language:     "Analog" # other examples include Verilog, Amaranth, VHDL, etc
   clock_hz:     25000000       # SPI register and sigma-delta clock: 10-50 MHz works, 25 MHz recommended (docs/tx_fine_tune.md)
