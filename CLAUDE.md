@@ -10,6 +10,9 @@ machine, ask him to install his private claude-config repo.
   His background is digital and the ASIC flow, plus earlier sky130 mixed-signal work.
   - Explain the *why* briefly in chat as results come in: the intuition and the trade-off, tied to our own numbers.
   - **Don't create or append to learning docs (`docs/learning.md` or similar) unless he asks.**
+  - **Learning tracking lives in the private repo `mattvenn/circuit-design-learnings`, never in this repo:** the
+    Razavi-Bench progress tracker (`razavi_progress.md`: scores, "ask again" list, small-signal drill cards and log)
+    and any new learning notes. Attach that repo to the session to update it.
 - **Use the project skill** `.claude/skills/mixed-signal-asic/` (the SKILL.md, the matching `references/*.md`, and
   tools from its `scripts/`). It is written for sky130, so adapt to gf180mcuD.
 - **Delegate documents** (datasheets, write-ups) to a background subagent with a tight brief:
