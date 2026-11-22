@@ -72,6 +72,9 @@
   node per bit (the output order is declaration order). The image's ngspice lowercases vlnggen's shell
   lines and Verilator 5.048 rejects `-mdir`, so vlnggen needed a bash rebuild.
 - Add a TT-wrapper cocotb test, with the wrapper generated from the schematic and the analog as a stub.
+- **The analog stubs must follow every block port change.** A merge that renamed and moved one analog cell passed
+  every analog check and broke CI ("Unknown module type"). Run the wrapper cocotb tests (RTL and GL) after any
+  change to a block's ports, and regenerate or edit the stubs in the same commit.
 
 ## Formal (SymbiYosys)
 - Prove properties with every input free (straps, comparator, `rst_n` at any time), assuming only a

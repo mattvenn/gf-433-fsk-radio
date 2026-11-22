@@ -71,6 +71,12 @@ The previous chip was built by several sessions at once (Mac, cloud pod, big Lin
   netlist). A plausible bug (repeated PWL times) turned out to cost nothing; the netlist and the load did.
 - Don't edit a script while it runs. Don't run two copies of a script that rewrites a shared netlist.
 - Judge runs by their output files, not exit codes.
+- **Scheduler starvation, two ways.** A large job skipped by the load-average check doesn't reserve its threads,
+  so small jobs keep taking the gap (an 8-thread job waited 4.5 h). And a reservation holds threads idle until
+  enough free up (3 of 28 idle for hours, with 330 one-thread jobs ready). Let small jobs use reserved threads
+  if they finish before the large job could start, and reserve on a load-check skip too.
+- **Status pushes from a long driver trigger CI on every push.** Put `[skip ci]` in status commits (or keep them
+  local and push with the next real commit).
 - **Background agents end their turn "waiting" on a run and sit idle.** One did for 3 hours. Every brief needs:
   "never end your turn while runs are pending; wait with a background command that exits when they finish".
 - Wait on a scheduler through its status file (`sched.py --status`, `status.json`), not `pgrep -f <script>`. The
@@ -90,6 +96,10 @@ Tested on gf-433-oscillator: results pushed under 2 minutes after the last sim, 
 6. Write up, commit and push in the same session, straight after the driver ends.
 
 ## Estimates
+- Estimates from smoke runs on a lightly loaded machine run 1.3-1.8× long once the machine is full. Scale them, or
+  measure under load.
+- Check which machine you are on (`hostname`, `nproc`) before costing a run "here" against "the sim server": they
+  may be the same machine.
 - Quote run times from the timestamps of the same jobs (`ls -lT build/...`), with every chained step
   included. Past mistake: "~45 min" for three variants that took ~45 min *each*.
 - Estimate Claude's own coding work from how long similar changes took in this repo (often minutes),

@@ -30,6 +30,12 @@
   none, 3 more lost to routes or narrow width, and about 44,000 µm² (20 % of the tile) ended up as dummy fill.
   It was fine only because the blocks carried their own decap (VAPWR about 86 pF effective, 1 mV ripple). Adding
   decap after extraction means re-extracting and re-verifying, so decide it before the long runs.
+- **Keep shared bias and reference nets away from fast or large-swing nets** (clocks, oscillator outputs, drivers,
+  switching logic). A bias line feeds many cells, so whatever couples onto it reaches all of them, and nonlinear
+  loads rectify it into DC offsets. One router-placed neighbour (10.6 fF over a long parallel run) gave one of two
+  identical signal paths a one-sided offset. Give bias nets a keep-away from the aggressors' routed paths (a cost
+  penalty within a few tracks), not only shields. Check: identical paths must show matching DC offsets; a
+  mismatch between them points to coupling, not to the circuit.
 - **Match the pitch of blocks that tap each other.** A detector at a 20.8 µm cell pitch fed from a chain
   whose taps sit at 11.7 µm needed tap runs up to ~60 µm: 14–32 fF to ground per tap, ~0.035 dB per fF per
   stage, 4.2 dB in all on the block (~1.1 dB on the tile). Turn or re-pin the receiving cells so their

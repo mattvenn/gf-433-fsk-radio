@@ -116,6 +116,27 @@ system transient would have taken years.
 - After any block fix, rerun the system-level checks too.
 - Re-check claims in docs before trusting them (an "antenna fixed" note was stale).
 
+## Test benches before long runs
+- **Smoke-run every new bench, short, before any long run.** In one sign-off set, 4 of about 10 new benches were
+  wrong in the bench, not the design: a circuit started unsettled (its outputs saturated for longer than the run,
+  so every decision was a coin flip); a test ramp too short to reach the second switching point; a start-up run
+  too short at the slow corner; and a mutation counted as caught whenever the check failed. Each would have
+  wasted a multi-day run.
+- **Check that a result depends on its stimulus.** If zero noise and ten times the noise give the same error
+  count, the bench is broken, not the circuit. Sweep the input once and see the result move.
+- **Judge a mutation by direction and significance against the nominal run** (e.g. a one-sided binomial test at
+  1 %), not by "the check failed". A check that already fails nominally "catches" every mutation.
+- **Only check what the run window can measure.** A short run with a few edges can show phase or sign but not
+  frequency or duty; check those on a settled run, or make the run longer.
+- **Start-up and settling limits are corner numbers.** Bias filters and references charge more slowly at slow
+  corners and temperature extremes: a 15 µs start-up at tt was 16 µs at ss / 70 °C. Size runs and limits per
+  corner.
+- **Monte Carlo on extracted netlists:** check statically that no device in the deck has m > 1 (one mismatch draw
+  per instance), and prove the MC varies: two seeds with mismatch off must give identical numbers.
+- **Timing rules for firmware or the user** (wait after enable, after a mode switch, after an overload) come from
+  the extracted design's measured recovery, with margin. A 1 ms rule written from block estimates needed 2 ms
+  (1.47 ms after enable, 1.9 ms after overload).
+
 ## Run-time rules of thumb (sky130, 8 threads unless noted)
 | Job | Time |
 |---|---|
