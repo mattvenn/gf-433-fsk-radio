@@ -180,6 +180,35 @@ These caught real faults that every other check passed.
   so even the TT order needs PIO / SoftSPI there. gf-433-oscillator shipped a non-standard SCLK, MOSI, CS_n, MISO
   order and found out after layout, too late to change cheaply.
 
+## Documentation
+Two front pages for two readers (set up on ook-asic-radio, 2026-11-22).
+- **`docs/info.md` is the TT datasheet page.** It is frozen into the shuttle datasheet (PDF and web) at
+  submission and often read away from GitHub, so it must stand alone. Contents:
+  - What the project is.
+  - That it was AI assisted, said in words. The badge image may not survive the PDF.
+  - Links to the explainer, article and videos.
+  - A short how it works with the headline numbers.
+  - How to test, the debug straps, external hardware, and any regulatory warning.
+  - Then "More detail" links. Use absolute GitHub URLs: relative links break in the datasheet.
+- **`README.md` is the front door and table of contents** for someone arriving at the repo with no TT
+  context:
+  - A plain intro: what it is, Tiny Tapeout, process, shuttle, simulated or measured.
+  - Explainer, article and video thumbnails.
+  - A pointer to info.md for use on a TT board.
+  - Then one short section per area that links out: How it was made (the AI-assisted design and the log:
+    history, transcripts, plan, reviews), How it works, Pins, Schematics (xschem-viewer links), Layout
+    (gds-viewer 3D link for the tile and blocks), Digital, Verification, Bring-up, Status, Repo layout.
+- **info.md links to README section anchors, not to individual files.** Files move (cleanups, archiving),
+  but the datasheet can't be changed after submission. Only the README then needs fixing. The README
+  headings become an interface: put a comment above them saying they are linked from info.md and must not be
+  renamed.
+- **Check they agree before submission:**
+  - The info.yaml description, README and info.md say the same thing: block names, numbers, range.
+  - Every number quotes the current verification report, not an archived one.
+  - No link points at a draft or superseded section (an old "Draft pin map" with the pre-layout pins
+    survived until review).
+  - Run the pinout check after editing info.yaml.
+
 ## Starting a new project: checklist
 - [ ] Repo skeleton: `xschem/` (+`gen/`), `layout/gen/`, `layout/pex/`, `layout/ref/`, `sim/<block>/`,
       `model/`, `verilog/`, `docs/`, `tools/`, `build/` (gitignored). Tracked root `.spiceinit`.
@@ -197,3 +226,5 @@ These caught real faults that every other check passed.
 - [ ] A constraints file (net classes, aggressors, modes, keep-outs) written at schematic time for
       the floorplan and router (sketch in floorplan-power.md).
 - [ ] Book the big machine for the final verification. It needs a day.
+- [ ] Docs: `docs/info.md` as a standalone datasheet linking to README section anchors, README as the
+      front door and table of contents ("Documentation" above).
