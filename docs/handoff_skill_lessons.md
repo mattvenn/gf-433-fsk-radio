@@ -18,7 +18,7 @@ found the gap can't reach `claude-config`.
    copy matches), commit and push.
 5. Replace the first line of this file with `> Done (date): claude-config <commit>` and push.
 
-Sources are on branch `rx-option-b` of `mattvenn/gf-433-oscillator`.
+Sources are on branch `rx-option-b` of `mattvenn/gf-433-fsk-radio`.
 
 ## General lessons (into `SKILL.md` or the matching reference)
 

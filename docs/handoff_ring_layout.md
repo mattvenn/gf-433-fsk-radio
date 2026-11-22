@@ -7,7 +7,7 @@ checks, plus an extracted-versus-schematic frequency comparison. Commit it with 
 `docs/ring_layout.md`.**
 
 A second agent may be running bias and tuning sims (`docs/handoff_bias_and_tuning.md`) in the same repo at the same
-time. Work in **your own clone**: `cd /foss/designs && git clone https://github.com/mattvenn/gf-433-oscillator.git gf433-layout`
+time. Work in **your own clone**: `cd /foss/designs && git clone https://github.com/mattvenn/gf-433-fsk-radio.git gf433-layout`
 (HTTPS, with the `GITHUB_TOKEN` credential helper Matt set up). The sims agent uses `gf433-sims`; never `cd` into its
 checkout. Use at most **8 CPUs**. You own `layout/`, `mag/` and `docs/ring_layout.md`. **Don't edit anything under
 `sim/`.** Import `sim/vco/vco_bias.py` read-only, and put any new code (netlist export, PEX swap) under `layout/gen/`.

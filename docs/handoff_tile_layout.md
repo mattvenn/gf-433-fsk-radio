@@ -13,7 +13,7 @@ pins and `info.yaml` work are folded in below.
 
 ## Where things are
 - **Branch: `floorplan`.** It has everything (`rx-option-b` plus the floorplan tool). Clone it:
-  `cd /foss/designs && git clone -b floorplan https://github.com/mattvenn/gf-433-oscillator.git gf433-tile`.
+  `cd /foss/designs && git clone -b floorplan https://github.com/mattvenn/gf-433-fsk-radio.git gf433-tile`.
   Commit and push to `floorplan` only, `git pull --rebase --autostash` before every push. Never push to `main` or
   `rx-option-b`.
 - **The floorplan (read these first):**

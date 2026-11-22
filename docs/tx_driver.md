@@ -36,9 +36,9 @@ Limits).
 
 ## Circuit
 Schematics (xschem, see [schematics.md](schematics.md)):
-[tx_drv](https://xschem-viewer.com/?file=https://github.com/mattvenn/gf-433-oscillator/blob/main/xschem/tx_drv.sch),
-[tx_split](https://xschem-viewer.com/?file=https://github.com/mattvenn/gf-433-oscillator/blob/main/xschem/tx_split.sch),
-[tx_arm](https://xschem-viewer.com/?file=https://github.com/mattvenn/gf-433-oscillator/blob/main/xschem/tx_arm.sch).
+[tx_drv](https://xschem-viewer.com/?file=https://github.com/mattvenn/gf-433-fsk-radio/blob/main/xschem/tx_drv.sch),
+[tx_split](https://xschem-viewer.com/?file=https://github.com/mattvenn/gf-433-fsk-radio/blob/main/xschem/tx_split.sch),
+[tx_arm](https://xschem-viewer.com/?file=https://github.com/mattvenn/gf-433-fsk-radio/blob/main/xschem/tx_arm.sch).
 
 ![tx_drv schematic](img/xschem/tx_drv.png)
 

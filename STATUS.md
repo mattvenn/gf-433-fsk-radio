@@ -2,7 +2,7 @@
 
 This is the "pick up from here" note: a summary, the next steps, and where everything lives. The detail and evidence
 for each result are in the docs it links.
-Repo: github.com/mattvenn/gf-433-oscillator (`main`). Plans: `~/.claude/plans/in-a-recent-radio-majestic-lovelace.md` (VCO),
+Repo: github.com/mattvenn/gf-433-fsk-radio (`main`). Plans: `~/.claude/plans/in-a-recent-radio-majestic-lovelace.md` (VCO),
 `~/.claude/plans/i-want-you-to-frolicking-sparkle.md` (TX driver).
 Flow and rules: the project skill `.claude/skills/mixed-signal-asic/`.
 

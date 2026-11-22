@@ -16,7 +16,7 @@ The floorplan itself (placing and reshaping `rx_top`, which at 299 × 376 µm is
 
 ## Where things are
 - **Branch: `rx-option-b`.** Clone it: `cd /foss/designs && git clone -b rx-option-b
-  https://github.com/mattvenn/gf-433-oscillator.git gf433-rx-prep`. Commit and push to `rx-option-b` only,
+  https://github.com/mattvenn/gf-433-fsk-radio.git gf433-rx-prep`. Commit and push to `rx-option-b` only,
   `git pull --rebase --autostash` before every push. Never push to `main`.
 - **Read first:** `docs/tx_fine_tune.md` (the macro, its register map, Table VI, and how it was hardened),
   `docs/rx_layout.md` ("Before the second pass" and "Integration"), `docs/top_layout.md`, `docs/platform.md`

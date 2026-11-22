@@ -28,7 +28,7 @@ that give today's netlist).
 ## Host and tools
 - You are in the IIC-OSIC-TOOLS pod. `tools/osic-mac` runs tools directly there. Don't edit it.
 - Clone over HTTPS into **your own directory**, which nobody else uses:
-  `cd /foss/designs && git clone https://github.com/mattvenn/gf-433-oscillator.git gf433-sims`.
+  `cd /foss/designs && git clone https://github.com/mattvenn/gf-433-fsk-radio.git gf433-sims`.
   The layout agent uses `gf433-layout`. Never `cd` into its checkout.
   The `GITHUB_TOKEN` credential helper is set up by Matt. If a push fails on authentication, stop and say so;
   don't try other credentials.

@@ -13,7 +13,7 @@ with steps −8, +7, −7, +7 (the same as the schematic). This run checks the s
 
 ## Where things are
 - **Branch: `rx-option-b`** (the receiver is only there). Clone it:
-  `cd /foss/designs && git clone -b rx-option-b https://github.com/mattvenn/gf-433-oscillator.git gf433-rx-chain2`.
+  `cd /foss/designs && git clone -b rx-option-b https://github.com/mattvenn/gf-433-fsk-radio.git gf433-rx-chain2`.
   Commit and push to `rx-option-b` only, `git pull --rebase --autostash` before every push. Never push to `main`.
 - **The bench:** `layout/gen/rx_pexbench.py chain` (the `sim/rx/rx_chain.py realfsk` flow with the extracted
   `rx_top`, C only, and the extracted `lsdiv` on a0). Its inputs are committed: `layout/pex/rx_top_c.spice` (second

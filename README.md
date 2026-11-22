@@ -73,18 +73,18 @@ layout and the digital code.
 
 The xschem schematics are drawn like textbook schematics and open in the online xschem viewer:
 [docs/schematics.md](docs/schematics.md) lists them all. Key sheets:
-[vco_top](https://xschem-viewer.com/?file=https://github.com/mattvenn/gf-433-oscillator/blob/main/xschem/vco_top.sch),
-[cfed_dac](https://xschem-viewer.com/?file=https://github.com/mattvenn/gf-433-oscillator/blob/main/xschem/cfed_dac.sch),
-[mdac](https://xschem-viewer.com/?file=https://github.com/mattvenn/gf-433-oscillator/blob/main/xschem/mdac.sch),
-[tx_drv](https://xschem-viewer.com/?file=https://github.com/mattvenn/gf-433-oscillator/blob/main/xschem/tx_drv.sch),
-[rx_top](https://xschem-viewer.com/?file=https://github.com/mattvenn/gf-433-oscillator/blob/main/xschem/rx_top.sch).
+[vco_top](https://xschem-viewer.com/?file=https://github.com/mattvenn/gf-433-fsk-radio/blob/main/xschem/vco_top.sch),
+[cfed_dac](https://xschem-viewer.com/?file=https://github.com/mattvenn/gf-433-fsk-radio/blob/main/xschem/cfed_dac.sch),
+[mdac](https://xschem-viewer.com/?file=https://github.com/mattvenn/gf-433-fsk-radio/blob/main/xschem/mdac.sch),
+[tx_drv](https://xschem-viewer.com/?file=https://github.com/mattvenn/gf-433-fsk-radio/blob/main/xschem/tx_drv.sch),
+[rx_top](https://xschem-viewer.com/?file=https://github.com/mattvenn/gf-433-fsk-radio/blob/main/xschem/rx_top.sch).
 They are netlist-checked against the simulated circuits and the layout's LVS (layout versus schematic) source.
 
 ## Layout
 
 The 2x2 tile is 693.28 × 325.36 µm, generated in Python (`layout/gen/tile.py`): [docs/tile_layout.md](docs/tile_layout.md)
 and [docs/img/tile_layout.png](docs/img/tile_layout.png). Open the GDS (the layout file) in the
-[TT 3D GDS viewer](https://gds-viewer.tinytapeout.com/?url=https://raw.githubusercontent.com/mattvenn/gf-433-oscillator/main/gds/tt_um_mattvenn_gf433_vco.gds&pdk=gf180mcuD).
+[TT 3D GDS viewer](https://gds-viewer.tinytapeout.com/?url=https://raw.githubusercontent.com/mattvenn/gf-433-fsk-radio/main/gds/tt_um_mattvenn_gf433_vco.gds&pdk=gf180mcuD).
 The blocks' own layouts and viewer links are in [docs/schematics.md](docs/schematics.md).
 
 ## Digital

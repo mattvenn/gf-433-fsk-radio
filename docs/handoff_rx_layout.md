@@ -9,7 +9,7 @@ parasitics, I/Q phase, noise), not a sign-off. Matt will decide the open review 
 
 ## Where things are
 - **Branch: `rx-option-b`.** The receiver only exists there (not on `main`). Work in your own clone:
-  `cd /foss/designs && git clone -b rx-option-b https://github.com/mattvenn/gf-433-oscillator.git gf433-rx-layout`.
+  `cd /foss/designs && git clone -b rx-option-b https://github.com/mattvenn/gf-433-fsk-radio.git gf433-rx-layout`.
   Commit and push to `rx-option-b` only, `git pull --rebase` before every push. Never push to `main`.
 - **Design and numbers:** `docs/rx_design.md` (read it all first; the "Open questions for the review" and the area
   table at the end matter here). The brief that produced it: `docs/handoff_rx_schematic.md`.

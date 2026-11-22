@@ -20,7 +20,7 @@ check the results are physical, and commit them to `docs/pn_results.md` and `sim
 - Don't run more ngspice processes than CPUs: `PAR × JOBS ≤ 28`.
 
 ## Steps
-1. `cd /foss/designs && git clone git@github.com:mattvenn/gf-433-oscillator.git && cd gf-433-oscillator`
+1. `cd /foss/designs && git clone git@github.com:mattvenn/gf-433-fsk-radio.git && cd gf-433-oscillator`
    (or `git pull` if it is already there). Set the git identity if needed: Matt Venn.
 2. **Tool-version check** (about 1 min):
    ```

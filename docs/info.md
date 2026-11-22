@@ -126,14 +126,14 @@ uo[0]: it is off after reset, and the pads are only clean to about 50 MHz.
 
 ## More detail
 
-The project repository: https://github.com/mattvenn/gf-433-oscillator
+The project repository: https://github.com/mattvenn/gf-433-fsk-radio
 
-- How it was made, with Claude Code: https://github.com/mattvenn/gf-433-oscillator/blob/main/README.md#how-it-was-made
-- How it works: https://github.com/mattvenn/gf-433-oscillator/blob/main/README.md#how-it-works
-- Pins: https://github.com/mattvenn/gf-433-oscillator/blob/main/README.md#pins
-- Schematics: https://github.com/mattvenn/gf-433-oscillator/blob/main/README.md#schematics
-- Layout: https://github.com/mattvenn/gf-433-oscillator/blob/main/README.md#layout
-- Digital: https://github.com/mattvenn/gf-433-oscillator/blob/main/README.md#digital
-- Verification: https://github.com/mattvenn/gf-433-oscillator/blob/main/README.md#verification
-- Bring-up: https://github.com/mattvenn/gf-433-oscillator/blob/main/README.md#bring-up
-- Status: https://github.com/mattvenn/gf-433-oscillator/blob/main/README.md#status
+- How it was made, with Claude Code: https://github.com/mattvenn/gf-433-fsk-radio/blob/main/README.md#how-it-was-made
+- How it works: https://github.com/mattvenn/gf-433-fsk-radio/blob/main/README.md#how-it-works
+- Pins: https://github.com/mattvenn/gf-433-fsk-radio/blob/main/README.md#pins
+- Schematics: https://github.com/mattvenn/gf-433-fsk-radio/blob/main/README.md#schematics
+- Layout: https://github.com/mattvenn/gf-433-fsk-radio/blob/main/README.md#layout
+- Digital: https://github.com/mattvenn/gf-433-fsk-radio/blob/main/README.md#digital
+- Verification: https://github.com/mattvenn/gf-433-fsk-radio/blob/main/README.md#verification
+- Bring-up: https://github.com/mattvenn/gf-433-fsk-radio/blob/main/README.md#bring-up
+- Status: https://github.com/mattvenn/gf-433-fsk-radio/blob/main/README.md#status
