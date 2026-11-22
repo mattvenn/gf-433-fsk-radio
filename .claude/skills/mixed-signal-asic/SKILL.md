@@ -1,6 +1,6 @@
 ---
 name: mixed-signal-asic
-description: Hard-won flow, rules and scripts for designing an open-source analog / mixed-signal ASIC on sky130 (Tiny Tapeout analog tiles in particular) with xschem, ngspice, KLayout-Python layout generators, magic/netgen DRC-LVS-PEX, LibreLane digital macros, cocotb and formal. Use when starting or working on any analog or mixed-signal chip project: planning, schematic and testbench writing, layout, floorplan, power grid, extraction, Monte Carlo/corner/supply verification, TT precheck/submission, bring-up, or coordinating several Claude sessions on one chip.
+description: Hard-won flow, rules and scripts for designing an open-source analog / mixed-signal ASIC on sky130 (Tiny Tapeout analog tiles in particular) with xschem, ngspice, KLayout-Python layout generators, magic/netgen DRC-LVS-PEX, LibreLane digital macros, cocotb and formal. Use when starting or working on any analog or mixed-signal chip project: planning, schematic and testbench writing, layout, floorplan, power grid, extraction, Monte Carlo/corner/supply verification, TT precheck/submission, documentation (README, the TT datasheet docs/info.md, checking the project docs), bring-up, or coordinating several Claude sessions on one chip.
 ---
 
 # Analog / mixed-signal ASIC on sky130 / Tiny Tapeout
@@ -208,6 +208,14 @@ Two front pages for two readers (set up on ook-asic-radio, 2026-11-22).
   - No link points at a draft or superseded section (an old "Draft pin map" with the pre-layout pins
     survived until review).
   - Run the pinout check after editing info.yaml.
+- **To check a project's docs** (when asked, and before submission):
+  1. Read info.yaml, README.md and docs/info.md together.
+  2. Check every link resolves, including the README anchors info.md uses (GitHub anchor = heading lower-cased,
+     spaces to hyphens, punctuation dropped).
+  3. Check each number (sensitivity, range, power, gain, pins) against the current verification report and STATUS.
+  4. Run the pinout check.
+  5. Check the AI-assisted statement (in words) and the Made with Claude badge are in both files.
+  6. Report what's missing or inconsistent, as a numbered list, before editing.
 
 ## Starting a new project: checklist
 - [ ] Repo skeleton: `xschem/` (+`gen/`), `layout/gen/`, `layout/pex/`, `layout/ref/`, `sim/<block>/`,
