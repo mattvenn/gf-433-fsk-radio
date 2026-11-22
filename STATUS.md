@@ -69,8 +69,7 @@ failed as of 2026-11-22 21:30. Expected finish about Wednesday 2026-11-25 evenin
 
 ## Decisions (Matt), newest first
 - **2026-11-22:** a PLL is out of scope here, a separate project. Decap closed - about 8.6 pF placed, supplies checked
-  (VAPWR 1.0 mV ripple, VDPWR 13.7 mV), and there's no room for more without going to a 3x2 tile
-  (`docs/tile_layout.md`'s closing list still says 7.4 pF). Dummy fill left as is: TT adds it later.
+  (VAPWR 1.0 mV ripple, VDPWR 13.7 mV), and there's no room for more without going to a 3x2 tile. Dummy fill left as is: TT adds it later.
 - **2026-11-20/21 (full run):** firmware rule 2 is a **2 ms wait** after rx_en, after TX and after a strong signal
   (the extracted design needs 1.47 ms after rx_en, 1.90 ms after an in-band burst); no trims; the 16-bit packet is
   kept whole; chatter limit at most 1 glitch per 4 bits. The full run goes on the sim server.

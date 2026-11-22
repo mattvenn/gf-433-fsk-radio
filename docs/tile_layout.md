@@ -319,9 +319,9 @@ repeats the TT check (metal touching a ring 0.1–0.5 µm around each analog pin
 
 ## Open items, at the time of writing
 
-- **Decap: about 7.4 pF placed** (38 units, mostly VDPWR under the macro), against about 61 pF the floorplan estimated.
-  The unit is 12 × 15.7 µm and most decap rectangles are narrow, carry routes or have no stripe pair. A smaller unit,
-  or decap wired by the router, would recover most of it.
+- **Decap: closed (Matt, 2026-11-22).** About 8.6 pF placed after later changes (7.4 pF at first, 38 units, mostly
+  VDPWR under the macro), against about 61 pF the floorplan estimated. The supplies were checked and are fine (VAPWR
+  1.0 mV ripple, VDPWR 13.7 mV); there is no room for more without going to a 3x2 tile.
 - **The baseband pairs are not routed as pairs**: each wire is routed and shielded on its own. The I pair's wires are
   127 µm each; the Q pair's 218 and 248 µm.
 - **ls / lsq: 184 / 148 µm** (the I LO load against the Q), 36 µm apart; the floorplan had 163 / 149. The extracted
