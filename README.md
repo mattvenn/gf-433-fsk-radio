@@ -2,14 +2,13 @@
 
 [![Made with Claude](https://img.shields.io/badge/Made%20with-Claude-D97757?logo=anthropic&logoColor=white)](https://claude.com/claude-code)
 
-# 433 MHz radio toolkit (GF180MCU, Tiny Tapeout)
+# 433 MHz FSK transceiver (GF180MCU, Tiny Tapeout)
 
-This is a small 433.92 MHz radio on one chip tile: a tunable ring voltage-controlled oscillator (VCO), a transmit (TX)
+This is a half-duplex 433.92 MHz FSK transceiver on one chip tile: a tunable ring voltage-controlled oscillator (VCO), a transmit (TX)
 driver for a dipole antenna, on-chip fine tuning over a Serial Peripheral Interface (SPI), 2-level frequency-shift
 keying (FSK), and a zero intermediate frequency (zero-IF) receiver (RX). It has no inductors. The digital work
 (tuning, demodulation, framing) is done by the RP2350 on the Tiny Tapeout (TT) demo board. It is a 2x2 analog tile on
-GlobalFoundries' 180 nm process (GF180MCU) for the ttgf26c shuttle, and part of an FM (frequency modulation) radio
-toolkit for the Zero to ASIC Course.
+GlobalFoundries' 180 nm process (GF180MCU) for the ttgf26c shuttle, made for the Zero to ASIC Course.
 
 **The chip has only been simulated, not yet measured.** Every number on this page is a simulation result.
 

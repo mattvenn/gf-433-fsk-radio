@@ -1,8 +1,8 @@
 [![Made with Claude](https://img.shields.io/badge/Made%20with-Claude-D97757?logo=anthropic&logoColor=white)](https://claude.com/claude-code)
 
-This project is a 433.92 MHz radio toolkit on a 2x2 Tiny Tapeout (TT) analog tile on GF180MCU (GlobalFoundries
+This project is a half-duplex 433.92 MHz FSK (frequency-shift keying) transceiver on a 2x2 Tiny Tapeout (TT) analog tile on GF180MCU (GlobalFoundries
 180 nm), for the Zero to ASIC Course. It has a tunable ring voltage-controlled oscillator (VCO), a transmit (TX) driver
-for a dipole, on-chip fine tuning over a Serial Peripheral Interface (SPI), 2-level frequency-shift keying (2-FSK) and
+for a dipole, on-chip fine tuning over a Serial Peripheral Interface (SPI), 2-level FSK (2-FSK) and
 a zero intermediate frequency (zero-IF) in-phase / quadrature (I/Q) receiver (RX), with no inductors. The RP2350 on
 the demo board does the digital work: tuning, demodulation and framing. The analog runs from VAPWR = 3.3 V.
 
