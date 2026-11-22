@@ -1,251 +1,124 @@
-# Where we are (2026-11-12)
+# Where we are (2026-11-22)
 
-This is the "pick up from here" note: a summary, the next steps, and where everything lives. The detail and evidence
-for each result are in the docs it links.
-Repo: github.com/mattvenn/gf-433-fsk-radio (`main`). Plans: `~/.claude/plans/in-a-recent-radio-majestic-lovelace.md` (VCO),
-`~/.claude/plans/i-want-you-to-frolicking-sparkle.md` (TX driver).
-Flow and rules: the project skill `.claude/skills/mixed-signal-asic/`.
+This is the "pick up from here" note: the current state, what is running, the open items and the decisions. The
+detail and evidence for each result are in the docs it links; the history is in git and in those docs.
+Repo: github.com/mattvenn/gf-433-fsk-radio (`main`; this work on branch `verify-gaps`). Flow and rules: the project
+skill `.claude/skills/mixed-signal-asic/`. Front door and datasheet: `README.md`, `docs/info.md`.
 
 ## Goal
-A tunable 433.92 MHz oscillator on GF180MCU (Tiny Tapeout, ttgf26c), with no inductors and no external components.
-It is to become an **FM radio toolkit**:
-- **On chip:** the VCO, dividers, the antenna driver, the LNA, the mixer and the IF chain.
-- **On the RP2350:** all the digital: tuning, demodulation and framing.
-- **Receiver (option B, Matt 2026-11-12):** zero IF, I/Q mixers on two ring taps 72° apart, a limiter per arm, two bits to
-  uo[4]/uo[5], decoded by the RP2350 PIO as a quadrature counter (`sim/rx/rx_model.py`).
-- **Range:** room-temperature operation only.
+A **433 MHz FSK transceiver** (the title in `info.yaml`) on GF180MCU for Tiny Tapeout (TT) ttgf26c: a half-duplex
+433.92 MHz 2-level frequency-shift keying (2-FSK) transceiver with no inductors. On chip: an SPI-tuned (Serial
+Peripheral Interface) ring voltage-controlled oscillator (VCO), a dipole transmit (TX) driver and a zero
+intermediate frequency (zero-IF) I/Q receiver (RX) with limiters. The RP2350 on the TT demo board does the digital
+work: tuning, demodulation and framing. Room-temperature operation only.
 
-## Start here
-**2026-11-17: the tile is laid out from the agreed floorplan (variant B), branch `floorplan`: `docs/tile_layout.md`.**
-The receiver (as its cells), the debug mux on ua[0] and the re-hardened macro (250 × 176.8 µm, RX_EN + DBG_SEL) are
-in; DRC 0 (magic and KLayout), LVS match with 14 / 14 mutations caught, antenna 0. Generator `layout/gen/tile.py`,
-checks `layout/gen/tile_driver.sh`. The real TT precheck passes in CI. Open: decap only about 7.4 pF.
-**Tile simulated (2026-11-18, fca76de, `sim/top/tile_results.md`):** TX (+6.16 dBm at code 13; +5.97 dBm with the
-supply grid's R), RX settled at -70 ... -100 dBm, power-up, debug mux, supplies pass; power IR / EM pass
-(`sim/power/results.md`); 10 / 10 mutations. **The ring runs 12.2-12.8 % slow** (19.9 fF on a2): 433.92 MHz still reached at every corner
-(tt code 12-13); accept or re-lay out rx_lsq is Matt's call. Every test: `docs/verification.md`.
-
-**The oscillator topology is chosen: a current-fed ring with a 5-bit current DAC.**
-- It passes every check so far, in schematic and on the extracted v3 layout.
-- **GF silicon factor: about 1.0 at typical** (`docs/gf_silicon_factor.md`, 2026-11-09). On the ttgf0p2 ring #614
-  the six inv_2 taps give silicon/sim 0.993–1.001 and sit between the sf and tt corners. The 5× inv_1 ring gives
-  0.935, but it is the least certain bench point and disagrees with the taps: re-measure it. Even at 0.935, the
-  extracted range (193–851 MHz) still covers 433.92 MHz.
+## Current state
+**The tile is laid out and verified:** a 2x2 analog tile (variant B floorplan) holding the VCO core with the level
+shifter and ÷4 (lsdiv), the mirrored Q level shifter, the constant-gm reference, the 10-bit medium DAC (digital-to-
+analogue converter) and digital macro `tx_fine`, the TX driver, the receiver cells and the debug mux on ua[0]
+(`docs/tile_layout.md`, generator `layout/gen/tile.py`, checks `layout/gen/tile_driver.sh`). DRC 0 (magic and
+KLayout), LVS match with every mutation caught, antenna 0; the TT precheck passes in CI. Tile simulations:
+`sim/top/tile_results.md` (latest: "Update 2026-11-20"); power IR / EM: `sim/power/results.md`; every test and
+verdict: `docs/verification.md`. Bring-up and firmware rules: `docs/bringup.md`.
 
 | | Result | Doc |
 |---|---|---|
-| Topology | Five inverters between VDD and a shared node vg (3 pF decap); one binary-weighted current DAC (base 6 + 5 bits, unit 1.2/5.33 µm) plus a fine leg on vctrl; const-gm reference with a 1 MΩ / 20 pF RC filter | `docs/cfed_results.md`, `docs/schematics.md` |
-| Range, full PVT (schematic) | 228–750 MHz (target ≤ 310 / ≥ 700); 433.92 at codes 7–11 | `docs/cfed_sizing_results.md` |
-| Range, extracted v3 RC (corrected) | 193–851 MHz at vctrl 1.65 V with the level shifter (old 194–677 had the RC double count) | `docs/remap_results.md`, `docs/rc_extraction_fix.md` |
-| 433.92 codes, extracted core + level shifter | tt 9, ss 11, ff 7, sf 9, fs 10 at vctrl 1.75–2.25 V (3 codes reach it at every corner) | `docs/remap_results.md` |
-| Monotonic / no gaps | yes at all PVT; fine/step ≥ 2.1 (needs 1.3) | `docs/cfed_sizing_results.md` |
-| DAC mismatch (MC, N = 900) | 0 % non-monotonic, worst DNL ±0.13, fine/step ≥ 3.1 | `docs/cfed_v3_check.md` |
-| rms FM, 1–10 kHz | 7.3–8.3 kHz over PVT (limit 15); the reference path dominates | `docs/cfed_sizing_results.md` |
-| Supply sensitivity | −0.008 %/10 mV (the starved ring was −0.25) | `docs/cfed_results.md` |
-| Power at 433.92 MHz | 0.39–0.52 mW | `docs/cfed_sizing_results.md` |
-| Power-on start-up | 36 of 36 runs reach the fundamental mode; worst 138 µs to within 1 %, set by the RC filter | `docs/cfed_startup_results.md` |
-| Core layout (v3) | 69 × 52 µm, DRC / LVS / antenna clean; ring nodes 3.0–3.4 fF | `docs/ring_layout_v3.md` |
-| Tuning procedure | binary-search the code, servo vctrl, FSK at about ±1.8 mV for ±50 kHz | `docs/tuning.md` |
+| Topology | Current-fed ring: five inverters between VDD and vg (3 pF PMOS decap to VDD), 5-bit binary coarse DAC plus fine leg, const-gm reference with 1 MΩ / 20 pF filter | `docs/cfed_results.md`, `docs/schematics.md` |
+| GF silicon factor | about 1.0 at typical (ttgf0p2 inv_2 taps 0.993-1.001; inv_1 ring 0.935, re-measure) | `docs/gf_silicon_factor.md` |
+| Tuning, extracted tile | 209.1-753.8 MHz at tt, about 19 MHz per code near 433.92 MHz, reached from code 10 (tt); tile about 3.6 % below the block-level map | `docs/bringup.md` (T2), `sim/top/tile_results.md` |
+| Fine tuning / FSK | 10-bit medium DAC, LSB 27.4 / 31.1 / 35.6 kHz (ss / tt / ff), sigma-delta spurs -58 dBc, FSK ±3 LSB settles in 0.26 µs | `docs/tx_fine_tune.md` |
+| 25 MHz supply spur | -84 dBc (extracted), after moving the vg decap to VDD | `docs/tx_fine_tune.md` |
+| DAC mismatch (MC, N = 900) | 0 % non-monotonic, worst DNL ±0.13 | `docs/cfed_v3_check.md` |
+| rms FM, 1-10 kHz | 7.3-8.3 kHz over PVT (limit 15) | `docs/cfed_sizing_results.md` |
+| Start-up | 36 / 36 schematic runs reach the fundamental, worst 138 µs to 1 % | `docs/cfed_startup_results.md` |
+| TX, tile | +6.28 dBm at code 9 (+5.99 dBm code 13), off -90 dBm; H3 below -55 dBc with the board low-pass filter | `sim/top/tile_results.md`, `docs/tx_harmonics.md` |
+| RX, tile | settled -95 dBm pass; I/Q LO phase 72.9 / 74.1 / 72.8° (tt / ss / ff); model -110.4 dBm at BER 1e-3, 10 kbit/s | `sim/top/tile_results.md`, `docs/rx_design.md` |
+| Supplies, tile | VAPWR ripple 1.0 mV p-p with TX on, VDPWR 13.7 mV; f +0.32 / -0.30 % at VDD ±4.5 % | `sim/top/tile_results.md` §6 |
+| Pins | TT analog switch 11-37 Ω plus 15-60 Ω routing, about 7.7 pF per pin; checked over n_off 0-3 | `docs/pad_model.md`, `docs/platform.md` |
 
-## How we got here (short)
-1. **First architecture study:** starved ring candidates (`docs/vco_study.md`). Phase noise came from the ISF method
-   (`docs/pn_results.md`), cross-checked against VACASK transient noise.
-2. **Quiet constant-gm reference:** 14 × 14 arrays of the unit device, which keep the tempco null; the RC filter
-   (`docs/bias_tuning_results.md`).
-3. **The layout showed about 10 fF per ring node, not the 2 fF assumed** (`docs/ring_layout.md`). The compact v2 cut
-   that to about 3 fF. Then **f-node charge sharing broke the starved stage at low codes** (`docs/ring_layout_v2.md`).
-4. **Topology comparison:** only the current-fed ring passes (`docs/cfed_results.md`).
-5. **Sizing, PVT map, PVT noise, v3 layout, MC and start-up** (the docs in the table above).
+## In progress
+**Full verification run** on branch `verify-gaps` (`docs/handoff_full_verification.md`, plan
+`docs/plan_verify_gaps.md`), on this machine (the sim server). Started 2026-11-21 09:41; 973 jobs; 535 OK and none
+failed as of 2026-11-22 21:30. Expected finish about Wednesday 2026-11-25 evening. The driver pushes a
+`Running: step N/M` commit at each change; don't touch `build/`, `sim/` or the run while it goes.
 
-## Next steps
-**In progress 2026-11-20 (branch `verify-gaps`):** the receiver / system gap tests 1-6 (`docs/plan_verify_gaps.md`)
-are built on the extracted design; phases 1-2 done. Smoke verdict: 73 PASS, 1 FAIL (mixed rx_en at ss: a stale
-2026-11-17 result, the known co-simulation SPI issue), 7 pending (tile runs for gaps 2, 3, 6, finishing overnight);
-18 / 18 planted errors caught. **Decisions (Matt):** firmware rule 2 is now a 2 ms wait after rx_en / TX (the
-extracted design needs 1.47 ms after rx_en, 1.90 ms after an in-band burst); no trims; the full run
-(`docs/handoff_full_verification.md`, about 66 h) runs here on the sim server once the smoke runs are checked.
+## Open items / next steps
+1. **Submit to `TinyTapeout/tinytapeout-gf-26c` before 2026-12-07** (the project is not in it yet).
+2. After the full run:
+   - write it up in `docs/verification.md`;
+   - fix the scheduler starvation in `sim/sched.py`;
+   - add a no-push option to the driver;
+   - fix the stale "about 21 MHz per code" in `docs/tuning.md` and the tuning row in `docs/verification.md` (now about
+     19 MHz per code, `docs/bringup.md`);
+   - merge `verify-gaps` to `main`.
+3. Ask tnt about VDPWR before the power switch (bond wires, chip grid) and the ground path (R, L); ground ripple is
+   not modelled.
+4. lsdiv block power is about 1.7× the schematic (0.63 mW at tt, routing C on the TSPC nodes;
+   `docs/lsdiv_layout.md`). Don't clock the ÷4 below about 150 MHz.
+5. Optional: re-tune the tempco. f(T) is a parabola peaking near 35 °C (+100...+140 ppm/°C at 27 °C); moving the
+   n-well length lnw would put the peak at 27 °C (`docs/ref_layout.md`, "Tempco").
+6. Minor, unexplained: the common baseband start-up offset is about -1.1 V on both arms against -0.83 V at fca76de
+   (`sim/top/tile_results.md`, "Update 2026-11-20").
+7. Bench: re-measure the ttgf0p2 inv_1 ring (`bench/lab_todo.md`); check `uio[1]` toggles first (it read held low on
+   the ttgf0p2 carrier).
+8. Later, not crucial: extra debug options (`docs/bringup.md` section 6): a divided Q LO on `uo[6]`, debug switches on
+   `oi_n` / `oq_n`, the macro keeping only the lowest DBG_SEL bit.
+9. Dummy fill: TT adds it later (Matt 2026-11-22: leave as is).
+10. Sign-off: full PVT (5 corners × 0 / 27 / 70 °C × VDD ±4.5 %) plus Monte Carlo on the extracted tile; the full
+    run covers this.
 
-**Decision 2026-11-19 (Matt):** the I and Q LO taps must match. a2's long wire skews the I/Q phase by +8-9° as well as
-slowing the ring 12.5 % (`sim/top/a2_load/results.md`). Fix on branch `iq-symmetry`: the Q level shifter moves against
-the ring as a mirror of lsdiv; the tile's I/Q LO phase gets a 72 ± 3° check. The TX final-stage shrink is dropped.
+## Decisions (Matt), newest first
+- **2026-11-22:** a PLL is out of scope here, a separate project. Decap closed - about 8.6 pF placed, supplies checked
+  (VAPWR 1.0 mV ripple, VDPWR 13.7 mV), and there's no room for more without going to a 3x2 tile
+  (`docs/tile_layout.md`'s closing list still says 7.4 pF). Dummy fill left as is: TT adds it later.
+- **2026-11-20/21 (full run):** firmware rule 2 is a **2 ms wait** after rx_en, after TX and after a strong signal
+  (the extracted design needs 1.47 ms after rx_en, 1.90 ms after an in-band burst); no trims; the 16-bit packet is
+  kept whole; chatter limit at most 1 glitch per 4 bits. The full run goes on the sim server.
+- **2026-11-20:** the unsettled 14 µs RX runs (`rxh_*`) check phase and sign only; frequency is checked on the
+  settled runs (`rxs_*`). The ss I/Q LO phase of 76.1° was accepted (quadrature decoding works at 50-110°); after
+  the nb fix it is 74.1° and passes anyway. nb is routed away from the LO wires (`tile_nets.KEEP_AWAY`).
+- **2026-11-19:** the I and Q LO taps must match: the Q level shifter is mirrored under lsdiv (merged a899165). This
+  fixed the a2 load (VCO shift -12.5 % -> -3.6...-3.9 %, `sim/top/a2_load/results.md`) and the I/Q skew; the tile
+  gets a 72 ± 3° I/Q LO check. The TX final-stage shrink to 20-22 µm is dropped: the 40 µm stage stays.
+- **2026-11-17:** floorplan variant B. No TX/RX hardware interlock: firmware keeps RX_EN off while transmitting and
+  waits before trusting `q_i` / `q_q` (the "about 1 ms" wait is superseded by 2 ms, above). The SPI stays on
+  `uio[0..3]` = SCLK, MOSI, CS_n, MISO via PIO or SoftSPI (`docs/bringup.md`). Extra debug options deferred.
+- **2026-11-13:** VAPWR and VDPWR are separate supplies, both 3.3 V by default on the demo board (`docs/platform.md`).
+- **2026-11-12:** receiver option B: zero IF, I/Q mixers on two ring taps 72° apart, a limiter per arm, two bits to
+  uo[4] / uo[5], decoded by the RP2350 PIO (`docs/rx_design.md`). TX harmonics fixed by a board 5th-order pi
+  low-pass filter (the one board exception), after on-chip slew control failed (`docs/tx_harmonics.md`). The ua pin
+  current at ff / 15 Ω (10.8-11.1 mA rms against 10 mA) is acceptable. Kept as is: the sigma-delta charge injection
+  (+0.4 LSB) and the FSK overshoot at a major carry (firmware keeps the FSK pair inside one block of 32). Not
+  pursued: the 0.10 % low shift after the decap redraw (the RP2350 servo tunes absolute f).
+- **2026-11-11:** the ttgf26c pin plan isn't known until tapeout, so designs are checked over n_off 0-3.
+- **2026-11-10:** no board components except the dipoles (and later the TX filter), so all fine tuning is on chip:
+  option C, a 10-bit medium current DAC with sigma-delta dither, an SPI register from the RP2350, FSK as a digital
+  offset, a ÷16 / ÷64 / ÷1024 divider to `uo_out`; vctrl tied inside the chip, ua[0] kept for debug; the RP2350
+  counts and servos (frozen during packets); the RX gets its own dipole.
 
-**Decision 2026-11-20 (Matt):** the ss I/Q LO phase of 76.1° (0.13° outside 72 ± 3°) is accepted: the receiver's
-quadrature decoding works at 50-110°. **Same day, nb fix (branch `iq-symmetry`):** the router had put lsq beside the
-receiver bias nb (10.55 fF), giving the Q mixer a one-sided start-up offset. nb now keeps away from the LO wires
-(`tile_nets.KEEP_AWAY`); lsq - nb 0.13 fF, all tile checks clean. Rerun (`sim/top/tile_results.md`, "Update
-2026-11-20"): both arms' mixer offsets equal again (-3.4 ... -3.9 mV), nb at f_LO 0.34 mV (was 7.1), I/Q LO 72.9 /
-74.1 / 72.8° at tt / ss / ff (now all pass), RX settled -95 dBm pass, TX +6.28 dBm code 9, 11 / 11 mutations. The
-per-arm start-up offset is closed. **Decision 2026-11-20 (Matt):** the unsettled 14 µs RX runs (`rxh_*`) check phase
-and sign only; frequency is checked on the settled runs (`rxs_*`). The +offset run read q_i / q_q 233 / 240 kHz vs 202
-from 4 edges on the common start-up offset, while the settled run reads 198 / 200 kHz. Verdict: all pass, 12 / 12
-mutations (new: settled f_qi +30 %). Still unexplained (minor): the common start-up offset is about -1.1 V on both
-baseband arms against -0.83 V at fca76de.
-
-**Decision 2026-11-17 (Matt):** no TX/RX hardware interlock. Firmware keeps RX_EN off while transmitting and waits
-about 1 ms after TX before trusting `q_i` / `q_q` (`docs/bringup.md`, firmware rules).
-
-**Decision 2026-11-17 (Matt):** the SPI stays on `uio[0..3]` = SCLK, MOSI, CS_n, MISO, driven by the RP2350's PIO or
-SoftSPI; the demo board's hardware SPI1 on GPIO25-28 has the order CSn, SCK, TX, RX, so only MISO matches
-(`docs/bringup.md`). Check `uio[1]` toggles first: it read held low on the ttgf0p2 carrier.
-
-**Decisions 2026-11-10 (Matt):** no board components except the dipoles, so all fine tuning is on chip. TX plan is option C: a ~10-bit medium current DAC (~50 kHz LSB, ±25 MHz, from the constant-gm reference) with sigma-delta dither below one LSB, an SPI register from the RP2350, FSK as a digital offset (±100 kHz, 2-FSK), and a ÷16/÷64/÷1024 divider to `uo_out` (GF pins are fine to ~50 MHz, so `ck` at 108 MHz is not; gate it, since 4 × ck = 433.92 MHz). vctrl is tied inside the chip, with ua[0] kept as a debug override. The RP2350 counts and servos (freezing during packets). The RX gets its own dipole on a second pair of `ua` pins (6 of 6 used); zero-IF vs low-IF is deferred. Focus on the TX first. **2026-11-12 (Matt): the exception is a board low-pass filter for the TX harmonics** (item 5). **Option C (fine tuning and FSK, item 3) is complete (2026-11-12). Harmonics: board filter (item 5); the proposed 20-22 µm final stage is not in the tile layout yet.**
-
-1. **Bench 2026-11-09: done** (results at the top of `bench/lab_todo.md`). **`docs/handoff_gf_silicon_factor.md` is
-   running on the sim server (started 2026-11-09 evening)**: `git pull` for its status / DONE / FAILED files, then compare
-   with the bench (inv1x5 319.6 MHz and the tap sweep) and re-check that codes 7–11 still reach 433.92 MHz.
-   The original list was:
-   - measure the ttgf0p2 #200 ring, for the GF silicon/sim factor;
-   - check the carrier's core regulator (R1 or R3 feed, VDD_CORE noise);
-   - check the RP2350 13.56 / 27.12 MHz reference clock;
-   - if time allows, measure a `ua` pin's R and C.
-2. **Level shifter + TSPC ÷4 prescaler: schematic and layout done** (`docs/lsdiv_design.md`, `docs/lsdiv_layout.md`,
-   `xschem/lsdiv.sch`, `layout/lsdiv.gds`, 40.5 × 37 µm, DRC/LVS/antenna clean).
-   - On the extracted core: ÷4 exact, duty 46–51 %, −1.5…−1.8 % f; Cc extracted 1.99 fF.
-   - **Open:**
-     - block power is about 1.7× the schematic (0.63 mW at tt code 9): routing C on the TSPC nodes;
-     - the RC extraction double-counts Cc on a0 (sims use the C-only `lsdiv_c.spice`); check the core's RC ports for
-       the same effect;
-     - sf/fs, 0/70 °C, VDD ±4.5 %, MC on the extracted block; the ~10 pF supply decap (top level);
-     - don't clock the ÷4 below about 150 MHz (sf fails below that; the ring never goes there).
-   - **433.92 MHz codes re-mapped** on the corrected extracted core + extracted level shifter (`docs/remap_results.md`):
-     tt 9, ss 11, ff 7, sf 9, fs 10 (the schematic map's codes, fs +1), vctrl 1.75–2.25 V; 3 codes reach 433.92
-     at every corner.
-   - **Hi-res poly is 1 kΩ/sq (confirmed, `docs/platform.md`); the design now uses ppolyf_u_1k.** `vco_bias.py`
-     sizes RF for 1 MΩ at 1k (970 µm at 1 µm wide; `rfm=3k` reproduces older results). tt 27 °C code 9 noise is
-     unchanged (7.87 kHz rms 1–10 kHz). lsdiv's R1 stays as drawn (about 164 kΩ); extracted corners unchanged.
-3. **On-chip fine tuning and FSK (option C): complete, closed 2026-11-12** (built through the tile 2026-11-11) (`docs/tx_fine_tune.md`,
-   handoff `docs/handoff_tx_fine_tune.md`). 10-bit medium current DAC on vg (5 unary + 5 binary, PMOS steering,
-   3/30 mirror) + first-order ΣΔ cell, SPI register / FSK offset / ÷16 ÷64 ÷1024 / gated ck in the digital macro
-   `tx_fine` (LibreLane), vctrl pulled down on chip (200 kΩ), tile LVS / DRC / antenna clean, TT precheck passes.
-   - Extracted ring + extracted DAC (C only, `pex_mdac.sh` + `pexmerge.py`): LSB 27.4 / 31.1 / 35.6 kHz (ss / tt / ff),
-     −0.2 % vs the schematic DAC, range > 1.3 coarse steps; MC (N = 200 × 3 corners, schematic DAC) monotonic; ΣΔ
-     spurs −58.2 dBc (model −60); FSK ±3 LSB = 204 kHz, settles within 0.26 µs; FM +5 %. VDD 2.8-3.3 V: LSB and
-     range unchanged (no headroom issue).
-   - **Clock gating (2026-11-11, macro r12):** 4 icgtp gates, small CTS buffers; clock charge 21.1 -> 4.48 pC per
-     25 MHz cycle (OpenSTA, `macro/tx_fine/power/clk_charge.py`); supply spur −32.1 -> **−45.5 dBc** (target −40).
-   - **25 MHz supply spur fixed: the vg decap is on VDD (2026-11-12, `docs/handoff_vg_decap_pmos.md`, done).** The
-     spur came in through the ring's own supply, VDD − vg: the 3 pF decap tied vg to VSS, so vg held still while VDD
-     rippled (`sim/tune/spur_paths.py`: ring only -45.3 dBc, DACs or nothing about -80). The decap is now a PMOS gate
-     cap (gate vg, S/D/B VDD, own n-well, 6 x 29.82/4.12 um, 3.0 pF) in ring_core_v3, vco_top and the tile, all checks
-     clean. **Extracted layout: 25 MHz spur -84.6 / -84.3 / -84.1 dBc at tt / ss / ff (was -46.1 / -47.8 / -44.2)**;
-     schematic -79.8 / -80.3 / -80.8; TX driver-on jitter 0.10-0.13 ps (was 0.20-0.29); start-up fine (0.5-1 us
-     later). Write-up: `docs/tx_fine_tune.md`, "Supply coupling: the vg decap".
-     - **Not pursued (Matt, 2026-11-12: the RP2350 servo tunes absolute f):** the re-drawn layout runs 0.10-0.11 % low (-410…-470 kHz, LSB 31.09 kHz tt) against the NMOS-decap
-       layout. Not the decap device (an ideal C gives the same f within 1 ppm); vg is 0.76 mV lower (about half of
-       it); C-only extraction shows only -0.011 %, likely the core's wiring R. Codes, LSB and range unchanged.
-     - **Not modelled:** ground ripple (needs the TT ground path's R and L) and VDPWR before the power switch (ask tnt).
-       Still open as options: the floorplan coupling Matt suspects; the analog on VAPWR (VAPWR and VDPWR are separate
-       on chip and from separate pins, both 3.3 V by default on the demo board; `docs/platform.md`, Matt 2026-11-13).
-   - **Kept as is (Matt, 2026-11-12):** the ΣΔ-cell charge injection (+0.4 LSB at fraction ½; monotonic, the servo
-     corrects it) and the FSK overshoot at a major carry (firmware keeps the FSK pair inside one block of 32).
-4. **Reference layout: done** (`docs/ref_layout.md`, `layout/cgm_ref.gds`, 238.8 × 69.4 µm, DRC/LVS/antenna clean).
-   Extracted core + extracted reference: f within −0.03 % of the schematic reference at tt/ss/ff, vbnf start-up
-   88–94 µs. **Top level `vco_top` done** (`docs/top_layout.md`, 386.6 × 70.8 µm since the 2026-11-16 decap redraw (was 407.7), DRC/LVS/antenna clean, no Metal4/5): the extracted
-   top matches the blocks within 0.07 % (tt 418.0 MHz at code 9 with the LS). As a straight row it needs a 2x2;
-   folded (about 29k µm²) it would fit a 1x2. Open: a0 tap for the TX driver, full start-up to settling.
-   - **Tempco at room temperature is +100…+140 ppm/°C (about 45–60 kHz/°C)**, schematic and layout alike. The sizing
-     nulled the 0–70 °C least-squares slope (+1.6 ppm/°C), but f(T) is a parabola peaking near 35 °C. For
-     room-temperature operation, re-tune the n-well length lnw to put the peak at 27 °C (only RBW's length changes).
-5. **TX driver: built through the tile; harmonics open** (`docs/tx_driver.md`, 2026-11-09). lsdiv's `ls` -> tap -> phase splitter ->
-   two arms (NAND2 enable + x4 taper, final N 40 / P 100 um, 3.3 V devices on VDPWR) -> ua[3] (out_p) / ua[2] (out_n)
-   into a two-wire dipole; enables on ui_in[5] / ui_in[6].
-   - Schematic: +3.7…+9.3 dBm fundamental into 73 ohm over 5 corners x routing 15–60 ohm x n_off 0–3 (+6.3 dBm tt),
-     12.6 mA from VDPWR at tt, duty 48.8–52.1 %, phase error <= 0.5 deg, off state 0 V (`sim/tx/results/`).
-   - Layout `layout/tx_drv.gds` 73 x 106 um: DRC / antenna / LVS clean; extracted -0.2…-0.3 dB vs schematic.
-   - On the extracted vco_top: the tap does not disturb the ring. Behind TT's power switch (tt_pg_3v3_hp_2, Ron
-     1.2–1.5 ohm, common to the whole tile) keying the driver on moves the ring +0.03…+0.05 % (+110…+210 kHz), ripple
-     12–15 mV, no jitter change. LS duty passes through (out_p 54.0 % at ff). 3rd harmonic at the dipole -14 dBc.
-   - **Harmonics: fixed with a board low-pass filter (Matt, 2026-11-12)**, after option 1 (on-chip slew control) failed
-     (`docs/tx_harmonics.md`, merged from PR #2). A balanced 5th-order pi low-pass between the pins and the
-     dipole, standard values per line 4.7 pF / 18 nH / 15 pF / 18 nH / 4.7 pF (caps to ground, so the common mode is
-     filtered too; `sim/tx/board_lpf.py`): H3 -55.7…-60.1 dBc, H5 below -77 dBc at 5 corners x 15/60 ohm x n_off 0/3
-     (today -14 / -23; pass line -36). The filter transforms the load and raises the power, so the pad current would
-     reach 13.8 mA rms at ff / 15 ohm with the 40 um final stage. A final stage of 20-22 um was proposed
-     (pad current <= 9.3 / 9.9 mA); **dropped (Matt, 2026-11-19): the 40 um stage stays.** Short
-     experiments can run without the filter (harmonics as today).
-   - In the 2x2 tile above lsdiv; wrapper LVS passes (5 mutations caught), KLayout DRC clean except fill rules.
-   - CI on 6503f1c: TT precheck, LVS and docs workflows pass.
-   - **ua pin limit is 10 mA rms** (tnt, 2026-11-11): each arm carries 7.8-8.1 mA rms at tt / 40 Ω, but
-     10.8-11.1 mA at ff with 15 Ω of routing. Kept at 40 um (Matt, 2026-11-12: the small ff excess is acceptable).
-   - **Open:** ask tnt about VDPWR before the power switch (bond wires, chip grid); re-floorplan with the receiver.
-     The pin plan can't be known before tapeout (it depends on the other projects then), so the TX is checked
-     over n_off 0-3 instead.
-6. **Receiver: option B, schematics and first-pass sims done on branch `rx-option-b` (2026-11-13), for Matt's review
-   before layout** (`docs/rx_design.md`, handoff `docs/handoff_rx_schematic.md`).
-   - Blocks (`sim/rx/rx_*.py`, sheets `xschem/rx_*.sch`, checked by `xschem/gen/check_rx.py`): constant-gm bias;
-     two-stage LNA (the OOK amp_dp port, pin self-biased at vcm, one second stage per mixer); Q tap = a copy of
-     lsdiv's level shifter with the same load, on a2 (I from `ls`); passive TG mixers; 3-stage baseband (LPF 137-150 kHz,
-     HPF 8.3-9.4 kHz); limiter + hysteresis comparator to uo[4] / uo[5]. vco_top has a new `a2` port (not in the layout yet).
-   - Results: NF antenna to comparator 5.7-8.4 dB over corners / n_off / routing (7.27 dB tt, n_off 3, 40 ohm); I/Q 71-74 deg;
-     hysteresis 0.29-0.41 x noise; about 7 mA; the model with these numbers gives -110.4 dBm at BER 1e-3, 10 kbit/s.
-   - **For the review:** rx_en vs the ring (gating the Q tap moves the ring 14-23 LSB; keeping it on costs 0.18-0.26 mA
-     off-state; the schematic keeps it on); offset-step recovery about 1 ms; rx_en wiring; VAPWR vs VDPWR; filter order;
-     the areas.
-   - The pin costs NF: 26–97 Ω of switch + routing and 7.7 pF per side (a 240 MHz low-pass with the dipole).
-
-   **Pin budget: GF analog pin model done** (`docs/pad_model.md`, `sim/pad/pad_model_gf180.spice`,
-   `xschem/pad_model_gf180.sch`, checked by `sim/pad/check_xsch.py`). tnt's `tt_asw_5v0` switch is 11–37 Ω tt
-   (ss peak 72 Ω), plus 15–60 Ω of routing; a project node sees about 7.7 pF with the pin open; 433.92 MHz out into
-   50 Ω loses −0.5…−0.9 dB vs DC (6–12 dB absolute, the R divider). VAPWR is 3.3–5 V, set independently of VDPWR
-   (tnt, `docs/platform.md`; simulated at 3.3 V, the conservative case). The ttgf26c pin plan isn't known until
-   tapeout (it depends on the other analog projects then, Matt 2026-11-11), so designs are checked over n_off 0–3
-   (3 the default, 0–1 likely). 12 `ua` pins requested so far, 4 used now: vctrl, vbn, TX out_n, TX out_p.
-   **Our project is not in `TinyTapeout/tinytapeout-gf-26c` yet: submit before 2026-12-07.**
-7. **Later:** a PLL (on-chip PFD, charge pump and loop filter, reference from the RP2350), and I/Q for the receiver.
-8. **Sign-off:** full PVT (5 corners × 0/27/70 °C × VDD ±4.5 %) plus MC on the extracted tile.
-9. **Estimated tile:** 2x2.
-10. **To consider later: extra debug options** (`docs/bringup.md` section 6; Matt 2026-11-17: not crucial, the
-    design stays as it is for now). Candidates, most diagnostic value first:
-    - a divided Q LO on spare `uo[6]`, to tell a dead Q LO path from a dead Q mixer or limiter (a new divider
-      cell plus layout);
-    - debug switches on `oi_n` / `oq_n`, to separate the baseband offset from the common mode (two `dbg_tg` cells
-      plus two DBG_SEL bits);
-    - the macro keeping only the lowest set DBG_SEL bit, so two switches can't short two nodes (digital only).
-
-## Done 2026-11-09 (TX driver)
-- Plan steps 1–5: circuit + xschem sheets (`sim/tx/tx_drv.py`, `xschem/gen/tx_drv.py`), block and top-level benches
-  (`sim/tx/tb_tx_drv.py`, `sim/tx/tb_tx_top.py`), layout + checks + extraction (`layout/gen/tx_drv.py`,
-  `check_tx.sh`, `pex_tx.sh`), the `ls` port on lsdiv / vco_top, and the tile (`layout/gen/tt_wrapper.py`).
-- `xschem/gen/check.py`'s size diff now joins SPICE continuation lines (a wrapped `m=3` was missed before).
-
-## Done 2026-11-08
-- The xschem schematics are redrawn as wired, textbook-style sheets (no net labels). Checks pass, and they render in
-  xschem-viewer.
-- The level shifter and ÷4 prescaler: schematic, layout, extracted sims (above), and the 433.92 code re-map.
-- **The xschem netlist is now the LVS source of the v3 core** (`layout/gen/check_v3.sh`). It caught that the committed
-  `layout/ring_core_v3.gds` was the wfu 0.25 layout, not the chosen 0.30. The GDS, `layout/ref/ring_core_v3.spice` and
-  the floorplan PNG are now 0.30, the layout the extracted netlists (`*_w30chk_rc.spice`) were made from. All checks pass.
+## How we got here
+Starved-ring study (`docs/vco_study.md`), then the layout showed about 10 fF per ring node and charge sharing broke
+the starved stage, so the current-fed ring won the topology comparison (`docs/cfed_results.md`). Then sizing and PVT
+(`docs/cfed_sizing_results.md`), the v3 core layout (`docs/ring_layout_v3.md`), lsdiv (`docs/lsdiv_design.md`), the
+reference (`docs/ref_layout.md`), `vco_top` (`docs/top_layout.md`), fine tuning (`docs/tx_fine_tune.md`), the TX
+driver (`docs/tx_driver.md`), the receiver (`docs/rx_design.md`) and the tile. Detail: those docs and `git log`.
 
 ## How things run
-- **Tools:** `tools/osic-mac <cmd>` runs IIC-OSIC-TOOLS (laptop image 2026.05; sim pod 2026.09). **It doesn't pass
-  env vars into Docker:** use `tools/osic-mac env K=V cmd`.
-- **Corners** (`docs/handoff_autonomy.md`, "Corner policy"):
-  - iterate at 27 °C and VDD 3.3 V on the bounding process corners;
-  - VDD and 0 / 70 °C only for robustness checks and sign-off.
-- **Long runs (over about 5 min) go to the sim pod** via `docs/handoff_<topic>.md`.
-  - The rules for unattended runs are in `docs/handoff_autonomy.md`; they were tested twice and work.
-  - The pod session, "gf433 sims", can be messaged directly over Remote Control.
-  - The laptop session watches the handoff's status line on GitHub.
-- **Key scripts:**
-  - `sim/vco/vco_bias.py` (the circuit; `topo=cfed`), `sim/vco/topo_cmp.py`;
-  - `sim/pn/cfed_noise.py`, `sim/pn/cfed_sizing.py`, `sim/pn/cfed_startup.py`;
-  - `sim/mc/dac_mc.py`;
-  - `layout/gen/ring_core_v3.py` (pass `--set wfu=0.30`) + `check_v3.sh`/`pex_v3`/`pex_sim_v3`;
-  - `xschem/gen/` + `check.py`.
+- **This machine is the sim server.** Long runs (over about 5 minutes) go through a `docs/handoff_<topic>.md` under
+  the rules in `docs/handoff_autonomy.md` (including "Corner policy": iterate at 27 °C, 3.3 V on the bounding
+  process corners; 0 / 70 °C and VDD ±4.5 % for robustness and sign-off).
+- **Tools:** `tools/osic-mac <cmd>` runs IIC-OSIC-TOOLS. It doesn't pass env vars into Docker: use
+  `tools/osic-mac env K=V cmd`.
 - **Chosen design settings:** `sim/results/2026-11-08/winner_sets.txt`, plus `lnw=5.023 topo=cfed kc=0.75 k=6
-  cvg=3e-12 ka=16 wfu=0.30 wff=0.30 rf=1e6 cf=20e-12`.
-- **Viewers:**
-  - GDS: `https://gds-viewer.tinytapeout.com/?url=<raw github URL>&pdk=gf180mcuD`;
-  - schematics: the links in `docs/schematics.md` (xschem-viewer).
+  cvg=3e-12 ka=16 wfu=0.30 wff=0.30 rf=1e6 cf=20e-12` (circuit in `sim/vco/vco_bias.py`).
+- **Viewers:** GDS `https://gds-viewer.tinytapeout.com/?url=<raw github URL>&pdk=gf180mcuD`; schematics via the
+  xschem-viewer links in `docs/schematics.md`.
 
 ## Known issues and traps
-- **Map reads high:** `map.csv` frequencies read about 1.3 % high (a 100–200 ns window, before vg settles). The
-  extracted layout runs at about 0.98× the schematic.
-- **magic RC extraction double-counted the coupling C** on ports and split nets, which made the core look 13 % slow
-  (the old "0.87×"). Simulate the `_rcx.spice` files (`layout/gen/rcfix.py`, `docs/rc_extraction_fix.md`).
-- **Kvco is not linear:** the fine leg is flat below about 1 V and square-law above it, so measure Kvco at the
-  operating point before setting the FSK step.
-- **xschem-viewer has no GF180 library:** the symbols are copied into `xschem/symbols/`. They render correctly
-  (confirmed by Matt, 2026-11-08).
-- **Leftover Docker containers** from killed subagent runs (for example a hung xschem render): check with `docker ps`.
+- **magic RC extraction double-counts coupling C** on ports and split nets: simulate the `_rcx.spice` files
+  (`layout/gen/rcfix.py`, `docs/rc_extraction_fix.md`).
+- **`map.csv` reads about 1.3 % high** (before vg settles); the extracted layout runs at about 0.98× the schematic.
+- **Kvco is not linear:** the fine leg is flat below about 1 V, square-law above; measure Kvco at the operating point.
+- **xschem-viewer has no GF180 library:** the symbols are copied into `xschem/symbols/`.
+- **Leftover Docker containers** from killed runs: check with `docker ps`.
 - **Never commit `sim.yaml`:** it holds the VNC password.
