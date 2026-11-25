@@ -31,6 +31,13 @@ changes, tested with the dry run:
   65 GB (only raws beside a newer `result.json`, never one a waiting job depends on: the verdicts read `result.json`).
   At `DISK_HARD` (78 GB) the most recently started job is killed and set back to wait. Tested on a small directory
   with MB limits: prune, hold and kill all happened as described.
+- **The skill's newer scheduler.** `sim/sched.py` is now the mixed-signal-asic skill's `scripts/sched.py` with the
+  disk watch added: a job that has used no CPU for 30 min is killed and counted `stalled`; a failing round is logged
+  and the scheduler carries on; `status.json` has a `_sched` heartbeat; an IDLE line says why waiting jobs don't
+  start; jobs start on real load (`LOAD`, the load average plus jobs just started), with `BUDGET` only a cap on the
+  declared threads. This fixes the 4.5 h wait of the 16-bit packet in the first run.
+- **`tools/pod_setup.sh`** (run first on every new pod): git identity, a credential helper reading `GITHUB_TOKEN`,
+  Tcl / Tk 8.6.14 and magic 8.3.642 (with Tcl) built into `~/.local`, the Python modules, the tool versions.
 - **No GitHub Actions on this branch:** every workflow has `branches-ignore: [verify-gaps]`, and the driver's commits
   carry `[skip ci]`.
 
@@ -60,8 +67,8 @@ first guesses), `python3 sim/verify/jobs_full.py` prints them.
 ## Config (edit here; the driver reads environment variables of the same names)
 
 ```
-BUDGET=28        # CPUs for the scheduler (the sim server has 30: keep 2 free)
-LOAD=30          # the scheduler starts no job while the 1-minute load is above this
+LOAD=28          # real CPU: no job starts if the load average + jobs just started + its threads exceed it (30 CPUs: keep 2 free)
+BUDGET=40        # cap on the running jobs' declared threads (ngspice often uses fewer than it declares)
 TOUT_H=96        # the scheduler's give-up time (h)
 DISK_SOFT=70     # GB: hold new jobs, prune finished raws
 DISK_HARD=78     # GB: kill and requeue the newest job (the pod's disk is 100 GB; stay under 80)
@@ -74,7 +81,7 @@ this sign-off-style run). To trim the run, edit the job files (`plan_verify_gaps
 
 ## Steps
 
-1. `git pull --rebase` on `verify-gaps`. Check the tools: `magic` 8.3.642 is only needed if you re-extract (the run
+1. `git pull --rebase` on `verify-gaps`, then `bash tools/pod_setup.sh` (must end in `done`). Check the tools: `magic` 8.3.642 is only needed if you re-extract (the run
    uses the committed `layout/pex/tile_c.spice` and `layout/pex/rx_*_c.spice`; don't re-extract with 8.3.684, it drops
    substrate C).
 2. Test the driver first (seconds, nothing moved): `DRY=1 POLL=2 bash sim/verify/full_run.sh` must end in

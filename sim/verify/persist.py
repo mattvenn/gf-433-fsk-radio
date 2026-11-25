@@ -88,6 +88,7 @@ def restore():
     if not sp.exists():
         return
     st = json.loads(sp.read_text())
+    st.pop('_sched', None)                               # the dead scheduler's heartbeat
     jobs = {j['name']: j for j in runpy.run_path(str(REPO / JOBF))['JOBS']}
     for n_, s in st.items():                             # running when the machine went: run again
         if s.get('state') == 'run':

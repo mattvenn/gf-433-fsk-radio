@@ -15,8 +15,9 @@
 #   bash sim/verify/full_run.sh          (repo root, IIC-OSIC-TOOLS image)
 # Status: build/verify/full/status.txt, build/verify/full/DONE | FAILED; jobs: python3 sim/sched.py --status --out build/verify/full
 set -u
-BUDGET=${BUDGET:-28}
-LOAD=${LOAD:-30}
+export PDK_ROOT=/foss/pdks PDK=gf180mcuD STD_CELL_LIBRARY=gf180mcu_fd_sc_mcu7t5v0   # the image defaults to IHP
+BUDGET=${BUDGET:-40}      # cap on the jobs' declared threads (ngspice often uses fewer than it declares)
+LOAD=${LOAD:-28}          # real CPU: load average + jobs just started (the pod has 30 CPUs: keep 2 free)
 TOUT_H=${TOUT_H:-96}
 DISK_SOFT=${DISK_SOFT:-70}
 DISK_HARD=${DISK_HARD:-78}
@@ -75,7 +76,9 @@ push_line "Running: step 1/$NSTEP setup since $(date '+%F %H:%M')"
   echo "magic: $(magic -dnull -noconsole --version 2>&1 | head -1)"
   echo "netgen: $(timeout 20 netgen -batch quit < /dev/null 2>&1 | grep -m1 -i 'netgen')"
   echo "klayout: $(timeout 20 klayout -v < /dev/null 2>&1)"
-  echo "cores: $(nproc), budget $BUDGET"
+  echo "PDK: $PDK_ROOT/$PDK"
+  echo "magic (pinned, for PEX only): $($HOME/.local/magic642/bin/magic -dnull -noconsole --version 2>&1 | tail -1)"
+  echo "cores: $(nproc), load $LOAD, budget $BUDGET, disk soft $DISK_SOFT / hard $DISK_HARD GB"
 } > "$F/setup.txt" 2>&1
 if [ "$RESUME" = 1 ]; then
   python3 sim/verify/persist.py restore >> "$F/setup.txt" 2>&1 || fail 1 setup "$F/setup.txt"
@@ -110,8 +113,8 @@ while kill -0 $SP 2>/dev/null; do
     c=$(python3 -c "
 import json, collections
 s = json.load(open('$F/status.json'))
-c = collections.Counter(v['state'] for v in s.values())
-print(', '.join(f'{k} {c[k]}' for k in ('ok', 'fail', 'skip', 'run', 'wait') if c[k]))")
+c = collections.Counter(v['state'] for k, v in s.items() if not k.startswith('_'))
+print(', '.join(f'{k} {c[k]}' for k in ('ok', 'fail', 'stalled', 'skip', 'run', 'wait') if c[k]))")
     c="$c; disk $(cut -d' ' -f3-4 "$F/disk.txt" 2>/dev/null)"
     echo "$(date '+%F %H:%M') progress: $c" >> "$F/status.txt"
     [ "$DRY" = 0 ] || python3 sim/verify/persist.py save >> "$F/persist.log" 2>&1
