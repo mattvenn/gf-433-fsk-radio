@@ -1,4 +1,4 @@
-> Not started.
+> Running: step 2/5 since 16:29, ETA 16:55
 
 # Handoff: does the fine word fall at word boundaries? (medium-DAC Monte Carlo, sim server)
 
