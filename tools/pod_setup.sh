@@ -7,7 +7,8 @@
 # 2. git credential helper that reads $GITHUB_TOKEN at push time (the token itself is never written to disk)
 # 3. magic 8.3.642 in ~/.local/magic642 (8.3.684, the image's, drops node-to-substrate C; layout/gen/pex*.sh use it)
 # 4. ~/.designinit for gf180mcuD
-# 5. the Python modules the run scripts import
+# 5. tt-support-tools beside the repo
+# 6. the Python modules the run scripts import
 # Ends with the tool versions, and exits non-zero if any step failed.
 set -u
 cd "$(git rev-parse --show-toplevel)" || exit 1
@@ -63,6 +64,13 @@ if ! grep -q '^PDK=gf180mcuD' "$D" 2>/dev/null; then
   say "wrote $D (gf180mcuD)"
 fi
 [ -d /foss/pdks/gf180mcuD ] && say "PDK gf180mcuD present" || { say "PDK /foss/pdks/gf180mcuD missing"; ok=0; }
+
+# 4b. tt-support-tools beside the repo (layout/gen/tile.py reads its gf180mcuD analog DEF; main, as the project used)
+TT=$(dirname "$PWD")/tt-support-tools
+[ -d "$TT/tech/gf180mcuD" ] || git clone -q --depth 1 https://github.com/TinyTapeout/tt-support-tools "$TT" \
+  || { say "tt-support-tools clone FAILED"; ok=0; }
+[ -s "$TT/tech/gf180mcuD/def/analog/tt_analog_2x2_pgvaa.def" ] && say "tt-support-tools OK ($(git -C "$TT" rev-parse --short HEAD))" \
+  || { say "tt-support-tools: the 2x2 analog DEF is missing"; ok=0; }
 
 # 5. Python modules
 python3 -c "import numpy, scipy, matplotlib, yaml" 2>/dev/null && say "python modules OK" \

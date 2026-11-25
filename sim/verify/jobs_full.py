@@ -100,6 +100,13 @@ if __name__ == "__main__":
     for b in (28, 30):
         print(f"budget {b}: >= {max(cpu / b, longest['est'] / 3600):.1f} h wall (CPU-bound lower limit)")
 
+# 2026-11-25: the first ex_layout failed (exit 0, RESULT FAIL: tt-support-tools missing on the new pod) and the
+# scheduler counted it OK; renamed so it runs again, and the power-grid jobs wait for the new one
+for j in JOBS:
+    if j["name"] == "ex_layout":
+        j["name"] = "ex_layout_r2"
+    j["deps"] = ["ex_layout_r2" if d == "ex_layout" else d for d in j.get("deps", [])]
+
 # 2026-11-25: coupling_budget reads the settled -95 dBm tt RX result; on a fresh pod only this run's own copy exists
 for j in JOBS:
     if j["name"] == "coupling_budget":
