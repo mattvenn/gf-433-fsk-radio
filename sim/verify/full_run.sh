@@ -46,6 +46,7 @@ NSTEP=4
 T0=$(date +%s)
 step() { echo "$(date '+%F %H:%M:%S') step $1/$NSTEP $2: $3" | tee -a "$F/status.txt"; }
 push_line() {   # the one-line status at the top of the handoff, committed and pushed (only with a token)
+  # pull with a merge, not a rebase: the run rewrites tracked files (the layout job's gds/), and a rebase refuses a dirty tree
   [ -n "${GITHUB_TOKEN:-}" ] && [ "$DRY" = 0 ] || return 0
   python3 - "$HANDOFF" "$1" <<'PY'
 import sys, re
@@ -57,7 +58,7 @@ PY
   python3 sim/verify/persist.py save >> "$F/persist.log" 2>&1
   git add "$HANDOFF" && git add -f "$RES" \
     && git -c user.name=Claude -c user.email=noreply@anthropic.com commit -q -m "full verification: $1 [skip ci]" -- "$HANDOFF" "$RES" \
-    && git -c user.name=Claude -c user.email=noreply@anthropic.com pull -q --rebase \
+    && git -c user.name=Claude -c user.email=noreply@anthropic.com pull -q --no-rebase --no-edit \
     && git -c credential.helper='!f() { echo username=x-access-token; echo "password=$GITHUB_TOKEN"; }; f' push -q || true
 }
 fail() {  # fail <step> <name> <log>
