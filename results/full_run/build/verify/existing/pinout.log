@@ -1,0 +1,4 @@
+  ua[1]: shorted to VGND by ['Rshort_ua1'] (['R'])
+  tx_fine: 54 signal pins, the same in RTL, LEF, GL netlist and LVS subcircuit
+pinout: OK (0 errors; uio_oe = 0x08)
+RESULT pinout PASS pinout: OK (0 errors; uio_oe = 0x08)

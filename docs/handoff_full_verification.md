@@ -1,6 +1,6 @@
 # Handoff: the full verification run (existing checks + receiver / system gaps 1-6)
 
-> Not started: the first full run (from 2026-11-21 09:41, last heartbeat 2026-11-22 23:42: ok 538, run 7, wait 428) was lost with the sim server's pod; its results were never saved. Restart with the 2026-11-25 changes below.
+> Running: step 1/4 setup since 2026-11-25 13:15
 
 [![Made with Claude](https://img.shields.io/badge/Made%20with-Claude-D97757?logo=anthropic&logoColor=white)](https://claude.com/claude-code)
 

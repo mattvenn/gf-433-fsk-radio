@@ -1,0 +1,244 @@
+{
+ "checks": [
+  {
+   "area": "digital",
+   "check": "pinout",
+   "status": "pending",
+   "detail": "pending"
+  },
+  {
+   "area": "digital",
+   "check": "mutations",
+   "status": "pending",
+   "detail": "pending"
+  },
+  {
+   "area": "digital",
+   "check": "cocotb_macro",
+   "status": "pending",
+   "detail": "pending"
+  },
+  {
+   "area": "digital",
+   "check": "cocotb_macro_gl",
+   "status": "pending",
+   "detail": "pending"
+  },
+  {
+   "area": "digital",
+   "check": "cocotb_tt",
+   "status": "pending",
+   "detail": "pending"
+  },
+  {
+   "area": "digital",
+   "check": "cocotb_tt_gl",
+   "status": "pending",
+   "detail": "pending"
+  },
+  {
+   "area": "digital",
+   "check": "formal_prove",
+   "status": "pending",
+   "detail": "pending"
+  },
+  {
+   "area": "digital",
+   "check": "formal_gates_bmc",
+   "status": "pending",
+   "detail": "pending"
+  },
+  {
+   "area": "digital",
+   "check": "formal_mutate",
+   "status": "pending",
+   "detail": "pending"
+  },
+  {
+   "area": "digital",
+   "check": "eqy",
+   "status": "pending",
+   "detail": "pending"
+  },
+  {
+   "area": "layout",
+   "check": "floorplan",
+   "status": "pending",
+   "detail": "pending"
+  },
+  {
+   "area": "layout",
+   "check": "xschem",
+   "status": "pending",
+   "detail": "pending"
+  },
+  {
+   "area": "layout",
+   "check": "layout",
+   "status": "pending",
+   "detail": "pending"
+  },
+  {
+   "area": "mixed",
+   "check": "co-simulation (sim/mixed)",
+   "status": "pending",
+   "detail": "pending"
+  },
+  {
+   "area": "tile (existing)",
+   "check": "tb_tile_verdict.py",
+   "status": "pending",
+   "detail": "pending"
+  },
+  {
+   "area": "power",
+   "check": "IR drop / EM (sim/power)",
+   "status": "pending",
+   "detail": "pending"
+  },
+  {
+   "area": "gap 1 MC",
+   "check": "receiver mismatch MC (extracted blocks)",
+   "status": "pending",
+   "detail": "pending"
+  },
+  {
+   "area": "gap 2 noise",
+   "check": "tile fskn_c_tt_-105_n2_s1",
+   "status": "pending",
+   "detail": "pending"
+  },
+  {
+   "area": "gap 2 noise",
+   "check": "extracted chain BER statistics",
+   "status": "pending",
+   "detail": "pending"
+  },
+  {
+   "area": "gap 4 overload",
+   "check": "+6 dBm at the RX pins: every LNA / mixer device within 3.63 V",
+   "status": "pending",
+   "detail": "pending"
+  },
+  {
+   "area": "gap 4 overload",
+   "check": "split-bench sanity, no burst: the receiver settles from its LO start-up and decodes within 1 ms",
+   "status": "pending",
+   "detail": "pending"
+  },
+  {
+   "area": "gap 4 overload",
+   "check": "-10 dBm burst of 1 ms, then -95 dBm FSK: decodes within 2 ms",
+   "status": "pending",
+   "detail": "pending"
+  },
+  {
+   "area": "gap 4 overload",
+   "check": "+0 dBm burst of 1 ms, then -95 dBm FSK: decodes within 2 ms",
+   "status": "pending",
+   "detail": "pending"
+  },
+  {
+   "area": "gap 4 overload",
+   "check": "+6 dBm burst of 1 ms, then -95 dBm FSK: decodes within 2 ms",
+   "status": "pending",
+   "detail": "pending"
+  },
+  {
+   "area": "gap 4 overload",
+   "check": "tile TX on (RX off) then TX off / rx_en on: run clean, LNA pins within the rails during TX",
+   "status": "pending",
+   "detail": "pending"
+  },
+  {
+   "area": "gap 4 overload",
+   "check": "TX -> RX: -95 dBm decodes within the firmware wait (2.0 ms after rx_en)",
+   "status": "pending",
+   "detail": "pending"
+  },
+  {
+   "area": "gap 5 coupling",
+   "check": "q_i / q_q -> baseband coupling within budget",
+   "status": "pending",
+   "detail": ""
+  },
+  {
+   "area": "gap 5 coupling",
+   "check": "tile, settled, no RF input: the limiters do not toggle",
+   "status": "pending",
+   "detail": "pending"
+  },
+  {
+   "area": "gap 6 FSK",
+   "check": "tile fsk_c_tt_-95_n2",
+   "status": "pending",
+   "detail": "pending"
+  }
+ ],
+ "mutations": [
+  {
+   "area": "gap 1 MC",
+   "mutation": "mismatch off: the spread check must fail",
+   "status": "pending",
+   "detail": ""
+  },
+  {
+   "area": "gap 1 MC",
+   "mutation": "stage-1 fingers merged into m=16: the unit-instance check must flag it",
+   "status": "pending",
+   "detail": ""
+  },
+  {
+   "area": "gap 3 PVT",
+   "mutation": "3.45 V point run at 3.0 V: the supply check flags it",
+   "status": "pending",
+   "detail": "pending"
+  },
+  {
+   "area": "gap 3 PVT",
+   "mutation": "70 C not passed to the deck: the temperature check flags it",
+   "status": "pending",
+   "detail": ""
+  },
+  {
+   "area": "gap 4 overload",
+   "mutation": "LNA / mixer at 4.5 V: the rating check flags it",
+   "status": "pending",
+   "detail": "pending"
+  },
+  {
+   "area": "gap 4 overload",
+   "mutation": "burst left on: no recovery may be found",
+   "status": "pending",
+   "detail": "pending"
+  },
+  {
+   "area": "gap 4 overload",
+   "mutation": "firmware wait set to 0 ms: the turnaround check fails",
+   "status": "pending",
+   "detail": ""
+  },
+  {
+   "area": "gap 5 coupling",
+   "mutation": "10 x budget cap from q_i to the most sensitive node: the budget check fails",
+   "status": "pending",
+   "detail": ""
+  },
+  {
+   "area": "gap 6 FSK",
+   "mutation": "fsk_c_tt_-95_n2: reference data inverted (errors must be all bits)",
+   "status": "pending",
+   "detail": ""
+  }
+ ],
+ "counts": {
+  "PASS": 0,
+  "FAIL": 0,
+  "pending": 29
+ },
+ "mut_counts": {
+  "caught": 0,
+  "MISSED": 0,
+  "pending": 9
+ }
+}
