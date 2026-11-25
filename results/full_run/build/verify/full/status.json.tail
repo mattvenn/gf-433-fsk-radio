@@ -1,10 +1,4 @@
-[tail: last 200 lines of 155483 bytes]
- "fsk_pex_tt_-110_n8_nf0_s2": {
-  "state": "wait",
-  "threads": 1
- },
- "fsk_pex_tt_-110_n8_nf0_s3": {
-  "state": "wait",
+[tail: last 200 lines of 166887 bytes]
   "threads": 1
  },
  "fsk_pex_tt_-110_n8_nf0_s4": {
@@ -45,12 +39,18 @@
   "end": 1795619992.7676203
  },
  "fsk_pex_tt_-70_n16": {
-  "state": "wait",
-  "threads": 1
+  "state": "run",
+  "threads": 1,
+  "start": 1795629488.1115792,
+  "pid": 255614,
+  "cmd": "cd /foss/designs/gf-433-fsk-radio && python3 sim/verify/chain_x.py fsk --level -70 --ndata 16"
  },
  "fsk_pex_tt_-95_n16": {
-  "state": "wait",
-  "threads": 1
+  "state": "run",
+  "threads": 1,
+  "start": 1795629488.112311,
+  "pid": 255615,
+  "cmd": "cd /foss/designs/gf-433-fsk-radio && python3 sim/verify/chain_x.py fsk --level -95 --ndata 16"
  },
  "ovl1_tt_-95": {
   "state": "ok",
@@ -195,7 +195,7 @@
   "end": 1795612134.9021313
  },
  "_sched": {
-  "beat": 1795626938.4367096,
+  "beat": 1795630542.0404298,
   "pid": 32019
  }
 }

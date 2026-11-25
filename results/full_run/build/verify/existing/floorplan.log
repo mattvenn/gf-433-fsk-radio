@@ -1,0 +1,19 @@
+
+== B on the real blocks (tile step 3, 2026-11-17)  (receiver: cells)
+ok   1  RX input far from the macro and clocks 211 µm         LNA + ua[4] / ua[5] wires ↔ macro halo 283 µm, ↔ ck / dividers / 25 MHz / SPI / DAC wires 211 µm (closest: miso 211, div1024 212, div64 212), ↔ top channel 221 µm (want ≥ 150). lsdiv ↔ LNA 124 µm, ring ↔ LNA 168 µm (LO-locked, land at DC). Open question: gate ck and the dividers during RX (and when).
+  -  2  LO wires short and matched             -              Place vco_top and the receiver.
+ok   3  LNA at ua[4] / ua[5]                   9 µm           ua[4] → inp 3.8, ua[5] → inn 9.1 µm (want ≤ 40, and equal: Δ 5.3 µm).
+ok   4  TX driver at ua[2] / ua[3]             0 µm           out_n → ua[2] 0, out_p → ua[3] 0 µm (12.6 mA: short and wide; want ≤ 80). TX out wires ↔ RX input 26 µm (soft: the TX is off in RX; ua[3] is the pad next to ua[4]).
+WARN 5  Supply domains                         47 crossings   Nearest stripe on the other rail: vco.core (VAPWR) nearest VDPWR @ 267.0; xtxd (VDPWR) nearest VAPWR @ 185.4. 47 signals cross VAPWR ↔ VDPWR (3.3 V both, no level shifters; listed under Nets). Closest VAPWR ↔ VDPWR blocks 0.1 µm.
+ok   6  No digital or LO wire over the RX      4 round, +52 µm Routed round the receiver (their straight L route would cross it): en_n +32, en_p +17, nb bus +1, bbq bus +1 µm; detours 52 µm in all (want ≤ 300). The baseband and limiter AC-coupling nodes are ~60 MΩ.
+ok   7  Short fine-tune bus                    6 µm           37 DAC lines tx_fine → mdac: longest 6, mean 6 µm (want ≤ 200); mdac.vg → vco_top.vg 10 µm (want ≤ 60); vbnf 68 µm.
+ok   8  Macro near the top edge                12.6 µm        Macro top ↔ tile top 12.6 µm (want ≤ 40, and ≥ the channel over it, 8.8 µm). The top channel is 9.6 µm at its widest (12 wires at 0.8 µm).
+ok   9  Fit and spacing                        none           Overlaps: none. All gaps ≥ 2.5 µm.
+ok   10 Power stripes                          42 clear       42 Metal4 stripe(s) (y 5–320.36), every lane clear; over the macro only on its own straps.
+WARN 11 VCO bias wires (vco_top split)         113 µm         cgm_ref → ring: vbnf 113 µm, vctrl 106 µm (want ≤ 40); closest macro / clock / DAC wire 0 µm (want ≥ 50). Inside vco_top both are abutments with no wire; noise on them is FM.
+ok   12 Debug mux next to its sources          20 µm          source → switch: bbi 20, bbq 15, nb 16, vctrl 14 µm (want ≤ 20); bus to ua[0] 936 µm in all, 56 µm from the LNA.
+  -  D  Decap VAPWR                            ≈ 59.4 pF      24770 µm² in 10 rectangle(s), at ~2.4 fF/µm² (nfet gate cap). Blocks carry their own: vco_top 10 pF on VDD_LS, rx_decap in the receiver.
+  -  D  Decap VDPWR                            ≈ 1.7 pF       695 µm² in 1 rectangle(s), at ~2.4 fF/µm² (nfet gate cap). Blocks carry their own: vco_top 10 pF on VDD_LS, rx_decap in the receiver.
+WARN -  Unplaced blocks                        1              rx.lsq
+area: tile 225.6k, macro 44.2k, receiver 68.3k, other blocks 51.5k, decap 25.5k, free 36.1k µm²
+RESULT floorplan PASS no rule fails, 3 warnings

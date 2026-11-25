@@ -1,0 +1,51 @@
+make: Entering directory '/foss/designs/gf-433-fsk-radio/test'
+rm -f /foss/designs/gf-433-fsk-radio/build/mut/swap_tx_en.xml
+/foss/tools/bin/iverilog -o /foss/designs/gf-433-fsk-radio/build/mut/sb_swap_tx_en/sim.vvp -s tb -g2012 -f /foss/designs/gf-433-fsk-radio/build/mut/sb_swap_tx_en/cmds.f  /foss/designs/gf-433-fsk-radio/src/tx_fine.v /foss/designs/gf-433-fsk-radio/test/tb.v /foss/designs/gf-433-fsk-radio/test/stubs.v /foss/designs/gf-433-fsk-radio/build/mut/sb_swap_tx_en/tt_um_mattvenn_gf433_vco.v
+rm -f /foss/designs/gf-433-fsk-radio/build/mut/swap_tx_en.xml
+COCOTB_TEST_MODULES=test COCOTB_TESTCASE=  COCOTB_TOPLEVEL=tb TOPLEVEL_LANG=verilog       \
+	 /foss/tools/bin/vvp -m /usr/local/lib/python3.12/dist-packages/cocotb/libs/libcocotbvpi_icarus.so   /foss/designs/gf-433-fsk-radio/build/mut/sb_swap_tx_en/sim.vvp   
+     -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:242  in gpi_load_users                  Loaded entry library: '/usr/lib/x86_64-linux-gnu/libpython3.12.so.1.0'
+     -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:233  in gpi_load_users                  Running entry func 'initialize' from loaded library '/usr/local/lib/python3.12/dist-packages/cocotb/simulator.cpython-312-x86_64-linux-gnu.so'
+     -.--ns INFO     pygpi                              ..ib/pygpi/embed.cpp:114  in initialize                      Using Python 3.12.12 interpreter at /usr/bin/python3
+     -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:74   in gpi_print_registered_impl       GPI: VPI support registered
+     0.00ns INFO     cocotb.initialize                  Seeding Python random module with 1795629469
+     0.00ns INFO     cocotb.initialize                  Initialized cocotb v2.1.0 from /usr/local/lib/python3.12/dist-packages/cocotb
+     0.00ns INFO     cocotb.initialize                  Running on Icarus Verilog version 14.0 (devel)
+     0.00ns INFO     cocotb.regression                  Running tests
+     0.00ns INFO     cocotb.regression                  running test.test_reset_and_oe (1/6)
+                                                            uio_oe and the tied outputs during and after reset; every control at its reset value; ena is ignored.
+ 61520.00ns INFO     cocotb.regression                  test.test_reset_and_oe passed
+ 61520.00ns INFO     cocotb.regression                  running test.test_spi_to_mdac (2/6)
+                                                            Register writes on the uio pins reach the macro and, through the 37 DAC lines, the medium DAC's word.
+779241.00ns INFO     cocotb.regression                  test.test_spi_to_mdac passed
+779241.00ns INFO     cocotb.regression                  running test.test_rx_en (3/6)
+                                                            CTRL[4] (RX_EN) turns on the receiver's bias and both LO buffers; the limiters reach uo_out[4] / [5].
+802901.00ns INFO     cocotb.regression                  test.test_rx_en passed
+802901.00ns INFO     cocotb.regression                  running test.test_dbg_sel (4/6)
+                                                            DBG_SEL bit k closes debug switch k only, and ua[0] then carries that switch's source; bit 3 also lets
+910101.00ns INFO     cocotb.regression                  test.test_dbg_sel passed
+910101.00ns INFO     cocotb.regression                  running test.test_tx_and_code (5/6)
+                                                            ui_in[5] / ui_in[6] enable the TX arms on ua[3] / ua[2]; ui_in[4:0] reach the ring's coarse DAC with
+910737.00ns WARNING  cocotb.regression                  test.test_tx_and_code failed
+                                                        Traceback (most recent call last):
+                                                          File "/foss/designs/gf-433-fsk-radio/test/test.py", line 257, in test_tx_and_code
+                                                            assert await toggles(pin) == {'0', '1'}, f"ui_in[{b}] does not key ua[{pin}]"
+                                                        AssertionError: ui_in[5] does not key ua[3]
+                                                        assert {'0'} == {'0', '1'}
+910737.00ns INFO     cocotb.regression                  running test.test_dividers (6/6)
+                                                            uo_out[1..3] = ck / 4, / 16, / 256 (f / 16, / 64, / 1024); uo_out[0] = ck only with CTRL.CK_EN.
+930011.01ns INFO     cocotb.regression                  test.test_dividers passed
+930011.01ns INFO     cocotb.regression                  **************************************************************************************
+                                                        ** TEST                          STATUS  SIM TIME (ns)  REAL TIME (s)  RATIO (ns/s) **
+                                                        **************************************************************************************
+                                                        ** test.test_reset_and_oe         PASS       61520.00           0.19     326420.53  **
+                                                        ** test.test_spi_to_mdac          PASS      717721.00           1.73     413760.30  **
+                                                        ** test.test_rx_en                PASS       23660.00           0.05     514130.39  **
+                                                        ** test.test_dbg_sel              PASS      107200.00           0.21     513874.48  **
+                                                        ** test.test_tx_and_code          FAIL         636.00           0.00     307482.71  **
+                                                        ** test.test_dividers             PASS       19274.00           0.04     498937.41  **
+                                                        **************************************************************************************
+                                                        ** TESTS=6 PASS=5 FAIL=1 SKIP=0             930011.01           2.22     418591.80  **
+                                                        **************************************************************************************
+make: *** [/usr/local/lib/python3.12/dist-packages/cocotb_tools/makefiles/simulators/Makefile.icarus:69: /foss/designs/gf-433-fsk-radio/build/mut/swap_tx_en.xml] Error 1
+make: Leaving directory '/foss/designs/gf-433-fsk-radio/test'

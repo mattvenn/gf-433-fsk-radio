@@ -1,0 +1,499 @@
+
+ /----------------------------------------------------------------------------\
+ |  yosys -- Yosys Open SYnthesis Suite                                       |
+ |  Copyright (C) 2012 - 2026  Claire Xenia Wolf <claire@yosyshq.com>         |
+ |  Distributed under an ISC-like license, type "license" to see terms        |
+ \----------------------------------------------------------------------------/
+ Yosys 0.69 (git sha1 9f75ca1f9, Release, GNU /usr/bin/c++ 13.3.0)
+
+-- Executing script file `run.ys' --
+
+1. Executing Verilog-2005 frontend: ../../../partitions/tx_fine.dac_tn.sv
+Parsing SystemVerilog input from `../../../partitions/tx_fine.dac_tn.sv' to AST representation.
+Generating RTLIL representation for module `\miter'.
+Generating RTLIL representation for module `\miter_cmp_prop'.
+Generating RTLIL representation for module `\miter_def_prop'.
+Generating RTLIL representation for module `\gold.tx_fine.dac_tn'.
+Generating RTLIL representation for module `\gate.tx_fine.dac_tn'.
+Successfully finished Verilog frontend.
+
+2. Executing RTLIL frontend.
+Input filename: ../../../partitions/tx_fine.dac_tn.il
+Replacing existing blackbox module \gold.tx_fine.dac_tn.
+Replacing existing blackbox module \gate.tx_fine.dac_tn.
+
+3. Executing HIERARCHY pass (managing design hierarchy).
+
+3.1. Analyzing design hierarchy..
+Top module:  \miter
+Used module:     \miter_cmp_prop
+Used module:     \gate.tx_fine.dac_tn
+Used module:     \gold.tx_fine.dac_tn
+Parameter 1 (\WIDTH) = 31
+Parameter 2 (\TYPE) = 48'011000010111001101110011011001010111001001110100
+
+3.2. Executing AST frontend in derive mode using pre-parsed AST for module `\miter_cmp_prop'.
+Parameter 1 (\WIDTH) = 31
+Parameter 2 (\TYPE) = 48'011000010111001101110011011001010111001001110100
+Generating RTLIL representation for module `$paramod$0e4ae775c81cba98fb6db46ff9324c5f9aa92d25\miter_cmp_prop'.
+
+3.3. Analyzing design hierarchy..
+Top module:  \miter
+Used module:     $paramod$0e4ae775c81cba98fb6db46ff9324c5f9aa92d25\miter_cmp_prop
+Used module:     \gate.tx_fine.dac_tn
+Used module:     \gold.tx_fine.dac_tn
+
+3.4. Analyzing design hierarchy..
+Top module:  \miter
+Used module:     $paramod$0e4ae775c81cba98fb6db46ff9324c5f9aa92d25\miter_cmp_prop
+Used module:     \gate.tx_fine.dac_tn
+Used module:     \gold.tx_fine.dac_tn
+Removing unused module `\miter_def_prop'.
+Removing unused module `\miter_cmp_prop'.
+Removed 2 unused modules.
+Module $paramod$0e4ae775c81cba98fb6db46ff9324c5f9aa92d25\miter_cmp_prop directly or indirectly contains formal properties -> setting "keep" attribute.
+Module miter directly or indirectly contains formal properties -> setting "keep" attribute.
+Mapping positional arguments of cell miter.__po_dac_tn__assert ($paramod$0e4ae775c81cba98fb6db46ff9324c5f9aa92d25\miter_cmp_prop).
+
+4. Executing PROC pass (convert processes to netlists).
+
+4.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Cleaned up 0 empty switches.
+
+4.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).
+Removed a total of 0 dead cases.
+
+4.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).
+Removed 1 redundant assignment.
+Promoted 3 assignments to connections.
+
+4.4. Executing PROC_INIT pass (extract init attributes).
+
+4.5. Executing PROC_ARST pass (detect async resets in processes).
+
+4.6. Executing PROC_ROM pass (convert switches to ROMs).
+Converted 0 switches.
+
+4.7. Executing PROC_MUX pass (convert decision trees to multiplexers).
+Creating decoders for process `$paramod$0e4ae775c81cba98fb6db46ff9324c5f9aa92d25\miter_cmp_prop.$proc$../../../partitions/tx_fine.dac_tn.sv:86$6617'.
+Creating decoders for process `$paramod$0e4ae775c81cba98fb6db46ff9324c5f9aa92d25\miter_cmp_prop.$proc$../../../partitions/tx_fine.dac_tn.sv:80$6492'.
+
+4.8. Executing PROC_DLATCH pass (convert process syncs to latches).
+No latch inferred for signal `$paramod$0e4ae775c81cba98fb6db46ff9324c5f9aa92d25\miter_cmp_prop.\i' from process `$paramod$0e4ae775c81cba98fb6db46ff9324c5f9aa92d25\miter_cmp_prop.$proc$../../../partitions/tx_fine.dac_tn.sv:80$6492'.
+No latch inferred for signal `$paramod$0e4ae775c81cba98fb6db46ff9324c5f9aa92d25\miter_cmp_prop.\okay' from process `$paramod$0e4ae775c81cba98fb6db46ff9324c5f9aa92d25\miter_cmp_prop.$proc$../../../partitions/tx_fine.dac_tn.sv:80$6492'.
+
+4.9. Executing PROC_DFF pass (convert process syncs to FFs).
+
+4.10. Executing PROC_MEMWR pass (convert process memory writes to cells).
+
+4.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Removing empty process `$paramod$0e4ae775c81cba98fb6db46ff9324c5f9aa92d25\miter_cmp_prop.$proc$../../../partitions/tx_fine.dac_tn.sv:86$6617'.
+Removing empty process `$paramod$0e4ae775c81cba98fb6db46ff9324c5f9aa92d25\miter_cmp_prop.$proc$../../../partitions/tx_fine.dac_tn.sv:80$6492'.
+Cleaned up 0 empty switches.
+
+4.12. Executing OPT_EXPR pass (perform const folding).
+Optimizing module gold.tx_fine.dac_tn.
+Optimizing module $paramod$0e4ae775c81cba98fb6db46ff9324c5f9aa92d25\miter_cmp_prop.
+<suppressed ~1 debug messages>
+Optimizing module gate.tx_fine.dac_tn.
+Optimizing module miter.
+
+5. Executing ASYNC2SYNC pass.
+Replacing gold.tx_fine.dac_tn.$procdff$391 ($adff): ARST=\rst_n, D={ $0\dac_tn[30:0][30] $0\dac_tn[30:0][29] $0\dac_tn[30:0][28] $0\dac_tn[30:0][27] $0\dac_tn[30:0][26] $0\dac_tn[30:0][25] $0\dac_tn[30:0][24] $0\dac_tn[30:0][23] $0\dac_tn[30:0][22] $0\dac_tn[30:0][21] $0\dac_tn[30:0][20] $0\dac_tn[30:0][19] $0\dac_tn[30:0][18] $0\dac_tn[30:0][17] $0\dac_tn[30:0][16] $0\dac_tn[30:0][15] $0\dac_tn[30:0][14] $0\dac_tn[30:0][13] $0\dac_tn[30:0][12] $0\dac_tn[30:0][11] $0\dac_tn[30:0][10] $0\dac_tn[30:0][9] $0\dac_tn[30:0][8] $0\dac_tn[30:0][7] $0\dac_tn[30:0][6] $0\dac_tn[30:0][5] $0\dac_tn[30:0][4] $0\dac_tn[30:0][3] $0\dac_tn[30:0][2] $0\dac_tn[30:0][1] $0\dac_tn[30:0][0] }, Q=\dac_tn
+Replacing gate.tx_fine.dac_tn.$flatten\_1150_.$auto$liberty.cc:242:create_ff$943 ($_DFF_PP1_): ARST=$flatten\_1034_.$auto$rtlil.cc:3488:NotGate$888, D=\_0037_, Q=\net36
+Replacing gate.tx_fine.dac_tn.$flatten\_1149_.$auto$liberty.cc:242:create_ff$943 ($_DFF_PP1_): ARST=$flatten\_1034_.$auto$rtlil.cc:3488:NotGate$888, D=\_0035_, Q=\net34
+Replacing gate.tx_fine.dac_tn.$flatten\_1148_.$auto$liberty.cc:242:create_ff$943 ($_DFF_PP1_): ARST=$flatten\_1034_.$auto$rtlil.cc:3488:NotGate$888, D=\_0034_, Q=\net33
+Replacing gate.tx_fine.dac_tn.$flatten\_1147_.$auto$liberty.cc:242:create_ff$943 ($_DFF_PP1_): ARST=$flatten\_1034_.$auto$rtlil.cc:3488:NotGate$888, D=\_0033_, Q=\net32
+Replacing gate.tx_fine.dac_tn.$flatten\_1146_.$auto$liberty.cc:242:create_ff$943 ($_DFF_PP1_): ARST=$flatten\_1034_.$auto$rtlil.cc:3488:NotGate$888, D=\_0032_, Q=\net31
+Replacing gate.tx_fine.dac_tn.$flatten\_1145_.$auto$liberty.cc:242:create_ff$943 ($_DFF_PP1_): ARST=$flatten\_1034_.$auto$rtlil.cc:3488:NotGate$888, D=\_0031_, Q=\net30
+Replacing gate.tx_fine.dac_tn.$flatten\_1144_.$auto$liberty.cc:242:create_ff$943 ($_DFF_PP1_): ARST=$flatten\_1034_.$auto$rtlil.cc:3488:NotGate$888, D=\_0030_, Q=\net29
+Replacing gate.tx_fine.dac_tn.$flatten\_1143_.$auto$liberty.cc:242:create_ff$943 ($_DFF_PP1_): ARST=$flatten\_1034_.$auto$rtlil.cc:3488:NotGate$888, D=\_0029_, Q=\net28
+Replacing gate.tx_fine.dac_tn.$flatten\_1142_.$auto$liberty.cc:242:create_ff$943 ($_DFF_PP1_): ARST=$flatten\_1034_.$auto$rtlil.cc:3488:NotGate$888, D=\_0028_, Q=\net27
+Replacing gate.tx_fine.dac_tn.$flatten\_1141_.$auto$liberty.cc:242:create_ff$943 ($_DFF_PP1_): ARST=$flatten\_1034_.$auto$rtlil.cc:3488:NotGate$888, D=\_0027_, Q=\net26
+Replacing gate.tx_fine.dac_tn.$flatten\_1140_.$auto$liberty.cc:242:create_ff$943 ($_DFF_PP1_): ARST=$flatten\_1034_.$auto$rtlil.cc:3488:NotGate$888, D=\_0026_, Q=\net25
+Replacing gate.tx_fine.dac_tn.$flatten\_1139_.$auto$liberty.cc:242:create_ff$943 ($_DFF_PP1_): ARST=$flatten\_1034_.$auto$rtlil.cc:3488:NotGate$888, D=\_0024_, Q=\net23
+Replacing gate.tx_fine.dac_tn.$flatten\_1138_.$auto$liberty.cc:242:create_ff$943 ($_DFF_PP1_): ARST=$flatten\_1034_.$auto$rtlil.cc:3488:NotGate$888, D=\_0023_, Q=\net22
+Replacing gate.tx_fine.dac_tn.$flatten\_1137_.$auto$liberty.cc:242:create_ff$943 ($_DFF_PP1_): ARST=$flatten\_1034_.$auto$rtlil.cc:3488:NotGate$888, D=\_0022_, Q=\net21
+Replacing gate.tx_fine.dac_tn.$flatten\_1136_.$auto$liberty.cc:242:create_ff$943 ($_DFF_PP1_): ARST=$flatten\_1034_.$auto$rtlil.cc:3488:NotGate$888, D=\_0021_, Q=\net20
+Replacing gate.tx_fine.dac_tn.$flatten\_1135_.$auto$liberty.cc:242:create_ff$889 ($_DFF_PP0_): ARST=$flatten\_1034_.$auto$rtlil.cc:3488:NotGate$888, D=\_0020_, Q=\net19
+Replacing gate.tx_fine.dac_tn.$flatten\_1134_.$auto$liberty.cc:242:create_ff$889 ($_DFF_PP0_): ARST=$flatten\_1034_.$auto$rtlil.cc:3488:NotGate$888, D=\_0019_, Q=\net18
+Replacing gate.tx_fine.dac_tn.$flatten\_1133_.$auto$liberty.cc:242:create_ff$889 ($_DFF_PP0_): ARST=$flatten\_1034_.$auto$rtlil.cc:3488:NotGate$888, D=\_0018_, Q=\net17
+Replacing gate.tx_fine.dac_tn.$flatten\_1132_.$auto$liberty.cc:242:create_ff$889 ($_DFF_PP0_): ARST=$flatten\_1034_.$auto$rtlil.cc:3488:NotGate$888, D=\_0017_, Q=\net16
+Replacing gate.tx_fine.dac_tn.$flatten\_1131_.$auto$liberty.cc:242:create_ff$889 ($_DFF_PP0_): ARST=$flatten\_1034_.$auto$rtlil.cc:3488:NotGate$888, D=\_0016_, Q=\net15
+Replacing gate.tx_fine.dac_tn.$flatten\_1130_.$auto$liberty.cc:242:create_ff$889 ($_DFF_PP0_): ARST=$flatten\_1034_.$auto$rtlil.cc:3488:NotGate$888, D=\_0015_, Q=\net14
+Replacing gate.tx_fine.dac_tn.$flatten\_1129_.$auto$liberty.cc:242:create_ff$889 ($_DFF_PP0_): ARST=$flatten\_1034_.$auto$rtlil.cc:3488:NotGate$888, D=\_0044_, Q=\net43
+Replacing gate.tx_fine.dac_tn.$flatten\_1128_.$auto$liberty.cc:242:create_ff$889 ($_DFF_PP0_): ARST=$flatten\_1034_.$auto$rtlil.cc:3488:NotGate$888, D=\_0043_, Q=\net42
+Replacing gate.tx_fine.dac_tn.$flatten\_1127_.$auto$liberty.cc:242:create_ff$889 ($_DFF_PP0_): ARST=$flatten\_1034_.$auto$rtlil.cc:3488:NotGate$888, D=\_0042_, Q=\net41
+Replacing gate.tx_fine.dac_tn.$flatten\_1126_.$auto$liberty.cc:242:create_ff$889 ($_DFF_PP0_): ARST=$flatten\_1034_.$auto$rtlil.cc:3488:NotGate$888, D=\_0041_, Q=\net40
+Replacing gate.tx_fine.dac_tn.$flatten\_1125_.$auto$liberty.cc:242:create_ff$889 ($_DFF_PP0_): ARST=$flatten\_1034_.$auto$rtlil.cc:3488:NotGate$888, D=\_0040_, Q=\net39
+Replacing gate.tx_fine.dac_tn.$flatten\_1124_.$auto$liberty.cc:242:create_ff$889 ($_DFF_PP0_): ARST=$flatten\_1034_.$auto$rtlil.cc:3488:NotGate$888, D=\_0039_, Q=\net38
+Replacing gate.tx_fine.dac_tn.$flatten\_1123_.$auto$liberty.cc:242:create_ff$889 ($_DFF_PP0_): ARST=$flatten\_1034_.$auto$rtlil.cc:3488:NotGate$888, D=\_0038_, Q=\net37
+Replacing gate.tx_fine.dac_tn.$flatten\_1122_.$auto$liberty.cc:242:create_ff$889 ($_DFF_PP0_): ARST=$flatten\_1034_.$auto$rtlil.cc:3488:NotGate$888, D=\_0036_, Q=\net35
+Replacing gate.tx_fine.dac_tn.$flatten\_1121_.$auto$liberty.cc:242:create_ff$889 ($_DFF_PP0_): ARST=$flatten\_1034_.$auto$rtlil.cc:3488:NotGate$888, D=\_0025_, Q=\net24
+Replacing gate.tx_fine.dac_tn.$flatten\_1120_.$auto$liberty.cc:242:create_ff$889 ($_DFF_PP0_): ARST=$flatten\_1034_.$auto$rtlil.cc:3488:NotGate$888, D=\_0014_, Q=\net13
+
+6. Executing FORMALFF pass.
+
+7. Executing SETUNDEF pass (replace undef values with defined constants).
+
+8. Executing FLATTEN pass (flatten design).
+Deleting now unused module gold.tx_fine.dac_tn.
+Deleting now unused module $paramod$0e4ae775c81cba98fb6db46ff9324c5f9aa92d25\miter_cmp_prop.
+Deleting now unused module gate.tx_fine.dac_tn.
+<suppressed ~3 debug messages>
+
+9. Executing DFFUNMAP pass (unmap clock enable and synchronous reset from FFs).
+
+10. Executing OPT_EXPR pass (perform const folding).
+Optimizing module miter.
+<suppressed ~63 debug messages>
+
+11. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \miter..
+Removed 2 unused cells and 8 unused wires.
+<suppressed ~49 debug messages>
+
+12. Executing SAT pass (solving SAT problems in the circuit).
+Using SAT solver `minisat`.
+
+Setting up time step 1:
+Final constraint equation: { } = { }
+Import def constraint for this timestep: \__pi_clk_dec
+Import def constraint for this timestep: \__pi_clk_eff
+Import def constraint for this timestep: \__pi_eff_q[13]
+Import def constraint for this timestep: \__pi_eff_q[14]
+Import def constraint for this timestep: \__pi_eff_q[15]
+Import def constraint for this timestep: \__pi_eff_q[16]
+Import def constraint for this timestep: \__pi_eff_q[17]
+Import def constraint for this timestep: \__pi_rst_n
+Imported 366 cells to SAT database.
+Import proof for assert: \__po_dac_tn__assert.okay when 1'1.
+
+** Trying induction with length 1 **
+
+Setting up time step 1:
+Final constraint equation: { } = { }
+Import def constraint for this timestep: \__pi_clk_dec
+Import def constraint for this timestep: \__pi_clk_eff
+Import def constraint for this timestep: \__pi_eff_q[13]
+Import def constraint for this timestep: \__pi_eff_q[14]
+Import def constraint for this timestep: \__pi_eff_q[15]
+Import def constraint for this timestep: \__pi_eff_q[16]
+Import def constraint for this timestep: \__pi_eff_q[17]
+Import def constraint for this timestep: \__pi_rst_n
+Imported 366 cells to SAT database.
+Final init constraint equation: $flatten\gold.$auto$async2sync.cc:253:execute$6619 = 31'x
+Import proof for assert: \__po_dac_tn__assert.okay when 1'1.
+Import show expression: \__po_dac_tn__assert.i
+Import show expression: \__po_dac_tn__assert.okay
+Import show expression: \__po_dac_tn__assert.in_gate
+Import show expression: \__po_dac_tn__assert.in_gold
+Import show expression: \gate._0014_
+Import show expression: \gate.clk_eff
+Import show expression: \gate.clknet_0_clk_eff
+Import show expression: \gate.clknet_1_0__leaf_clk_eff
+Import show expression: \gate.clknet_1_1__leaf_clk_eff
+Import show expression: \gate.net13
+Import show expression: \gate.dac_tn
+Import show expression: \gate._0025_
+Import show expression: \gate.net24
+Import show expression: \gate._0036_
+Import show expression: \gate.net35
+Import show expression: \gate.net37
+Import show expression: \gate._0173_
+Import show expression: \gate._0038_
+Import show expression: \gate._0039_
+Import show expression: \gate.net38
+Import show expression: \gate.net39
+Import show expression: \gate._0172_
+Import show expression: \gate._0174_
+Import show expression: \gate._0040_
+Import show expression: \gate._0041_
+Import show expression: \gate.net40
+Import show expression: \gate.net41
+Import show expression: \gate._0043_
+Import show expression: \gate.net42
+Import show expression: \gate._0042_
+Import show expression: \gate._0044_
+Import show expression: \gate.net43
+Import show expression: \gate._0015_
+Import show expression: \gate.net14
+Import show expression: \gate.net15
+Import show expression: \gate._0017_
+Import show expression: \gate.net16
+Import show expression: \gate._0018_
+Import show expression: \gate.net17
+Import show expression: \gate._0170_
+Import show expression: \gate._0016_
+Import show expression: \gate._0019_
+Import show expression: \gate.net18
+Import show expression: \gate.net19
+Import show expression: \gate._0021_
+Import show expression: \gate.net20
+Import show expression: \gate._0022_
+Import show expression: \gate.net21
+Import show expression: \gate._0023_
+Import show expression: \gate.net22
+Import show expression: \gate._0024_
+Import show expression: \gate.net23
+Import show expression: \gate.net25
+Import show expression: \gate.net26
+Import show expression: \gate._0167_
+Import show expression: \gate._0165_
+Import show expression: \gate._0020_
+Import show expression: \gate._0162_
+Import show expression: \gate._0026_
+Import show expression: \gate._0166_
+Import show expression: \gate._0027_
+Import show expression: \gate._0028_
+Import show expression: \gate.net27
+Import show expression: \gate.net28
+Import show expression: \gate._0030_
+Import show expression: \gate.net29
+Import show expression: \gate._0168_
+Import show expression: \gate._0031_
+Import show expression: \gate.net30
+Import show expression: \gate._0029_
+Import show expression: \gate._0032_
+Import show expression: \gate.net31
+Import show expression: \gate.net32
+Import show expression: \gate._0163_
+Import show expression: \gate._0034_
+Import show expression: \gate.net33
+Import show expression: \gate._0035_
+Import show expression: \gate.net34
+Import show expression: \gate.rst_n
+Import show expression: \gate.net4
+Import show expression: \gate.net57
+Import show expression: \gate.net58
+Import show expression: \gate.net59
+Import show expression: \gate.net60
+Import show expression: \gate.net61
+Import show expression: \gate.eff_q[17]
+Import show expression: \gate.eff_q[16]
+Import show expression: \gate._0164_
+Import show expression: \gate.eff_q[15]
+Import show expression: \gate._0171_
+Import show expression: \gate._0033_
+Import show expression: \gate.eff_q[14]
+Import show expression: \gate.eff_q[13]
+Import show expression: \gate._0169_
+Import show expression: \gate._0037_
+Import show expression: \gate.clk_dec
+Import show expression: \gate.clknet_0_clk_dec
+Import show expression: \gate.clknet_2_0__leaf_clk_dec
+Import show expression: \gate.clknet_2_1__leaf_clk_dec
+Import show expression: \gate.clknet_2_2__leaf_clk_dec
+Import show expression: \gate.clknet_2_3__leaf_clk_dec
+Import show expression: \gate.net36
+Import show expression: \gate.__pi_clk_dec
+Import show expression: \gate.__pi_clk_eff
+Import show expression: \gate.__pi_eff_q[13]
+Import show expression: \gate.__pi_eff_q[14]
+Import show expression: \gate.__pi_eff_q[15]
+Import show expression: \gate.__pi_eff_q[16]
+Import show expression: \gate.__pi_eff_q[17]
+Import show expression: \gate.__pi_rst_n
+Import show expression: \gate.__po_dac_tn
+Import show expression: \gold.clk_eff
+Import show expression: \gold.dac_tn
+Import show expression: \gold.g_dec.gclk
+Import show expression: \gold.rst_n
+Import show expression: \gold.eff_q[17]
+Import show expression: \gold.eff_q[16]
+Import show expression: \gold.eff_q[15]
+Import show expression: \gold.eff_q[14]
+Import show expression: \gold.eff_q[13]
+Import show expression: \gold.clk_dec
+Import show expression: \gold.__pi_clk_dec
+Import show expression: \gold.__pi_clk_eff
+Import show expression: \gold.__pi_eff_q[13]
+Import show expression: \gold.__pi_eff_q[14]
+Import show expression: \gold.__pi_eff_q[15]
+Import show expression: \gold.__pi_eff_q[16]
+Import show expression: \gold.__pi_eff_q[17]
+Import show expression: \gold.__pi_rst_n
+Import show expression: \gold.__po_dac_tn
+Import show expression: \__po_dac_tn__gate
+Import show expression: \__po_dac_tn__gold
+Import show expression: \__pi_rst_n
+Import show expression: \__pi_eff_q[17]
+Import show expression: \__pi_eff_q[16]
+Import show expression: \__pi_eff_q[15]
+Import show expression: \__pi_eff_q[14]
+Import show expression: \__pi_eff_q[13]
+Import show expression: \__pi_clk_eff
+Import show expression: \__pi_clk_dec
+
+[base case 1] Solving problem with 7936 variables and 21178 clauses..
+Base case for induction length 1 proven.
+
+Setting up time step 2:
+Final constraint equation: { } = { }
+Import def constraint for this timestep: \__pi_clk_dec
+Import def constraint for this timestep: \__pi_clk_eff
+Import def constraint for this timestep: \__pi_eff_q[13]
+Import def constraint for this timestep: \__pi_eff_q[14]
+Import def constraint for this timestep: \__pi_eff_q[15]
+Import def constraint for this timestep: \__pi_eff_q[16]
+Import def constraint for this timestep: \__pi_eff_q[17]
+Import def constraint for this timestep: \__pi_rst_n
+Imported 366 cells to SAT database.
+Import proof for assert: \__po_dac_tn__assert.okay when 1'1.
+Import show expression: \__po_dac_tn__assert.i
+Import show expression: \__po_dac_tn__assert.okay
+Import show expression: \__po_dac_tn__assert.in_gate
+Import show expression: \__po_dac_tn__assert.in_gold
+Import show expression: \gate._0014_
+Import show expression: \gate.clk_eff
+Import show expression: \gate.clknet_0_clk_eff
+Import show expression: \gate.clknet_1_0__leaf_clk_eff
+Import show expression: \gate.clknet_1_1__leaf_clk_eff
+Import show expression: \gate.net13
+Import show expression: \gate.dac_tn
+Import show expression: \gate._0025_
+Import show expression: \gate.net24
+Import show expression: \gate._0036_
+Import show expression: \gate.net35
+Import show expression: \gate.net37
+Import show expression: \gate._0173_
+Import show expression: \gate._0038_
+Import show expression: \gate._0039_
+Import show expression: \gate.net38
+Import show expression: \gate.net39
+Import show expression: \gate._0172_
+Import show expression: \gate._0174_
+Import show expression: \gate._0040_
+Import show expression: \gate._0041_
+Import show expression: \gate.net40
+Import show expression: \gate.net41
+Import show expression: \gate._0043_
+Import show expression: \gate.net42
+Import show expression: \gate._0042_
+Import show expression: \gate._0044_
+Import show expression: \gate.net43
+Import show expression: \gate._0015_
+Import show expression: \gate.net14
+Import show expression: \gate.net15
+Import show expression: \gate._0017_
+Import show expression: \gate.net16
+Import show expression: \gate._0018_
+Import show expression: \gate.net17
+Import show expression: \gate._0170_
+Import show expression: \gate._0016_
+Import show expression: \gate._0019_
+Import show expression: \gate.net18
+Import show expression: \gate.net19
+Import show expression: \gate._0021_
+Import show expression: \gate.net20
+Import show expression: \gate._0022_
+Import show expression: \gate.net21
+Import show expression: \gate._0023_
+Import show expression: \gate.net22
+Import show expression: \gate._0024_
+Import show expression: \gate.net23
+Import show expression: \gate.net25
+Import show expression: \gate.net26
+Import show expression: \gate._0167_
+Import show expression: \gate._0165_
+Import show expression: \gate._0020_
+Import show expression: \gate._0162_
+Import show expression: \gate._0026_
+Import show expression: \gate._0166_
+Import show expression: \gate._0027_
+Import show expression: \gate._0028_
+Import show expression: \gate.net27
+Import show expression: \gate.net28
+Import show expression: \gate._0030_
+Import show expression: \gate.net29
+Import show expression: \gate._0168_
+Import show expression: \gate._0031_
+Import show expression: \gate.net30
+Import show expression: \gate._0029_
+Import show expression: \gate._0032_
+Import show expression: \gate.net31
+Import show expression: \gate.net32
+Import show expression: \gate._0163_
+Import show expression: \gate._0034_
+Import show expression: \gate.net33
+Import show expression: \gate._0035_
+Import show expression: \gate.net34
+Import show expression: \gate.rst_n
+Import show expression: \gate.net4
+Import show expression: \gate.net57
+Import show expression: \gate.net58
+Import show expression: \gate.net59
+Import show expression: \gate.net60
+Import show expression: \gate.net61
+Import show expression: \gate.eff_q[17]
+Import show expression: \gate.eff_q[16]
+Import show expression: \gate._0164_
+Import show expression: \gate.eff_q[15]
+Import show expression: \gate._0171_
+Import show expression: \gate._0033_
+Import show expression: \gate.eff_q[14]
+Import show expression: \gate.eff_q[13]
+Import show expression: \gate._0169_
+Import show expression: \gate._0037_
+Import show expression: \gate.clk_dec
+Import show expression: \gate.clknet_0_clk_dec
+Import show expression: \gate.clknet_2_0__leaf_clk_dec
+Import show expression: \gate.clknet_2_1__leaf_clk_dec
+Import show expression: \gate.clknet_2_2__leaf_clk_dec
+Import show expression: \gate.clknet_2_3__leaf_clk_dec
+Import show expression: \gate.net36
+Import show expression: \gate.__pi_clk_dec
+Import show expression: \gate.__pi_clk_eff
+Import show expression: \gate.__pi_eff_q[13]
+Import show expression: \gate.__pi_eff_q[14]
+Import show expression: \gate.__pi_eff_q[15]
+Import show expression: \gate.__pi_eff_q[16]
+Import show expression: \gate.__pi_eff_q[17]
+Import show expression: \gate.__pi_rst_n
+Import show expression: \gate.__po_dac_tn
+Import show expression: \gold.clk_eff
+Import show expression: \gold.dac_tn
+Import show expression: \gold.g_dec.gclk
+Import show expression: \gold.rst_n
+Import show expression: \gold.eff_q[17]
+Import show expression: \gold.eff_q[16]
+Import show expression: \gold.eff_q[15]
+Import show expression: \gold.eff_q[14]
+Import show expression: \gold.eff_q[13]
+Import show expression: \gold.clk_dec
+Import show expression: \gold.__pi_clk_dec
+Import show expression: \gold.__pi_clk_eff
+Import show expression: \gold.__pi_eff_q[13]
+Import show expression: \gold.__pi_eff_q[14]
+Import show expression: \gold.__pi_eff_q[15]
+Import show expression: \gold.__pi_eff_q[16]
+Import show expression: \gold.__pi_eff_q[17]
+Import show expression: \gold.__pi_rst_n
+Import show expression: \gold.__po_dac_tn
+Import show expression: \__po_dac_tn__gate
+Import show expression: \__po_dac_tn__gold
+Import show expression: \__pi_rst_n
+Import show expression: \__pi_eff_q[17]
+Import show expression: \__pi_eff_q[16]
+Import show expression: \__pi_eff_q[15]
+Import show expression: \__pi_eff_q[14]
+Import show expression: \__pi_eff_q[13]
+Import show expression: \__pi_clk_eff
+Import show expression: \__pi_clk_dec
+
+[induction step 1] Solving problem with 16148 variables and 43067 clauses..
+Induction step proven: SUCCESS!
+
+                  /$$$$$$      /$$$$$$$$     /$$$$$$$    
+                 /$$__  $$    | $$_____/    | $$__  $$   
+                | $$  \ $$    | $$          | $$  \ $$   
+                | $$  | $$    | $$$$$       | $$  | $$   
+                | $$  | $$    | $$__/       | $$  | $$   
+                | $$/$$ $$    | $$          | $$  | $$   
+                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$
+                 \____ $$$|__/|________/|__/|_______/|__/
+                       \__/                              
+
+End of script. Logfile hash: 8263acb3a6, time: 0.10s, user: 0.11s, system: 0.00s, MEM: 52.84 MB peak
+Yosys 0.69 (git sha1 9f75ca1f9, Release, GNU /usr/bin/c++ 13.3.0)
+Time spent: 88% 1x sat (0 sec), 2% 1x hierarchy (0 sec), ...

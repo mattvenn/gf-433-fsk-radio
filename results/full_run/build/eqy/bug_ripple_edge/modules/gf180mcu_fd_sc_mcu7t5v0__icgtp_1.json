@@ -1,0 +1,57 @@
+{
+  "partition": {
+    "index": 0,
+    "name": "gf180mcu_fd_sc_mcu7t5v0__icgtp_1",
+    "inbits": {
+      "CLK": [
+        0
+      ],
+      "E": [
+        0
+      ],
+      "TE": [
+        0
+      ]
+    },
+    "outbits": {
+      "Q": [
+        0
+      ]
+    },
+    "crossbits": {}
+  },
+  "gold_module": {
+    "name": "gold.gf180mcu_fd_sc_mcu7t5v0__icgtp_1",
+    "internal": {},
+    "unused": {
+      "CLK": [
+        0
+      ],
+      "E": [
+        0
+      ],
+      "TE": [
+        0
+      ]
+    },
+    "cellcount": 0,
+    "bitcount": 4
+  },
+  "gate_module": {
+    "name": "gold.gf180mcu_fd_sc_mcu7t5v0__icgtp_1",
+    "internal": {},
+    "unused": {
+      "CLK": [
+        0
+      ],
+      "E": [
+        0
+      ],
+      "TE": [
+        0
+      ]
+    },
+    "cellcount": 0,
+    "bitcount": 4
+  }
+}

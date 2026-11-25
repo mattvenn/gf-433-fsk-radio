@@ -1,0 +1,16 @@
+pinout swap_ua23: caught: ua[2]: LVS source has [('xxtxd', 'out_p')], PINOUT expects [('xxtxd', 'out_n')]
+pinout swap_dbg01: caught: net dbg_sel[0]: LVS source has [('xxant_dbg', 'a0'), ('xxdbg_bbq', 'ctrl'), ('xxmac', 'dbg_sel[0]')], expected [('xxant_dbg', 'a0'), ('xxdbg_bb
+pinout oe3_low: caught: uio_oe[3]: expected tied 1, LVS source has [('xtie_uio_oe_3', 'ZN')] (['gf180mcu_fd_sc_mcu7t5v0__tiel'])
+pinout dac_rev: caught: net dac_tn[27]: LVS source has [('xxmac', 'dac_tn[27]'), ('xxmdac', 'ns30')], expected [('xxmac', 'dac_tn[27]'), ('xxmdac', 'ns28')]
+pinout ua1_open: caught: ua[1]: PINOUT says it is the on-chip VGND sense, but the LVS source leaves it unconnected (lvs/make_source.py / layout/gen/tile_nets.py need th
+pinout rx_en_open: caught: net rx_en: LVS source has [('xrx_bias', 'en'), ('xrx_lobuf_i', 'en'), ('xxmac', 'rx_en')], expected [('xrx_bias', 'en'), ('xrx_lobuf_i', 'en'),
+pinout label: caught: info.yaml uo[1]: "f / 64 (6.8 MHz)", PINOUT says "f / 16 (27 MHz)"
+pinout analog_pins: caught: info.yaml analog_pins = 4, PINOUT uses ua[0..5]
+tt swap_dbg01: caught, failing: test_dbg_sel
+tt oe3_low: caught, failing: test_reset_and_oe
+tt dac_rev: caught, failing: test_spi_to_mdac
+tt swap_tx_en: caught, failing: test_tx_and_code
+tt rx_en_open: caught, failing: test_reset_and_oe test_rx_en
+tt rtl_rx_en: caught, failing: test_rx_en test_dbg_sel
+tt rtl_dbg_addr: caught, failing: test_reset_and_oe test_spi_to_mdac test_dbg_sel
+RESULT mutations PASS mutants caught 15 / 15

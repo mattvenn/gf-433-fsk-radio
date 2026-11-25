@@ -1,0 +1,201 @@
+[tail: last 200 lines of 281100 bytes]
+          "bits": [ 653 ],
+          "offset": 13,
+          "attributes": {
+            "src": "rtl/tx_fine.v:163.17-163.20"
+          }
+        },
+        "sum[14]": {
+          "hide_name": 0,
+          "bits": [ 654 ],
+          "offset": 14,
+          "attributes": {
+            "src": "rtl/tx_fine.v:163.17-163.20"
+          }
+        },
+        "sum[15]": {
+          "hide_name": 0,
+          "bits": [ 655 ],
+          "offset": 15,
+          "attributes": {
+            "src": "rtl/tx_fine.v:163.17-163.20"
+          }
+        },
+        "sum[16]": {
+          "hide_name": 0,
+          "bits": [ 656 ],
+          "offset": 16,
+          "attributes": {
+            "src": "rtl/tx_fine.v:163.17-163.20"
+          }
+        },
+        "sum[17]": {
+          "hide_name": 0,
+          "bits": [ 657 ],
+          "offset": 17,
+          "attributes": {
+            "src": "rtl/tx_fine.v:163.17-163.20"
+          }
+        },
+        "sum[18]": {
+          "hide_name": 0,
+          "bits": [ 658 ],
+          "offset": 18,
+          "attributes": {
+            "src": "rtl/tx_fine.v:163.17-163.20"
+          }
+        },
+        "sum[1]": {
+          "hide_name": 0,
+          "bits": [ 641 ],
+          "offset": 1,
+          "attributes": {
+            "src": "rtl/tx_fine.v:163.17-163.20"
+          }
+        },
+        "sum[2]": {
+          "hide_name": 0,
+          "bits": [ 642 ],
+          "offset": 2,
+          "attributes": {
+            "src": "rtl/tx_fine.v:163.17-163.20"
+          }
+        },
+        "sum[3]": {
+          "hide_name": 0,
+          "bits": [ 643 ],
+          "offset": 3,
+          "attributes": {
+            "src": "rtl/tx_fine.v:163.17-163.20"
+          }
+        },
+        "sum[4]": {
+          "hide_name": 0,
+          "bits": [ 644 ],
+          "offset": 4,
+          "attributes": {
+            "src": "rtl/tx_fine.v:163.17-163.20"
+          }
+        },
+        "sum[5]": {
+          "hide_name": 0,
+          "bits": [ 645 ],
+          "offset": 5,
+          "attributes": {
+            "src": "rtl/tx_fine.v:163.17-163.20"
+          }
+        },
+        "sum[6]": {
+          "hide_name": 0,
+          "bits": [ 646 ],
+          "offset": 6,
+          "attributes": {
+            "src": "rtl/tx_fine.v:163.17-163.20"
+          }
+        },
+        "sum[7]": {
+          "hide_name": 0,
+          "bits": [ 647 ],
+          "offset": 7,
+          "attributes": {
+            "src": "rtl/tx_fine.v:163.17-163.20"
+          }
+        },
+        "sum[8]": {
+          "hide_name": 0,
+          "bits": [ 648 ],
+          "offset": 8,
+          "attributes": {
+            "src": "rtl/tx_fine.v:163.17-163.20"
+          }
+        },
+        "sum[9]": {
+          "hide_name": 0,
+          "bits": [ 649 ],
+          "offset": 9,
+          "attributes": {
+            "src": "rtl/tx_fine.v:163.17-163.20"
+          }
+        },
+        "tck[0]": {
+          "hide_name": 0,
+          "bits": [ 9 ],
+          "attributes": {
+            "src": "rtl/tx_fine.v:212.16-212.19"
+          }
+        },
+        "tck[1]": {
+          "hide_name": 0,
+          "bits": [ 250 ],
+          "offset": 1,
+          "attributes": {
+            "src": "rtl/tx_fine.v:212.16-212.19"
+          }
+        },
+        "tck[2]": {
+          "hide_name": 0,
+          "bits": [ 11 ],
+          "offset": 2,
+          "attributes": {
+            "src": "rtl/tx_fine.v:212.16-212.19"
+          }
+        },
+        "tck[3]": {
+          "hide_name": 0,
+          "bits": [ 253 ],
+          "offset": 3,
+          "attributes": {
+            "src": "rtl/tx_fine.v:212.16-212.19"
+          }
+        },
+        "tck[4]": {
+          "hide_name": 0,
+          "bits": [ 12 ],
+          "offset": 4,
+          "attributes": {
+            "src": "rtl/tx_fine.v:212.16-212.19"
+          }
+        },
+        "tck[5]": {
+          "hide_name": 0,
+          "bits": [ 256 ],
+          "offset": 5,
+          "attributes": {
+            "src": "rtl/tx_fine.v:212.16-212.19"
+          }
+        },
+        "tck[6]": {
+          "hide_name": 0,
+          "bits": [ 258 ],
+          "offset": 6,
+          "attributes": {
+            "src": "rtl/tx_fine.v:212.16-212.19"
+          }
+        },
+        "tck[7]": {
+          "hide_name": 0,
+          "bits": [ 260 ],
+          "offset": 7,
+          "attributes": {
+            "src": "rtl/tx_fine.v:212.16-212.19"
+          }
+        },
+        "tck[8]": {
+          "hide_name": 0,
+          "bits": [ 13 ],
+          "offset": 8,
+          "attributes": {
+            "src": "rtl/tx_fine.v:212.16-212.19"
+          }
+        },
+        "up": {
+          "hide_name": 0,
+          "bits": [ 639 ],
+          "attributes": {
+            "src": "rtl/tx_fine.v:162.17-162.19"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,129 @@
+{
+  "partition": {
+    "index": 8,
+    "name": "tx_fine.rnw",
+    "inbits": {
+      "bitcnt[0]": [
+        0
+      ],
+      "bitcnt[1]": [
+        0
+      ],
+      "bitcnt[2]": [
+        0
+      ],
+      "bitcnt[3]": [
+        0
+      ],
+      "bitcnt[4]": [
+        0
+      ],
+      "clk_spi": [
+        0
+      ],
+      "rst_n": [
+        0
+      ],
+      "s_cs[1]": [
+        0
+      ],
+      "s_sclk[1]": [
+        0
+      ],
+      "s_sclk[2]": [
+        0
+      ],
+      "sr[2]": [
+        0
+      ]
+    },
+    "outbits": {
+      "rnw": [
+        0
+      ]
+    },
+    "crossbits": {}
+  },
+  "gold_module": {
+    "name": "gold.tx_fine.rnw",
+    "internal": {
+      "g_spi.gclk": [
+        0
+      ],
+      "sck_rise": [
+        0
+      ]
+    },
+    "unused": {},
+    "cellcount": 8,
+    "bitcount": 19
+  },
+  "gate_module": {
+    "name": "gold.tx_fine.rnw",
+    "internal": {
+      "_0125_": [
+        0
+      ],
+      "_0370_": [
+        0
+      ],
+      "_0376_": [
+        0
+      ],
+      "_0379_": [
+        0
+      ],
+      "_0430_": [
+        0
+      ],
+      "clknet_0_clk_spi": [
+        0
+      ],
+      "clknet_3_0__leaf_clk_spi": [
+        0
+      ],
+      "clknet_3_1__leaf_clk_spi": [
+        0
+      ],
+      "clknet_3_2__leaf_clk_spi": [
+        0
+      ],
+      "clknet_3_3__leaf_clk_spi": [
+        0
+      ],
+      "clknet_3_4__leaf_clk_spi": [
+        0
+      ],
+      "clknet_3_5__leaf_clk_spi": [
+        0
+      ],
+      "clknet_3_6__leaf_clk_spi": [
+        0
+      ],
+      "clknet_3_7__leaf_clk_spi": [
+        0
+      ],
+      "net4": [
+        0
+      ],
+      "net57": [
+        0
+      ],
+      "net58": [
+        0
+      ],
+      "net59": [
+        0
+      ],
+      "net60": [
+        0
+      ],
+      "net61": [
+        0
+      ]
+    },
+    "unused": {},
+    "cellcount": 31,
+    "bitcount": 42
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "partition": {
+    "index": 22,
+    "name": "tx_fine.g_spi.clk",
+    "inbits": {
+      "clk": [
+        0
+      ]
+    },
+    "outbits": {
+      "g_spi.clk": [
+        0
+      ]
+    },
+    "crossbits": {}
+  },
+  "gold_module": {
+    "name": "gold.tx_fine.g_spi.clk",
+    "internal": {
+      "g_dec.clk": [
+        0
+      ],
+      "g_eff.clk": [
+        0
+      ],
+      "g_sd.clk": [
+        0
+      ]
+    },
+    "unused": {},
+    "cellcount": 4,
+    "bitcount": 5
+  },
+  "gate_module": {
+    "name": "gold.tx_fine.g_spi.clk",
+    "internal": {
+      "clk_regs": [
+        0
+      ],
+      "clknet_0_clk": [
+        0
+      ],
+      "clknet_0_clk_regs": [
+        0
+      ],
+      "clknet_1_0__leaf_clk": [
+        0
+      ],
+      "clknet_1_0__leaf_clk_regs": [
+        0
+      ],
+      "clknet_1_1__leaf_clk": [
+        0
+      ],
+      "clknet_1_1__leaf_clk_regs": [
+        0
+      ],
+      "delaynet_0_clk": [
+        0
+      ],
+      "delaynet_1_clk": [
+        0
+      ],
+      "delaynet_2_clk": [
+        0
+      ]
+    },
+    "unused": {},
+    "cellcount": 11,
+    "bitcount": 12
+  }
+}

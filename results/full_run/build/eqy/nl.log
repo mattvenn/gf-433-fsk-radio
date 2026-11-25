@@ -1,0 +1,273 @@
+EQY 18:56:58 [nl] read_gold: starting process "yosys -ql nl/gold.log nl/gold.ys"
+EQY 18:56:58 [nl] read_gold: finished (returncode=0)
+EQY 18:56:58 [nl] read_gate: starting process "yosys -ql nl/gate.log nl/gate.ys"
+EQY 18:56:59 [nl] read_gate: finished (returncode=0)
+EQY 18:56:59 [nl] combine: starting process "yosys -ql nl/combine.log nl/combine.ys"
+EQY 18:56:59 [nl] combine: Warning: Ignoring boxed module gf180mcu_fd_sc_mcu7t5v0__icgtp_1.
+EQY 18:56:59 [nl] combine: finished (returncode=0)
+EQY 18:56:59 [nl] partition: starting process "cd nl; yosys -ql partition.log partition.ys"
+EQY 18:56:59 [nl] partition: finished (returncode=0)
+EQY 18:56:59 [nl] Warning: Partition tx_fine.sd_en contains 8 unused gate inputs.
+EQY 18:56:59 [nl] Warning: Partition tx_fine.rx_en contains 8 unused gate inputs.
+EQY 18:56:59 [nl] Warning: Partition tx_fine.miso contains 2 unused gate inputs.
+EQY 18:56:59 [nl] Warning: Partition tx_fine.fsk_inv contains 8 unused gate inputs.
+EQY 18:56:59 [nl] Warning: Partition tx_fine.fsk_en contains 8 unused gate inputs.
+EQY 18:56:59 [nl] Warning: Partition tx_fine.devx.9 contains 22 unused gate inputs.
+EQY 18:56:59 [nl] Warning: Partition tx_fine.devx.8 contains 22 unused gate inputs.
+EQY 18:56:59 [nl] Warning: Partition tx_fine.devx.7 contains 22 unused gate inputs.
+EQY 18:56:59 [nl] Warning: Partition tx_fine.devx.6 contains 22 unused gate inputs.
+EQY 18:56:59 [nl] Warning: Partition tx_fine.devx.5 contains 22 unused gate inputs.
+EQY 18:56:59 [nl] Warning: Partition tx_fine.devx.4 contains 22 unused gate inputs.
+EQY 18:56:59 [nl] Warning: Partition tx_fine.devx.3 contains 22 unused gate inputs.
+EQY 18:56:59 [nl] Warning: Partition tx_fine.devx.2 contains 22 unused gate inputs.
+EQY 18:56:59 [nl] Warning: Partition tx_fine.devx.1 contains 22 unused gate inputs.
+EQY 18:56:59 [nl] Warning: Partition tx_fine.devx.11 contains 22 unused gate inputs.
+EQY 18:56:59 [nl] Warning: Partition tx_fine.devx.10 contains 22 unused gate inputs.
+EQY 18:56:59 [nl] Warning: Partition tx_fine.devx.0 contains 22 unused gate inputs.
+EQY 18:56:59 [nl] Warning: Partition tx_fine.dbg_sel.3 contains 4 unused gate inputs.
+EQY 18:56:59 [nl] Warning: Partition tx_fine.dbg_sel.2 contains 4 unused gate inputs.
+EQY 18:56:59 [nl] Warning: Partition tx_fine.dbg_sel.1 contains 4 unused gate inputs.
+EQY 18:56:59 [nl] Warning: Partition tx_fine.dbg_sel.0 contains 4 unused gate inputs.
+EQY 18:56:59 [nl] Warning: Partition tx_fine.ck_en contains 8 unused gate inputs.
+EQY 18:56:59 [nl] Warning: Partition tx_fine.base.9 contains 18 unused gate inputs.
+EQY 18:56:59 [nl] Warning: Partition tx_fine.base.8 contains 18 unused gate inputs.
+EQY 18:56:59 [nl] Warning: Partition tx_fine.base.7 contains 14 unused gate inputs.
+EQY 18:56:59 [nl] Warning: Partition tx_fine.base.6 contains 14 unused gate inputs.
+EQY 18:56:59 [nl] Warning: Partition tx_fine.base.5 contains 14 unused gate inputs.
+EQY 18:56:59 [nl] Warning: Partition tx_fine.base.4 contains 14 unused gate inputs.
+EQY 18:56:59 [nl] Warning: Partition tx_fine.base.3 contains 14 unused gate inputs.
+EQY 18:56:59 [nl] Warning: Partition tx_fine.base.2 contains 14 unused gate inputs.
+EQY 18:56:59 [nl] Warning: Partition tx_fine.base.1 contains 14 unused gate inputs.
+EQY 18:56:59 [nl] Warning: Partition tx_fine.base.17 contains 18 unused gate inputs.
+EQY 18:56:59 [nl] Warning: Partition tx_fine.base.16 contains 18 unused gate inputs.
+EQY 18:56:59 [nl] Warning: Partition tx_fine.base.15 contains 18 unused gate inputs.
+EQY 18:56:59 [nl] Warning: Partition tx_fine.base.14 contains 18 unused gate inputs.
+EQY 18:56:59 [nl] Warning: Partition tx_fine.base.13 contains 18 unused gate inputs.
+EQY 18:56:59 [nl] Warning: Partition tx_fine.base.12 contains 18 unused gate inputs.
+EQY 18:56:59 [nl] Warning: Partition tx_fine.base.11 contains 18 unused gate inputs.
+EQY 18:56:59 [nl] Warning: Partition tx_fine.base.10 contains 18 unused gate inputs.
+EQY 18:56:59 [nl] Warning: Partition tx_fine.base.0 contains 14 unused gate inputs.
+EQY 18:56:59 [nl] run: starting process "make -j4 -C nl -f strategies.mk"
+EQY 18:56:59 [nl] run: make: Entering directory '/foss/designs/gf-433-fsk-radio/build/eqy/nl'
+EQY 18:56:59 [nl] run: Running strategy 'sat' on 'tx_fine.acc.0'..
+EQY 18:56:59 [nl] run: Running strategy 'sat' on 'tx_fine.base.0'..
+EQY 18:56:59 [nl] run: Running strategy 'sat' on 'tx_fine.base.1'..
+EQY 18:56:59 [nl] run: Running strategy 'sat' on 'tx_fine.base.10'..
+EQY 18:56:59 [nl] run: Proved equivalence of partition 'tx_fine.base.10' using strategy 'sat'
+EQY 18:56:59 [nl] run: Running strategy 'sat' on 'tx_fine.base.11'..
+EQY 18:56:59 [nl] run: Proved equivalence of partition 'tx_fine.acc.0' using strategy 'sat'
+EQY 18:56:59 [nl] run: Running strategy 'sat' on 'tx_fine.base.12'..
+EQY 18:56:59 [nl] run: Proved equivalence of partition 'tx_fine.base.1' using strategy 'sat'
+EQY 18:56:59 [nl] run: Running strategy 'sat' on 'tx_fine.base.13'..
+EQY 18:56:59 [nl] run: Proved equivalence of partition 'tx_fine.base.0' using strategy 'sat'
+EQY 18:56:59 [nl] run: Running strategy 'sat' on 'tx_fine.base.14'..
+EQY 18:56:59 [nl] run: Proved equivalence of partition 'tx_fine.base.11' using strategy 'sat'
+EQY 18:56:59 [nl] run: Proved equivalence of partition 'tx_fine.base.12' using strategy 'sat'
+EQY 18:56:59 [nl] run: Running strategy 'sat' on 'tx_fine.base.15'..
+EQY 18:56:59 [nl] run: Running strategy 'sat' on 'tx_fine.base.16'..
+EQY 18:56:59 [nl] run: Proved equivalence of partition 'tx_fine.base.13' using strategy 'sat'
+EQY 18:56:59 [nl] run: Proved equivalence of partition 'tx_fine.base.14' using strategy 'sat'
+EQY 18:56:59 [nl] run: Running strategy 'sat' on 'tx_fine.base.17'..
+EQY 18:56:59 [nl] run: Running strategy 'sat' on 'tx_fine.base.2'..
+EQY 18:56:59 [nl] run: Proved equivalence of partition 'tx_fine.base.15' using strategy 'sat'
+EQY 18:56:59 [nl] run: Running strategy 'sat' on 'tx_fine.base.3'..
+EQY 18:56:59 [nl] run: Proved equivalence of partition 'tx_fine.base.16' using strategy 'sat'
+EQY 18:56:59 [nl] run: Running strategy 'sat' on 'tx_fine.base.4'..
+EQY 18:56:59 [nl] run: Proved equivalence of partition 'tx_fine.base.17' using strategy 'sat'
+EQY 18:56:59 [nl] run: Proved equivalence of partition 'tx_fine.base.2' using strategy 'sat'
+EQY 18:56:59 [nl] run: Running strategy 'sat' on 'tx_fine.base.5'..
+EQY 18:56:59 [nl] run: Running strategy 'sat' on 'tx_fine.base.6'..
+EQY 18:56:59 [nl] run: Proved equivalence of partition 'tx_fine.base.3' using strategy 'sat'
+EQY 18:56:59 [nl] run: Running strategy 'sat' on 'tx_fine.base.7'..
+EQY 18:56:59 [nl] run: Proved equivalence of partition 'tx_fine.base.4' using strategy 'sat'
+EQY 18:56:59 [nl] run: Running strategy 'sat' on 'tx_fine.base.8'..
+EQY 18:56:59 [nl] run: Proved equivalence of partition 'tx_fine.base.5' using strategy 'sat'
+EQY 18:56:59 [nl] run: Proved equivalence of partition 'tx_fine.base.6' using strategy 'sat'
+EQY 18:56:59 [nl] run: Running strategy 'sat' on 'tx_fine.base.9'..
+EQY 18:56:59 [nl] run: Running strategy 'sat' on 'tx_fine.bitcnt.0'..
+EQY 18:56:59 [nl] run: Proved equivalence of partition 'tx_fine.base.8' using strategy 'sat'
+EQY 18:56:59 [nl] run: Proved equivalence of partition 'tx_fine.base.7' using strategy 'sat'
+EQY 18:56:59 [nl] run: Running strategy 'sat' on 'tx_fine.ck_en'..
+EQY 18:56:59 [nl] run: Running strategy 'sat' on 'tx_fine.ck_o'..
+EQY 18:56:59 [nl] run: Proved equivalence of partition 'tx_fine.base.9' using strategy 'sat'
+EQY 18:56:59 [nl] run: Running strategy 'sat' on 'tx_fine.dac_bn'..
+EQY 18:56:59 [nl] run: Proved equivalence of partition 'tx_fine.bitcnt.0' using strategy 'sat'
+EQY 18:56:59 [nl] run: Running strategy 'sat' on 'tx_fine.dac_sdn'..
+EQY 18:56:59 [nl] run: Proved equivalence of partition 'tx_fine.ck_o' using strategy 'sat'
+EQY 18:56:59 [nl] run: Running strategy 'sat' on 'tx_fine.dac_tn'..
+EQY 18:56:59 [nl] run: Proved equivalence of partition 'tx_fine.dac_bn' using strategy 'sat'
+EQY 18:56:59 [nl] run: Running strategy 'sat' on 'tx_fine.dbg_sel.0'..
+EQY 18:56:59 [nl] run: Proved equivalence of partition 'tx_fine.dac_sdn' using strategy 'sat'
+EQY 18:56:59 [nl] run: Proved equivalence of partition 'tx_fine.ck_en' using strategy 'sat'
+EQY 18:56:59 [nl] run: Running strategy 'sat' on 'tx_fine.dbg_sel.1'..
+EQY 18:56:59 [nl] run: Running strategy 'sat' on 'tx_fine.dbg_sel.2'..
+EQY 18:56:59 [nl] run: Proved equivalence of partition 'tx_fine.dbg_sel.0' using strategy 'sat'
+EQY 18:56:59 [nl] run: Running strategy 'sat' on 'tx_fine.dbg_sel.3'..
+EQY 18:56:59 [nl] run: Proved equivalence of partition 'tx_fine.dbg_sel.1' using strategy 'sat'
+EQY 18:56:59 [nl] run: Proved equivalence of partition 'tx_fine.dbg_sel.2' using strategy 'sat'
+EQY 18:56:59 [nl] run: Running strategy 'sat' on 'tx_fine.devx.0'..
+EQY 18:56:59 [nl] run: Running strategy 'sat' on 'tx_fine.devx.1'..
+EQY 18:56:59 [nl] run: Proved equivalence of partition 'tx_fine.dbg_sel.3' using strategy 'sat'
+EQY 18:56:59 [nl] run: Running strategy 'sat' on 'tx_fine.devx.10'..
+EQY 18:57:00 [nl] run: Proved equivalence of partition 'tx_fine.dac_tn' using strategy 'sat'
+EQY 18:57:00 [nl] run: Proved equivalence of partition 'tx_fine.devx.1' using strategy 'sat'
+EQY 18:57:00 [nl] run: Running strategy 'sat' on 'tx_fine.devx.11'..
+EQY 18:57:00 [nl] run: Running strategy 'sat' on 'tx_fine.devx.2'..
+EQY 18:57:00 [nl] run: Proved equivalence of partition 'tx_fine.devx.0' using strategy 'sat'
+EQY 18:57:00 [nl] run: Running strategy 'sat' on 'tx_fine.devx.3'..
+EQY 18:57:00 [nl] run: Proved equivalence of partition 'tx_fine.devx.10' using strategy 'sat'
+EQY 18:57:00 [nl] run: Running strategy 'sat' on 'tx_fine.devx.4'..
+EQY 18:57:00 [nl] run: Proved equivalence of partition 'tx_fine.devx.2' using strategy 'sat'
+EQY 18:57:00 [nl] run: Running strategy 'sat' on 'tx_fine.devx.5'..
+EQY 18:57:00 [nl] run: Proved equivalence of partition 'tx_fine.devx.11' using strategy 'sat'
+EQY 18:57:00 [nl] run: Running strategy 'sat' on 'tx_fine.devx.6'..
+EQY 18:57:00 [nl] run: Proved equivalence of partition 'tx_fine.devx.3' using strategy 'sat'
+EQY 18:57:00 [nl] run: Running strategy 'sat' on 'tx_fine.devx.7'..
+EQY 18:57:00 [nl] run: Proved equivalence of partition 'tx_fine.devx.4' using strategy 'sat'
+EQY 18:57:00 [nl] run: Running strategy 'sat' on 'tx_fine.devx.8'..
+EQY 18:57:00 [nl] run: Proved equivalence of partition 'tx_fine.devx.5' using strategy 'sat'
+EQY 18:57:00 [nl] run: Running strategy 'sat' on 'tx_fine.devx.9'..
+EQY 18:57:00 [nl] run: Proved equivalence of partition 'tx_fine.devx.6' using strategy 'sat'
+EQY 18:57:00 [nl] run: Running strategy 'sat' on 'tx_fine.div1024'..
+EQY 18:57:00 [nl] run: Proved equivalence of partition 'tx_fine.devx.7' using strategy 'sat'
+EQY 18:57:00 [nl] run: Running strategy 'sat' on 'tx_fine.div16'..
+EQY 18:57:00 [nl] run: Proved equivalence of partition 'tx_fine.devx.8' using strategy 'sat'
+EQY 18:57:00 [nl] run: Running strategy 'sat' on 'tx_fine.div64'..
+EQY 18:57:00 [nl] run: Proved equivalence of partition 'tx_fine.div1024' using strategy 'sat'
+EQY 18:57:00 [nl] run: Running strategy 'sat' on 'tx_fine.eff_int.0'..
+EQY 18:57:00 [nl] run: Proved equivalence of partition 'tx_fine.devx.9' using strategy 'sat'
+EQY 18:57:00 [nl] run: Running strategy 'sat' on 'tx_fine.eff_q.0'..
+EQY 18:57:00 [nl] run: Proved equivalence of partition 'tx_fine.div64' using strategy 'sat'
+EQY 18:57:00 [nl] run: Running strategy 'sat' on 'tx_fine.fsk_en'..
+EQY 18:57:00 [nl] run: Proved equivalence of partition 'tx_fine.div16' using strategy 'sat'
+EQY 18:57:00 [nl] run: Running strategy 'sat' on 'tx_fine.fsk_inv'..
+EQY 18:57:00 [nl] run: Proved equivalence of partition 'tx_fine.eff_int.0' using strategy 'sat'
+EQY 18:57:00 [nl] run: Running strategy 'sat' on 'tx_fine.g_dec.en'..
+EQY 18:57:00 [nl] run: Proved equivalence of partition 'tx_fine.fsk_en' using strategy 'sat'
+EQY 18:57:00 [nl] run: Running strategy 'sat' on 'tx_fine.g_eff.en'..
+EQY 18:57:00 [nl] run: Proved equivalence of partition 'tx_fine.fsk_inv' using strategy 'sat'
+EQY 18:57:00 [nl] run: Running strategy 'sat' on 'tx_fine.g_en'..
+EQY 18:57:00 [nl] run: Proved equivalence of partition 'tx_fine.g_dec.en' using strategy 'sat'
+EQY 18:57:00 [nl] run: Running strategy 'sat' on 'tx_fine.g_sd.en'..
+EQY 18:57:00 [nl] run: Proved equivalence of partition 'tx_fine.g_eff.en' using strategy 'sat'
+EQY 18:57:00 [nl] run: Running strategy 'sat' on 'tx_fine.g_spi.clk'..
+EQY 18:57:00 [nl] run: Proved equivalence of partition 'tx_fine.g_en' using strategy 'sat'
+EQY 18:57:00 [nl] run: Running strategy 'sat' on 'tx_fine.g_spi.en'..
+EQY 18:57:00 [nl] run: Proved equivalence of partition 'tx_fine.g_spi.clk' using strategy 'sat'
+EQY 18:57:00 [nl] run: Proved equivalence of partition 'tx_fine.g_sd.en' using strategy 'sat'
+EQY 18:57:00 [nl] run: Running strategy 'sat' on 'tx_fine.miso'..
+EQY 18:57:00 [nl] run: Running strategy 'sat' on 'tx_fine.r_ck.1'..
+EQY 18:57:00 [nl] run: Proved equivalence of partition 'tx_fine.g_spi.en' using strategy 'sat'
+EQY 18:57:00 [nl] run: Running strategy 'sat' on 'tx_fine.rd.0'..
+EQY 18:57:00 [nl] run: Proved equivalence of partition 'tx_fine.r_ck.1' using strategy 'sat'
+EQY 18:57:00 [nl] run: Running strategy 'sat' on 'tx_fine.rip.0.q'..
+EQY 18:57:00 [nl] run: Proved equivalence of partition 'tx_fine.miso' using strategy 'sat'
+EQY 18:57:00 [nl] run: Running strategy 'sat' on 'tx_fine.rip.2.q'..
+EQY 18:57:00 [nl] run: Proved equivalence of partition 'tx_fine.eff_q.0' using strategy 'sat'
+EQY 18:57:00 [nl] run: Running strategy 'sat' on 'tx_fine.rip.4.q'..
+EQY 18:57:00 [nl] run: Proved equivalence of partition 'tx_fine.rip.0.q' using strategy 'sat'
+EQY 18:57:00 [nl] run: Running strategy 'sat' on 'tx_fine.rip.5.q'..
+EQY 18:57:00 [nl] run: Proved equivalence of partition 'tx_fine.rip.2.q' using strategy 'sat'
+EQY 18:57:00 [nl] run: Running strategy 'sat' on 'tx_fine.rip.6.q'..
+EQY 18:57:00 [nl] run: Proved equivalence of partition 'tx_fine.rip.4.q' using strategy 'sat'
+EQY 18:57:00 [nl] run: Running strategy 'sat' on 'tx_fine.rnw'..
+EQY 18:57:00 [nl] run: Proved equivalence of partition 'tx_fine.rip.5.q' using strategy 'sat'
+EQY 18:57:00 [nl] run: Running strategy 'sat' on 'tx_fine.rx_en'..
+EQY 18:57:00 [nl] run: Proved equivalence of partition 'tx_fine.rip.6.q' using strategy 'sat'
+EQY 18:57:00 [nl] run: Running strategy 'sat' on 'tx_fine.s_cken.0'..
+EQY 18:57:00 [nl] run: Proved equivalence of partition 'tx_fine.rnw' using strategy 'sat'
+EQY 18:57:00 [nl] run: Running strategy 'sat' on 'tx_fine.s_cs.1'..
+EQY 18:57:00 [nl] run: Proved equivalence of partition 'tx_fine.rd.0' using strategy 'sat'
+EQY 18:57:00 [nl] run: Running strategy 'sat' on 'tx_fine.s_fsk.0'..
+EQY 18:57:00 [nl] run: Proved equivalence of partition 'tx_fine.s_cken.0' using strategy 'sat'
+EQY 18:57:00 [nl] run: Running strategy 'sat' on 'tx_fine.s_mosi.1'..
+EQY 18:57:00 [nl] run: Proved equivalence of partition 'tx_fine.rx_en' using strategy 'sat'
+EQY 18:57:00 [nl] run: Running strategy 'sat' on 'tx_fine.s_sclk.1'..
+EQY 18:57:00 [nl] run: Proved equivalence of partition 'tx_fine.s_cs.1' using strategy 'sat'
+EQY 18:57:00 [nl] run: Running strategy 'sat' on 'tx_fine.sd_en'..
+EQY 18:57:00 [nl] run: Proved equivalence of partition 'tx_fine.s_mosi.1' using strategy 'sat'
+EQY 18:57:00 [nl] run: Running strategy 'sat' on 'tx_fine.sr.0'..
+EQY 18:57:00 [nl] run: Proved equivalence of partition 'tx_fine.s_fsk.0' using strategy 'sat'
+EQY 18:57:00 [nl] run: Proved equivalence of partition 'tx_fine.s_sclk.1' using strategy 'sat'
+EQY 18:57:00 [nl] run: Proved equivalence of partition 'tx_fine.sd_en' using strategy 'sat'
+EQY 18:57:00 [nl] run: Proved equivalence of partition 'tx_fine.sr.0' using strategy 'sat'
+EQY 18:57:00 [nl] run: make -f strategies.mk summary
+EQY 18:57:00 [nl] run: make[1]: Entering directory '/foss/designs/gf-433-fsk-radio/build/eqy/nl'
+EQY 18:57:00 [nl] run: make[1]: Leaving directory '/foss/designs/gf-433-fsk-radio/build/eqy/nl'
+EQY 18:57:00 [nl] run: make: Leaving directory '/foss/designs/gf-433-fsk-radio/build/eqy/nl'
+EQY 18:57:00 [nl] run: finished (returncode=0)
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.sr.0
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.sd_en
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.s_sclk.1
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.s_mosi.1
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.s_fsk.0
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.s_cs.1
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.s_cken.0
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.rx_en
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.rnw
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.rip.6.q
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.rip.5.q
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.rip.4.q
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.rip.2.q
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.rip.0.q
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.rd.0
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.r_ck.1
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.miso
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.g_spi.en
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.g_sd.en
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.g_en
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.g_eff.en
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.g_dec.en
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.g_spi.clk
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.fsk_inv
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.fsk_en
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.eff_q.0
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.eff_int.0
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.div64
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.div16
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.div1024
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.devx.9
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.devx.8
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.devx.7
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.devx.6
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.devx.5
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.devx.4
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.devx.3
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.devx.2
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.devx.1
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.devx.11
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.devx.10
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.devx.0
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.dbg_sel.3
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.dbg_sel.2
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.dbg_sel.1
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.dbg_sel.0
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.dac_tn
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.dac_sdn
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.dac_bn
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.ck_o
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.ck_en
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.bitcnt.0
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.base.9
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.base.8
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.base.7
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.base.6
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.base.5
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.base.4
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.base.3
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.base.2
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.base.1
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.base.17
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.base.16
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.base.15
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.base.14
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.base.13
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.base.12
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.base.11
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.base.10
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.base.0
+EQY 18:57:00 [nl] Successfully proved equivalence of partition tx_fine.acc.0
+EQY 18:57:00 [nl] Successfully proved designs equivalent
+EQY 18:57:00 [nl] summary: Elapsed clock time [H:MM:SS (secs)]: 0:00:02 (2)
+EQY 18:57:00 [nl] summary: Elapsed process time [H:MM:SS (secs)]: 0:00:05 (5)
+EQY 18:57:00 [nl] DONE (PASS, rc=0)

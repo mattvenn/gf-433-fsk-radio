@@ -1,0 +1,5 @@
+  ua[1]: shorted to VGND by ['Rshort_ua1'] (['R'])
+  tx_fine: 54 signal pins, the same in RTL, LEF, GL netlist and LVS subcircuit
+ERROR: ua[2]: LVS source has [('xxtxd', 'out_p')], PINOUT expects [('xxtxd', 'out_n')]
+ERROR: ua[3]: LVS source has [('xxtxd', 'out_n')], PINOUT expects [('xxtxd', 'out_p')]
+pinout: FAIL (2 errors; uio_oe = 0x08)

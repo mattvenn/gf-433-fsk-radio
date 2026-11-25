@@ -1,0 +1,110 @@
+{
+  "partition": {
+    "index": 18,
+    "name": "tx_fine.g_sd.en",
+    "inbits": {
+      "acc[0]": [
+        0
+      ],
+      "acc[1]": [
+        0
+      ],
+      "acc[2]": [
+        0
+      ],
+      "acc[3]": [
+        0
+      ],
+      "acc[4]": [
+        0
+      ],
+      "acc[5]": [
+        0
+      ],
+      "acc[6]": [
+        0
+      ],
+      "acc[7]": [
+        0
+      ],
+      "dac_sdn": [
+        0
+      ],
+      "eff_q[0]": [
+        0
+      ],
+      "eff_q[1]": [
+        0
+      ],
+      "eff_q[2]": [
+        0
+      ],
+      "eff_q[3]": [
+        0
+      ],
+      "eff_q[4]": [
+        0
+      ],
+      "eff_q[5]": [
+        0
+      ],
+      "eff_q[6]": [
+        0
+      ],
+      "eff_q[7]": [
+        0
+      ],
+      "sd_en": [
+        0
+      ]
+    },
+    "outbits": {
+      "g_sd.en": [
+        0
+      ]
+    },
+    "crossbits": {}
+  },
+  "gold_module": {
+    "name": "gold.tx_fine.g_sd.en",
+    "internal": {},
+    "unused": {},
+    "cellcount": 5,
+    "bitcount": 23
+  },
+  "gate_module": {
+    "name": "gold.tx_fine.g_sd.en",
+    "internal": {
+      "_0132_": [
+        0
+      ],
+      "_0176_": [
+        0
+      ],
+      "_0177_": [
+        0
+      ],
+      "_0178_": [
+        0
+      ],
+      "_0179_": [
+        0
+      ],
+      "_0180_": [
+        0
+      ],
+      "_0181_": [
+        0
+      ],
+      "_0182_": [
+        0
+      ],
+      "net12": [
+        0
+      ]
+    },
+    "unused": {},
+    "cellcount": 38,
+    "bitcount": 56
+  }
+}

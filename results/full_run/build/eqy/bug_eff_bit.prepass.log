@@ -1,0 +1,1091 @@
+
+ /----------------------------------------------------------------------------\
+ |  yosys -- Yosys Open SYnthesis Suite                                       |
+ |  Copyright (C) 2012 - 2026  Claire Xenia Wolf <claire@yosyshq.com>         |
+ |  Distributed under an ISC-like license, type "license" to see terms        |
+ \----------------------------------------------------------------------------/
+ Yosys 0.69 (git sha1 9f75ca1f9, Release, GNU /usr/bin/c++ 13.3.0)
+
+-- Running command `script in/gold.ys; write_json gold.json; design -reset; script in/gate.ys; write_json gate.json' --
+
+-- Executing script file `in/gold.ys' --
+
+1. Executing Verilog-2005 frontend: in/icg_bb.v
+Parsing Verilog input from `in/icg_bb.v' to AST representation.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__icgtp_1'.
+Successfully finished Verilog frontend.
+
+2. Executing Verilog-2005 frontend: rtl/tx_fine.v
+Parsing SystemVerilog input from `rtl/tx_fine.v' to AST representation.
+Generating RTLIL representation for module `\tx_cg'.
+Generating RTLIL representation for module `\tx_fine'.
+Successfully finished Verilog frontend.
+
+3. Executing HIERARCHY pass (managing design hierarchy).
+
+3.1. Analyzing design hierarchy..
+Top module:  \tx_fine
+Used module:     \tx_cg
+
+3.2. Analyzing design hierarchy..
+Top module:  \tx_fine
+Used module:     \tx_cg
+Removed 0 unused modules.
+
+4. Executing FLATTEN pass (flatten design).
+Deleting now unused module tx_cg.
+<suppressed ~4 debug messages>
+
+5. Executing PREP pass.
+
+5.1. Executing HIERARCHY pass (managing design hierarchy).
+
+5.1.1. Analyzing design hierarchy..
+Top module:  \tx_fine
+
+5.1.2. Analyzing design hierarchy..
+Top module:  \tx_fine
+Removed 0 unused modules.
+
+5.2. Executing PROC pass (convert processes to netlists).
+
+5.2.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Cleaned up 0 empty switches.
+
+5.2.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).
+Marked 1 switch rules as full_case in process $proc$rtl/tx_fine.v:222$152 in module tx_fine.
+Marked 1 switch rules as full_case in process $proc$rtl/tx_fine.v:222$149 in module tx_fine.
+Marked 1 switch rules as full_case in process $proc$rtl/tx_fine.v:222$146 in module tx_fine.
+Marked 1 switch rules as full_case in process $proc$rtl/tx_fine.v:222$143 in module tx_fine.
+Marked 1 switch rules as full_case in process $proc$rtl/tx_fine.v:222$140 in module tx_fine.
+Marked 1 switch rules as full_case in process $proc$rtl/tx_fine.v:222$137 in module tx_fine.
+Marked 1 switch rules as full_case in process $proc$rtl/tx_fine.v:222$134 in module tx_fine.
+Marked 1 switch rules as full_case in process $proc$rtl/tx_fine.v:219$131 in module tx_fine.
+Marked 1 switch rules as full_case in process $proc$rtl/tx_fine.v:236$128 in module tx_fine.
+Marked 1 switch rules as full_case in process $proc$rtl/tx_fine.v:233$126 in module tx_fine.
+Marked 1 switch rules as full_case in process $proc$rtl/tx_fine.v:206$124 in module tx_fine.
+Marked 1 switch rules as full_case in process $proc$rtl/tx_fine.v:194$59 in module tx_fine.
+Marked 2 switch rules as full_case in process $proc$rtl/tx_fine.v:181$56 in module tx_fine.
+Marked 1 switch rules as full_case in process $proc$rtl/tx_fine.v:177$54 in module tx_fine.
+Marked 5 switch rules as full_case in process $proc$rtl/tx_fine.v:127$12 in module tx_fine.
+Marked 1 switch rules as full_case in process $proc$rtl/tx_fine.v:81$3 in module tx_fine.
+Removed a total of 0 dead cases.
+
+5.2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).
+Removed 21 redundant assignments.
+Promoted 3 assignments to connections.
+
+5.2.4. Executing PROC_INIT pass (extract init attributes).
+
+5.2.5. Executing PROC_ARST pass (detect async resets in processes).
+Found async reset \rst_ck_n in `\tx_fine.$proc$rtl/tx_fine.v:222$152'.
+Found async reset \rst_ck_n in `\tx_fine.$proc$rtl/tx_fine.v:222$149'.
+Found async reset \rst_ck_n in `\tx_fine.$proc$rtl/tx_fine.v:222$146'.
+Found async reset \rst_ck_n in `\tx_fine.$proc$rtl/tx_fine.v:222$143'.
+Found async reset \rst_ck_n in `\tx_fine.$proc$rtl/tx_fine.v:222$140'.
+Found async reset \rst_ck_n in `\tx_fine.$proc$rtl/tx_fine.v:222$137'.
+Found async reset \rst_ck_n in `\tx_fine.$proc$rtl/tx_fine.v:222$134'.
+Found async reset \rst_ck_n in `\tx_fine.$proc$rtl/tx_fine.v:219$131'.
+Found async reset \rst_ck_n in `\tx_fine.$proc$rtl/tx_fine.v:236$128'.
+Found async reset \rst_ck_n in `\tx_fine.$proc$rtl/tx_fine.v:233$126'.
+Found async reset \rst_n in `\tx_fine.$proc$rtl/tx_fine.v:206$124'.
+Found async reset \rst_n in `\tx_fine.$proc$rtl/tx_fine.v:194$59'.
+Found async reset \rst_n in `\tx_fine.$proc$rtl/tx_fine.v:181$56'.
+Found async reset \rst_n in `\tx_fine.$proc$rtl/tx_fine.v:177$54'.
+Found async reset \rst_n in `\tx_fine.$proc$rtl/tx_fine.v:127$12'.
+Found async reset \rst_n in `\tx_fine.$proc$rtl/tx_fine.v:81$3'.
+
+5.2.6. Executing PROC_ROM pass (convert switches to ROMs).
+Converted 0 switches.
+<suppressed ~8 debug messages>
+
+5.2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).
+Creating decoders for process `\tx_fine.$proc$rtl/tx_fine.v:222$152'.
+     1/1: $0\rip[7].q[0:0]
+Creating decoders for process `\tx_fine.$proc$rtl/tx_fine.v:222$149'.
+     1/1: $0\rip[6].q[0:0]
+Creating decoders for process `\tx_fine.$proc$rtl/tx_fine.v:222$146'.
+     1/1: $0\rip[5].q[0:0]
+Creating decoders for process `\tx_fine.$proc$rtl/tx_fine.v:222$143'.
+     1/1: $0\rip[4].q[0:0]
+Creating decoders for process `\tx_fine.$proc$rtl/tx_fine.v:222$140'.
+     1/1: $0\rip[3].q[0:0]
+Creating decoders for process `\tx_fine.$proc$rtl/tx_fine.v:222$137'.
+     1/1: $0\rip[2].q[0:0]
+Creating decoders for process `\tx_fine.$proc$rtl/tx_fine.v:222$134'.
+     1/1: $0\rip[1].q[0:0]
+Creating decoders for process `\tx_fine.$proc$rtl/tx_fine.v:219$131'.
+     1/1: $0\rip[0].q[0:0]
+Creating decoders for process `\tx_fine.$proc$rtl/tx_fine.v:236$128'.
+     1/1: $0\g_en[0:0]
+Creating decoders for process `\tx_fine.$proc$rtl/tx_fine.v:233$126'.
+     1/1: $0\s_cken[1:0]
+Creating decoders for process `\tx_fine.$proc$rtl/tx_fine.v:206$124'.
+     1/1: $0\r_ck[1:0]
+Creating decoders for process `\tx_fine.$proc$rtl/tx_fine.v:194$59'.
+     1/34: $0\dac_bn[4:0]
+     2/34: $1\i[31:0]
+     3/34: $0\dac_tn[30:0] [30]
+     4/34: $0\dac_tn[30:0] [29]
+     5/34: $0\dac_tn[30:0] [28]
+     6/34: $0\dac_tn[30:0] [27]
+     7/34: $0\dac_tn[30:0] [26]
+     8/34: $0\dac_tn[30:0] [25]
+     9/34: $0\dac_tn[30:0] [24]
+    10/34: $0\dac_tn[30:0] [23]
+    11/34: $0\dac_tn[30:0] [22]
+    12/34: $0\dac_tn[30:0] [21]
+    13/34: $0\dac_tn[30:0] [20]
+    14/34: $0\dac_tn[30:0] [19]
+    15/34: $0\dac_tn[30:0] [18]
+    16/34: $0\dac_tn[30:0] [17]
+    17/34: $0\dac_tn[30:0] [16]
+    18/34: $0\dac_tn[30:0] [15]
+    19/34: $0\dac_tn[30:0] [14]
+    20/34: $0\dac_tn[30:0] [13]
+    21/34: $0\dac_tn[30:0] [12]
+    22/34: $0\dac_tn[30:0] [11]
+    23/34: $0\dac_tn[30:0] [10]
+    24/34: $0\dac_tn[30:0] [9]
+    25/34: $0\dac_tn[30:0] [8]
+    26/34: $0\dac_tn[30:0] [7]
+    27/34: $0\dac_tn[30:0] [6]
+    28/34: $0\dac_tn[30:0] [5]
+    29/34: $0\dac_tn[30:0] [4]
+    30/34: $0\dac_tn[30:0] [3]
+    31/34: $0\dac_tn[30:0] [2]
+    32/34: $0\dac_tn[30:0] [1]
+    33/34: $0\dac_tn[30:0] [0]
+    34/34: $0\eff_int[9:0]
+Creating decoders for process `\tx_fine.$proc$rtl/tx_fine.v:181$56'.
+     1/2: $0\dac_sdn[0:0]
+     2/2: $0\acc[7:0]
+Creating decoders for process `\tx_fine.$proc$rtl/tx_fine.v:177$54'.
+     1/1: $0\eff_q[17:0]
+Creating decoders for process `\tx_fine.$proc$rtl/tx_fine.v:127$12'.
+     1/20: $5\rdmux$func$rtl/tx_fine.v:140$2.$result[11:0]$27
+     2/20: $4\rdmux$func$rtl/tx_fine.v:140$2.$result[11:0]$25
+     3/20: $4\rdmux$func$rtl/tx_fine.v:140$2.a[2:0]$26
+     4/20: $3\rdmux$func$rtl/tx_fine.v:140$2.a[2:0]$22
+     5/20: $3\rdmux$func$rtl/tx_fine.v:140$2.$result[11:0]$21
+     6/20: $2\rdmux$func$rtl/tx_fine.v:140$2.a[2:0]$20
+     7/20: $2\rdmux$func$rtl/tx_fine.v:140$2.$result[11:0]$19
+     8/20: $1\rdmux$func$rtl/tx_fine.v:140$2.a[2:0]$17
+     9/20: $1\rdmux$func$rtl/tx_fine.v:140$2.$result[11:0]$16
+    10/20: $0\addr[2:0]
+    11/20: $0\rnw[0:0]
+    12/20: $0\rd[11:0]
+    13/20: $0\sr[15:0]
+    14/20: $0\bitcnt[4:0]
+    15/20: $0\dbg[3:0]
+    16/20: $0\ctrl[4:0]
+    17/20: $0\fsk_dev[11:0]
+    18/20: $0\med_frac[7:0]
+    19/20: $0\med_int[9:0]
+    20/20: $0\miso[0:0]
+Creating decoders for process `\tx_fine.$proc$rtl/tx_fine.v:81$3'.
+     1/4: $0\s_fsk[2:0]
+     2/4: $0\s_mosi[1:0]
+     3/4: $0\s_cs[2:0]
+     4/4: $0\s_sclk[2:0]
+
+5.2.8. Executing PROC_DLATCH pass (convert process syncs to latches).
+
+5.2.9. Executing PROC_DFF pass (convert process syncs to FFs).
+Creating register for signal `\tx_fine.\rip[7].q' using process `\tx_fine.$proc$rtl/tx_fine.v:222$152'.
+  created $adff cell `$procdff$329' with negative edge clock and positive level reset.
+Creating register for signal `\tx_fine.\rip[6].q' using process `\tx_fine.$proc$rtl/tx_fine.v:222$149'.
+  created $adff cell `$procdff$334' with negative edge clock and positive level reset.
+Creating register for signal `\tx_fine.\rip[5].q' using process `\tx_fine.$proc$rtl/tx_fine.v:222$146'.
+  created $adff cell `$procdff$339' with negative edge clock and positive level reset.
+Creating register for signal `\tx_fine.\rip[4].q' using process `\tx_fine.$proc$rtl/tx_fine.v:222$143'.
+  created $adff cell `$procdff$344' with negative edge clock and positive level reset.
+Creating register for signal `\tx_fine.\rip[3].q' using process `\tx_fine.$proc$rtl/tx_fine.v:222$140'.
+  created $adff cell `$procdff$349' with negative edge clock and positive level reset.
+Creating register for signal `\tx_fine.\rip[2].q' using process `\tx_fine.$proc$rtl/tx_fine.v:222$137'.
+  created $adff cell `$procdff$354' with negative edge clock and positive level reset.
+Creating register for signal `\tx_fine.\rip[1].q' using process `\tx_fine.$proc$rtl/tx_fine.v:222$134'.
+  created $adff cell `$procdff$359' with negative edge clock and positive level reset.
+Creating register for signal `\tx_fine.\rip[0].q' using process `\tx_fine.$proc$rtl/tx_fine.v:219$131'.
+  created $adff cell `$procdff$364' with positive edge clock and positive level reset.
+Creating register for signal `\tx_fine.\g_en' using process `\tx_fine.$proc$rtl/tx_fine.v:236$128'.
+  created $adff cell `$procdff$369' with negative edge clock and positive level reset.
+Creating register for signal `\tx_fine.\s_cken' using process `\tx_fine.$proc$rtl/tx_fine.v:233$126'.
+  created $adff cell `$procdff$374' with positive edge clock and positive level reset.
+Creating register for signal `\tx_fine.\r_ck' using process `\tx_fine.$proc$rtl/tx_fine.v:206$124'.
+  created $adff cell `$procdff$379' with positive edge clock and positive level reset.
+Creating register for signal `\tx_fine.\i' using process `\tx_fine.$proc$rtl/tx_fine.v:194$59'.
+  created $dff cell `$procdff$386' with positive edge clock.
+Creating register for signal `\tx_fine.\dac_tn' using process `\tx_fine.$proc$rtl/tx_fine.v:194$59'.
+  created $adff cell `$procdff$391' with positive edge clock and positive level reset.
+Creating register for signal `\tx_fine.\dac_bn' using process `\tx_fine.$proc$rtl/tx_fine.v:194$59'.
+  created $adff cell `$procdff$396' with positive edge clock and positive level reset.
+Creating register for signal `\tx_fine.\eff_int' using process `\tx_fine.$proc$rtl/tx_fine.v:194$59'.
+  created $adff cell `$procdff$401' with positive edge clock and positive level reset.
+Creating register for signal `\tx_fine.\dac_sdn' using process `\tx_fine.$proc$rtl/tx_fine.v:181$56'.
+  created $adff cell `$procdff$406' with positive edge clock and positive level reset.
+Creating register for signal `\tx_fine.\acc' using process `\tx_fine.$proc$rtl/tx_fine.v:181$56'.
+  created $adff cell `$procdff$411' with positive edge clock and positive level reset.
+Creating register for signal `\tx_fine.\eff_q' using process `\tx_fine.$proc$rtl/tx_fine.v:177$54'.
+  created $adff cell `$procdff$416' with positive edge clock and positive level reset.
+Creating register for signal `\tx_fine.\miso' using process `\tx_fine.$proc$rtl/tx_fine.v:127$12'.
+  created $adff cell `$procdff$421' with positive edge clock and positive level reset.
+Creating register for signal `\tx_fine.\med_int' using process `\tx_fine.$proc$rtl/tx_fine.v:127$12'.
+  created $adff cell `$procdff$426' with positive edge clock and positive level reset.
+Creating register for signal `\tx_fine.\med_frac' using process `\tx_fine.$proc$rtl/tx_fine.v:127$12'.
+  created $adff cell `$procdff$431' with positive edge clock and positive level reset.
+Creating register for signal `\tx_fine.\fsk_dev' using process `\tx_fine.$proc$rtl/tx_fine.v:127$12'.
+  created $adff cell `$procdff$436' with positive edge clock and positive level reset.
+Creating register for signal `\tx_fine.\ctrl' using process `\tx_fine.$proc$rtl/tx_fine.v:127$12'.
+  created $adff cell `$procdff$441' with positive edge clock and positive level reset.
+Creating register for signal `\tx_fine.\dbg' using process `\tx_fine.$proc$rtl/tx_fine.v:127$12'.
+  created $adff cell `$procdff$446' with positive edge clock and positive level reset.
+Creating register for signal `\tx_fine.\bitcnt' using process `\tx_fine.$proc$rtl/tx_fine.v:127$12'.
+  created $adff cell `$procdff$451' with positive edge clock and positive level reset.
+Creating register for signal `\tx_fine.\sr' using process `\tx_fine.$proc$rtl/tx_fine.v:127$12'.
+  created $adff cell `$procdff$456' with positive edge clock and positive level reset.
+Creating register for signal `\tx_fine.\rd' using process `\tx_fine.$proc$rtl/tx_fine.v:127$12'.
+  created $adff cell `$procdff$461' with positive edge clock and positive level reset.
+Creating register for signal `\tx_fine.\rnw' using process `\tx_fine.$proc$rtl/tx_fine.v:127$12'.
+  created $adff cell `$procdff$466' with positive edge clock and positive level reset.
+Creating register for signal `\tx_fine.\addr' using process `\tx_fine.$proc$rtl/tx_fine.v:127$12'.
+  created $adff cell `$procdff$471' with positive edge clock and positive level reset.
+Creating register for signal `\tx_fine.\rdmux$func$rtl/tx_fine.v:140$2.$result' using process `\tx_fine.$proc$rtl/tx_fine.v:127$12'.
+  created $adff cell `$procdff$476' with positive edge clock and positive level reset.
+Creating register for signal `\tx_fine.\rdmux$func$rtl/tx_fine.v:140$2.a' using process `\tx_fine.$proc$rtl/tx_fine.v:127$12'.
+  created $adff cell `$procdff$481' with positive edge clock and positive level reset.
+Creating register for signal `\tx_fine.\s_sclk' using process `\tx_fine.$proc$rtl/tx_fine.v:81$3'.
+  created $adff cell `$procdff$486' with positive edge clock and positive level reset.
+Creating register for signal `\tx_fine.\s_cs' using process `\tx_fine.$proc$rtl/tx_fine.v:81$3'.
+  created $adff cell `$procdff$491' with positive edge clock and positive level reset.
+Creating register for signal `\tx_fine.\s_mosi' using process `\tx_fine.$proc$rtl/tx_fine.v:81$3'.
+  created $adff cell `$procdff$496' with positive edge clock and positive level reset.
+Creating register for signal `\tx_fine.\s_fsk' using process `\tx_fine.$proc$rtl/tx_fine.v:81$3'.
+  created $adff cell `$procdff$501' with positive edge clock and positive level reset.
+
+5.2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).
+
+5.2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Removing empty process `tx_fine.$proc$rtl/tx_fine.v:222$152'.
+Removing empty process `tx_fine.$proc$rtl/tx_fine.v:222$149'.
+Removing empty process `tx_fine.$proc$rtl/tx_fine.v:222$146'.
+Removing empty process `tx_fine.$proc$rtl/tx_fine.v:222$143'.
+Removing empty process `tx_fine.$proc$rtl/tx_fine.v:222$140'.
+Removing empty process `tx_fine.$proc$rtl/tx_fine.v:222$137'.
+Removing empty process `tx_fine.$proc$rtl/tx_fine.v:222$134'.
+Removing empty process `tx_fine.$proc$rtl/tx_fine.v:219$131'.
+Removing empty process `tx_fine.$proc$rtl/tx_fine.v:236$128'.
+Removing empty process `tx_fine.$proc$rtl/tx_fine.v:233$126'.
+Removing empty process `tx_fine.$proc$rtl/tx_fine.v:206$124'.
+Removing empty process `tx_fine.$proc$rtl/tx_fine.v:194$59'.
+Found and cleaned up 1 empty switch in `\tx_fine.$proc$rtl/tx_fine.v:181$56'.
+Removing empty process `tx_fine.$proc$rtl/tx_fine.v:181$56'.
+Removing empty process `tx_fine.$proc$rtl/tx_fine.v:177$54'.
+Found and cleaned up 7 empty switches in `\tx_fine.$proc$rtl/tx_fine.v:127$12'.
+Removing empty process `tx_fine.$proc$rtl/tx_fine.v:127$12'.
+Removing empty process `tx_fine.$proc$rtl/tx_fine.v:81$3'.
+Cleaned up 8 empty switches.
+
+5.2.12. Executing OPT_EXPR pass (perform const folding).
+Optimizing module tx_fine.
+<suppressed ~74 debug messages>
+
+5.3. Executing FUTURE pass.
+
+5.4. Executing OPT_EXPR pass (perform const folding).
+Optimizing module tx_fine.
+
+5.5. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \tx_fine..
+Removed 72 unused cells and 243 unused wires.
+<suppressed ~76 debug messages>
+
+5.6. Executing CHECK pass (checking for obvious problems).
+Checking module tx_fine...
+Found and reported 0 problems.
+
+5.7. Executing OPT pass (performing simple optimizations).
+
+5.7.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module tx_fine.
+
+5.7.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\tx_fine'.
+Computing hashes of 197 cells of `\tx_fine'.
+Finding duplicate cells in `\tx_fine'.
+Removed a total of 0 cells.
+
+5.7.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \tx_fine..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+    dead port 1/2 on $mux $procmux$181.
+    dead port 2/2 on $mux $procmux$178.
+    dead port 2/2 on $mux $procmux$176.
+Removed 3 multiplexer ports.
+<suppressed ~60 debug messages>
+
+5.7.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \tx_fine.
+Performed a total of 0 changes.
+
+5.7.5. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\tx_fine'.
+Computing hashes of 194 cells of `\tx_fine'.
+Finding duplicate cells in `\tx_fine'.
+Removed a total of 0 cells.
+
+5.7.6. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \tx_fine..
+Removed 0 unused cells and 3 unused wires.
+<suppressed ~1 debug messages>
+
+5.7.7. Executing OPT_EXPR pass (perform const folding).
+Optimizing module tx_fine.
+
+5.7.8. Rerunning OPT passes. (Maybe there is more to do..)
+
+5.7.9. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \tx_fine..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~57 debug messages>
+
+5.7.10. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \tx_fine.
+Performed a total of 0 changes.
+
+5.7.11. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\tx_fine'.
+Computing hashes of 194 cells of `\tx_fine'.
+Finding duplicate cells in `\tx_fine'.
+Removed a total of 0 cells.
+
+5.7.12. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \tx_fine..
+
+5.7.13. Executing OPT_EXPR pass (perform const folding).
+Optimizing module tx_fine.
+
+5.7.14. Finished fast OPT passes. (There is nothing left to do.)
+
+5.8. Executing WREDUCE pass (reducing word size of cells).
+Removed top 3 bits (of 5) from port B of cell tx_fine.$eq$rtl/tx_fine.v:137$24 ($eq).
+Removed top 1 bits (of 5) from port B of cell tx_fine.$eq$rtl/tx_fine.v:142$28 ($eq).
+Removed top 2 bits (of 5) from port B of cell tx_fine.$ge$rtl/tx_fine.v:153$31 ($ge).
+Removed top 1 bits (of 5) from port B of cell tx_fine.$le$rtl/tx_fine.v:153$33 ($le).
+Removed top 1 bits (of 19) from port A of cell tx_fine.$add$rtl/tx_fine.v:163$37 ($add).
+Removed top 7 bits (of 19) from port B of cell tx_fine.$add$rtl/tx_fine.v:163$37 ($add).
+Removed top 1 bits (of 19) from port A of cell tx_fine.$sub$rtl/tx_fine.v:163$38 ($sub).
+Removed top 7 bits (of 19) from port B of cell tx_fine.$sub$rtl/tx_fine.v:163$38 ($sub).
+Removed top 1 bits (of 9) from port A of cell tx_fine.$add$rtl/tx_fine.v:169$45 ($add).
+Removed top 1 bits (of 9) from port B of cell tx_fine.$add$rtl/tx_fine.v:169$45 ($add).
+Removed top 31 bits (of 32) from port B of cell tx_fine.$gt$rtl/tx_fine.v:200$61 ($gt).
+Removed top 31 bits (of 32) from port B of cell tx_fine.$gt$rtl/tx_fine.v:200$63 ($gt).
+Removed top 30 bits (of 32) from port B of cell tx_fine.$gt$rtl/tx_fine.v:200$65 ($gt).
+Removed top 30 bits (of 32) from port B of cell tx_fine.$gt$rtl/tx_fine.v:200$67 ($gt).
+Removed top 29 bits (of 32) from port B of cell tx_fine.$gt$rtl/tx_fine.v:200$69 ($gt).
+Removed top 29 bits (of 32) from port B of cell tx_fine.$gt$rtl/tx_fine.v:200$71 ($gt).
+Removed top 29 bits (of 32) from port B of cell tx_fine.$gt$rtl/tx_fine.v:200$73 ($gt).
+Removed top 29 bits (of 32) from port B of cell tx_fine.$gt$rtl/tx_fine.v:200$75 ($gt).
+Removed top 28 bits (of 32) from port B of cell tx_fine.$gt$rtl/tx_fine.v:200$77 ($gt).
+Removed top 28 bits (of 32) from port B of cell tx_fine.$gt$rtl/tx_fine.v:200$79 ($gt).
+Removed top 28 bits (of 32) from port B of cell tx_fine.$gt$rtl/tx_fine.v:200$81 ($gt).
+Removed top 28 bits (of 32) from port B of cell tx_fine.$gt$rtl/tx_fine.v:200$83 ($gt).
+Removed top 28 bits (of 32) from port B of cell tx_fine.$gt$rtl/tx_fine.v:200$85 ($gt).
+Removed top 28 bits (of 32) from port B of cell tx_fine.$gt$rtl/tx_fine.v:200$87 ($gt).
+Removed top 28 bits (of 32) from port B of cell tx_fine.$gt$rtl/tx_fine.v:200$89 ($gt).
+Removed top 28 bits (of 32) from port B of cell tx_fine.$gt$rtl/tx_fine.v:200$91 ($gt).
+Removed top 27 bits (of 32) from port B of cell tx_fine.$gt$rtl/tx_fine.v:200$93 ($gt).
+Removed top 27 bits (of 32) from port B of cell tx_fine.$gt$rtl/tx_fine.v:200$95 ($gt).
+Removed top 27 bits (of 32) from port B of cell tx_fine.$gt$rtl/tx_fine.v:200$97 ($gt).
+Removed top 27 bits (of 32) from port B of cell tx_fine.$gt$rtl/tx_fine.v:200$99 ($gt).
+Removed top 27 bits (of 32) from port B of cell tx_fine.$gt$rtl/tx_fine.v:200$101 ($gt).
+Removed top 27 bits (of 32) from port B of cell tx_fine.$gt$rtl/tx_fine.v:200$103 ($gt).
+Removed top 27 bits (of 32) from port B of cell tx_fine.$gt$rtl/tx_fine.v:200$105 ($gt).
+Removed top 27 bits (of 32) from port B of cell tx_fine.$gt$rtl/tx_fine.v:200$107 ($gt).
+Removed top 27 bits (of 32) from port B of cell tx_fine.$gt$rtl/tx_fine.v:200$109 ($gt).
+Removed top 27 bits (of 32) from port B of cell tx_fine.$gt$rtl/tx_fine.v:200$111 ($gt).
+Removed top 27 bits (of 32) from port B of cell tx_fine.$gt$rtl/tx_fine.v:200$113 ($gt).
+Removed top 27 bits (of 32) from port B of cell tx_fine.$gt$rtl/tx_fine.v:200$115 ($gt).
+Removed top 27 bits (of 32) from port B of cell tx_fine.$gt$rtl/tx_fine.v:200$117 ($gt).
+Removed top 27 bits (of 32) from port B of cell tx_fine.$gt$rtl/tx_fine.v:200$119 ($gt).
+Removed top 27 bits (of 32) from port B of cell tx_fine.$gt$rtl/tx_fine.v:200$121 ($gt).
+Removed top 1 bits (of 3) from port B of cell tx_fine.$procmux$172_CMP0 ($eq).
+Removed top 1 bits (of 3) from port B of cell tx_fine.$procmux$173_CMP0 ($eq).
+Removed top 2 bits (of 3) from port B of cell tx_fine.$procmux$174_CMP0 ($eq).
+Removed top 1 bits (of 3) from port B of cell tx_fine.$procmux$273_CMP0 ($eq).
+Removed top 1 bits (of 3) from port B of cell tx_fine.$procmux$285_CMP0 ($eq).
+Removed top 2 bits (of 3) from port B of cell tx_fine.$procmux$298_CMP0 ($eq).
+
+5.9. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \tx_fine..
+
+5.10. Executing MEMORY_COLLECT pass (generating $mem cells).
+
+5.11. Executing OPT pass (performing simple optimizations).
+
+5.11.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module tx_fine.
+
+5.11.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\tx_fine'.
+Computing hashes of 194 cells of `\tx_fine'.
+Finding duplicate cells in `\tx_fine'.
+Removed a total of 0 cells.
+
+5.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \tx_fine..
+
+5.11.4. Finished fast OPT passes.
+
+5.12. Executing SORT pass.
+
+5.13. Printing statistics.
+
+=== tx_fine ===
+
+        +----------Local Count, excluding submodules.
+        | 
+      189 wires
+      779 wire bits
+       76 public wires
+      305 public wire bits
+       17 ports
+       54 port bits
+      194 cells
+        3   $add
+       31   $adff
+        3   $and
+       12   $eq
+        1   $ge
+       31   $gt
+        1   $le
+        4   $logic_and
+        3   $logic_not
+       41   $mux
+        1   $ne
+       46   $not
+        3   $or
+        1   $pmux
+        2   $reduce_or
+        4   $scopeinfo
+        1   $sub
+        2   $xor
+        4   gf180mcu_fd_sc_mcu7t5v0__icgtp_1
+
+5.14. Executing CHECK pass (checking for obvious problems).
+Checking module tx_fine...
+Found and reported 0 problems.
+
+6. Executing MEMORY_MAP pass (converting memories to logic and flip-flops).
+
+7. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \tx_fine..
+
+8. Executing SPLITNETS pass (splitting up multi-bit signals).
+
+9. Executing JSON backend.
+
+-- Executing script file `in/gate.ys' --
+
+10. Executing Liberty frontend: in/cells.lib
+Ignoring cell gf180mcu_fd_sc_mcu7t5v0__icgtn_1 with missing function on output IQ3.
+Ignoring cell gf180mcu_fd_sc_mcu7t5v0__icgtn_2 with missing function on output IQ3.
+Ignoring cell gf180mcu_fd_sc_mcu7t5v0__icgtn_4 with missing function on output IQ3.
+Ignoring cell gf180mcu_fd_sc_mcu7t5v0__icgtp_1 with missing function on output IQ2.
+Ignoring cell gf180mcu_fd_sc_mcu7t5v0__icgtp_2 with missing function on output IQ2.
+Ignoring cell gf180mcu_fd_sc_mcu7t5v0__icgtp_4 with missing function on output IQ2.
+Imported 223 cell types from liberty file.
+<suppressed ~24 debug messages>
+
+11. Executing Verilog-2005 frontend: in/icg_bb.v
+Parsing Verilog input from `in/icg_bb.v' to AST representation.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__icgtp_1'.
+Successfully finished Verilog frontend.
+
+12. Executing Verilog-2005 frontend: gate.v
+Parsing Verilog input from `gate.v' to AST representation.
+Generating RTLIL representation for module `\tx_fine'.
+Successfully finished Verilog frontend.
+
+13. Executing HIERARCHY pass (managing design hierarchy).
+
+13.1. Analyzing design hierarchy..
+Top module:  \tx_fine
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__clkbuf_3
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__buf_8
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__buf_12
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__buf_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__buf_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__tiel
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__clkbuf_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__mux2_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__clkinv_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__clkbuf_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__inv_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__clkinv_8
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__inv_3
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__inv_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__dffrnq_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__dffsnq_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__dffrnq_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__tieh
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__dffnrnq_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__dffrnq_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__nand2_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__oai211_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__oai21_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__aoi21_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__nand3_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__aoi22_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__aoi222_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__oai221_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__aoi221_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__nand4_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__nor2_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__aoi211_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__and3_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__nor3_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__and2_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__or4_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__or2_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__nor4_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__clkinv_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__nor4_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__nand3_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__xor3_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__xnor2_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__xor2_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__oai32_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__aoi21_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__oai22_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__oai22_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__oai31_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__oai21_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__mux2_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__aoi21_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__and3_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__oai211_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__xor2_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__aoi211_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__oai21_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__nor3_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__and2_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__nor2_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__nand2_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__and2_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__or4_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__oai31_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__xnor2_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__or3_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__filltie
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__endcap
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__fill_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__fill_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__fillcap_8
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__fillcap_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__fillcap_16
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__fillcap_32
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__fillcap_64
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__antenna
+
+13.2. Analyzing design hierarchy..
+Top module:  \tx_fine
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__clkbuf_3
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__buf_8
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__buf_12
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__buf_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__buf_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__tiel
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__clkbuf_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__mux2_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__clkinv_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__clkbuf_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__inv_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__clkinv_8
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__inv_3
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__inv_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__dffrnq_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__dffsnq_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__dffrnq_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__tieh
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__dffnrnq_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__dffrnq_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__nand2_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__oai211_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__oai21_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__aoi21_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__nand3_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__aoi22_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__aoi222_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__oai221_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__aoi221_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__nand4_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__nor2_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__aoi211_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__and3_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__nor3_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__and2_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__or4_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__or2_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__nor4_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__clkinv_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__nor4_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__nand3_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__xor3_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__xnor2_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__xor2_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__oai32_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__aoi21_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__oai22_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__oai22_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__oai31_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__oai21_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__mux2_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__aoi21_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__and3_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__oai211_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__xor2_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__aoi211_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__oai21_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__nor3_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__and2_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__nor2_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__nand2_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__and2_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__or4_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__oai31_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__xnor2_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__or3_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__filltie
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__endcap
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__fill_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__fill_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__fillcap_8
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__fillcap_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__fillcap_16
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__fillcap_32
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__fillcap_64
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__antenna
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__xor3_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__xor3_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__xor2_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__xnor3_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__xnor3_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__xnor3_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__xnor2_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__sdffsnq_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__sdffsnq_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__sdffsnq_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__sdffrsnq_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__sdffrsnq_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__sdffrsnq_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__sdffrnq_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__sdffrnq_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__sdffrnq_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__sdffq_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__sdffq_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__sdffq_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__or4_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__or3_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__or3_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__or2_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__or2_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__oai222_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__oai222_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__oai222_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__oai221_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__oai221_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__oai211_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__oai33_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__oai33_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__oai33_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__oai32_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__oai32_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__oai31_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__oai22_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__nor4_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__nor3_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__nor2_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__nand4_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__nand4_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__nand3_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__nand2_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__mux4_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__mux4_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__mux4_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__mux2_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__latsnq_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__latsnq_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__latsnq_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__latrsnq_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__latrsnq_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__latrsnq_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__latrnq_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__latrnq_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__latrnq_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__latq_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__latq_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__latq_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__invz_16'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__invz_12'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__invz_8'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__invz_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__invz_3'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__invz_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__invz_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__inv_20'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__inv_16'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__inv_12'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__inv_8'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__inv_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__hold'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__fill_64'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__fill_32'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__fill_16'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__fill_8'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__fill_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dlyd_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dlyd_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dlyd_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dlyc_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dlyc_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dlyc_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dlyb_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dlyb_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dlyb_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dlya_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dlya_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dlya_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dffsnq_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dffsnq_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dffrsnq_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dffrsnq_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dffrsnq_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dffq_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dffq_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dffq_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dffnsnq_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dffnsnq_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dffnsnq_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dffnrsnq_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dffnrsnq_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dffnrsnq_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dffnrnq_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dffnrnq_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dffnq_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dffnq_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dffnq_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__clkinv_20'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__clkinv_16'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__clkinv_12'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__clkinv_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__clkinv_3'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__clkbuf_20'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__clkbuf_16'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__clkbuf_12'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__clkbuf_8'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__clkbuf_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__bufz_16'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__bufz_12'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__bufz_8'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__bufz_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__bufz_3'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__bufz_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__bufz_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__buf_20'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__buf_16'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__buf_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__buf_3'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__aoi222_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__aoi222_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__aoi221_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__aoi221_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__aoi211_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__aoi22_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__aoi22_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__and4_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__and4_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__and4_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__and3_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__addh_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__addh_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__addh_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__addf_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__addf_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__addf_1'.
+Removed 147 unused modules.
+
+14. Executing FLATTEN pass (flatten design).
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__dffrnq_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__oai21_4.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__oai21_2.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__oai21_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__tieh.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__nor4_2.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__nor4_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__xor2_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__nor3_2.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__nor3_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__nor2_2.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__dffnrnq_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__nor2_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__xor3_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__inv_4.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__inv_3.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__inv_2.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__clkinv_8.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__nand4_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__filltie.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__clkinv_2.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__clkinv_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__fillcap_64.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__fillcap_32.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__fillcap_16.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__fillcap_8.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__clkbuf_4.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__clkbuf_3.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__clkbuf_2.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__fillcap_4.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__oai221_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__nand3_2.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__nand3_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__oai211_4.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__nand2_2.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__fill_2.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__fill_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__endcap.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__nand2_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__buf_12.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__buf_8.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__or4_2.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__oai211_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__buf_2.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__buf_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__or4_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__mux2_4.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__aoi222_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__mux2_2.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__xor2_2.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__aoi221_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__aoi211_4.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__xnor2_2.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__aoi211_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__oai32_4.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__or3_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__aoi22_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__aoi21_4.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__aoi21_2.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__aoi21_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__antenna.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__xnor2_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__oai31_4.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__tiel.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__and3_4.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__oai31_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__and3_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__and2_4.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__and2_2.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__and2_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__dffsnq_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__or2_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__oai22_2.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__oai22_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__dffrnq_4.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__dffrnq_2.
+<suppressed ~821 debug messages>
+
+15. Executing Verilog-2005 frontend: in/icg_bb.v
+Parsing Verilog input from `in/icg_bb.v' to AST representation.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__icgtp_1'.
+Successfully finished Verilog frontend.
+
+16. Executing PREP pass.
+
+16.1. Executing HIERARCHY pass (managing design hierarchy).
+
+16.1.1. Analyzing design hierarchy..
+Top module:  \tx_fine
+
+16.1.2. Analyzing design hierarchy..
+Top module:  \tx_fine
+Removed 0 unused modules.
+
+16.2. Executing PROC pass (convert processes to netlists).
+
+16.2.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Cleaned up 0 empty switches.
+
+16.2.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).
+Removed a total of 0 dead cases.
+
+16.2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).
+Removed 0 redundant assignments.
+Promoted 0 assignments to connections.
+
+16.2.4. Executing PROC_INIT pass (extract init attributes).
+
+16.2.5. Executing PROC_ARST pass (detect async resets in processes).
+
+16.2.6. Executing PROC_ROM pass (convert switches to ROMs).
+Converted 0 switches.
+
+16.2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).
+
+16.2.8. Executing PROC_DLATCH pass (convert process syncs to latches).
+
+16.2.9. Executing PROC_DFF pass (convert process syncs to FFs).
+
+16.2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).
+
+16.2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Cleaned up 0 empty switches.
+
+16.2.12. Executing OPT_EXPR pass (perform const folding).
+Optimizing module tx_fine.
+<suppressed ~160 debug messages>
+
+16.3. Executing FUTURE pass.
+
+16.4. Executing OPT_EXPR pass (perform const folding).
+Optimizing module tx_fine.
+
+16.5. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \tx_fine..
+Removed 380 unused cells and 4031 unused wires.
+<suppressed ~382 debug messages>
+
+16.6. Executing CHECK pass (checking for obvious problems).
+Checking module tx_fine...
+Found and reported 0 problems.
+
+16.7. Executing OPT pass (performing simple optimizations).
+
+16.7.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module tx_fine.
+
+16.7.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\tx_fine'.
+Computing hashes of 3436 cells of `\tx_fine'.
+Finding duplicate cells in `\tx_fine'.
+Computing hashes of 2508 cells of `\tx_fine'.
+Finding duplicate cells in `\tx_fine'.
+Computing hashes of 2470 cells of `\tx_fine'.
+Finding duplicate cells in `\tx_fine'.
+Computing hashes of 2468 cells of `\tx_fine'.
+Finding duplicate cells in `\tx_fine'.
+Computing hashes of 2467 cells of `\tx_fine'.
+Finding duplicate cells in `\tx_fine'.
+<suppressed ~2907 debug messages>
+Removed a total of 969 cells.
+
+16.7.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \tx_fine..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Removed 0 multiplexer ports.
+
+16.7.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \tx_fine.
+Performed a total of 0 changes.
+
+16.7.5. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\tx_fine'.
+Computing hashes of 2467 cells of `\tx_fine'.
+Finding duplicate cells in `\tx_fine'.
+Removed a total of 0 cells.
+
+16.7.6. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \tx_fine..
+Removed 0 unused cells and 968 unused wires.
+<suppressed ~1 debug messages>
+
+16.7.7. Executing OPT_EXPR pass (perform const folding).
+Optimizing module tx_fine.
+
+16.7.8. Rerunning OPT passes. (Maybe there is more to do..)
+
+16.7.9. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \tx_fine..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Removed 0 multiplexer ports.
+
+16.7.10. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \tx_fine.
+Performed a total of 0 changes.
+
+16.7.11. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\tx_fine'.
+Computing hashes of 2467 cells of `\tx_fine'.
+Finding duplicate cells in `\tx_fine'.
+Removed a total of 0 cells.
+
+16.7.12. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \tx_fine..
+
+16.7.13. Executing OPT_EXPR pass (perform const folding).
+Optimizing module tx_fine.
+
+16.7.14. Finished fast OPT passes. (There is nothing left to do.)
+
+16.8. Executing WREDUCE pass (reducing word size of cells).
+
+16.9. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \tx_fine..
+
+16.10. Executing MEMORY_COLLECT pass (generating $mem cells).
+
+16.11. Executing OPT pass (performing simple optimizations).
+
+16.11.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module tx_fine.
+
+16.11.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\tx_fine'.
+Computing hashes of 2467 cells of `\tx_fine'.
+Finding duplicate cells in `\tx_fine'.
+Removed a total of 0 cells.
+
+16.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \tx_fine..
+
+16.11.4. Finished fast OPT passes.
+
+16.12. Executing SORT pass.
+
+16.13. Printing statistics.
+
+=== tx_fine ===
+
+        +----------Local Count, excluding submodules.
+        | 
+     1726 wires
+     1763 wire bits
+      751 public wires
+      788 public wire bits
+       17 ports
+       54 port bits
+     2467 cells
+      531   $_AND_
+      143   $_DFF_PP0_
+       27   $_DFF_PP1_
+      441   $_NOT_
+      454   $_OR_
+       46   $_XOR_
+      821   $scopeinfo
+        4   gf180mcu_fd_sc_mcu7t5v0__icgtp_1
+
+16.14. Executing CHECK pass (checking for obvious problems).
+Checking module tx_fine...
+Found and reported 0 problems.
+
+17. Executing JSON backend.
+
+End of script. Logfile hash: 9d058310ab, time: 0.41s, user: 0.35s, system: 0.09s, MEM: 84.27 MB peak
+Yosys 0.69 (git sha1 9f75ca1f9, Release, GNU /usr/bin/c++ 13.3.0)
+Time spent: 22% 10x read_verilog (0 sec), 22% 2x read_liberty (0 sec), ...

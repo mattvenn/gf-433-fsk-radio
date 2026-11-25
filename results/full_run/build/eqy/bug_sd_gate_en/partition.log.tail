@@ -1,0 +1,201 @@
+[tail: last 200 lines of 209344 bytes]
+Checking module gate.tx_fine.acc.0...
+Checking module gold.tx_fine.acc.0...
+Found and reported 0 problems.
+
+Writing partition 71 as tx_fine.
+  partition pi bit 0: \fsk <-> \fsk
+  partition pi bit 1: \ck <-> \ck
+  partition pi bit 2: \sclk <-> \sclk
+  partition pi bit 3: \mosi <-> \mosi
+  partition pi bit 4: \cs_n <-> \cs_n
+  partition pi bit 5: \clk <-> \clk
+  partition pi bit 6: \rst_n <-> \rst_n
+  partition mp bit 0: \s_cken[0] <-> \s_cken[0]
+  partition mp bit 1: \s_cken[1] <-> \s_cken[1]
+  partition mp bit 2: \g_en <-> \g_en
+  partition mp bit 3: \eff_q[7] <-> \eff_q[7]
+  partition mp bit 4: \eff_q[6] <-> \eff_q[6]
+  partition mp bit 5: \eff_q[5] <-> \eff_q[5]
+  partition mp bit 6: \eff_q[4] <-> \eff_q[4]
+  partition mp bit 7: \eff_q[3] <-> \eff_q[3]
+  partition mp bit 8: \eff_q[2] <-> \eff_q[2]
+  partition mp bit 9: \eff_q[1] <-> \eff_q[1]
+  partition mp bit 10: \eff_q[0] <-> \eff_q[0]
+  partition mp bit 11: \acc[7] <-> \acc[7]
+  partition mp bit 12: \acc[6] <-> \acc[6]
+  partition mp bit 13: \acc[5] <-> \acc[5]
+  partition mp bit 14: \acc[4] <-> \acc[4]
+  partition mp bit 15: \acc[3] <-> \acc[3]
+  partition mp bit 16: \acc[2] <-> \acc[2]
+  partition mp bit 17: \acc[1] <-> \acc[1]
+  partition mp bit 18: \clk_sd <-> \clk_sd
+  partition mp bit 19: \acc[0] <-> \acc[0]
+  partition mp bit 20: \g_sd.en <-> \g_sd.en
+  partition mp bit 21: \eff_int[9] <-> \eff_int[9]
+  partition mp bit 22: \eff_int[8] <-> \eff_int[8]
+  partition mp bit 23: \eff_int[7] <-> \eff_int[7]
+  partition mp bit 24: \eff_int[6] <-> \eff_int[6]
+  partition mp bit 25: \eff_int[5] <-> \eff_int[5]
+  partition mp bit 26: \eff_int[4] <-> \eff_int[4]
+  partition mp bit 27: \eff_int[3] <-> \eff_int[3]
+  partition mp bit 28: \eff_int[2] <-> \eff_int[2]
+  partition mp bit 29: \eff_int[1] <-> \eff_int[1]
+  partition mp bit 30: \eff_q[17] <-> \eff_q[17]
+  partition mp bit 31: \eff_q[16] <-> \eff_q[16]
+  partition mp bit 32: \eff_q[15] <-> \eff_q[15]
+  partition mp bit 33: \eff_q[14] <-> \eff_q[14]
+  partition mp bit 34: \eff_q[13] <-> \eff_q[13]
+  partition mp bit 35: \eff_q[12] <-> \eff_q[12]
+  partition mp bit 36: \eff_q[11] <-> \eff_q[11]
+  partition mp bit 37: \eff_q[10] <-> \eff_q[10]
+  partition mp bit 38: \eff_q[9] <-> \eff_q[9]
+  partition mp bit 39: \devx[11] <-> \devx[11]
+  partition mp bit 40: \devx[10] <-> \devx[10]
+  partition mp bit 41: \devx[9] <-> \devx[9]
+  partition mp bit 42: \devx[8] <-> \devx[8]
+  partition mp bit 43: \devx[7] <-> \devx[7]
+  partition mp bit 44: \devx[6] <-> \devx[6]
+  partition mp bit 45: \devx[5] <-> \devx[5]
+  partition mp bit 46: \devx[4] <-> \devx[4]
+  partition mp bit 47: \devx[3] <-> \devx[3]
+  partition mp bit 48: \devx[2] <-> \devx[2]
+  partition mp bit 49: \devx[1] <-> \devx[1]
+  partition mp bit 50: \devx[0] <-> \devx[0]
+  partition mp bit 51: \base[17] <-> \base[17]
+  partition mp bit 52: \base[16] <-> \base[16]
+  partition mp bit 53: \base[15] <-> \base[15]
+  partition mp bit 54: \base[14] <-> \base[14]
+  partition mp bit 55: \base[13] <-> \base[13]
+  partition mp bit 56: \base[12] <-> \base[12]
+  partition mp bit 57: \base[11] <-> \base[11]
+  partition mp bit 58: \base[10] <-> \base[10]
+  partition mp bit 59: \base[9] <-> \base[9]
+  partition mp bit 60: \base[8] <-> \base[8]
+  partition mp bit 61: \base[7] <-> \base[7]
+  partition mp bit 62: \base[6] <-> \base[6]
+  partition mp bit 63: \base[5] <-> \base[5]
+  partition mp bit 64: \base[4] <-> \base[4]
+  partition mp bit 65: \base[3] <-> \base[3]
+  partition mp bit 66: \base[2] <-> \base[2]
+  partition mp bit 67: \base[1] <-> \base[1]
+  partition mp bit 68: \base[0] <-> \base[0]
+  partition mp bit 69: \s_fsk[2] <-> \s_fsk[2]
+  partition mp bit 70: \s_fsk[0] <-> \s_fsk[0]
+  partition mp bit 71: \s_fsk[1] <-> \s_fsk[1]
+  partition mp bit 72: \g_eff.en <-> \g_eff.en
+  partition mp bit 73: \clk_eff <-> \clk_eff
+  partition mp bit 74: \eff_q[8] <-> \eff_q[8]
+  partition mp bit 75: \g_dec.en <-> \g_dec.en
+  partition mp bit 76: \clk_dec <-> \clk_dec
+  partition mp bit 77: \eff_int[0] <-> \eff_int[0]
+  partition mp bit 78: \rd[10] <-> \rd[10]
+  partition mp bit 79: \rd[9] <-> \rd[9]
+  partition mp bit 80: \rd[8] <-> \rd[8]
+  partition mp bit 81: \rd[7] <-> \rd[7]
+  partition mp bit 82: \rd[6] <-> \rd[6]
+  partition mp bit 83: \rd[5] <-> \rd[5]
+  partition mp bit 84: \rd[4] <-> \rd[4]
+  partition mp bit 85: \rd[3] <-> \rd[3]
+  partition mp bit 86: \rd[2] <-> \rd[2]
+  partition mp bit 87: \rd[1] <-> \rd[1]
+  partition mp bit 88: \rd[0] <-> \rd[0]
+  partition mp bit 89: \rd[11] <-> \rd[11]
+  partition mp bit 90: \rip[0].q <-> \rip[0].q
+  partition mp bit 91: \rip[2].q <-> \rip[2].q
+  partition mp bit 92: \rip[4].q <-> \rip[4].q
+  partition mp bit 93: \rip[5].q <-> \rip[5].q
+  partition mp bit 94: \r_ck[0] <-> \r_ck[0]
+  partition mp bit 95: \r_ck[1] <-> \r_ck[1]
+  partition mp bit 96: \rip[6].q <-> \rip[6].q
+  partition mp bit 97: \rnw <-> \rnw
+  partition mp bit 98: \bitcnt[4] <-> \bitcnt[4]
+  partition mp bit 99: \bitcnt[3] <-> \bitcnt[3]
+  partition mp bit 100: \bitcnt[2] <-> \bitcnt[2]
+  partition mp bit 101: \bitcnt[1] <-> \bitcnt[1]
+  partition mp bit 102: \bitcnt[0] <-> \bitcnt[0]
+  partition mp bit 103: \s_sclk[2] <-> \s_sclk[2]
+  partition mp bit 104: \s_sclk[0] <-> \s_sclk[0]
+  partition mp bit 105: \s_sclk[1] <-> \s_sclk[1]
+  partition mp bit 106: \sr[14] <-> \sr[14]
+  partition mp bit 107: \sr[13] <-> \sr[13]
+  partition mp bit 108: \sr[12] <-> \sr[12]
+  partition mp bit 109: \sr[11] <-> \sr[11]
+  partition mp bit 110: \sr[10] <-> \sr[10]
+  partition mp bit 111: \sr[9] <-> \sr[9]
+  partition mp bit 112: \sr[8] <-> \sr[8]
+  partition mp bit 113: \sr[7] <-> \sr[7]
+  partition mp bit 114: \sr[6] <-> \sr[6]
+  partition mp bit 115: \sr[5] <-> \sr[5]
+  partition mp bit 116: \sr[4] <-> \sr[4]
+  partition mp bit 117: \sr[3] <-> \sr[3]
+  partition mp bit 118: \sr[2] <-> \sr[2]
+  partition mp bit 119: \sr[1] <-> \sr[1]
+  partition mp bit 120: \sr[0] <-> \sr[0]
+  partition mp bit 121: \s_mosi[0] <-> \s_mosi[0]
+  partition mp bit 122: \s_mosi[1] <-> \s_mosi[1]
+  partition mp bit 123: \fsk_inv <-> \fsk_inv
+  partition mp bit 124: \fsk_en <-> \fsk_en
+  partition mp bit 125: \ck_en <-> \ck_en
+  partition mp bit 126: \s_cs[2] <-> \s_cs[2]
+  partition mp bit 127: \s_cs[0] <-> \s_cs[0]
+  partition mp bit 128: \s_cs[1] <-> \s_cs[1]
+  partition mp bit 129: \g_spi.en <-> \en_spi
+  partition mp bit 130: \g_spi.clk <-> \delaynet_3_clk
+  partition mp bit 131: \clk_spi <-> \clk_spi
+  partition mp bit 132: \sd_en <-> \sd_en
+  partition po bit 0: \ck_o <-> \ck_o
+  partition po bit 1: \dac_bn [0] <-> \dac_bn [0]
+  partition po bit 2: \dac_bn [1] <-> \dac_bn [1]
+  partition po bit 3: \dac_bn [2] <-> \dac_bn [2]
+  partition po bit 4: \dac_bn [3] <-> \dac_bn [3]
+  partition po bit 5: \dac_bn [4] <-> \dac_bn [4]
+  partition po bit 6: \dac_sdn <-> \dac_sdn
+  partition po bit 7: \dac_tn [0] <-> \dac_tn [0]
+  partition po bit 8: \dac_tn [1] <-> \dac_tn [1]
+  partition po bit 9: \dac_tn [2] <-> \dac_tn [2]
+  partition po bit 10: \dac_tn [3] <-> \dac_tn [3]
+  partition po bit 11: \dac_tn [4] <-> \dac_tn [4]
+  partition po bit 12: \dac_tn [5] <-> \dac_tn [5]
+  partition po bit 13: \dac_tn [6] <-> \dac_tn [6]
+  partition po bit 14: \dac_tn [7] <-> \dac_tn [7]
+  partition po bit 15: \dac_tn [8] <-> \dac_tn [8]
+  partition po bit 16: \dac_tn [9] <-> \dac_tn [9]
+  partition po bit 17: \dac_tn [10] <-> \dac_tn [10]
+  partition po bit 18: \dac_tn [11] <-> \dac_tn [11]
+  partition po bit 19: \dac_tn [12] <-> \dac_tn [12]
+  partition po bit 20: \dac_tn [13] <-> \dac_tn [13]
+  partition po bit 21: \dac_tn [14] <-> \dac_tn [14]
+  partition po bit 22: \dac_tn [15] <-> \dac_tn [15]
+  partition po bit 23: \dac_tn [16] <-> \dac_tn [16]
+  partition po bit 24: \dac_tn [17] <-> \dac_tn [17]
+  partition po bit 25: \dac_tn [18] <-> \dac_tn [18]
+  partition po bit 26: \dac_tn [19] <-> \dac_tn [19]
+  partition po bit 27: \dac_tn [20] <-> \dac_tn [20]
+  partition po bit 28: \dac_tn [21] <-> \dac_tn [21]
+  partition po bit 29: \dac_tn [22] <-> \dac_tn [22]
+  partition po bit 30: \dac_tn [23] <-> \dac_tn [23]
+  partition po bit 31: \dac_tn [24] <-> \dac_tn [24]
+  partition po bit 32: \dac_tn [25] <-> \dac_tn [25]
+  partition po bit 33: \dac_tn [26] <-> \dac_tn [26]
+  partition po bit 34: \dac_tn [27] <-> \dac_tn [27]
+  partition po bit 35: \dac_tn [28] <-> \dac_tn [28]
+  partition po bit 36: \dac_tn [29] <-> \dac_tn [29]
+  partition po bit 37: \dac_tn [30] <-> \dac_tn [30]
+  partition po bit 38: \dbg_sel [0] <-> \dbg_sel [0]
+  partition po bit 39: \dbg_sel [1] <-> \dbg_sel [1]
+  partition po bit 40: \dbg_sel [2] <-> \dbg_sel [2]
+  partition po bit 41: \dbg_sel [3] <-> \dbg_sel [3]
+  partition po bit 42: \div1024 <-> \div1024
+  partition po bit 43: \div16 <-> \div16
+  partition po bit 44: \div64 <-> \div64
+  partition po bit 45: \miso <-> \miso
+  partition po bit 46: \rx_en <-> \rx_en
+
+3.2.147. Executing RTLIL backend.
+Output filename: modules/tx_fine.il
+<suppressed ~12588 debug messages>
+
+End of script. Logfile hash: cc29e0550b, time: 0.15s, user: 0.15s, system: 0.02s, MEM: 44.51 MB peak
+Yosys 0.69 (git sha1 9f75ca1f9, Release, GNU /usr/bin/c++ 13.3.0)
+Time spent: 71% 1x eqy_partition (0 sec), 10% 73x write_rtlil (0 sec), ...

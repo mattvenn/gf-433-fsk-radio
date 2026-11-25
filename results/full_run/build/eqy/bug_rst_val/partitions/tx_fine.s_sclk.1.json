@@ -1,0 +1,65 @@
+{
+  "partition": {
+    "index": 2,
+    "name": "tx_fine.s_sclk.1",
+    "inbits": {
+      "g_spi.clk": [
+        0
+      ],
+      "rst_n": [
+        0
+      ],
+      "sclk": [
+        0
+      ]
+    },
+    "outbits": {
+      "s_sclk[0]": [
+        0
+      ],
+      "s_sclk[1]": [
+        0
+      ],
+      "s_sclk[2]": [
+        0
+      ]
+    },
+    "crossbits": {}
+  },
+  "gold_module": {
+    "name": "gold.tx_fine.s_sclk.1",
+    "internal": {},
+    "unused": {},
+    "cellcount": 1,
+    "bitcount": 6
+  },
+  "gate_module": {
+    "name": "gold.tx_fine.s_sclk.1",
+    "internal": {
+      "net4": [
+        0
+      ],
+      "net5": [
+        0
+      ],
+      "net57": [
+        0
+      ],
+      "net58": [
+        0
+      ],
+      "net59": [
+        0
+      ],
+      "net60": [
+        0
+      ],
+      "net61": [
+        0
+      ]
+    },
+    "unused": {},
+    "cellcount": 11,
+    "bitcount": 14
+  }
+}

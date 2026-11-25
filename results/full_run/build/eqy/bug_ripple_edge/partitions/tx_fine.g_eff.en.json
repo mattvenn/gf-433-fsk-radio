@@ -1,0 +1,41 @@
+{
+  "partition": {
+    "index": 20,
+    "name": "tx_fine.g_eff.en",
+    "inbits": {
+      "g_spi.en": [
+        0
+      ],
+      "s_fsk[1]": [
+        0
+      ],
+      "s_fsk[2]": [
+        0
+      ]
+    },
+    "outbits": {
+      "g_eff.en": [
+        0
+      ]
+    },
+    "crossbits": {}
+  },
+  "gold_module": {
+    "name": "gold.tx_fine.g_eff.en",
+    "internal": {},
+    "unused": {},
+    "cellcount": 2,
+    "bitcount": 5
+  },
+  "gate_module": {
+    "name": "gold.tx_fine.g_eff.en",
+    "internal": {
+      "_0175_": [
+        0
+      ]
+    },
+    "unused": {},
+    "cellcount": 8,
+    "bitcount": 11
+  }
+}

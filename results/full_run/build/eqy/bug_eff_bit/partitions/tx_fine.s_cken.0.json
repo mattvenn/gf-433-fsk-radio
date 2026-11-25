@@ -1,0 +1,66 @@
+{
+  "partition": {
+    "index": 6,
+    "name": "tx_fine.s_cken.0",
+    "inbits": {
+      "ck": [
+        0
+      ],
+      "ck_en": [
+        0
+      ],
+      "r_ck[1]": [
+        0
+      ]
+    },
+    "outbits": {
+      "s_cken[0]": [
+        0
+      ],
+      "s_cken[1]": [
+        0
+      ]
+    },
+    "crossbits": {}
+  },
+  "gold_module": {
+    "name": "gold.tx_fine.s_cken.0",
+    "internal": {
+      "rst_ck_n": [
+        0
+      ],
+      "tck[0]": [
+        0
+      ]
+    },
+    "unused": {},
+    "cellcount": 3,
+    "bitcount": 7
+  },
+  "gate_module": {
+    "name": "gold.tx_fine.s_cken.0",
+    "internal": {
+      "ck_regs": [
+        0
+      ],
+      "clknet_0_ck": [
+        0
+      ],
+      "clknet_0_ck_regs": [
+        0
+      ],
+      "clknet_1_0__leaf_ck": [
+        0
+      ],
+      "clknet_1_0__leaf_ck_regs": [
+        0
+      ],
+      "clknet_1_1__leaf_ck_regs": [
+        0
+      ]
+    },
+    "unused": {},
+    "cellcount": 9,
+    "bitcount": 12
+  }
+}

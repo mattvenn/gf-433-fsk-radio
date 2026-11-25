@@ -1,0 +1,142 @@
+{
+  "partition": {
+    "index": 16,
+    "name": "tx_fine.miso",
+    "inbits": {
+      "bitcnt[0]": [
+        0
+      ],
+      "bitcnt[1]": [
+        0
+      ],
+      "bitcnt[2]": [
+        0
+      ],
+      "bitcnt[3]": [
+        0
+      ],
+      "bitcnt[4]": [
+        0
+      ],
+      "clk_spi": [
+        0
+      ],
+      "rd[11]": [
+        0
+      ],
+      "rnw": [
+        0
+      ],
+      "rst_n": [
+        0
+      ],
+      "s_cs[1]": [
+        0
+      ],
+      "s_sclk[1]": [
+        0
+      ],
+      "s_sclk[2]": [
+        0
+      ]
+    },
+    "outbits": {
+      "miso": [
+        0
+      ]
+    },
+    "crossbits": {}
+  },
+  "gold_module": {
+    "name": "gold.tx_fine.miso",
+    "internal": {
+      "g_spi.gclk": [
+        0
+      ],
+      "sck_fall": [
+        0
+      ]
+    },
+    "unused": {},
+    "cellcount": 11,
+    "bitcount": 23
+  },
+  "gate_module": {
+    "name": "gold.tx_fine.miso",
+    "internal": {
+      "_0053_": [
+        0
+      ],
+      "_0370_": [
+        0
+      ],
+      "_0371_": [
+        0
+      ],
+      "_0372_": [
+        0
+      ],
+      "_0373_": [
+        0
+      ],
+      "clknet_0_clk_spi": [
+        0
+      ],
+      "clknet_3_0__leaf_clk_spi": [
+        0
+      ],
+      "clknet_3_1__leaf_clk_spi": [
+        0
+      ],
+      "clknet_3_2__leaf_clk_spi": [
+        0
+      ],
+      "clknet_3_3__leaf_clk_spi": [
+        0
+      ],
+      "clknet_3_4__leaf_clk_spi": [
+        0
+      ],
+      "clknet_3_5__leaf_clk_spi": [
+        0
+      ],
+      "clknet_3_6__leaf_clk_spi": [
+        0
+      ],
+      "clknet_3_7__leaf_clk_spi": [
+        0
+      ],
+      "net4": [
+        0
+      ],
+      "net51": [
+        0
+      ],
+      "net57": [
+        0
+      ],
+      "net58": [
+        0
+      ],
+      "net59": [
+        0
+      ],
+      "net60": [
+        0
+      ],
+      "net61": [
+        0
+      ]
+    },
+    "unused": {
+      "bitcnt[0]": [
+        0
+      ],
+      "bitcnt[1]": [
+        0
+      ]
+    },
+    "cellcount": 39,
+    "bitcount": 51
+  }
+}

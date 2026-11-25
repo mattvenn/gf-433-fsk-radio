@@ -1,0 +1,619 @@
+
+ /----------------------------------------------------------------------------\
+ |  yosys -- Yosys Open SYnthesis Suite                                       |
+ |  Copyright (C) 2012 - 2026  Claire Xenia Wolf <claire@yosyshq.com>         |
+ |  Distributed under an ISC-like license, type "license" to see terms        |
+ \----------------------------------------------------------------------------/
+ Yosys 0.69 (git sha1 9f75ca1f9, Release, GNU /usr/bin/c++ 13.3.0)
+
+-- Executing script file `bug_sd_gate_en/gate.ys' --
+
+-- Executing script file `in/gate.ys' --
+
+1. Executing Liberty frontend: in/cells.lib
+Ignoring cell gf180mcu_fd_sc_mcu7t5v0__icgtn_1 with missing function on output IQ3.
+Ignoring cell gf180mcu_fd_sc_mcu7t5v0__icgtn_2 with missing function on output IQ3.
+Ignoring cell gf180mcu_fd_sc_mcu7t5v0__icgtn_4 with missing function on output IQ3.
+Ignoring cell gf180mcu_fd_sc_mcu7t5v0__icgtp_1 with missing function on output IQ2.
+Ignoring cell gf180mcu_fd_sc_mcu7t5v0__icgtp_2 with missing function on output IQ2.
+Ignoring cell gf180mcu_fd_sc_mcu7t5v0__icgtp_4 with missing function on output IQ2.
+Imported 223 cell types from liberty file.
+<suppressed ~24 debug messages>
+
+2. Executing Verilog-2005 frontend: in/icg_bb.v
+Parsing Verilog input from `in/icg_bb.v' to AST representation.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__icgtp_1'.
+Successfully finished Verilog frontend.
+
+3. Executing Verilog-2005 frontend: gate.v
+Parsing Verilog input from `gate.v' to AST representation.
+Generating RTLIL representation for module `\tx_fine'.
+Successfully finished Verilog frontend.
+
+4. Executing HIERARCHY pass (managing design hierarchy).
+
+4.1. Analyzing design hierarchy..
+Top module:  \tx_fine
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__clkbuf_3
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__buf_8
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__buf_12
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__buf_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__buf_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__tiel
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__clkbuf_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__mux2_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__clkinv_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__clkbuf_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__inv_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__clkinv_8
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__inv_3
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__inv_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__dffrnq_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__dffsnq_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__dffrnq_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__tieh
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__dffnrnq_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__dffrnq_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__nand2_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__oai211_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__oai21_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__aoi21_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__nand3_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__aoi22_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__aoi222_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__oai221_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__aoi221_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__nand4_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__nor2_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__aoi211_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__and3_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__nor3_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__and2_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__or4_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__or2_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__nor4_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__clkinv_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__nor4_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__nand3_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__xor3_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__xnor2_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__xor2_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__oai32_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__aoi21_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__oai22_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__oai22_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__oai31_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__oai21_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__mux2_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__aoi21_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__and3_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__oai211_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__xor2_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__aoi211_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__oai21_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__nor3_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__and2_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__nor2_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__nand2_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__and2_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__or4_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__oai31_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__xnor2_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__or3_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__filltie
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__endcap
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__fill_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__fill_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__fillcap_8
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__fillcap_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__fillcap_16
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__fillcap_32
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__fillcap_64
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__antenna
+
+4.2. Analyzing design hierarchy..
+Top module:  \tx_fine
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__clkbuf_3
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__buf_8
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__buf_12
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__buf_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__buf_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__tiel
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__clkbuf_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__mux2_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__clkinv_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__clkbuf_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__inv_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__clkinv_8
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__inv_3
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__inv_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__dffrnq_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__dffsnq_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__dffrnq_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__tieh
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__dffnrnq_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__dffrnq_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__nand2_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__oai211_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__oai21_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__aoi21_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__nand3_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__aoi22_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__aoi222_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__oai221_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__aoi221_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__nand4_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__nor2_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__aoi211_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__and3_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__nor3_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__and2_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__or4_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__or2_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__nor4_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__clkinv_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__nor4_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__nand3_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__xor3_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__xnor2_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__xor2_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__oai32_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__aoi21_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__oai22_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__oai22_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__oai31_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__oai21_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__mux2_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__aoi21_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__and3_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__oai211_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__xor2_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__aoi211_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__oai21_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__nor3_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__and2_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__nor2_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__nand2_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__and2_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__or4_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__oai31_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__xnor2_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__or3_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__filltie
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__endcap
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__fill_1
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__fill_2
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__fillcap_8
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__fillcap_4
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__fillcap_16
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__fillcap_32
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__fillcap_64
+Used module:     \gf180mcu_fd_sc_mcu7t5v0__antenna
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__xor3_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__xor3_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__xor2_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__xnor3_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__xnor3_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__xnor3_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__xnor2_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__sdffsnq_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__sdffsnq_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__sdffsnq_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__sdffrsnq_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__sdffrsnq_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__sdffrsnq_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__sdffrnq_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__sdffrnq_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__sdffrnq_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__sdffq_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__sdffq_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__sdffq_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__or4_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__or3_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__or3_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__or2_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__or2_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__oai222_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__oai222_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__oai222_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__oai221_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__oai221_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__oai211_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__oai33_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__oai33_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__oai33_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__oai32_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__oai32_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__oai31_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__oai22_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__nor4_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__nor3_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__nor2_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__nand4_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__nand4_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__nand3_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__nand2_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__mux4_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__mux4_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__mux4_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__mux2_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__latsnq_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__latsnq_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__latsnq_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__latrsnq_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__latrsnq_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__latrsnq_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__latrnq_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__latrnq_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__latrnq_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__latq_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__latq_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__latq_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__invz_16'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__invz_12'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__invz_8'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__invz_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__invz_3'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__invz_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__invz_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__inv_20'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__inv_16'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__inv_12'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__inv_8'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__inv_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__hold'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__fill_64'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__fill_32'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__fill_16'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__fill_8'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__fill_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dlyd_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dlyd_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dlyd_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dlyc_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dlyc_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dlyc_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dlyb_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dlyb_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dlyb_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dlya_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dlya_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dlya_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dffsnq_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dffsnq_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dffrsnq_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dffrsnq_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dffrsnq_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dffq_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dffq_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dffq_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dffnsnq_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dffnsnq_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dffnsnq_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dffnrsnq_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dffnrsnq_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dffnrsnq_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dffnrnq_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dffnrnq_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dffnq_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dffnq_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__dffnq_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__clkinv_20'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__clkinv_16'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__clkinv_12'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__clkinv_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__clkinv_3'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__clkbuf_20'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__clkbuf_16'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__clkbuf_12'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__clkbuf_8'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__clkbuf_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__bufz_16'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__bufz_12'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__bufz_8'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__bufz_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__bufz_3'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__bufz_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__bufz_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__buf_20'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__buf_16'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__buf_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__buf_3'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__aoi222_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__aoi222_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__aoi221_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__aoi221_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__aoi211_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__aoi22_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__aoi22_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__and4_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__and4_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__and4_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__and3_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__addh_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__addh_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__addh_1'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__addf_4'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__addf_2'.
+Removing unused module `\gf180mcu_fd_sc_mcu7t5v0__addf_1'.
+Removed 147 unused modules.
+
+5. Executing FLATTEN pass (flatten design).
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__dffrnq_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__oai21_4.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__oai21_2.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__oai21_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__tieh.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__nor4_2.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__nor4_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__xor2_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__nor3_2.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__nor3_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__nor2_2.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__dffnrnq_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__nor2_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__xor3_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__inv_4.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__inv_3.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__inv_2.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__clkinv_8.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__nand4_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__filltie.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__clkinv_2.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__clkinv_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__fillcap_64.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__fillcap_32.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__fillcap_16.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__fillcap_8.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__clkbuf_4.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__clkbuf_3.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__clkbuf_2.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__fillcap_4.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__oai221_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__nand3_2.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__nand3_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__oai211_4.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__nand2_2.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__fill_2.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__fill_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__endcap.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__nand2_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__buf_12.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__buf_8.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__or4_2.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__oai211_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__buf_2.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__buf_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__or4_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__mux2_4.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__aoi222_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__mux2_2.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__xor2_2.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__aoi221_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__aoi211_4.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__xnor2_2.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__aoi211_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__oai32_4.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__or3_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__aoi22_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__aoi21_4.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__aoi21_2.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__aoi21_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__antenna.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__xnor2_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__oai31_4.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__tiel.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__and3_4.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__oai31_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__and3_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__and2_4.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__and2_2.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__and2_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__dffsnq_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__or2_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__oai22_2.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__oai22_1.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__dffrnq_4.
+Deleting now unused module gf180mcu_fd_sc_mcu7t5v0__dffrnq_2.
+<suppressed ~821 debug messages>
+
+6. Executing Verilog-2005 frontend: in/icg_bb.v
+Parsing Verilog input from `in/icg_bb.v' to AST representation.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__icgtp_1'.
+Successfully finished Verilog frontend.
+
+7. Executing PREP pass.
+
+7.1. Executing HIERARCHY pass (managing design hierarchy).
+
+7.1.1. Analyzing design hierarchy..
+Top module:  \tx_fine
+
+7.1.2. Analyzing design hierarchy..
+Top module:  \tx_fine
+Removed 0 unused modules.
+
+7.2. Executing PROC pass (convert processes to netlists).
+
+7.2.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Cleaned up 0 empty switches.
+
+7.2.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).
+Removed a total of 0 dead cases.
+
+7.2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).
+Removed 0 redundant assignments.
+Promoted 0 assignments to connections.
+
+7.2.4. Executing PROC_INIT pass (extract init attributes).
+
+7.2.5. Executing PROC_ARST pass (detect async resets in processes).
+
+7.2.6. Executing PROC_ROM pass (convert switches to ROMs).
+Converted 0 switches.
+
+7.2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).
+
+7.2.8. Executing PROC_DLATCH pass (convert process syncs to latches).
+
+7.2.9. Executing PROC_DFF pass (convert process syncs to FFs).
+
+7.2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).
+
+7.2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Cleaned up 0 empty switches.
+
+7.2.12. Executing OPT_EXPR pass (perform const folding).
+Optimizing module tx_fine.
+<suppressed ~160 debug messages>
+
+7.3. Executing FUTURE pass.
+
+7.4. Executing OPT_EXPR pass (perform const folding).
+Optimizing module tx_fine.
+
+7.5. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \tx_fine..
+Removed 380 unused cells and 4031 unused wires.
+<suppressed ~382 debug messages>
+
+7.6. Executing CHECK pass (checking for obvious problems).
+Checking module tx_fine...
+Found and reported 0 problems.
+
+7.7. Executing OPT pass (performing simple optimizations).
+
+7.7.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module tx_fine.
+
+7.7.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\tx_fine'.
+Computing hashes of 3438 cells of `\tx_fine'.
+Finding duplicate cells in `\tx_fine'.
+Computing hashes of 2509 cells of `\tx_fine'.
+Finding duplicate cells in `\tx_fine'.
+Computing hashes of 2471 cells of `\tx_fine'.
+Finding duplicate cells in `\tx_fine'.
+Computing hashes of 2469 cells of `\tx_fine'.
+Finding duplicate cells in `\tx_fine'.
+Computing hashes of 2468 cells of `\tx_fine'.
+Finding duplicate cells in `\tx_fine'.
+<suppressed ~2910 debug messages>
+Removed a total of 970 cells.
+
+7.7.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \tx_fine..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Removed 0 multiplexer ports.
+
+7.7.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \tx_fine.
+Performed a total of 0 changes.
+
+7.7.5. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\tx_fine'.
+Computing hashes of 2468 cells of `\tx_fine'.
+Finding duplicate cells in `\tx_fine'.
+Removed a total of 0 cells.
+
+7.7.6. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \tx_fine..
+Removed 0 unused cells and 969 unused wires.
+<suppressed ~1 debug messages>
+
+7.7.7. Executing OPT_EXPR pass (perform const folding).
+Optimizing module tx_fine.
+
+7.7.8. Rerunning OPT passes. (Maybe there is more to do..)
+
+7.7.9. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \tx_fine..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Removed 0 multiplexer ports.
+
+7.7.10. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \tx_fine.
+Performed a total of 0 changes.
+
+7.7.11. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\tx_fine'.
+Computing hashes of 2468 cells of `\tx_fine'.
+Finding duplicate cells in `\tx_fine'.
+Removed a total of 0 cells.
+
+7.7.12. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \tx_fine..
+
+7.7.13. Executing OPT_EXPR pass (perform const folding).
+Optimizing module tx_fine.
+
+7.7.14. Finished fast OPT passes. (There is nothing left to do.)
+
+7.8. Executing WREDUCE pass (reducing word size of cells).
+
+7.9. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \tx_fine..
+
+7.10. Executing MEMORY_COLLECT pass (generating $mem cells).
+
+7.11. Executing OPT pass (performing simple optimizations).
+
+7.11.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module tx_fine.
+
+7.11.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\tx_fine'.
+Computing hashes of 2468 cells of `\tx_fine'.
+Finding duplicate cells in `\tx_fine'.
+Removed a total of 0 cells.
+
+7.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \tx_fine..
+
+7.11.4. Finished fast OPT passes.
+
+7.12. Executing SORT pass.
+
+7.13. Printing statistics.
+
+=== tx_fine ===
+
+        +----------Local Count, excluding submodules.
+        | 
+     1727 wires
+     1764 wire bits
+      751 public wires
+      788 public wire bits
+       17 ports
+       54 port bits
+     2468 cells
+      532   $_AND_
+      143   $_DFF_PP0_
+       27   $_DFF_PP1_
+      441   $_NOT_
+      454   $_OR_
+       46   $_XOR_
+      821   $scopeinfo
+        4   gf180mcu_fd_sc_mcu7t5v0__icgtp_1
+
+7.14. Executing CHECK pass (checking for obvious problems).
+Checking module tx_fine...
+Found and reported 0 problems.
+
+8. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \tx_fine..
+
+9. Executing CHECK pass (checking for obvious problems).
+Checking module tx_fine...
+Found and reported 0 problems.
+
+10. Executing SETUNDEF pass (replace undef values with defined constants).
+
+11. Executing RTLIL backend.
+Output filename: bug_sd_gate_en/gate.il
+
+End of script. Logfile hash: 946b2049db, time: 0.38s, user: 0.36s, system: 0.06s, MEM: 83.50 MB peak
+Yosys 0.69 (git sha1 9f75ca1f9, Release, GNU /usr/bin/c++ 13.3.0)
+Time spent: 24% 2x read_liberty (0 sec), 18% 6x read_verilog (0 sec), ...

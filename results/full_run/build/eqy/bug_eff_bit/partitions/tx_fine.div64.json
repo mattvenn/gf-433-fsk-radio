@@ -1,0 +1,57 @@
+{
+  "partition": {
+    "index": 27,
+    "name": "tx_fine.div64",
+    "inbits": {
+      "r_ck[1]": [
+        0
+      ],
+      "rip[2].q": [
+        0
+      ]
+    },
+    "outbits": {
+      "div64": [
+        0
+      ]
+    },
+    "crossbits": {}
+  },
+  "gold_module": {
+    "name": "gold.tx_fine.div64",
+    "internal": {
+      "rip[3].q": [
+        0
+      ],
+      "rst_ck_n": [
+        0
+      ],
+      "tck[3]": [
+        0
+      ],
+      "tck[4]": [
+        0
+      ]
+    },
+    "unused": {},
+    "cellcount": 6,
+    "bitcount": 8
+  },
+  "gate_module": {
+    "name": "gold.tx_fine.div64",
+    "internal": {
+      "_0047_": [
+        0
+      ],
+      "_0048_": [
+        0
+      ],
+      "net50": [
+        0
+      ]
+    },
+    "unused": {},
+    "cellcount": 5,
+    "bitcount": 7
+  }
+}

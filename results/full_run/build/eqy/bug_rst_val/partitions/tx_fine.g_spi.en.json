@@ -1,0 +1,41 @@
+{
+  "partition": {
+    "index": 17,
+    "name": "tx_fine.g_spi.en",
+    "inbits": {
+      "s_cs[1]": [
+        0
+      ],
+      "s_cs[2]": [
+        0
+      ]
+    },
+    "outbits": {
+      "g_spi.en": [
+        0
+      ]
+    },
+    "crossbits": {}
+  },
+  "gold_module": {
+    "name": "gold.tx_fine.g_spi.en",
+    "internal": {
+      "en_spi": [
+        0
+      ],
+      "sel": [
+        0
+      ]
+    },
+    "unused": {},
+    "cellcount": 4,
+    "bitcount": 6
+  },
+  "gate_module": {
+    "name": "gold.tx_fine.g_spi.en",
+    "internal": {},
+    "unused": {},
+    "cellcount": 3,
+    "bitcount": 5
+  }
+}

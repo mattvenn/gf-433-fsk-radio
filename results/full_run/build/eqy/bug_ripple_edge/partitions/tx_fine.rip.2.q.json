@@ -1,0 +1,51 @@
+{
+  "partition": {
+    "index": 12,
+    "name": "tx_fine.rip.2.q",
+    "inbits": {
+      "div16": [
+        0
+      ],
+      "r_ck[1]": [
+        0
+      ]
+    },
+    "outbits": {
+      "rip[2].q": [
+        0
+      ]
+    },
+    "crossbits": {}
+  },
+  "gold_module": {
+    "name": "gold.tx_fine.rip.2.q",
+    "internal": {
+      "rst_ck_n": [
+        0
+      ],
+      "tck[3]": [
+        0
+      ]
+    },
+    "unused": {},
+    "cellcount": 4,
+    "bitcount": 6
+  },
+  "gate_module": {
+    "name": "gold.tx_fine.rip.2.q",
+    "internal": {
+      "_0046_": [
+        0
+      ],
+      "_0047_": [
+        0
+      ],
+      "net49": [
+        0
+      ]
+    },
+    "unused": {},
+    "cellcount": 5,
+    "bitcount": 7
+  }
+}

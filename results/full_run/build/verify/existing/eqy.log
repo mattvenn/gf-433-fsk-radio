@@ -1,0 +1,31 @@
+nl: PASS, 71/71 partitions proven, 2 s (/foss/designs/gf-433-fsk-radio/build/eqy/nl.log)
+  gold: 171 flop bits, 170 with a name in the netlist; 4 clock gates; 145 names matched; combinational outputs (amended): ck_o
+  clocks: PASS, 170 flop output names on both sides; same clock source, edge and reset on 170; 0 mismatched; sources {'neg ck': 1, 'neg div16': 1, 'neg div64': 1, 'neg rip[0].q': 1, 'neg rip[2].q': 1, 'neg rip[4].q': 1, 'neg rip[5].q': 1, 'neg rip[6].q': 1, 'pos ck': 5, 'pos clk': 11, 'pos g_dec.icg': 46, 'pos g_eff.icg': 18, 'pos g_sd.icg': 9, 'pos g_spi.icg': 73}
+pnl: the same 2617 statements as nl.v once the power pins are stripped
+bug_sd_gate_en: FAIL, 70/71 partitions proven, 2 s (/foss/designs/gf-433-fsk-radio/build/eqy/bug_sd_gate_en.log)
+  gold: 171 flop bits, 170 with a name in the netlist; 4 clock gates; 145 names matched; combinational outputs (amended): ck_o
+  not proven: tx_fine.g_sd.en
+  clocks: PASS, 170 flop output names on both sides; same clock source, edge and reset on 170; 0 mismatched; sources {'neg ck': 1, 'neg div16': 1, 'neg div64': 1, 'neg rip[0].q': 1, 'neg rip[2].q': 1, 'neg rip[4].q': 1, 'neg rip[5].q': 1, 'neg rip[6].q': 1, 'pos ck': 5, 'pos clk': 11, 'pos g_dec.icg': 46, 'pos g_eff.icg': 18, 'pos g_sd.icg': 9, 'pos g_spi.icg': 73}
+  caught
+bug_eff_bit: FAIL, 70/71 partitions proven, 2 s (/foss/designs/gf-433-fsk-radio/build/eqy/bug_eff_bit.log)
+  gold: 171 flop bits, 170 with a name in the netlist; 4 clock gates; 145 names matched; combinational outputs (amended): ck_o
+  not proven: tx_fine.eff_int.0
+  clocks: PASS, 170 flop output names on both sides; same clock source, edge and reset on 170; 0 mismatched; sources {'neg ck': 1, 'neg div16': 1, 'neg div64': 1, 'neg rip[0].q': 1, 'neg rip[2].q': 1, 'neg rip[4].q': 1, 'neg rip[5].q': 1, 'neg rip[6].q': 1, 'pos ck': 5, 'pos clk': 11, 'pos g_dec.icg': 46, 'pos g_eff.icg': 18, 'pos g_sd.icg': 9, 'pos g_spi.icg': 73}
+  caught
+bug_rst_val: FAIL, 70/71 partitions proven, 3 s (/foss/designs/gf-433-fsk-radio/build/eqy/bug_rst_val.log)
+  gold: 171 flop bits, 170 with a name in the netlist; 4 clock gates; 145 names matched; combinational outputs (amended): ck_o
+  not proven: tx_fine.eff_q.0
+  clocks: PASS, 170 flop output names on both sides; same clock source, edge and reset on 170; 0 mismatched; sources {'neg ck': 1, 'neg div16': 1, 'neg div64': 1, 'neg rip[0].q': 1, 'neg rip[2].q': 1, 'neg rip[4].q': 1, 'neg rip[5].q': 1, 'neg rip[6].q': 1, 'pos ck': 5, 'pos clk': 11, 'pos g_dec.icg': 46, 'pos g_eff.icg': 18, 'pos g_sd.icg': 9, 'pos g_spi.icg': 73}
+  caught
+bug_clk_swap: PASS, 71/71 partitions proven, 3 s (/foss/designs/gf-433-fsk-radio/build/eqy/bug_clk_swap.log)
+  gold: 171 flop bits, 170 with a name in the netlist; 4 clock gates; 145 names matched; combinational outputs (amended): ck_o
+  clocks: FAIL, 170 flop output names on both sides; same clock source, edge and reset on 169; 1 mismatched; sources {'neg ck': 1, 'neg div16': 1, 'neg div64': 1, 'neg rip[0].q': 1, 'neg rip[2].q': 1, 'neg rip[4].q': 1, 'neg rip[5].q': 1, 'neg rip[6].q': 1, 'pos ck': 5, 'pos clk': 11, 'pos g_dec.icg': 46, 'pos g_eff.icg': 18, 'pos g_sd.icg': 9, 'pos g_spi.icg': 73}
+  mismatch: dac_tn[0]: gold clk ['g_dec.icg'] edge 1 rst (['rst_n'], 0); gate clk ['g_eff.icg'] edge 1 rst (['net4', 'net57', 'net58', 'net59', 'net60', 'net61', 'rst_n'], 0)
+  caught
+bug_ripple_edge: PASS, 71/71 partitions proven, 2 s (/foss/designs/gf-433-fsk-radio/build/eqy/bug_ripple_edge.log)
+  gold: 171 flop bits, 170 with a name in the netlist; 4 clock gates; 145 names matched; combinational outputs (amended): ck_o
+  clocks: FAIL, 170 flop output names on both sides; same clock source, edge and reset on 169; 1 mismatched; sources {'neg ck': 1, 'neg div16': 1, 'neg div64': 1, 'neg rip[0].q': 1, 'neg rip[2].q': 1, 'neg rip[4].q': 1, 'neg rip[5].q': 1, 'neg rip[6].q': 1, 'pos ck': 5, 'pos clk': 11, 'pos g_dec.icg': 46, 'pos g_eff.icg': 18, 'pos g_sd.icg': 9, 'pos g_spi.icg': 73}
+  mismatch: rip[6].q: gold clk ['rip[5].q', 'tck[6]'] edge 0 rst (['r_ck[1]', 'rst_ck_n'], 0); gate clk ['rip[5].q'] edge 1 rst (['r_ck[1]'], 0)
+  caught
+eqy: ALL PASS
+RESULT eqy PASS equivalent; planted bugs caught 5 / 5

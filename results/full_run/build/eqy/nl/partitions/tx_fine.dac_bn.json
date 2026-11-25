@@ -1,0 +1,121 @@
+{
+  "partition": {
+    "index": 48,
+    "name": "tx_fine.dac_bn",
+    "inbits": {
+      "clk_dec": [
+        0
+      ],
+      "eff_q[10]": [
+        0
+      ],
+      "eff_q[11]": [
+        0
+      ],
+      "eff_q[12]": [
+        0
+      ],
+      "eff_q[8]": [
+        0
+      ],
+      "eff_q[9]": [
+        0
+      ],
+      "rst_n": [
+        0
+      ]
+    },
+    "outbits": {
+      "dac_bn": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    "crossbits": {}
+  },
+  "gold_module": {
+    "name": "gold.tx_fine.dac_bn",
+    "internal": {
+      "g_dec.gclk": [
+        0
+      ]
+    },
+    "unused": {},
+    "cellcount": 3,
+    "bitcount": 18
+  },
+  "gate_module": {
+    "name": "gold.tx_fine.dac_bn",
+    "internal": {
+      "_0008_": [
+        0
+      ],
+      "_0009_": [
+        0
+      ],
+      "_0010_": [
+        0
+      ],
+      "_0011_": [
+        0
+      ],
+      "_0012_": [
+        0
+      ],
+      "clknet_0_clk_dec": [
+        0
+      ],
+      "clknet_2_0__leaf_clk_dec": [
+        0
+      ],
+      "clknet_2_1__leaf_clk_dec": [
+        0
+      ],
+      "clknet_2_2__leaf_clk_dec": [
+        0
+      ],
+      "clknet_2_3__leaf_clk_dec": [
+        0
+      ],
+      "net10": [
+        0
+      ],
+      "net11": [
+        0
+      ],
+      "net4": [
+        0
+      ],
+      "net57": [
+        0
+      ],
+      "net58": [
+        0
+      ],
+      "net59": [
+        0
+      ],
+      "net60": [
+        0
+      ],
+      "net61": [
+        0
+      ],
+      "net7": [
+        0
+      ],
+      "net8": [
+        0
+      ],
+      "net9": [
+        0
+      ]
+    },
+    "unused": {},
+    "cellcount": 27,
+    "bitcount": 34
+  }
+}

@@ -1,0 +1,58 @@
+
+ /----------------------------------------------------------------------------\
+ |  yosys -- Yosys Open SYnthesis Suite                                       |
+ |  Copyright (C) 2012 - 2026  Claire Xenia Wolf <claire@yosyshq.com>         |
+ |  Distributed under an ISC-like license, type "license" to see terms        |
+ \----------------------------------------------------------------------------/
+ Yosys 0.69 (git sha1 9f75ca1f9, Release, GNU /usr/bin/c++ 13.3.0)
+
+-- Executing script file `bug_eff_bit/combine.ys' --
+
+1. Executing RTLIL frontend.
+Input filename: bug_eff_bit/gold.il
+
+2. Executing UNIQUIFY pass (creating unique copies of modules).
+Created 0 unique modules.
+
+3. Executing HIERARCHY pass (managing design hierarchy).
+Attribute `top' found on module `tx_fine'. Setting top module to tx_fine.
+
+3.1. Analyzing design hierarchy..
+Top module:  \tx_fine
+
+3.2. Analyzing design hierarchy..
+Top module:  \tx_fine
+Removed 0 unused modules.
+
+4. Executing RTLIL frontend.
+Input filename: bug_eff_bit/gate_recoded.il
+
+5. Executing UNIQUIFY pass (creating unique copies of modules).
+Created 0 unique modules.
+
+6. Executing HIERARCHY pass (managing design hierarchy).
+Attribute `top' found on module `tx_fine'. Setting top module to tx_fine.
+
+6.1. Analyzing design hierarchy..
+Top module:  \tx_fine
+
+6.2. Analyzing design hierarchy..
+Top module:  \tx_fine
+Removed 0 unused modules.
+Warning: Ignoring boxed module gf180mcu_fd_sc_mcu7t5v0__icgtp_1.
+Warning: Ignoring boxed module gf180mcu_fd_sc_mcu7t5v0__icgtp_1.
+Warning: Ignoring boxed module gf180mcu_fd_sc_mcu7t5v0__icgtp_1.
+Warning: Ignoring boxed module gf180mcu_fd_sc_mcu7t5v0__icgtp_1.
+Warning: Ignoring boxed module gf180mcu_fd_sc_mcu7t5v0__icgtp_1.
+Warning: Ignoring boxed module gf180mcu_fd_sc_mcu7t5v0__icgtp_1.
+
+7. Executing MITER pass (creating miter circuit).
+Creating miter cell "miter" with gold cell "gold.tx_fine" and gate cell "gate.tx_fine".
+
+8. Executing RTLIL backend.
+Output filename: bug_eff_bit/combined.il
+
+Warnings: 1 unique messages, 6 total
+End of script. Logfile hash: 1e60976e33, time: 0.05s, user: 0.06s, system: 0.01s, MEM: 41.64 MB peak
+Yosys 0.69 (git sha1 9f75ca1f9, Release, GNU /usr/bin/c++ 13.3.0)
+Time spent: 26% 4x read_rtlil (0 sec), 23% 1x eqy_combine (0 sec), ...

@@ -1,0 +1,3 @@
+  tx_fine: 54 signal pins, the same in RTL, LEF, GL netlist and LVS subcircuit
+ERROR: ua[1]: PINOUT says it is the on-chip VGND sense, but the LVS source leaves it unconnected (lvs/make_source.py / layout/gen/tile_nets.py need the short to VGND)
+pinout: FAIL (1 errors; uio_oe = 0x08)

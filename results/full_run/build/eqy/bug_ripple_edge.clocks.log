@@ -1,0 +1,2 @@
+clocks: 170 flop output names on both sides; same clock source, edge and reset on 169; 1 mismatched; sources {'neg ck': 1, 'neg div16': 1, 'neg div64': 1, 'neg rip[0].q': 1, 'neg rip[2].q': 1, 'neg rip[4].q': 1, 'neg rip[5].q': 1, 'neg rip[6].q': 1, 'pos ck': 5, 'pos clk': 11, 'pos g_dec.icg': 46, 'pos g_eff.icg': 18, 'pos g_sd.icg': 9, 'pos g_spi.icg': 73}
+  mismatch: rip[6].q: gold clk ['rip[5].q', 'tck[6]'] edge 0 rst (['r_ck[1]', 'rst_ck_n'], 0); gate clk ['rip[5].q'] edge 1 rst (['r_ck[1]'], 0)

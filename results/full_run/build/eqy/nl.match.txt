@@ -1,0 +1,1 @@
+# gold: 171 flop bits, 170 with a name in the netlist; 4 clock gates; 145 names matched; combinational outputs (amended): ck_o

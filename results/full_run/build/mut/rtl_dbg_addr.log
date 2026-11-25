@@ -1,0 +1,63 @@
+make: Entering directory '/foss/designs/gf-433-fsk-radio/test'
+rm -f /foss/designs/gf-433-fsk-radio/build/mut/rtl_dbg_addr.xml
+/foss/tools/bin/iverilog -o /foss/designs/gf-433-fsk-radio/build/mut/sb_rtl_dbg_addr/sim.vvp -s tb -g2012 -f /foss/designs/gf-433-fsk-radio/build/mut/sb_rtl_dbg_addr/cmds.f  /foss/designs/gf-433-fsk-radio/build/mut/rtl_dbg_addr.v /foss/designs/gf-433-fsk-radio/test/tb.v /foss/designs/gf-433-fsk-radio/test/stubs.v /foss/designs/gf-433-fsk-radio/build/mut/sb_rtl_dbg_addr/tt_um_mattvenn_gf433_vco.v
+rm -f /foss/designs/gf-433-fsk-radio/build/mut/rtl_dbg_addr.xml
+COCOTB_TEST_MODULES=test COCOTB_TESTCASE=  COCOTB_TOPLEVEL=tb TOPLEVEL_LANG=verilog       \
+	 /foss/tools/bin/vvp -m /usr/local/lib/python3.12/dist-packages/cocotb/libs/libcocotbvpi_icarus.so   /foss/designs/gf-433-fsk-radio/build/mut/sb_rtl_dbg_addr/sim.vvp   
+     -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:242  in gpi_load_users                  Loaded entry library: '/usr/lib/x86_64-linux-gnu/libpython3.12.so.1.0'
+     -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:233  in gpi_load_users                  Running entry func 'initialize' from loaded library '/usr/local/lib/python3.12/dist-packages/cocotb/simulator.cpython-312-x86_64-linux-gnu.so'
+     -.--ns INFO     pygpi                              ..ib/pygpi/embed.cpp:114  in initialize                      Using Python 3.12.12 interpreter at /usr/bin/python3
+     -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:74   in gpi_print_registered_impl       GPI: VPI support registered
+     0.00ns INFO     cocotb.initialize                  Seeding Python random module with 1795629481
+     0.00ns INFO     cocotb.initialize                  Initialized cocotb v2.1.0 from /usr/local/lib/python3.12/dist-packages/cocotb
+     0.00ns INFO     cocotb.initialize                  Running on Icarus Verilog version 14.0 (devel)
+     0.00ns INFO     cocotb.regression                  Running tests
+     0.00ns INFO     cocotb.regression                  running test.test_reset_and_oe (1/6)
+                                                            uio_oe and the tied outputs during and after reset; every control at its reset value; ena is ignored.
+ 38480.00ns WARNING  cocotb.regression                  test.test_reset_and_oe failed
+                                                        Traceback (most recent call last):
+                                                          File "/foss/designs/gf-433-fsk-radio/test/test.py", line 131, in test_reset_and_oe
+                                                            assert mdac(dut)[0] == 0x2a5 and rx_on(dut) == [1, 1, 1] and dbg_ctrl(dut) == [0, 0, 1, 0]
+                                                        AssertionError: assert (677 == 677 and [1, 1, 1] == [1, 1, 1] and [0, 0, 0, 0] == [0, 0, 1, 0])
+                                                         +  where [1, 1, 1] = rx_on(HierarchyObject(tb with definition tb (at /foss/designs/gf-433-fsk-radio/test/tb.v)))
+                                                         +  and   [0, 0, 0, 0] = dbg_ctrl(HierarchyObject(tb with definition tb (at /foss/designs/gf-433-fsk-radio/test/tb.v)))
+ 38480.00ns INFO     cocotb.regression                  running test.test_spi_to_mdac (2/6)
+                                                            Register writes on the uio pins reach the macro and, through the 37 DAC lines, the medium DAC's word.
+114880.00ns WARNING  cocotb.regression                  test.test_spi_to_mdac failed
+                                                        Traceback (most recent call last):
+                                                          File "/foss/designs/gf-433-fsk-radio/test/test.py", line 148, in test_spi_to_mdac
+                                                            assert await rd(dut, p, a) == v, f"register {a}"
+                                                        AssertionError: register 5
+                                                        assert 0 == 3
+114880.00ns INFO     cocotb.regression                  running test.test_rx_en (3/6)
+                                                            CTRL[4] (RX_EN) turns on the receiver's bias and both LO buffers; the limiters reach uo_out[4] / [5].
+138500.00ns INFO     cocotb.regression                  test.test_rx_en passed
+138500.00ns INFO     cocotb.regression                  running test.test_dbg_sel (4/6)
+                                                            DBG_SEL bit k closes debug switch k only, and ua[0] then carries that switch's source; bit 3 also lets
+154100.00ns WARNING  cocotb.regression                  test.test_dbg_sel failed
+                                                        Traceback (most recent call last):
+                                                          File "/foss/designs/gf-433-fsk-radio/test/test.py", line 217, in test_dbg_sel
+                                                            assert dbg_ctrl(dut) == [int(j == k) for j in range(4)], f"DBG_SEL {1 << k}: {dbg_ctrl(dut)}"
+                                                        AssertionError: DBG_SEL 1: [0, 0, 0, 0]
+                                                        assert [0, 0, 0, 0] == [1, 0, 0, 0]
+                                                         +  where [0, 0, 0, 0] = dbg_ctrl(HierarchyObject(tb with definition tb (at /foss/designs/gf-433-fsk-radio/test/tb.v)))
+154100.00ns INFO     cocotb.regression                  running test.test_tx_and_code (5/6)
+                                                            ui_in[5] / ui_in[6] enable the TX arms on ua[3] / ua[2]; ui_in[4:0] reach the ring's coarse DAC with
+155061.00ns INFO     cocotb.regression                  test.test_tx_and_code passed
+155061.00ns INFO     cocotb.regression                  running test.test_dividers (6/6)
+                                                            uo_out[1..3] = ck / 4, / 16, / 256 (f / 16, / 64, / 1024); uo_out[0] = ck only with CTRL.CK_EN.
+174371.80ns INFO     cocotb.regression                  test.test_dividers passed
+174371.80ns INFO     cocotb.regression                  **************************************************************************************
+                                                        ** TEST                          STATUS  SIM TIME (ns)  REAL TIME (s)  RATIO (ns/s) **
+                                                        **************************************************************************************
+                                                        ** test.test_reset_and_oe         FAIL       38480.00           0.08     506556.83  **
+                                                        ** test.test_spi_to_mdac          FAIL       76400.00           0.24     318711.60  **
+                                                        ** test.test_rx_en                PASS       23620.00           0.08     285222.83  **
+                                                        ** test.test_dbg_sel              FAIL       15600.00           0.05     340742.99  **
+                                                        ** test.test_tx_and_code          PASS         961.00           0.01     191096.72  **
+                                                        ** test.test_dividers             PASS       19310.80           0.06     330624.31  **
+                                                        **************************************************************************************
+                                                        ** TESTS=6 PASS=3 FAIL=3 SKIP=0             174371.80           0.51     340297.53  **
+                                                        **************************************************************************************
+make: *** [/usr/local/lib/python3.12/dist-packages/cocotb_tools/makefiles/simulators/Makefile.icarus:69: /foss/designs/gf-433-fsk-radio/build/mut/rtl_dbg_addr.xml] Error 3
+make: Leaving directory '/foss/designs/gf-433-fsk-radio/test'

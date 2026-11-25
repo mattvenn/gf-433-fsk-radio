@@ -1,0 +1,722 @@
+
+ /----------------------------------------------------------------------------\
+ |  yosys -- Yosys Open SYnthesis Suite                                       |
+ |  Copyright (C) 2012 - 2026  Claire Xenia Wolf <claire@yosyshq.com>         |
+ |  Distributed under an ISC-like license, type "license" to see terms        |
+ \----------------------------------------------------------------------------/
+ Yosys 0.69 (git sha1 9f75ca1f9, Release, GNU /usr/bin/c++ 13.3.0)
+
+-- Executing script file `run.ys' --
+
+1. Executing Verilog-2005 frontend: ../../../partitions/tx_fine.devx.8.sv
+Parsing SystemVerilog input from `../../../partitions/tx_fine.devx.8.sv' to AST representation.
+Generating RTLIL representation for module `\miter'.
+Generating RTLIL representation for module `\miter_cmp_prop'.
+Generating RTLIL representation for module `\miter_def_prop'.
+Generating RTLIL representation for module `\gold.tx_fine.devx.8'.
+Generating RTLIL representation for module `\gate.tx_fine.devx.8'.
+Successfully finished Verilog frontend.
+
+2. Executing RTLIL frontend.
+Input filename: ../../../partitions/tx_fine.devx.8.il
+Replacing existing blackbox module \gold.tx_fine.devx.8.
+Replacing existing blackbox module \gate.tx_fine.devx.8.
+
+3. Executing HIERARCHY pass (managing design hierarchy).
+
+3.1. Analyzing design hierarchy..
+Top module:  \miter
+Used module:     \miter_cmp_prop
+Used module:     \gate.tx_fine.devx.8
+Used module:     \gold.tx_fine.devx.8
+Parameter 1 (\WIDTH) = 1
+Parameter 2 (\TYPE) = 48'011000010111001101110011011001010111001001110100
+
+3.2. Executing AST frontend in derive mode using pre-parsed AST for module `\miter_cmp_prop'.
+Parameter 1 (\WIDTH) = 1
+Parameter 2 (\TYPE) = 48'011000010111001101110011011001010111001001110100
+Generating RTLIL representation for module `$paramod$7c68cd0f50b67350b96c971f2e7bf39c83376225\miter_cmp_prop'.
+
+3.3. Analyzing design hierarchy..
+Top module:  \miter
+Used module:     $paramod$7c68cd0f50b67350b96c971f2e7bf39c83376225\miter_cmp_prop
+Used module:     \gate.tx_fine.devx.8
+Used module:     \gold.tx_fine.devx.8
+
+3.4. Analyzing design hierarchy..
+Top module:  \miter
+Used module:     $paramod$7c68cd0f50b67350b96c971f2e7bf39c83376225\miter_cmp_prop
+Used module:     \gate.tx_fine.devx.8
+Used module:     \gold.tx_fine.devx.8
+Removing unused module `\miter_def_prop'.
+Removing unused module `\miter_cmp_prop'.
+Removed 2 unused modules.
+Module $paramod$7c68cd0f50b67350b96c971f2e7bf39c83376225\miter_cmp_prop directly or indirectly contains formal properties -> setting "keep" attribute.
+Module miter directly or indirectly contains formal properties -> setting "keep" attribute.
+Mapping positional arguments of cell miter.__po_devx[8]__assert ($paramod$7c68cd0f50b67350b96c971f2e7bf39c83376225\miter_cmp_prop).
+
+4. Executing PROC pass (convert processes to netlists).
+
+4.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Cleaned up 0 empty switches.
+
+4.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).
+Removed a total of 0 dead cases.
+
+4.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).
+Removed 1 redundant assignment.
+Promoted 3 assignments to connections.
+
+4.4. Executing PROC_INIT pass (extract init attributes).
+
+4.5. Executing PROC_ARST pass (detect async resets in processes).
+
+4.6. Executing PROC_ROM pass (convert switches to ROMs).
+Converted 0 switches.
+
+4.7. Executing PROC_MUX pass (convert decision trees to multiplexers).
+Creating decoders for process `$paramod$7c68cd0f50b67350b96c971f2e7bf39c83376225\miter_cmp_prop.$proc$../../../partitions/tx_fine.devx.8.sv:202$6375'.
+Creating decoders for process `$paramod$7c68cd0f50b67350b96c971f2e7bf39c83376225\miter_cmp_prop.$proc$../../../partitions/tx_fine.devx.8.sv:196$6370'.
+
+4.8. Executing PROC_DLATCH pass (convert process syncs to latches).
+No latch inferred for signal `$paramod$7c68cd0f50b67350b96c971f2e7bf39c83376225\miter_cmp_prop.\i' from process `$paramod$7c68cd0f50b67350b96c971f2e7bf39c83376225\miter_cmp_prop.$proc$../../../partitions/tx_fine.devx.8.sv:196$6370'.
+No latch inferred for signal `$paramod$7c68cd0f50b67350b96c971f2e7bf39c83376225\miter_cmp_prop.\okay' from process `$paramod$7c68cd0f50b67350b96c971f2e7bf39c83376225\miter_cmp_prop.$proc$../../../partitions/tx_fine.devx.8.sv:196$6370'.
+
+4.9. Executing PROC_DFF pass (convert process syncs to FFs).
+
+4.10. Executing PROC_MEMWR pass (convert process memory writes to cells).
+
+4.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Removing empty process `$paramod$7c68cd0f50b67350b96c971f2e7bf39c83376225\miter_cmp_prop.$proc$../../../partitions/tx_fine.devx.8.sv:202$6375'.
+Removing empty process `$paramod$7c68cd0f50b67350b96c971f2e7bf39c83376225\miter_cmp_prop.$proc$../../../partitions/tx_fine.devx.8.sv:196$6370'.
+Cleaned up 0 empty switches.
+
+4.12. Executing OPT_EXPR pass (perform const folding).
+Optimizing module gold.tx_fine.devx.8.
+Optimizing module $paramod$7c68cd0f50b67350b96c971f2e7bf39c83376225\miter_cmp_prop.
+<suppressed ~1 debug messages>
+Optimizing module gate.tx_fine.devx.8.
+Optimizing module miter.
+
+5. Executing ASYNC2SYNC pass.
+Replacing gold.tx_fine.devx.8.$procdff$436 ($adff): ARST=\rst_n, D={ $0\fsk_dev[11:0][11] $0\fsk_dev[11:0][10] $0\fsk_dev[11:0][9] $0\fsk_dev[11:0][8] $0\fsk_dev[11:0][7] $0\fsk_dev[11:0][6] $0\fsk_dev[11:0][5] $0\fsk_dev[11:0][4] $0\fsk_dev[11:0][3] $0\fsk_dev[11:0][2] $0\fsk_dev[11:0][1] $0\fsk_dev[11:0][0] }, Q={ $auto$eqy_partition.cc:843:operator()$6369 $auto$eqy_partition.cc:843:operator()$6368 $auto$eqy_partition.cc:843:operator()$6367 \fsk_dev[8] $auto$eqy_partition.cc:843:operator()$6366 $auto$eqy_partition.cc:843:operator()$6365 $auto$eqy_partition.cc:843:operator()$6364 $auto$eqy_partition.cc:843:operator()$6363 $auto$eqy_partition.cc:843:operator()$6362 $auto$eqy_partition.cc:843:operator()$6361 $auto$eqy_partition.cc:843:operator()$6360 $auto$eqy_partition.cc:843:operator()$6359 }
+Replacing gate.tx_fine.devx.8.$flatten\_1061_.$auto$liberty.cc:242:create_ff$889 ($_DFF_PP0_): ARST=$flatten\_1034_.$auto$rtlil.cc:3488:NotGate$888, D=\_0080_, Q=\devx[8]
+
+6. Executing FORMALFF pass.
+
+7. Executing SETUNDEF pass (replace undef values with defined constants).
+
+8. Executing FLATTEN pass (flatten design).
+Deleting now unused module gold.tx_fine.devx.8.
+Deleting now unused module $paramod$7c68cd0f50b67350b96c971f2e7bf39c83376225\miter_cmp_prop.
+Deleting now unused module gate.tx_fine.devx.8.
+<suppressed ~3 debug messages>
+
+9. Executing DFFUNMAP pass (unmap clock enable and synchronous reset from FFs).
+
+10. Executing OPT_EXPR pass (perform const folding).
+Optimizing module miter.
+<suppressed ~3 debug messages>
+
+11. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \miter..
+Removed 2 unused cells and 8 unused wires.
+<suppressed ~20 debug messages>
+
+12. Executing SAT pass (solving SAT problems in the circuit).
+Using SAT solver `minisat`.
+
+Setting up time step 1:
+Final constraint equation: { } = { }
+Import def constraint for this timestep: \__pi_bitcnt[0]
+Import def constraint for this timestep: \__pi_bitcnt[1]
+Import def constraint for this timestep: \__pi_bitcnt[2]
+Import def constraint for this timestep: \__pi_bitcnt[3]
+Import def constraint for this timestep: \__pi_bitcnt[4]
+Import def constraint for this timestep: \__pi_clk_spi
+Import def constraint for this timestep: \__pi_devx[0]
+Import def constraint for this timestep: \__pi_devx[10]
+Import def constraint for this timestep: \__pi_devx[11]
+Import def constraint for this timestep: \__pi_devx[1]
+Import def constraint for this timestep: \__pi_devx[2]
+Import def constraint for this timestep: \__pi_devx[3]
+Import def constraint for this timestep: \__pi_devx[4]
+Import def constraint for this timestep: \__pi_devx[5]
+Import def constraint for this timestep: \__pi_devx[6]
+Import def constraint for this timestep: \__pi_devx[7]
+Import def constraint for this timestep: \__pi_devx[9]
+Import def constraint for this timestep: \__pi_rst_n
+Import def constraint for this timestep: \__pi_s_cs[1]
+Import def constraint for this timestep: \__pi_s_mosi[1]
+Import def constraint for this timestep: \__pi_s_sclk[1]
+Import def constraint for this timestep: \__pi_s_sclk[2]
+Import def constraint for this timestep: \__pi_sr[0]
+Import def constraint for this timestep: \__pi_sr[10]
+Import def constraint for this timestep: \__pi_sr[11]
+Import def constraint for this timestep: \__pi_sr[12]
+Import def constraint for this timestep: \__pi_sr[13]
+Import def constraint for this timestep: \__pi_sr[14]
+Import def constraint for this timestep: \__pi_sr[1]
+Import def constraint for this timestep: \__pi_sr[2]
+Import def constraint for this timestep: \__pi_sr[3]
+Import def constraint for this timestep: \__pi_sr[4]
+Import def constraint for this timestep: \__pi_sr[5]
+Import def constraint for this timestep: \__pi_sr[6]
+Import def constraint for this timestep: \__pi_sr[7]
+Import def constraint for this timestep: \__pi_sr[8]
+Import def constraint for this timestep: \__pi_sr[9]
+Imported 52 cells to SAT database.
+Import proof for assert: \__po_devx[8]__assert.okay when 1'1.
+
+** Trying induction with length 1 **
+
+Setting up time step 1:
+Final constraint equation: { } = { }
+Import def constraint for this timestep: \__pi_bitcnt[0]
+Import def constraint for this timestep: \__pi_bitcnt[1]
+Import def constraint for this timestep: \__pi_bitcnt[2]
+Import def constraint for this timestep: \__pi_bitcnt[3]
+Import def constraint for this timestep: \__pi_bitcnt[4]
+Import def constraint for this timestep: \__pi_clk_spi
+Import def constraint for this timestep: \__pi_devx[0]
+Import def constraint for this timestep: \__pi_devx[10]
+Import def constraint for this timestep: \__pi_devx[11]
+Import def constraint for this timestep: \__pi_devx[1]
+Import def constraint for this timestep: \__pi_devx[2]
+Import def constraint for this timestep: \__pi_devx[3]
+Import def constraint for this timestep: \__pi_devx[4]
+Import def constraint for this timestep: \__pi_devx[5]
+Import def constraint for this timestep: \__pi_devx[6]
+Import def constraint for this timestep: \__pi_devx[7]
+Import def constraint for this timestep: \__pi_devx[9]
+Import def constraint for this timestep: \__pi_rst_n
+Import def constraint for this timestep: \__pi_s_cs[1]
+Import def constraint for this timestep: \__pi_s_mosi[1]
+Import def constraint for this timestep: \__pi_s_sclk[1]
+Import def constraint for this timestep: \__pi_s_sclk[2]
+Import def constraint for this timestep: \__pi_sr[0]
+Import def constraint for this timestep: \__pi_sr[10]
+Import def constraint for this timestep: \__pi_sr[11]
+Import def constraint for this timestep: \__pi_sr[12]
+Import def constraint for this timestep: \__pi_sr[13]
+Import def constraint for this timestep: \__pi_sr[14]
+Import def constraint for this timestep: \__pi_sr[1]
+Import def constraint for this timestep: \__pi_sr[2]
+Import def constraint for this timestep: \__pi_sr[3]
+Import def constraint for this timestep: \__pi_sr[4]
+Import def constraint for this timestep: \__pi_sr[5]
+Import def constraint for this timestep: \__pi_sr[6]
+Import def constraint for this timestep: \__pi_sr[7]
+Import def constraint for this timestep: \__pi_sr[8]
+Import def constraint for this timestep: \__pi_sr[9]
+Imported 52 cells to SAT database.
+Final init constraint equation: $flatten\gold.$auto$async2sync.cc:253:execute$6377 = 12'x
+Import proof for assert: \__po_devx[8]__assert.okay when 1'1.
+Import show expression: \__po_devx[8]__assert.i
+Import show expression: \__po_devx[8]__assert.okay
+Import show expression: \__po_devx[8]__assert.in_gate
+Import show expression: \__po_devx[8]__assert.in_gold
+Import show expression: \gate.sr[10]
+Import show expression: \gate.sr[9]
+Import show expression: \gate.sr[8]
+Import show expression: \gate.sr[6]
+Import show expression: \gate.sr[5]
+Import show expression: \gate.sr[4]
+Import show expression: \gate.sr[3]
+Import show expression: \gate.sr[2]
+Import show expression: \gate.sr[1]
+Import show expression: \gate.sr[0]
+Import show expression: \gate.s_mosi[1]
+Import show expression: \gate.devx[11]
+Import show expression: \gate.devx[10]
+Import show expression: \gate.devx[9]
+Import show expression: \gate.devx[7]
+Import show expression: \gate.devx[6]
+Import show expression: \gate.devx[5]
+Import show expression: \gate.devx[4]
+Import show expression: \gate.devx[3]
+Import show expression: \gate.devx[2]
+Import show expression: \gate.devx[1]
+Import show expression: \gate.devx[0]
+Import show expression: \gate.rst_n
+Import show expression: \gate.net4
+Import show expression: \gate.net57
+Import show expression: \gate.net58
+Import show expression: \gate.net59
+Import show expression: \gate.net60
+Import show expression: \gate.net61
+Import show expression: \gate.bitcnt[3]
+Import show expression: \gate.bitcnt[2]
+Import show expression: \gate._0380_
+Import show expression: \gate.bitcnt[0]
+Import show expression: \gate.bitcnt[1]
+Import show expression: \gate._0379_
+Import show expression: \gate.sr[14]
+Import show expression: \gate.bitcnt[4]
+Import show expression: \gate._0381_
+Import show expression: \gate._0382_
+Import show expression: \gate.s_sclk[2]
+Import show expression: \gate.s_sclk[1]
+Import show expression: \gate.s_cs[1]
+Import show expression: \gate._0376_
+Import show expression: \gate.sr[13]
+Import show expression: \gate._0377_
+Import show expression: \gate._0378_
+Import show expression: \gate.sr[11]
+Import show expression: \gate.sr[12]
+Import show expression: \gate._0134_
+Import show expression: \gate._0404_
+Import show expression: \gate.sr[7]
+Import show expression: \gate._0080_
+Import show expression: \gate.clk_spi
+Import show expression: \gate.clknet_0_clk_spi
+Import show expression: \gate.clknet_3_0__leaf_clk_spi
+Import show expression: \gate.clknet_3_1__leaf_clk_spi
+Import show expression: \gate.clknet_3_2__leaf_clk_spi
+Import show expression: \gate.clknet_3_3__leaf_clk_spi
+Import show expression: \gate.clknet_3_4__leaf_clk_spi
+Import show expression: \gate.clknet_3_5__leaf_clk_spi
+Import show expression: \gate.clknet_3_6__leaf_clk_spi
+Import show expression: \gate.clknet_3_7__leaf_clk_spi
+Import show expression: \gate.devx[8]
+Import show expression: \gate.__pi_bitcnt[0]
+Import show expression: \gate.__pi_bitcnt[1]
+Import show expression: \gate.__pi_bitcnt[2]
+Import show expression: \gate.__pi_bitcnt[3]
+Import show expression: \gate.__pi_bitcnt[4]
+Import show expression: \gate.__pi_clk_spi
+Import show expression: \gate.__pi_devx[0]
+Import show expression: \gate.__pi_devx[10]
+Import show expression: \gate.__pi_devx[11]
+Import show expression: \gate.__pi_devx[1]
+Import show expression: \gate.__pi_devx[2]
+Import show expression: \gate.__pi_devx[3]
+Import show expression: \gate.__pi_devx[4]
+Import show expression: \gate.__pi_devx[5]
+Import show expression: \gate.__pi_devx[6]
+Import show expression: \gate.__pi_devx[7]
+Import show expression: \gate.__pi_devx[9]
+Import show expression: \gate.__pi_rst_n
+Import show expression: \gate.__pi_s_cs[1]
+Import show expression: \gate.__pi_s_mosi[1]
+Import show expression: \gate.__pi_s_sclk[1]
+Import show expression: \gate.__pi_s_sclk[2]
+Import show expression: \gate.__pi_sr[0]
+Import show expression: \gate.__pi_sr[10]
+Import show expression: \gate.__pi_sr[11]
+Import show expression: \gate.__pi_sr[12]
+Import show expression: \gate.__pi_sr[13]
+Import show expression: \gate.__pi_sr[14]
+Import show expression: \gate.__pi_sr[1]
+Import show expression: \gate.__pi_sr[2]
+Import show expression: \gate.__pi_sr[3]
+Import show expression: \gate.__pi_sr[4]
+Import show expression: \gate.__pi_sr[5]
+Import show expression: \gate.__pi_sr[6]
+Import show expression: \gate.__pi_sr[7]
+Import show expression: \gate.__pi_sr[8]
+Import show expression: \gate.__pi_sr[9]
+Import show expression: \gate.__po_devx[8]
+Import show expression: \gold.sck_rise
+Import show expression: \gold.sr[10]
+Import show expression: \gold.sr[9]
+Import show expression: \gold.sr[8]
+Import show expression: \gold.sr[6]
+Import show expression: \gold.sr[5]
+Import show expression: \gold.sr[4]
+Import show expression: \gold.sr[3]
+Import show expression: \gold.sr[2]
+Import show expression: \gold.sr[1]
+Import show expression: \gold.sr[0]
+Import show expression: \gold.s_mosi[1]
+Import show expression: \gold.devx[11]
+Import show expression: \gold.devx[10]
+Import show expression: \gold.devx[9]
+Import show expression: \gold.devx[7]
+Import show expression: \gold.devx[6]
+Import show expression: \gold.devx[5]
+Import show expression: \gold.devx[4]
+Import show expression: \gold.devx[3]
+Import show expression: \gold.devx[2]
+Import show expression: \gold.devx[1]
+Import show expression: \gold.devx[0]
+Import show expression: \gold.g_spi.gclk
+Import show expression: \gold.fsk_dev[8]
+Import show expression: \gold.rst_n
+Import show expression: \gold.bitcnt[3]
+Import show expression: \gold.bitcnt[2]
+Import show expression: \gold.bitcnt[0]
+Import show expression: \gold.bitcnt[1]
+Import show expression: \gold.sr[14]
+Import show expression: \gold.bitcnt[4]
+Import show expression: \gold.s_sclk[2]
+Import show expression: \gold.s_sclk[1]
+Import show expression: \gold.s_cs[1]
+Import show expression: \gold.sr[13]
+Import show expression: \gold.sr[11]
+Import show expression: \gold.sr[12]
+Import show expression: \gold.sr[7]
+Import show expression: \gold.clk_spi
+Import show expression: \gold.devx[8]
+Import show expression: \gold.__pi_bitcnt[0]
+Import show expression: \gold.__pi_bitcnt[1]
+Import show expression: \gold.__pi_bitcnt[2]
+Import show expression: \gold.__pi_bitcnt[3]
+Import show expression: \gold.__pi_bitcnt[4]
+Import show expression: \gold.__pi_clk_spi
+Import show expression: \gold.__pi_devx[0]
+Import show expression: \gold.__pi_devx[10]
+Import show expression: \gold.__pi_devx[11]
+Import show expression: \gold.__pi_devx[1]
+Import show expression: \gold.__pi_devx[2]
+Import show expression: \gold.__pi_devx[3]
+Import show expression: \gold.__pi_devx[4]
+Import show expression: \gold.__pi_devx[5]
+Import show expression: \gold.__pi_devx[6]
+Import show expression: \gold.__pi_devx[7]
+Import show expression: \gold.__pi_devx[9]
+Import show expression: \gold.__pi_rst_n
+Import show expression: \gold.__pi_s_cs[1]
+Import show expression: \gold.__pi_s_mosi[1]
+Import show expression: \gold.__pi_s_sclk[1]
+Import show expression: \gold.__pi_s_sclk[2]
+Import show expression: \gold.__pi_sr[0]
+Import show expression: \gold.__pi_sr[10]
+Import show expression: \gold.__pi_sr[11]
+Import show expression: \gold.__pi_sr[12]
+Import show expression: \gold.__pi_sr[13]
+Import show expression: \gold.__pi_sr[14]
+Import show expression: \gold.__pi_sr[1]
+Import show expression: \gold.__pi_sr[2]
+Import show expression: \gold.__pi_sr[3]
+Import show expression: \gold.__pi_sr[4]
+Import show expression: \gold.__pi_sr[5]
+Import show expression: \gold.__pi_sr[6]
+Import show expression: \gold.__pi_sr[7]
+Import show expression: \gold.__pi_sr[8]
+Import show expression: \gold.__pi_sr[9]
+Import show expression: \gold.__po_devx[8]
+Import show expression: \__po_devx[8]__gate
+Import show expression: \__po_devx[8]__gold
+Import show expression: \__pi_sr[9]
+Import show expression: \__pi_sr[8]
+Import show expression: \__pi_sr[7]
+Import show expression: \__pi_sr[6]
+Import show expression: \__pi_sr[5]
+Import show expression: \__pi_sr[4]
+Import show expression: \__pi_sr[3]
+Import show expression: \__pi_sr[2]
+Import show expression: \__pi_sr[1]
+Import show expression: \__pi_sr[14]
+Import show expression: \__pi_sr[13]
+Import show expression: \__pi_sr[12]
+Import show expression: \__pi_sr[11]
+Import show expression: \__pi_sr[10]
+Import show expression: \__pi_sr[0]
+Import show expression: \__pi_s_sclk[2]
+Import show expression: \__pi_s_sclk[1]
+Import show expression: \__pi_s_mosi[1]
+Import show expression: \__pi_s_cs[1]
+Import show expression: \__pi_rst_n
+Import show expression: \__pi_devx[9]
+Import show expression: \__pi_devx[7]
+Import show expression: \__pi_devx[6]
+Import show expression: \__pi_devx[5]
+Import show expression: \__pi_devx[4]
+Import show expression: \__pi_devx[3]
+Import show expression: \__pi_devx[2]
+Import show expression: \__pi_devx[1]
+Import show expression: \__pi_devx[11]
+Import show expression: \__pi_devx[10]
+Import show expression: \__pi_devx[0]
+Import show expression: \__pi_clk_spi
+Import show expression: \__pi_bitcnt[4]
+Import show expression: \__pi_bitcnt[3]
+Import show expression: \__pi_bitcnt[2]
+Import show expression: \__pi_bitcnt[1]
+Import show expression: \__pi_bitcnt[0]
+
+[base case 1] Solving problem with 2708 variables and 7224 clauses..
+Base case for induction length 1 proven.
+
+Setting up time step 2:
+Final constraint equation: { } = { }
+Import def constraint for this timestep: \__pi_bitcnt[0]
+Import def constraint for this timestep: \__pi_bitcnt[1]
+Import def constraint for this timestep: \__pi_bitcnt[2]
+Import def constraint for this timestep: \__pi_bitcnt[3]
+Import def constraint for this timestep: \__pi_bitcnt[4]
+Import def constraint for this timestep: \__pi_clk_spi
+Import def constraint for this timestep: \__pi_devx[0]
+Import def constraint for this timestep: \__pi_devx[10]
+Import def constraint for this timestep: \__pi_devx[11]
+Import def constraint for this timestep: \__pi_devx[1]
+Import def constraint for this timestep: \__pi_devx[2]
+Import def constraint for this timestep: \__pi_devx[3]
+Import def constraint for this timestep: \__pi_devx[4]
+Import def constraint for this timestep: \__pi_devx[5]
+Import def constraint for this timestep: \__pi_devx[6]
+Import def constraint for this timestep: \__pi_devx[7]
+Import def constraint for this timestep: \__pi_devx[9]
+Import def constraint for this timestep: \__pi_rst_n
+Import def constraint for this timestep: \__pi_s_cs[1]
+Import def constraint for this timestep: \__pi_s_mosi[1]
+Import def constraint for this timestep: \__pi_s_sclk[1]
+Import def constraint for this timestep: \__pi_s_sclk[2]
+Import def constraint for this timestep: \__pi_sr[0]
+Import def constraint for this timestep: \__pi_sr[10]
+Import def constraint for this timestep: \__pi_sr[11]
+Import def constraint for this timestep: \__pi_sr[12]
+Import def constraint for this timestep: \__pi_sr[13]
+Import def constraint for this timestep: \__pi_sr[14]
+Import def constraint for this timestep: \__pi_sr[1]
+Import def constraint for this timestep: \__pi_sr[2]
+Import def constraint for this timestep: \__pi_sr[3]
+Import def constraint for this timestep: \__pi_sr[4]
+Import def constraint for this timestep: \__pi_sr[5]
+Import def constraint for this timestep: \__pi_sr[6]
+Import def constraint for this timestep: \__pi_sr[7]
+Import def constraint for this timestep: \__pi_sr[8]
+Import def constraint for this timestep: \__pi_sr[9]
+Imported 52 cells to SAT database.
+Import proof for assert: \__po_devx[8]__assert.okay when 1'1.
+Import show expression: \__po_devx[8]__assert.i
+Import show expression: \__po_devx[8]__assert.okay
+Import show expression: \__po_devx[8]__assert.in_gate
+Import show expression: \__po_devx[8]__assert.in_gold
+Import show expression: \gate.sr[10]
+Import show expression: \gate.sr[9]
+Import show expression: \gate.sr[8]
+Import show expression: \gate.sr[6]
+Import show expression: \gate.sr[5]
+Import show expression: \gate.sr[4]
+Import show expression: \gate.sr[3]
+Import show expression: \gate.sr[2]
+Import show expression: \gate.sr[1]
+Import show expression: \gate.sr[0]
+Import show expression: \gate.s_mosi[1]
+Import show expression: \gate.devx[11]
+Import show expression: \gate.devx[10]
+Import show expression: \gate.devx[9]
+Import show expression: \gate.devx[7]
+Import show expression: \gate.devx[6]
+Import show expression: \gate.devx[5]
+Import show expression: \gate.devx[4]
+Import show expression: \gate.devx[3]
+Import show expression: \gate.devx[2]
+Import show expression: \gate.devx[1]
+Import show expression: \gate.devx[0]
+Import show expression: \gate.rst_n
+Import show expression: \gate.net4
+Import show expression: \gate.net57
+Import show expression: \gate.net58
+Import show expression: \gate.net59
+Import show expression: \gate.net60
+Import show expression: \gate.net61
+Import show expression: \gate.bitcnt[3]
+Import show expression: \gate.bitcnt[2]
+Import show expression: \gate._0380_
+Import show expression: \gate.bitcnt[0]
+Import show expression: \gate.bitcnt[1]
+Import show expression: \gate._0379_
+Import show expression: \gate.sr[14]
+Import show expression: \gate.bitcnt[4]
+Import show expression: \gate._0381_
+Import show expression: \gate._0382_
+Import show expression: \gate.s_sclk[2]
+Import show expression: \gate.s_sclk[1]
+Import show expression: \gate.s_cs[1]
+Import show expression: \gate._0376_
+Import show expression: \gate.sr[13]
+Import show expression: \gate._0377_
+Import show expression: \gate._0378_
+Import show expression: \gate.sr[11]
+Import show expression: \gate.sr[12]
+Import show expression: \gate._0134_
+Import show expression: \gate._0404_
+Import show expression: \gate.sr[7]
+Import show expression: \gate._0080_
+Import show expression: \gate.clk_spi
+Import show expression: \gate.clknet_0_clk_spi
+Import show expression: \gate.clknet_3_0__leaf_clk_spi
+Import show expression: \gate.clknet_3_1__leaf_clk_spi
+Import show expression: \gate.clknet_3_2__leaf_clk_spi
+Import show expression: \gate.clknet_3_3__leaf_clk_spi
+Import show expression: \gate.clknet_3_4__leaf_clk_spi
+Import show expression: \gate.clknet_3_5__leaf_clk_spi
+Import show expression: \gate.clknet_3_6__leaf_clk_spi
+Import show expression: \gate.clknet_3_7__leaf_clk_spi
+Import show expression: \gate.devx[8]
+Import show expression: \gate.__pi_bitcnt[0]
+Import show expression: \gate.__pi_bitcnt[1]
+Import show expression: \gate.__pi_bitcnt[2]
+Import show expression: \gate.__pi_bitcnt[3]
+Import show expression: \gate.__pi_bitcnt[4]
+Import show expression: \gate.__pi_clk_spi
+Import show expression: \gate.__pi_devx[0]
+Import show expression: \gate.__pi_devx[10]
+Import show expression: \gate.__pi_devx[11]
+Import show expression: \gate.__pi_devx[1]
+Import show expression: \gate.__pi_devx[2]
+Import show expression: \gate.__pi_devx[3]
+Import show expression: \gate.__pi_devx[4]
+Import show expression: \gate.__pi_devx[5]
+Import show expression: \gate.__pi_devx[6]
+Import show expression: \gate.__pi_devx[7]
+Import show expression: \gate.__pi_devx[9]
+Import show expression: \gate.__pi_rst_n
+Import show expression: \gate.__pi_s_cs[1]
+Import show expression: \gate.__pi_s_mosi[1]
+Import show expression: \gate.__pi_s_sclk[1]
+Import show expression: \gate.__pi_s_sclk[2]
+Import show expression: \gate.__pi_sr[0]
+Import show expression: \gate.__pi_sr[10]
+Import show expression: \gate.__pi_sr[11]
+Import show expression: \gate.__pi_sr[12]
+Import show expression: \gate.__pi_sr[13]
+Import show expression: \gate.__pi_sr[14]
+Import show expression: \gate.__pi_sr[1]
+Import show expression: \gate.__pi_sr[2]
+Import show expression: \gate.__pi_sr[3]
+Import show expression: \gate.__pi_sr[4]
+Import show expression: \gate.__pi_sr[5]
+Import show expression: \gate.__pi_sr[6]
+Import show expression: \gate.__pi_sr[7]
+Import show expression: \gate.__pi_sr[8]
+Import show expression: \gate.__pi_sr[9]
+Import show expression: \gate.__po_devx[8]
+Import show expression: \gold.sck_rise
+Import show expression: \gold.sr[10]
+Import show expression: \gold.sr[9]
+Import show expression: \gold.sr[8]
+Import show expression: \gold.sr[6]
+Import show expression: \gold.sr[5]
+Import show expression: \gold.sr[4]
+Import show expression: \gold.sr[3]
+Import show expression: \gold.sr[2]
+Import show expression: \gold.sr[1]
+Import show expression: \gold.sr[0]
+Import show expression: \gold.s_mosi[1]
+Import show expression: \gold.devx[11]
+Import show expression: \gold.devx[10]
+Import show expression: \gold.devx[9]
+Import show expression: \gold.devx[7]
+Import show expression: \gold.devx[6]
+Import show expression: \gold.devx[5]
+Import show expression: \gold.devx[4]
+Import show expression: \gold.devx[3]
+Import show expression: \gold.devx[2]
+Import show expression: \gold.devx[1]
+Import show expression: \gold.devx[0]
+Import show expression: \gold.g_spi.gclk
+Import show expression: \gold.fsk_dev[8]
+Import show expression: \gold.rst_n
+Import show expression: \gold.bitcnt[3]
+Import show expression: \gold.bitcnt[2]
+Import show expression: \gold.bitcnt[0]
+Import show expression: \gold.bitcnt[1]
+Import show expression: \gold.sr[14]
+Import show expression: \gold.bitcnt[4]
+Import show expression: \gold.s_sclk[2]
+Import show expression: \gold.s_sclk[1]
+Import show expression: \gold.s_cs[1]
+Import show expression: \gold.sr[13]
+Import show expression: \gold.sr[11]
+Import show expression: \gold.sr[12]
+Import show expression: \gold.sr[7]
+Import show expression: \gold.clk_spi
+Import show expression: \gold.devx[8]
+Import show expression: \gold.__pi_bitcnt[0]
+Import show expression: \gold.__pi_bitcnt[1]
+Import show expression: \gold.__pi_bitcnt[2]
+Import show expression: \gold.__pi_bitcnt[3]
+Import show expression: \gold.__pi_bitcnt[4]
+Import show expression: \gold.__pi_clk_spi
+Import show expression: \gold.__pi_devx[0]
+Import show expression: \gold.__pi_devx[10]
+Import show expression: \gold.__pi_devx[11]
+Import show expression: \gold.__pi_devx[1]
+Import show expression: \gold.__pi_devx[2]
+Import show expression: \gold.__pi_devx[3]
+Import show expression: \gold.__pi_devx[4]
+Import show expression: \gold.__pi_devx[5]
+Import show expression: \gold.__pi_devx[6]
+Import show expression: \gold.__pi_devx[7]
+Import show expression: \gold.__pi_devx[9]
+Import show expression: \gold.__pi_rst_n
+Import show expression: \gold.__pi_s_cs[1]
+Import show expression: \gold.__pi_s_mosi[1]
+Import show expression: \gold.__pi_s_sclk[1]
+Import show expression: \gold.__pi_s_sclk[2]
+Import show expression: \gold.__pi_sr[0]
+Import show expression: \gold.__pi_sr[10]
+Import show expression: \gold.__pi_sr[11]
+Import show expression: \gold.__pi_sr[12]
+Import show expression: \gold.__pi_sr[13]
+Import show expression: \gold.__pi_sr[14]
+Import show expression: \gold.__pi_sr[1]
+Import show expression: \gold.__pi_sr[2]
+Import show expression: \gold.__pi_sr[3]
+Import show expression: \gold.__pi_sr[4]
+Import show expression: \gold.__pi_sr[5]
+Import show expression: \gold.__pi_sr[6]
+Import show expression: \gold.__pi_sr[7]
+Import show expression: \gold.__pi_sr[8]
+Import show expression: \gold.__pi_sr[9]
+Import show expression: \gold.__po_devx[8]
+Import show expression: \__po_devx[8]__gate
+Import show expression: \__po_devx[8]__gold
+Import show expression: \__pi_sr[9]
+Import show expression: \__pi_sr[8]
+Import show expression: \__pi_sr[7]
+Import show expression: \__pi_sr[6]
+Import show expression: \__pi_sr[5]
+Import show expression: \__pi_sr[4]
+Import show expression: \__pi_sr[3]
+Import show expression: \__pi_sr[2]
+Import show expression: \__pi_sr[1]
+Import show expression: \__pi_sr[14]
+Import show expression: \__pi_sr[13]
+Import show expression: \__pi_sr[12]
+Import show expression: \__pi_sr[11]
+Import show expression: \__pi_sr[10]
+Import show expression: \__pi_sr[0]
+Import show expression: \__pi_s_sclk[2]
+Import show expression: \__pi_s_sclk[1]
+Import show expression: \__pi_s_mosi[1]
+Import show expression: \__pi_s_cs[1]
+Import show expression: \__pi_rst_n
+Import show expression: \__pi_devx[9]
+Import show expression: \__pi_devx[7]
+Import show expression: \__pi_devx[6]
+Import show expression: \__pi_devx[5]
+Import show expression: \__pi_devx[4]
+Import show expression: \__pi_devx[3]
+Import show expression: \__pi_devx[2]
+Import show expression: \__pi_devx[1]
+Import show expression: \__pi_devx[11]
+Import show expression: \__pi_devx[10]
+Import show expression: \__pi_devx[0]
+Import show expression: \__pi_clk_spi
+Import show expression: \__pi_bitcnt[4]
+Import show expression: \__pi_bitcnt[3]
+Import show expression: \__pi_bitcnt[2]
+Import show expression: \__pi_bitcnt[1]
+Import show expression: \__pi_bitcnt[0]
+
+[induction step 1] Solving problem with 5411 variables and 14403 clauses..
+Induction step proven: SUCCESS!
+
+                  /$$$$$$      /$$$$$$$$     /$$$$$$$    
+                 /$$__  $$    | $$_____/    | $$__  $$   
+                | $$  \ $$    | $$          | $$  \ $$   
+                | $$  | $$    | $$$$$       | $$  | $$   
+                | $$  | $$    | $$__/       | $$  | $$   
+                | $$/$$ $$    | $$          | $$  | $$   
+                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$
+                 \____ $$$|__/|________/|__/|_______/|__/
+                       \__/                              
+
+End of script. Logfile hash: 0de9839aa7, time: 0.05s, user: 0.05s, system: 0.01s, MEM: 42.09 MB peak
+Yosys 0.69 (git sha1 9f75ca1f9, Release, GNU /usr/bin/c++ 13.3.0)
+Time spent: 81% 1x sat (0 sec), 9% 2x read_verilog (0 sec), ...

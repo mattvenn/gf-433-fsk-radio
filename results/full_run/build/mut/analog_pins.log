@@ -1,0 +1,4 @@
+  ua[1]: shorted to VGND by ['Rshort_ua1'] (['R'])
+  tx_fine: 54 signal pins, the same in RTL, LEF, GL netlist and LVS subcircuit
+ERROR: info.yaml analog_pins = 4, PINOUT uses ua[0..5]
+pinout: FAIL (1 errors; uio_oe = 0x08)

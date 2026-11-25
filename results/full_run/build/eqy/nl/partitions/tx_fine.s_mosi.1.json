@@ -1,0 +1,62 @@
+{
+  "partition": {
+    "index": 3,
+    "name": "tx_fine.s_mosi.1",
+    "inbits": {
+      "g_spi.clk": [
+        0
+      ],
+      "mosi": [
+        0
+      ],
+      "rst_n": [
+        0
+      ]
+    },
+    "outbits": {
+      "s_mosi[0]": [
+        0
+      ],
+      "s_mosi[1]": [
+        0
+      ]
+    },
+    "crossbits": {}
+  },
+  "gold_module": {
+    "name": "gold.tx_fine.s_mosi.1",
+    "internal": {},
+    "unused": {},
+    "cellcount": 1,
+    "bitcount": 5
+  },
+  "gate_module": {
+    "name": "gold.tx_fine.s_mosi.1",
+    "internal": {
+      "net3": [
+        0
+      ],
+      "net4": [
+        0
+      ],
+      "net57": [
+        0
+      ],
+      "net58": [
+        0
+      ],
+      "net59": [
+        0
+      ],
+      "net60": [
+        0
+      ],
+      "net61": [
+        0
+      ]
+    },
+    "unused": {},
+    "cellcount": 10,
+    "bitcount": 13
+  }
+}
