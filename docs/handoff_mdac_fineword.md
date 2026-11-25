@@ -1,4 +1,4 @@
-> Running: step 3/5 since 16:51, ETA 17:13
+> Running: step 4/5 since 17:10, ETA 17:30
 
 # Handoff: does the fine word fall at word boundaries? (medium-DAC Monte Carlo, sim server)
 
