@@ -118,3 +118,9 @@ for j in JOBS:
 for j in JOBS:
     if j["name"] == "fsk_c_tt_-95_n16":
         j["threads"], j["est"] = 3, 412 * 470
+
+# 2026-11-25: the longest jobs start first. The 16-bit packet (about 54 h) is the critical path, and at prio 0 it queued
+# behind the ~420 prio-1 Monte Carlo samples (about 2 h)
+for j in JOBS:
+    if j["est"] >= 10 * 3600:
+        j["prio"] = max(j.get("prio") or 0, 2)
