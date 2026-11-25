@@ -318,8 +318,14 @@ with the macro's measured clock charge on the tile supply (schematic ring, from 
 - **ΣΔ.** The spurs match the model: −58.7 dBc at 7.59 MHz for fraction 77 (model −60.1 dBc) and −65.2 dBc for
   fraction ½ (schematic DAC, from 0.25 µs). The mean frequency is not linear in the fraction. Each turn-on of the ΣΔ cell injects charge from
   its drain node (about 0.9 V swing) into `mo`: about 1.1 Hz·ms per edge. The excess therefore follows the edge
-  rate, which is largest at fraction ½. The curve stays monotonic and continuous across word boundaries, so the
-  counting servo absorbs it. A dummy switch or slower edges on that one cell would remove it.
+  rate, which is largest at fraction ½. In these runs (no mismatch) the curve stays monotonic and continuous across
+  word boundaries, so the counting servo absorbs it. **With mismatch it need not:** going from (w, fraction 255) to
+  (w+1, 0) changes the mean by step(w) − 255/256 of the ΣΔ cell, which is negative whenever a DAC step is smaller than
+  the cell (a Lean proof, `mattvenn/circuit-design-learnings` `lean/MediumDac.lean`, theorem `fine_boundary`).
+  Table III's own numbers allow it: steps down to 0.24 LSB against a 0.92–1.08 LSB cell, so the frequency can step
+  *down* by about 0.7 LSB (about 20 kHz) at a weak carry. The counting servo still converges, because it measures
+  frequency, but a search or FSK step that assumes monotonicity across a word boundary does not. How often it
+  happens is being measured (`docs/handoff_mdac_fineword.md`). A dummy switch or slower edges on that one cell would remove it.
 - **Charge injection.** At the major carry 511 → 512 (16 cells switch): `mo` peaks 30 mV (ss 35 mV), `vg` 1.5 mV,
   and `vbnf` 0.07 mV in the run without the hold. The step is +33.3 kHz, so it stays monotonic. With the ΣΔ toggling,
   `mo` ripples 2.8 mV p-p.
