@@ -1,0 +1,23 @@
+Note: Starting dynamic gmin stepping
+Note: Dynamic gmin stepping completed
+Note: Starting dynamic gmin stepping
+Note: Dynamic gmin stepping completed
+
+Note: No compatibility mode selected!
+
+
+Circuit: * mc baseband ac typical seed 154 pex none
+
+Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
+
+Using SPARSE 1.3 as Direct Linear Solver
+
+No. of Data Rows : 1
+v(xbbi.o1p)-v(xbbi.o1n) = 3.793834e-03
+v(xbbq.o1p)-v(xbbq.o1n) = 1.446895e-02
+Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
+
+Using SPARSE 1.3 as Direct Linear Solver
+ Reference value :  5.00000e+04
+No. of Data Rows : 3
+Note: Simulation executed from .control section 
