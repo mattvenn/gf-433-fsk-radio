@@ -1,0 +1,8 @@
+git 7467688 verify-gaps
+ngspice: ** ngspice-47 : Circuit level simulation program
+magic: 8.3.684
+netgen: Netgen 1.5.323 compiled on Tue Sep 22 03:35:51 PM CEST 2026
+klayout: KLayout 0.30.12
+PDK: /foss/pdks/gf180mcuD
+magic (pinned, for PEX only): 8.3.642
+cores: 30, load 28, budget 40, disk soft 70 / hard 78 GB

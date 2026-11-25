@@ -1,0 +1,21 @@
+973 jobs, 2067 CPU-hours
+  pvt           1014.0 CPU-h
+  fsk            497.3 CPU-h
+  fskn           252.3 CPU-h
+  te             203.0 CPU-h
+  gap1_mc         46.7 CPU-h
+  mut             15.6 CPU-h
+  rx0             15.0 CPU-h
+  ex               5.6 CPU-h
+  mx               5.3 CPU-h
+  txrx             3.7 CPU-h
+  bbrec            3.5 CPU-h
+  rxset            2.9 CPU-h
+  ovl1             1.0 CPU-h
+  pw               0.4 CPU-h
+  rate             0.3 CPU-h
+  coupling         0.3 CPU-h
+  fskpre           0.1 CPU-h
+longest single job fsk_c_tt_-95_n16 53.8 h
+budget 28: >= 73.8 h wall (CPU-bound lower limit)
+budget 30: >= 68.9 h wall (CPU-bound lower limit)

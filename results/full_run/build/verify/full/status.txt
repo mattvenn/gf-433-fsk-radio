@@ -1,1 +1,3 @@
 2026-11-25 13:15:25 step 1/4 setup: started
+2026-11-25 13:15:28 step 1/4 setup: done: git 7467688 verify-gaps; 973 jobs, 2067 CPU-hours
+2026-11-25 13:15:28 step 2/4 jobs: started
