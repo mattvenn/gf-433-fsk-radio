@@ -1,0 +1,20 @@
+
+Note: No compatibility mode selected!
+
+
+Circuit: * mc comparators ff seed 38 pex none
+
+Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
+
+Using SPARSE 1.3 as Direct Linear Solver
+ Reference value :  4.49049e-06 Reference value :  1.51813e-05 Reference value :  2.75480e-05 Reference value :  3.68795e-05 Reference value :  5.05688e-05 Reference value :  5.90076e-05 Reference value :  7.19937e-05 Reference value :  8.22420e-05 Reference value :  9.34437e-05 Reference value :  1.04211e-04 Reference value :  1.15444e-04 Reference value :  1.27745e-04 Reference value :  1.35121e-04 Reference value :  1.44644e-04
+No. of Data Rows : 12092
+up1                 =  4.64575e-02
+dn1                 =  -3.05416e-02
+up1b                =  4.63979e-02
+dn1b                =  -3.05416e-02
+up2                 =  1.20281e-04
+dn2                 =  -3.88229e-02
+up2b                =  3.40939e-02
+dn2b                =  -3.88229e-02
+Note: Simulation executed from .control section 

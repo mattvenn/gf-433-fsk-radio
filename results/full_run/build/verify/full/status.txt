@@ -5,3 +5,4 @@
 2026-11-25 15:15 progress: ok 250, run 10, wait 714; disk 5.2 GB
 2026-11-25 16:15 progress: ok 308, run 10, wait 656; disk 6.5 GB
 2026-11-25 17:15 progress: ok 376, run 10, wait 588; disk 8.1 GB
+2026-11-25 18:15 progress: ok 443, run 9, wait 522; disk 9.6 GB
