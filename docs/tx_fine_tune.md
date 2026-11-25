@@ -21,7 +21,7 @@ All numbers are at 27 °C and VDD 3.3 V unless a corner is named (corner policy,
 | Resolution with ΣΔ | ≤ 1 kHz | LSB / 256 = 115-150 Hz | |
 | Medium DAC range | ≥ 1.3 × the largest coarse step | 1.58-1.59 × at tt / ss / ff / sf / fs | Table II |
 | Medium DAC LSB | ≤ 50 kHz | 29.4 kHz (ss) … 38.5 kHz (ff) | Table II |
-| Monotonic (Monte Carlo, N = 200) | DNL > −1 LSB in ≥ 99 % | 200 / 200 at tt, ss and ff (worst −0.76 LSB, ff) | Table III |
+| Monotonic (Monte Carlo, N = 200) | DNL > −1 LSB in ≥ 99 % | 200 / 200 at tt, ss and ff (worst −0.76 LSB, ff); a re-run gives 199 / 200 at ff (worst −1.02) | Table III and note |
 | rms FM, 1-10 kHz, reference path | ≤ 15 kHz (whole VCO) | 8.20 → 8.62 kHz at mid-scale, 9.08 kHz at full scale (tt) | Table IV |
 | Extracted DAC on the extracted vco_top | LSB ≤ 50 kHz, range ≥ 1.3 steps | LSB 27.4 (ss) / 31.1 (tt) / 35.6 (ff) kHz, range 28.0-36.5 MHz; −0.2 % against the schematic DAC | Table VII |
 | ΣΔ spurs, transistor level | ≤ −40 dBc | −58.2 dBc (fraction 77, model −60.1), −65.8 dBc (fraction ½), extracted DAC | Fig. 3 |
@@ -136,6 +136,39 @@ medium DAC at mid-scale). The swing at `vg` and the ring nodes is unchanged (tt 
 | tt | 200 / 200 | −0.721 | −0.700 | 6.52-6.81 nA | 0.928-1.071 |
 | ss | 200 / 200 | −0.682 | −0.662 | 6.90-7.19 nA | 0.932-1.068 |
 | ff | 200 / 200 | −0.763 | −0.738 | 6.17-6.46 nA | 0.924-1.075 |
+
+**Note (2026-11-25): the fine word across word boundaries.** Table III checks that every step of the 10-bit word
+stays positive (DNL > −1). The fine word (the 10-bit word w plus the 8-bit ΣΔ fraction f) needs a different
+condition, which a Lean proof made explicit (`mattvenn/circuit-design-learnings`, `lean/MediumDac.lean`, theorem
+`fine_boundary`; the reason this check was added): from (w, 255) to (w + 1, 0) the mean output only rises if the step
+is larger than 255/256 of the ΣΔ cell. The cell and the LSB step are the same unit, so the nominal margin is 1/256 LSB
+and mismatch breaks it both ways. A step smaller than the cell makes the frequency fall (two settings overlap). A
+step larger than the cell leaves a gap (no setting reaches it).
+
+A re-run of this Monte Carlo on the sim server (seeds 5000-5199, `run_mdac_fineword.sh`, then `mdac_fineword.py`
+and `mdac_coverage.py`) gives, per corner tt / ss / ff:
+- **Falls:** every sample has at least one falling boundary. Drops over 0.25 LSB occur in 136 / 125 / 139 of
+  200 samples and drops over 0.5 LSB in 30 / 26 / 40, all at major carries. Below a major carry the largest drop is
+  0.38 / 0.36 / 0.40 LSB. The worst is 0.93 / 0.88 / 0.98 LSB (28.9 / 24.1 / 34.9 kHz), seed 5102 at word 319.
+- **Gaps:** taking every word's reachable interval together, the gaps cover 2.8 / 2.7 / 3.0 % of the range. For a
+  random target the tuning error is 0 in 97 % of cases and under 0.76 / 0.60 / 0.96 kHz in 99 %. A typical chip's
+  worst case is 5.1 / 4.2 / 6.2 kHz and the worst of 200 chips 11.9 / 9.8 / 14.5 kHz, with the coarse code held (a
+  neighbouring coarse code often covers the gap, so these are upper bounds).
+
+What it means for the radio and the firmware. The counting servo measures frequency, so it tolerates both a fall
+and a gap. A search or FSK step that assumes monotonicity across a word boundary does not. Two chips can differ by up to
+about 15 kHz in how close they get to a given frequency. That is small against the ±100 kHz FSK tones, the
+receiver's 137-150 kHz baseband corner, the ring's 8 kHz rms FM noise and the 45-60 kHz/°C temperature drift. It is
+not simulated as a bit-error rate. The firmware should let the two ends agree on a frequency both can reach, or try
+the neighbouring coarse code when the servo cannot converge, and keep FSK pairs away from multiples of 32 (as below).
+A ΣΔ cell larger than the largest step (1.5-2 units, with the fraction scaled) would turn every gap into an overlap.
+The tile is unchanged.
+
+The same re-run does not reproduce Table III's tails. The LSB and ΣΔ-cell ranges agree, but the worst DNL is
+−0.965 / −0.912 / −1.019 (one ff sample is below −1, so 199 / 200, still within the ≥ 99 % target) and the 1st
+percentile is −0.797 / −0.753 / −0.843. The script that made Table III (`mdac.py` at 0917332) gives the same values
+as the re-run for seeds 5102 and 5093 on the sim server, so the difference is in the seeds or settings Table III used,
+which were not recorded. It is not a tools difference. Table III is left as it was.
 
 *Table IV. rms FM from the reference and DAC current noise (`mdac_sim.py noise`: `.noise` of the coarse DAC's and
 the medium DAC's drain currents with `vg` held, times K_I = df/dI from the ideal sink; 1-10 kHz).*
@@ -324,8 +357,11 @@ with the macro's measured clock charge on the tile supply (schematic ring, from 
   the cell (a Lean proof, `mattvenn/circuit-design-learnings` `lean/MediumDac.lean`, theorem `fine_boundary`).
   Table III's own numbers allow it: steps down to 0.24 LSB against a 0.92–1.08 LSB cell, so the frequency can step
   *down* by about 0.7 LSB (about 20 kHz) at a weak carry. The counting servo still converges, because it measures
-  frequency, but a search or FSK step that assumes monotonicity across a word boundary does not. How often it
-  happens is being measured (`docs/handoff_mdac_fineword.md`). A dummy switch or slower edges on that one cell would remove it.
+  frequency, but a search or FSK step that assumes monotonicity across a word boundary does not. The Monte Carlo
+  of the fine word (N = 200 per corner, `mdac_fineword.py`, note after Table III) finds a falling boundary in every
+  sample at tt, ss and ff (median about 450 per sample, almost all of them a few hundredths of an LSB). Drops over
+  0.5 LSB occur in 15 / 13 / 20 % of samples, all at major carries (w % 32 = 31); 3.6 % of all drops are at major
+  carries. The worst is 0.930 / 0.878 / 0.981 LSB (28.9 / 24.1 / 34.9 kHz) at tt / ss / ff. A dummy switch or slower edges on that one cell would remove it.
 - **Charge injection.** At the major carry 511 → 512 (16 cells switch): `mo` peaks 30 mV (ss 35 mV), `vg` 1.5 mV,
   and `vbnf` 0.07 mV in the run without the hold. The step is +33.3 kHz, so it stays monotonic. With the ΣΔ toggling,
   `mo` ripples 2.8 mV p-p.

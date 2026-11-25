@@ -111,7 +111,9 @@ SoftSPI; the demo board's hardware SPI1 on GPIO25-28 has the order CSn, SCK, TX,
    3/30 mirror) + first-order ΣΔ cell, SPI register / FSK offset / ÷16 ÷64 ÷1024 / gated ck in the digital macro
    `tx_fine` (LibreLane), vctrl pulled down on chip (200 kΩ), tile LVS / DRC / antenna clean, TT precheck passes.
    - Extracted ring + extracted DAC (C only, `pex_mdac.sh` + `pexmerge.py`): LSB 27.4 / 31.1 / 35.6 kHz (ss / tt / ff),
-     −0.2 % vs the schematic DAC, range > 1.3 coarse steps; MC (N = 200 × 3 corners, schematic DAC) monotonic; ΣΔ
+     −0.2 % vs the schematic DAC, range > 1.3 coarse steps; MC (N = 200 × 3 corners, schematic DAC) monotonic in ≥ 99 % (re-run 2026-11-25: ff 199 / 200); the fine word
+     (word + ΣΔ fraction) falls or gaps at word boundaries with mismatch, but 97 % of targets are hit exactly and the
+     worst miss is about 15 kHz (`docs/tx_fine_tune.md`, note after Table III); ΣΔ
      spurs −58.2 dBc (model −60); FSK ±3 LSB = 204 kHz, settles within 0.26 µs; FM +5 %. VDD 2.8-3.3 V: LSB and
      range unchanged (no headroom issue).
    - **Clock gating (2026-11-11, macro r12):** 4 icgtp gates, small CTS buffers; clock charge 21.1 -> 4.48 pC per

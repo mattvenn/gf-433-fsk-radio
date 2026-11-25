@@ -1,4 +1,4 @@
-> Stopped (2026-11-25): run complete, but the Table III sanity check is off (worst DNL 0.23-0.26 LSB deeper, ff 199/200), so docs/tx_fine_tune.md is not edited yet; results and draft text below for Matt.
+> Done (2026-11-25): falling boundary in 100 % / 100 % / 100 % of samples tt / ss / ff (mostly < 0.1 LSB; > 0.5 LSB in 15 / 13 / 20 %, all at major carries), worst 0.98 LSB (34.9 kHz, ff); gaps 3 % of the range, worst miss 15 kHz; see docs/tx_fine_tune.md (note after Table III).
 
 # Handoff: does the fine word fall at word boundaries? (medium-DAC Monte Carlo, sim server)
 
@@ -67,7 +67,7 @@ different test. This run counts the falling boundaries per sample.
 ## Results (server run, 2026-11-25, written by the server agent)
 Run on the sim server (30 CPUs, `JOBS=28`), 16:29-17:24, ngspice-47; `build/tx_fine/mdac/DONE`. Analysis self-test passed.
 **The run is complete and the fine-word numbers are measured, but the server agent stopped before editing
-`docs/tx_fine_tune.md`** because the sanity check against Table III missed the handoff's 0.1 LSB threshold.
+`docs/tx_fine_tune.md`** because the sanity check against Table III missed the handoff's 0.1 LSB threshold. After Matt reviewed the results, the note was written into the doc (2026-11-25).
 
 ### Sanity check against Table III (did not match)
 | Corner | DNL > −1 | Worst DNL (Table III) | 1st percentile (Table III) | LSB | ΣΔ cell / LSB |
@@ -111,7 +111,7 @@ fall, at every carry level. Breaking the drops down by size (a scratch script on
 Every drop over 0.5 LSB is at a major carry (carry into bits 5-9). The worst at all three corners is seed 5102 at
 word 319 (carry into bit 6).
 
-### Draft text for `docs/tx_fine_tune.md` (not applied)
+### Draft text for `docs/tx_fine_tune.md` (superseded: Matt reviewed the results and the note was written into the doc on 2026-11-25, with the coverage result from `sim/tune/mdac_coverage.py` added)
 - Replace "How often it happens is being measured (`docs/handoff_mdac_fineword.md`)." with: "A Monte Carlo of the
   fine word (N = 200 per corner, `mdac_fineword.py`) finds a falling boundary in every sample: the ΣΔ cell and the
   LSB step are the same unit, so about half of all boundaries fall by a few hundredths of an LSB. Drops over 0.25 LSB
