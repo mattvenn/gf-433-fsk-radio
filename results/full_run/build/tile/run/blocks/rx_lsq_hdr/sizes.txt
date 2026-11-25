@@ -1,0 +1,3 @@
+ok  ('nfet_03v3', 10.0, ('VSS',), 'vq', '-')  sim 24.57  layout 24.57
+ok  ('pfet_03v3', 0.28, ('VDD', 'vq'), 'qenb', 'VDD')  sim 20.0  layout 20.01
+SIZES OK (2 groups)

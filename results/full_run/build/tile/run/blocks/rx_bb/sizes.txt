@@ -1,0 +1,42 @@
+ok  ('nfet_03v3', 0.5, ('VSS', 't1'), 'nb', '-')  sim 16.0  layout 16.0
+ok  ('nfet_03v3', 0.5, ('VSS', 't2'), 'nb', '-')  sim 0.3  layout 0.3
+ok  ('nfet_03v3', 0.5, ('VSS', 't3'), 'nb', '-')  sim 0.8  layout 0.8
+ok  ('nfet_03v3', 1.0, ('o1n', 't1'), 'inp', '-')  sim 320.0  layout 320.0
+ok  ('nfet_03v3', 1.0, ('o1p', 't1'), 'inn', '-')  sim 320.0  layout 320.0
+ok  ('nfet_03v3', 1.0, ('o2n', 't2'), 'g2p', '-')  sim 8.0  layout 8.0
+ok  ('nfet_03v3', 1.0, ('o2p', 't2'), 'g2n', '-')  sim 8.0  layout 8.0
+ok  ('nfet_03v3', 1.0, ('outn', 't3'), 'g3p', '-')  sim 8.0  layout 8.0
+ok  ('nfet_03v3', 1.0, ('outp', 't3'), 'g3n', '-')  sim 8.0  layout 8.0
+ok  ('nfet_03v3', 10.0, ('VSS',), 'o2n', '-')  sim 98.2801  layout 98.28
+ok  ('nfet_03v3', 10.0, ('VSS',), 'o2p', '-')  sim 98.2801  layout 98.28
+ok  ('nfet_03v3', 10.0, ('VSS',), 'outn', '-')  sim 98.2801  layout 98.28
+ok  ('nfet_03v3', 10.0, ('VSS',), 'outp', '-')  sim 98.2801  layout 98.28
+ok  ('nfet_03v3', 10.0, ('VSS',), 'vb', '-')  sim 24.57  layout 24.57
+ok  ('nfet_03v3', 50.0, ('VSS', 'vgr'), 'nb', '-')  sim 0.42  layout 0.42
+ok  ('pfet_03v3', 0.28, ('VDD', 'vbt'), 'enb', 'VDD')  sim 1.0  layout 1.0
+ok  ('pfet_03v3', 1.0, ('g2n', 'mRp2b'), 'mRp2b', 'g2n')  sim 0.42  layout 0.42
+ok  ('pfet_03v3', 1.0, ('g2p', 'mRp2a'), 'mRp2a', 'g2p')  sim 0.42  layout 0.42
+ok  ('pfet_03v3', 1.0, ('g3n', 'mRp3b'), 'mRp3b', 'g3n')  sim 0.42  layout 0.42
+ok  ('pfet_03v3', 1.0, ('g3p', 'mRp3a'), 'mRp3a', 'g3p')  sim 0.42  layout 0.42
+ok  ('pfet_03v3', 1.0, ('mRp2a', 'vb'), 'mRp2a', 'vb')  sim 0.42  layout 0.42
+ok  ('pfet_03v3', 1.0, ('mRp2b', 'vb'), 'mRp2b', 'vb')  sim 0.42  layout 0.42
+ok  ('pfet_03v3', 1.0, ('mRp3a', 'vb'), 'mRp3a', 'vb')  sim 0.42  layout 0.42
+ok  ('pfet_03v3', 1.0, ('mRp3b', 'vb'), 'mRp3b', 'vb')  sim 0.42  layout 0.42
+ok  ('pfet_03v3', 1.0, ('vb', 'vgr'), 'vgr', 'vb')  sim 4.0  layout 4.0
+ok  ('pfet_03v3', 10.0, ('o1n',), 'g2n', 'o1n')  sim 24.57  layout 24.57
+ok  ('pfet_03v3', 10.0, ('o1p',), 'g2p', 'o1p')  sim 24.57  layout 24.57
+ok  ('pfet_03v3', 10.0, ('o2n',), 'g3n', 'o2n')  sim 24.57  layout 24.57
+ok  ('pfet_03v3', 10.0, ('o2p',), 'g3p', 'o2p')  sim 24.57  layout 24.57
+ok  ('pfet_03v3', 12.0, ('g2n', 'vb'), 'vgr', 'vb')  sim 0.42  layout 0.42
+ok  ('pfet_03v3', 12.0, ('g2p', 'vb'), 'vgr', 'vb')  sim 0.42  layout 0.42
+ok  ('pfet_03v3', 12.0, ('g3n', 'vb'), 'vgr', 'vb')  sim 0.42  layout 0.42
+ok  ('pfet_03v3', 12.0, ('g3p', 'vb'), 'vgr', 'vb')  sim 0.42  layout 0.42
+ok  ('ppolyf_u', 2.0, ('VDD', 'o1n'))  sim 57.143  layout 57.14
+ok  ('ppolyf_u', 2.0, ('VDD', 'o1p'))  sim 57.143  layout 57.14
+ok  ('ppolyf_u_1k', 1.0, ('VDD', 'o2n'))  sim 200.0  layout 200.0
+ok  ('ppolyf_u_1k', 1.0, ('VDD', 'o2p'))  sim 200.0  layout 200.0
+ok  ('ppolyf_u_1k', 1.0, ('VDD', 'outn'))  sim 200.0  layout 200.0
+ok  ('ppolyf_u_1k', 1.0, ('VDD', 'outp'))  sim 200.0  layout 200.0
+ok  ('ppolyf_u_1k', 1.0, ('VSS', 'vb'))  sim 100.0  layout 99.99
+ok  ('ppolyf_u_1k', 1.0, ('vb', 'vbt'))  sim 150.0  layout 150.02
+SIZES OK (41 groups)

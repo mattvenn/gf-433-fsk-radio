@@ -1,0 +1,25 @@
+gds /foss/designs/gf-433-fsk-radio/gds/tt_um_mattvenn_gf433_vco.gds  source /foss/designs/gf-433-fsk-radio/lvs/tt_um_mattvenn_gf433_vco.spice  PDK_ROOT /foss/pdks
+magic 8.3.684  Netgen 1.5.323
+== rnw repaint in cgm_ref: 1 box(es)
+== extraction (6 s): 14251 X devices, 42 D devices
+   layout ports: 54
+== LVS (57 s):
+Final result: Circuits match uniquely.
+Netlists match with 149 symmetries.
+LVS PASS
+== resistor sizes: PASS  26 source / 26 layout resistors; total L per model / W: nplus_u W 2: 100 vs 100 um; nwell W 2: 5.025 vs 5.025 um; ppolyf_u_1k W 1: 4192.39 vs 4192.44 um
+== mutation ui_in[0] <-> ui_in[1] at the code inverters: FAIL (expected)  [Final result: Top level cell failed pin matching. Netlists do not match. ]
+== mutation macro ck_o <-> div16 (uo_out[0] <-> uo_out[1]): FAIL (expected)  [Final result: Top level cell failed pin matching. ]
+== mutation SPI SCLK <-> MOSI at the macro (uio_in[0] <-> uio_in[1]): FAIL (expected)  [Final result: Top level cell failed pin matching. ]
+== mutation DAC line b4 <-> s1 at mdac (dac_bn[4] <-> dac_tn[0]): FAIL (expected)  [Final result: Circuits match uniquely. Netlists match with 149 symmetries with property errors. Property errors were found. The following cells had property errors: ]
+== mutation VDD_LS decap (decap_ls) m 3 -> 2: FAIL (expected)  [Final result: Circuits match uniquely. Netlists match with 149 symmetries with property errors. Property errors were found. The following cells had property errors: ]
+== mutation tx_drv out_p <-> out_n (ua[3] <-> ua[2]): FAIL (expected)  [Final result: Top level cell failed pin matching. ]
+== mutation tx_drv en_p <-> en_n (ui_in[5] <-> ui_in[6]): FAIL (expected)  [Final result: Top level cell failed pin matching. ]
+== mutation ua[4] <-> ua[5] at the LNA: FAIL (expected)  [Final result: Top level cell failed pin matching. ]
+== mutation q_i <-> q_q at uo[4] / uo[5]: FAIL (expected)  [Final result: Top level cell failed pin matching. ]
+== mutation dbg_sel[0] <-> dbg_sel[1] at the baseband switches: FAIL (expected)  [Final result: Top level cell failed pin matching. Netlists do not match. ]
+== mutation ls <-> lsq at the LO buffers (I / Q LO taps swapped): FAIL (expected)  [Final result: Top level cell failed pin matching. Netlists do not match. ]
+== mutation mixer Q on VDPWR instead of VAPWR: FAIL (expected)  [Final result: Top level cell failed pin matching. Netlists do not match. ]
+== mutation vbnf <-> vctrl at cgm_ref: FAIL (expected)  [Final result: Top level cell failed pin matching. Netlists do not match. ]
+== mutation ua[1] not strapped to VGND: FAIL (expected)  [Final result: Top level cell failed pin matching. ]
+CHECK OK  (LVS PASS, resistor sizes PASS, mutations caught 1)

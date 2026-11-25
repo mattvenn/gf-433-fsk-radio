@@ -1,0 +1,5 @@
+ok  ('nfet_03v3', 0.28, ('VSS', 'ctrl_b'), 'ctrl', '-') sim 0.42 layout 0.42
+ok  ('nfet_03v3', 0.28, ('bus', 'mod'), 'ctrl', '-') sim 2.0 layout 2.0
+ok  ('pfet_03v3', 0.28, ('VDD', 'ctrl_b'), 'ctrl', 'VDD') sim 1.0 layout 1.0
+ok  ('pfet_03v3', 0.28, ('bus', 'mod'), 'ctrl_b', 'VDD') sim 4.0 layout 4.0
+SIZES OK (4 groups)

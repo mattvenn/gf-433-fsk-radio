@@ -1,0 +1,24 @@
+ok  ('nfet_03v3', 0.28, ('D1n2', 'D1y'), 'D1x', '-')  sim 1.0  layout 1.0
+ok  ('nfet_03v3', 0.28, ('D1n2', 'VSS'), 'lsq', '-')  sim 1.0  layout 1.0
+ok  ('nfet_03v3', 0.28, ('D1n3', 'D1qb'), 'lsq', '-')  sim 1.0  layout 1.0
+ok  ('nfet_03v3', 0.28, ('D1n3', 'VSS'), 'D1y', '-')  sim 1.0  layout 1.0
+ok  ('nfet_03v3', 0.28, ('D1x', 'VSS'), 'D1qb', '-')  sim 1.0  layout 1.0
+ok  ('nfet_03v3', 0.28, ('VSS', 'lo1'), 'lg', '-')  sim 0.22  layout 0.22
+ok  ('nfet_03v3', 0.28, ('VSS', 'lo2'), 'lo1', '-')  sim 0.6  layout 0.6
+ok  ('nfet_03v3', 0.28, ('VSS', 'lsq'), 'VSS', '-')  sim 0.42  layout 0.42
+ok  ('nfet_03v3', 0.28, ('VSS', 'lsq'), 'lo2', '-')  sim 1.2  layout 1.2
+ok  ('nfet_03v3', 0.28, ('VSS', 'q1'), 'D1qb', '-')  sim 0.6  layout 0.6
+ok  ('nfet_03v3', 0.28, ('VSS', 'tt'), 'lsq', '-')  sim 0.42  layout 0.42
+ok  ('nfet_03v3', 16.0, ('VSS',), 'lf', '-')  sim 16.0  layout 16.0
+ok  ('pfet_03v3', 0.28, ('D1n1', 'D1x'), 'lsq', 'vq')  sim 2.0  layout 2.0
+ok  ('pfet_03v3', 0.28, ('D1n1', 'vq'), 'D1qb', 'vq')  sim 2.0  layout 2.0
+ok  ('pfet_03v3', 0.28, ('D1qb', 'vq'), 'D1y', 'vq')  sim 2.0  layout 2.0
+ok  ('pfet_03v3', 0.28, ('D1y', 'vq'), 'lsq', 'vq')  sim 2.0  layout 2.0
+ok  ('pfet_03v3', 0.28, ('lo1', 'vq'), 'lg', 'vq')  sim 0.5  layout 0.5
+ok  ('pfet_03v3', 0.28, ('lo2', 'vq'), 'lo1', 'vq')  sim 1.5  layout 1.5
+ok  ('pfet_03v3', 0.28, ('lsq', 'vq'), 'lo2', 'vq')  sim 3.0  layout 3.0
+ok  ('pfet_03v3', 0.28, ('q1', 'vq'), 'D1qb', 'vq')  sim 1.5  layout 1.5
+ok  ('pfet_03v3', 0.28, ('tt', 'vq'), 'lsq', 'vq')  sim 1.05  layout 1.05
+ok  ('pfet_03v3', 2.0, ('lf', 'lg'), 'VSS', 'vq')  sim 0.22  layout 0.22
+ok  ('ppolyf_u_1k', 1.0, ('lf', 'lsq'))  sim 159.125  layout 159.12
+SIZES OK (23 groups)

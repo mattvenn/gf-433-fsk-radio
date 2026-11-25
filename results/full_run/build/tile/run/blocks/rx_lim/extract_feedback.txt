@@ -1,0 +1,18 @@
+box 10830 2539 12830 4996
+feedback add "device missing 1 terminal;
+ connecting remainder to node ln" pale
+box 7714 2539 9714 4996
+feedback add "device missing 1 terminal;
+ connecting remainder to node lp" pale
+box 3692 2539 5692 4996
+feedback add "device missing 1 terminal;
+ connecting remainder to node inp" pale
+box 576 2539 2576 4996
+feedback add "device missing 1 terminal;
+ connecting remainder to node inn" pale
+box 17212 8459 19212 10916
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box 15012 8459 17012 10916
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale

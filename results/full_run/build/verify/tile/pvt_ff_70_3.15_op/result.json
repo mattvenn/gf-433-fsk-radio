@@ -1,0 +1,25 @@
+{
+ "name": "pvt_ff_70_3.15_op",
+ "flags": [],
+ "case": {
+  "corner": "ff",
+  "temp": 70,
+  "vap": 3.15,
+  "vdp": 3.15,
+  "vnom": 3.15,
+  "kind": "op",
+  "tstop": 0,
+  "rx_en": 1,
+  "ic": null,
+  "est": 60
+ },
+ "deck_temp": 70.0,
+ "deck_vsa": 3.15,
+ "deck_vsd": 3.15,
+ "runtime_s": 6.0,
+ "vbnf": 1.0999875003731994,
+ "vg": 1.6290222596525417,
+ "nb": 0.8563507382796574,
+ "vap": 3.15,
+ "vdp": 3.15
+}

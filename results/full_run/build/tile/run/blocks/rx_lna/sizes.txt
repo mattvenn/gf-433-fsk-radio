@@ -1,0 +1,22 @@
+ok  ('nfet_03v3', 0.28, ('2i_tail', 'oin'), 'outp', '-')  sim 60.0  layout 60.0
+ok  ('nfet_03v3', 0.28, ('2i_tail', 'oip'), 'outn', '-')  sim 60.0  layout 60.0
+ok  ('nfet_03v3', 0.28, ('2q_tail', 'oqn'), 'outp', '-')  sim 60.0  layout 60.0
+ok  ('nfet_03v3', 0.28, ('2q_tail', 'oqp'), 'outn', '-')  sim 60.0  layout 60.0
+ok  ('nfet_03v3', 0.28, ('outn', 'tail'), 'inp', '-')  sim 240.0  layout 240.0
+ok  ('nfet_03v3', 0.28, ('outp', 'tail'), 'inn', '-')  sim 240.0  layout 240.0
+ok  ('nfet_03v3', 0.5, ('2i_tail', 'VSS'), 'nb', '-')  sim 80.0  layout 80.0
+ok  ('nfet_03v3', 0.5, ('2q_tail', 'VSS'), 'nb', '-')  sim 80.0  layout 80.0
+ok  ('nfet_03v3', 0.5, ('VSS', 'tail'), 'nb', '-')  sim 240.0  layout 240.0
+ok  ('nfet_03v3', 10.0, ('VSS',), 'vcm', '-')  sim 49.14  layout 49.15
+ok  ('pfet_03v3', 0.28, ('VDD', 'vt'), 'enb', 'VDD')  sim 2.0  layout 2.0
+ok  ('ppolyf_u', 2.0, ('VDD', 'oin'))  sim 9.143  layout 9.14
+ok  ('ppolyf_u', 2.0, ('VDD', 'oip'))  sim 9.143  layout 9.14
+ok  ('ppolyf_u', 2.0, ('VDD', 'oqn'))  sim 9.143  layout 9.14
+ok  ('ppolyf_u', 2.0, ('VDD', 'oqp'))  sim 9.143  layout 9.14
+ok  ('ppolyf_u', 4.0, ('VDD', 'outn'))  sim 9.143  layout 9.14
+ok  ('ppolyf_u', 4.0, ('VDD', 'outp'))  sim 9.143  layout 9.14
+ok  ('ppolyf_u_1k', 1.0, ('VSS', 'vcm'))  sim 30.0  layout 30.0
+ok  ('ppolyf_u_1k', 1.0, ('inn', 'vcm'))  sim 20.0  layout 20.0
+ok  ('ppolyf_u_1k', 1.0, ('inp', 'vcm'))  sim 20.0  layout 20.0
+ok  ('ppolyf_u_1k', 1.0, ('vcm', 'vt'))  sim 40.0  layout 40.0
+SIZES OK (21 groups)

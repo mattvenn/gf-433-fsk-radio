@@ -1,0 +1,9 @@
+rst_dbg (prove): caught, assert line 126, step 1, 1 s
+addr4 (prove): caught, assert line 126, step 94, 8 s
+thermo (prove): caught, assert line 141, step 72, 9 s
+no_sat (prove): caught, assert line 136, step 200, 45 s
+sd_hold (prove): caught, assert line 149, step 410, 112 s
+ck_glitch (prove): caught, assert line 156, step 66, 9 s
+dec_gate (gates): caught, assert line 46, step 70, 47 s
+spi_gate (gates): caught, assert line 46, step 26, 4 s
+RESULT formal_mutate PASS mutants caught 8 / 8

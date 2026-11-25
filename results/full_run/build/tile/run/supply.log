@@ -1,0 +1,39 @@
+ok   vco.decap.VDD_LS wired by the router
+ok   xdbg_vctrl.VDD wired by the router
+ok   xdbg_vctrl.VSS wired by the router
+ok   xvpd.b wired by the router
+ok   xbits.VDD wired by the router
+ok   xbits.VSS wired by the router
+ok   rx.lsqh.qenb wired by the router
+ok   rx.lobuf_q.VDD wired by the router
+ok   xant_tx.VDD wired by the router
+ok   xant_tx.VSS wired by the router
+ok   xant_rx.VDD wired by the router
+ok   xant_rx.VSS wired by the router
+ok   xant_dbg.VDD wired by the router
+ok   xant_dbg.VSS wired by the router
+ok   vco.core.VDD (VAPWR, 0.79 mA): 14 Via3 cuts, need >= 3
+ok   vco.core.VDD_LS (VAPWR, 0.79 mA): 6 Via3 cuts, need >= 3
+ok   vco.core.VSS (VGND, 0.24 mA): 6 Via3 cuts, need >= 1
+ok   vco.ref.VDD (VAPWR, 0.05 mA): 6 Via3 cuts, need >= 0
+ok   vco.ref.VSS (VGND, 0.05 mA): 8 Via3 cuts, need >= 0
+ok   xmdac.VSS (VGND, 0.55 mA): 18 Via3 cuts, need >= 2
+ok   xtxd.VDD (VDPWR, 14.58 mA): 418 Via3 cuts, need >= 50
+ok   xtxd.VSS (VGND, 14.58 mA): 206 Via3 cuts, need >= 50
+ok   rx.lna.VDD (VAPWR, 5.06 mA): 524 Via3 cuts, need >= 17
+ok   rx.lna.VSS (VGND, 5.06 mA): 503 Via3 cuts, need >= 17
+ok   rx.bias.VDD (VAPWR, 0.17 mA): 118 Via3 cuts, need >= 1
+ok   rx.bias.VSS (VGND, 0.17 mA): 242 Via3 cuts, need >= 1
+ok   rx.lsqh.VDD (VAPWR, 0.26 mA): 6 Via3 cuts, need >= 1
+ok   rx.lsqh.VSS (VGND, 0.26 mA): 30 Via3 cuts, need >= 1
+ok   rx.lobuf_i.VDD (VAPWR, 0.45 mA): 176 Via3 cuts, need >= 2
+ok   rx.lobuf_i.VSS (VGND, 0.45 mA): 176 Via3 cuts, need >= 2
+ok   rx.bb_i.VDD (VAPWR, 0.22 mA): 21 Via3 cuts, need >= 1
+ok   rx.bb_i.VSS (VGND, 0.22 mA): 159 Via3 cuts, need >= 1
+ok   rx.bb_q.VDD (VAPWR, 0.22 mA): 24 Via3 cuts, need >= 1
+ok   rx.bb_q.VSS (VGND, 0.22 mA): 529 Via3 cuts, need >= 1
+ok   rx.lim_i.VDD (VAPWR, 0.15 mA): 6 Via3 cuts, need >= 1
+ok   rx.lim_i.VSS (VGND, 0.15 mA): 6 Via3 cuts, need >= 1
+ok   rx.lim_q.VDD (VAPWR, 0.15 mA): 6 Via3 cuts, need >= 1
+ok   rx.lim_q.VSS (VGND, 0.15 mA): 12 Via3 cuts, need >= 1
+SUPPLY CHECK OK

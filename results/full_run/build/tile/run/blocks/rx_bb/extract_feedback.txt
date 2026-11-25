@@ -1,0 +1,75 @@
+box 18620 120 20620 5034
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box 16100 120 18100 5034
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box 13900 120 15900 5034
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box 11700 120 13700 5034
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box 9500 120 11500 5034
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box 6980 120 8980 5034
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box 4780 120 6780 5034
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box 2580 120 4580 5034
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box 380 120 2380 5034
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box 16100 6483 18100 11397
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box 13900 6483 15900 11397
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box 11700 6483 13700 11397
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box 9500 6483 11500 11397
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box 6980 6483 8980 11397
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box 4780 6483 6780 11397
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box 2580 6483 4580 11397
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box 380 6483 2380 11397
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box 22872 17907 24872 20364
+feedback add "device missing 1 terminal;
+ connecting remainder to node o2n" pale
+box 20672 17907 22672 20364
+feedback add "device missing 1 terminal;
+ connecting remainder to node o2n" pale
+box 17556 17907 19556 20364
+feedback add "device missing 1 terminal;
+ connecting remainder to node o2p" pale
+box 15356 17907 17356 20364
+feedback add "device missing 1 terminal;
+ connecting remainder to node o2p" pale
+box 8958 17907 10958 20364
+feedback add "device missing 1 terminal;
+ connecting remainder to node o1n" pale
+box 6758 17907 8758 20364
+feedback add "device missing 1 terminal;
+ connecting remainder to node o1n" pale
+box 3642 17907 5642 20364
+feedback add "device missing 1 terminal;
+ connecting remainder to node o1p" pale
+box 1442 17907 3442 20364
+feedback add "device missing 1 terminal;
+ connecting remainder to node o1p" pale

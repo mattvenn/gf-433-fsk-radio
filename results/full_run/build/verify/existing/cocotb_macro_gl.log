@@ -1,0 +1,50 @@
+rm -f results_macro_gl.xml
+mkdir -p sim_build_macro_gl
+/foss/tools/bin/iverilog -o sim_build_macro_gl/sim.vvp -s tx_fine -g2012 -DFUNCTIONAL -DUNIT_DELAY=#1 -DGL -f sim_build_macro_gl/cmds.f  /foss/pdks/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/verilog/primitives.v /foss/pdks/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/verilog/gf180mcu_fd_sc_mcu7t5v0.v /foss/designs/gf-433-fsk-radio/macro/tx_fine/nl/tx_fine.nl.v
+rm -f results_macro_gl.xml
+COCOTB_TEST_MODULES=test_tx_fine COCOTB_TESTCASE=  COCOTB_TOPLEVEL=tx_fine TOPLEVEL_LANG=verilog       \
+	 /foss/tools/bin/vvp -m /usr/local/lib/python3.12/dist-packages/cocotb/libs/libcocotbvpi_icarus.so   sim_build_macro_gl/sim.vvp   
+     -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:242  in gpi_load_users                  Loaded entry library: '/usr/lib/x86_64-linux-gnu/libpython3.12.so.1.0'
+     -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:233  in gpi_load_users                  Running entry func 'initialize' from loaded library '/usr/local/lib/python3.12/dist-packages/cocotb/simulator.cpython-312-x86_64-linux-gnu.so'
+     -.--ns INFO     pygpi                              ..ib/pygpi/embed.cpp:114  in initialize                      Using Python 3.12.12 interpreter at /usr/bin/python3
+     -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:74   in gpi_print_registered_impl       GPI: VPI support registered
+     0.00ns INFO     cocotb.initialize                  Seeding Python random module with 1795609133
+     0.00ns INFO     cocotb.initialize                  Initialized cocotb v2.1.0 from /usr/local/lib/python3.12/dist-packages/cocotb
+     0.00ns INFO     cocotb.initialize                  Running on Icarus Verilog version 14.0 (devel)
+     0.00ns INFO     cocotb.regression                  Running tests
+     0.00ns INFO     cocotb.regression                  running test_tx_fine.reset_values (1/7)
+ 38814.80ns INFO     cocotb.regression                  test_tx_fine.reset_values passed
+ 38814.80ns INFO     cocotb.regression                  running test_tx_fine.write_readback (2/7)
+185414.80ns INFO     cocotb.regression                  test_tx_fine.write_readback passed
+185414.80ns INFO     cocotb.regression                  running test_tx_fine.sd_matches_model (3/7)
+                                                            The SD bitstream equals sd_model.sd1 bit for bit, and its mean equals the fraction.
+201034.80ns INFO     cocotb.tx_fine                     frac 1
+244354.80ns INFO     cocotb.tx_fine                     frac 77
+287674.80ns INFO     cocotb.tx_fine                     frac 128
+330994.80ns INFO     cocotb.tx_fine                     frac 200
+374314.80ns INFO     cocotb.tx_fine                     frac 255
+402375.80ns INFO     cocotb.regression                  test_tx_fine.sd_matches_model passed
+402375.80ns INFO     cocotb.regression                  running test_tx_fine.fsk_offset (4/7)
+487775.80ns INFO     cocotb.regression                  test_tx_fine.fsk_offset passed
+487775.80ns INFO     cocotb.regression                  running test_tx_fine.divider_and_ck_gate (5/7)
+507086.60ns INFO     cocotb.regression                  test_tx_fine.divider_and_ck_gate passed
+507086.60ns INFO     cocotb.regression                  running test_tx_fine.clock_gating (6/7)
+                                                            The gated clocks are idle when nothing changes, run only when needed, and the outputs still follow.
+631926.60ns INFO     cocotb.regression                  test_tx_fine.clock_gating passed
+631926.60ns INFO     cocotb.regression                  running test_tx_fine.rx_en_and_dbg_sel (7/7)
+                                                            CTRL[4] = RX_EN drives rx_en; DBG_SEL (address 5, [3:0]) drives dbg_sel. Both reset to 0, read back, and
+829966.61ns INFO     cocotb.regression                  test_tx_fine.rx_en_and_dbg_sel passed
+829966.61ns INFO     cocotb.regression                  ******************************************************************************************
+                                                        ** TEST                              STATUS  SIM TIME (ns)  REAL TIME (s)  RATIO (ns/s) **
+                                                        ******************************************************************************************
+                                                        ** test_tx_fine.reset_values          PASS       38814.80           0.07     532427.62  **
+                                                        ** test_tx_fine.write_readback        PASS      146600.00           0.27     552363.93  **
+                                                        ** test_tx_fine.sd_matches_model      PASS      216961.00           0.39     551877.61  **
+                                                        ** test_tx_fine.fsk_offset            PASS       85400.00           0.15     555184.44  **
+                                                        ** test_tx_fine.divider_and_ck_gate   PASS       19310.80           0.03     556000.43  **
+                                                        ** test_tx_fine.clock_gating          PASS      124840.00           0.23     545541.24  **
+                                                        ** test_tx_fine.rx_en_and_dbg_sel     PASS      198040.00           0.35     568645.04  **
+                                                        ******************************************************************************************
+                                                        ** TESTS=7 PASS=7 FAIL=0 SKIP=0                 829966.61           1.50     553603.26  **
+                                                        ******************************************************************************************
+RESULT cocotb_macro_gl PASS 7 / 7 pass

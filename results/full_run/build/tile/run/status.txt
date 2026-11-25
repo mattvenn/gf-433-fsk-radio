@@ -1,0 +1,14 @@
+13:53:10 step 1/8 harden: skipped (HARDEN=1 to run): the committed macro
+13:53:10 step 2/8 blocks: started
+13:55:25 step 2/8 blocks: done: 14 / 14 CHECK OK
+13:55:25 step 3/8 tile: started
+13:56:15 step 3/8 tile: done: round 3: unrouted []  (48 s); wrote /foss/designs/gf-433-fsk-radio/lvs/tt_um_mattvenn_gf433_vco.spice: 4746 element lines, 44 decap units; SUPPLY CHECK OK, mutation caught
+13:56:15 step 4/8 drc: started
+13:57:41 step 4/8 drc: done: magic count 0; KLayout: 0 errors, 768 rules run
+13:57:41 step 5/8 lvs: started
+14:08:37 step 5/8 lvs: done: CHECK OK  (LVS PASS, resistor sizes PASS, mutations caught 1)
+14:08:37 step 6/8 antenna: started
+14:08:53 step 6/8 antenna: done: KLayout antenna deck (24 rules) 0 violations; planted violation caught (2)
+14:08:53 step 7/8 precheck: started
+14:08:54 step 7/8 precheck: done: PRECHECK (local) OK
+14:08:54 step 8/8 summary: done

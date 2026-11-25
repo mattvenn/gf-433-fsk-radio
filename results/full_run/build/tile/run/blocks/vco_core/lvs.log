@@ -1,0 +1,134 @@
+Netgen 1.5.323 compiled on Tue Sep 22 03:35:51 PM CEST 2026
+Warning: netgen command 'format' use fully-qualified name '::netgen::format'
+Warning: netgen command 'global' use fully-qualified name '::netgen::global'
+Reading netlist file vco_core_lay.spice for vco_core_lay.spice vco_core
+Call to undefined subcircuit nfet_03v3
+Creating placeholder cell definition.
+Call to undefined subcircuit pfet_03v3
+Creating placeholder cell definition.
+Call to undefined subcircuit ppolyf_u_1k
+Creating placeholder cell definition.
+Reading netlist file /foss/designs/gf-433-fsk-radio/build/tile/run/blocks/vco_core/xsch/vco_core_lvs.spice for /foss/designs/gf-433-fsk-radio/build/tile/run/blocks/vco_core/xsch/vco_core_lvs.spice vco_core
+Call to undefined subcircuit ring_core_v3
+Creating placeholder cell definition.
+Call to undefined subcircuit lsdiv
+Creating placeholder cell definition.
+Call to undefined subcircuit rx_lsq_ls
+Creating placeholder cell definition.
+Call to undefined subcircuit nfet_03v3
+Creating placeholder cell definition.
+Call to undefined subcircuit cfed_dac
+Creating placeholder cell definition.
+Call to undefined subcircuit cfed_ring
+Creating placeholder cell definition.
+Call to undefined subcircuit pfet_03v3
+Creating placeholder cell definition.
+Call to undefined subcircuit ls_ac
+Creating placeholder cell definition.
+Call to undefined subcircuit tspc_t1
+Creating placeholder cell definition.
+Call to undefined subcircuit tspc_t2
+Creating placeholder cell definition.
+Call to undefined subcircuit ppolyf_u_1k
+Creating placeholder cell definition.
+
+Reading setup file /foss/pdks/gf180mcuD/libs.tech/netgen/gf180mcuD_setup.tcl
+
+Model ppolyf_u_1k pin 1 == 2
+No property par1 found for device ppolyf_u_1k
+No property pm found for device ppolyf_u_1k
+No property par found for device ppolyf_u_1k
+No property r found for device ppolyf_u_1k
+Model ppolyf_u_1k pin 1 == 2
+No property par1 found for device ppolyf_u_1k
+No property pm found for device ppolyf_u_1k
+No property par found for device ppolyf_u_1k
+No property r found for device ppolyf_u_1k
+Model nfet_03v3 pin 1 == 3
+No property par1 found for device nfet_03v3
+No property NRD found for device nfet_03v3
+No property NRS found for device nfet_03v3
+No property par found for device nfet_03v3
+No property sa found for device nfet_03v3
+No property sb found for device nfet_03v3
+No property sd found for device nfet_03v3
+No property par found for device nfet_03v3
+No property dtemp found for device nfet_03v3
+No property nf found for device nfet_03v3
+No property $D found for device nfet_03v3
+No property $X found for device nfet_03v3
+No property $Y found for device nfet_03v3
+Model nfet_03v3 pin 1 == 3
+No property par1 found for device nfet_03v3
+No property par found for device nfet_03v3
+No property par found for device nfet_03v3
+No property dtemp found for device nfet_03v3
+No property $D found for device nfet_03v3
+No property $X found for device nfet_03v3
+No property $Y found for device nfet_03v3
+Model pfet_03v3 pin 1 == 3
+No property par1 found for device pfet_03v3
+No property NRD found for device pfet_03v3
+No property NRS found for device pfet_03v3
+No property par found for device pfet_03v3
+No property sa found for device pfet_03v3
+No property sb found for device pfet_03v3
+No property sd found for device pfet_03v3
+No property par found for device pfet_03v3
+No property dtemp found for device pfet_03v3
+No property nf found for device pfet_03v3
+No property $D found for device pfet_03v3
+No property $X found for device pfet_03v3
+No property $Y found for device pfet_03v3
+Model pfet_03v3 pin 1 == 3
+No property par1 found for device pfet_03v3
+No property par found for device pfet_03v3
+No property par found for device pfet_03v3
+No property dtemp found for device pfet_03v3
+No property $D found for device pfet_03v3
+No property $X found for device pfet_03v3
+No property $Y found for device pfet_03v3
+Comparison output logged to file lvs.report
+Logging to file "lvs.report" enabled
+Circuit nfet_03v3 contains no devices.
+Circuit pfet_03v3 contains no devices.
+Circuit ppolyf_u_1k contains no devices.
+
+Contents of circuit 1:  Circuit: 'vco_core'
+Circuit vco_core contains 131 device instances.
+  Class: nfet_03v3             instances:  88
+  Class: ppolyf_u_1k           instances:   2
+  Class: pfet_03v3             instances:  41
+Circuit contains 60 nets.
+Contents of circuit 2:  Circuit: 'vco_core'
+Circuit vco_core contains 90 device instances.
+  Class: nfet_03v3             instances:  52
+  Class: ppolyf_u_1k           instances:   2
+  Class: pfet_03v3             instances:  36
+Circuit contains 60 nets.
+
+Circuit was modified by parallel/series device merging.
+New circuit summary:
+
+Contents of circuit 1:  Circuit: 'vco_core'
+Circuit vco_core contains 90 device instances.
+  Class: nfet_03v3             instances:  52
+  Class: ppolyf_u_1k           instances:   2
+  Class: pfet_03v3             instances:  36
+Circuit contains 60 nets.
+Contents of circuit 2:  Circuit: 'vco_core'
+Circuit vco_core contains 90 device instances.
+  Class: nfet_03v3             instances:  52
+  Class: ppolyf_u_1k           instances:   2
+  Class: pfet_03v3             instances:  36
+Circuit contains 60 nets.
+
+Circuit 1 contains 90 devices, Circuit 2 contains 90 devices.
+Circuit 1 contains 60 nets,    Circuit 2 contains 60 nets.
+
+
+Final result: 
+Circuits match uniquely.
+.
+Logging to file "lvs.report" disabled
+LVS Done.

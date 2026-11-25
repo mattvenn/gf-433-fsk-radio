@@ -1,0 +1,56 @@
+
+Magic 8.3 revision 684 - Compiled on Tue Sep 22 03:44:29 PM CEST 2026.
+Starting magic under Tcl interpreter
+Using the terminal as the console.
+WARNING: RLIMIT_NOFILE is above 1024 and Tcl_Version<9 this may cause runtime issues [rlim_cur=1073741816]
+Using NULL graphics device.
+Processing system .magicrc file
+Switching to WIRING tool.
+Switching to NETLIST tool.
+Switching to PICK tool.
+Switching to BOX tool.
+Sourcing design .magicrc for technology gf180mcuD ...
+10 Magic internal units = 1 Lambda
+Input style import: scaleFactor=10, multiplier=2
+The following types are not handled by extraction and will be treated as non-electrical types:
+    obsactive mvobsactive filldiff fillpoly m1hole obsm1 fillm1 obsv1 m2hole obsm2 fillm2 obsv2 m3hole obsm3 fillm3 m4hole obsm4 fillm4 m5hole obsm5 fillm5 glass fillblock lvstext obscomment 
+Scaled tech values by 10 / 1 to match internal grid scaling
+Loading gf180mcuD Device Generator Menu ...
+Loading "h.tcl" from command line.
+Warning: Calma reading is not undoable!  I hope that's OK.
+Library written using GDS-II Release 6.0
+Library name: vco_core_dcap
+Reading "ring_inv".
+Reading "ring_inv_m".
+Reading "vco_core_dcap".
+Reading "rx_lsq_ls".
+Moving label "lsq" from metal2 to via1 in cell rx_lsq_ls.
+Moving label "q1" from metal2 to via1 in cell rx_lsq_ls.
+Moving label "tt" from metal2 to via1 in cell rx_lsq_ls.
+Moving label "lf" from metal3 to via2 in cell rx_lsq_ls.
+Reading "lsdiv".
+Moving label "ls" from metal2 to via1 in cell lsdiv.
+Moving label "lf" from metal3 to via2 in cell lsdiv.
+Reading "ring_core".
+Reading "vco_core".
+Making label "a0" on type metal2 in cell vco_core sticky.
+Extracting rx_lsq_ls into rx_lsq_ls.ext:
+Processing rx_lsq_ls
+rx_lsq_ls: 1 warning
+Extracting vco_core_dcap into vco_core_dcap.ext:
+Processing vco_core_dcap
+vco_core_dcap: 5 warnings
+Extracting lsdiv into lsdiv.ext:
+Processing lsdiv
+lsdiv: 1 warning
+Extracting ring_inv_m into ring_inv_m.ext:
+Processing ring_inv_m
+Extracting ring_inv into ring_inv.ext:
+Processing ring_inv
+Extracting ring_core into ring_core.ext:
+Processing ring_core
+ring_core: 6 warnings
+Extracting vco_core into vco_core.ext:
+Processing vco_core
+Total of 13 warnings.
+exttospice finished.

@@ -1,0 +1,201 @@
+[tail: last 200 lines of 87666 bytes]
+SBY 13:21:19 [tx_fine_gates] engine_0: 51 : ... 11 26 13 29 13 49 19 55 23 51 19 41 19 177 81 187 1768 ~156      0     0      6.21 sec  T/O =  0  PRV =  0
+SBY 13:21:19 [tx_fine_gates] engine_0: 52 : ... 26 13 29 13 49 19 55 23 51 19 41 19 177 81 187 89 1679 ~156      0     0      6.35 sec  T/O =  0  PRV =  0
+SBY 13:21:19 [tx_fine_gates] engine_0: 53 : ... 29 13 49 19 55 23 51 19 41 19 177 81 187 89 149 1530 ~156        0     0      6.51 sec  T/O =  0  PRV =  0
+SBY 13:21:19 [tx_fine_gates] engine_0: 54 : ... 13 49 19 55 23 51 19 41 19 177 81 187 89 149 74 1456 ~156        0     0      6.67 sec  T/O =  0  PRV =  0
+SBY 13:21:20 [tx_fine_gates] engine_0: 55 : ... 49 19 55 23 51 19 41 19 177 81 187 89 149 74 116 1340 ~156       0     0      6.84 sec  T/O =  0  PRV =  0
+SBY 13:21:20 [tx_fine_gates] engine_0: 56 : ... 19 55 23 51 19 41 19 177 81 187 89 149 74 116 75 1265 ~156       0     0      7.01 sec  T/O =  0  PRV =  0
+SBY 13:21:20 [tx_fine_gates] engine_0: 57 : ... 55 23 51 19 41 19 177 81 187 89 149 74 116 75 136 1129 ~156      0     0      7.20 sec  T/O =  0  PRV =  0
+SBY 13:21:20 [tx_fine_gates] engine_0: 58 : ... 23 51 19 41 19 177 81 187 89 149 74 116 75 136 94 1035 ~156      0     0      7.39 sec  T/O =  0  PRV =  0
+SBY 13:21:20 [tx_fine_gates] engine_0: 59 : ... 51 19 41 19 177 81 187 89 149 74 116 75 136 94 137 898 ~156      0     0      7.61 sec  T/O =  0  PRV =  0
+SBY 13:21:21 [tx_fine_gates] engine_0: 60 : ... 19 41 19 177 81 187 89 149 74 116 75 136 94 137 98 800 ~156      0     0      7.82 sec  T/O =  0  PRV =  0
+SBY 13:21:21 [tx_fine_gates] engine_0: 61 : ... 19 177 81 187 89 149 74 116 75 136 94 137 99 107 697 ~156        4     9      8.06 sec  T/O =  0  PRV =  0
+SBY 13:21:21 [tx_fine_gates] engine_0: 62 : ... 177 81 187 89 149 74 116 75 136 94 137 98 106 70 638 ~156        4    23      8.42 sec  T/O =  0  PRV =  0
+SBY 13:21:22 [tx_fine_gates] engine_0: 63 : ... 81 187 89 149 74 116 75 136 94 137 98 106 66 118 535 ~156        1    43      8.77 sec  T/O =  0  PRV =  0
+SBY 13:21:22 [tx_fine_gates] engine_0: 64 : ... 188 91 152 77 118 78 141 98 142 103 113 71 128 189 363 ~156     19    71      9.19 sec  T/O =  0  PRV =  0
+SBY 13:21:22 [tx_fine_gates] engine_0: 64 : ... 188 91 152 77 118 78 141 98 142 103 113 71 129 192 368 ~156     64    73      9.24 sec  T/O =  0  PRV =  0
+SBY 13:21:22 [tx_fine_gates] engine_0: 64 : ... 188 91 152 77 118 78 141 98 142 103 113 71 129 192 370 ~156     52    95      9.36 sec  T/O =  0  PRV =  0
+SBY 13:21:22 [tx_fine_gates] engine_0: 64 : ... 188 91 152 77 118 78 141 98 142 103 113 71 129 192 370 ~156     43   105      9.49 sec  T/O =  0  PRV =  0
+SBY 13:21:22 [tx_fine_gates] engine_0: 64 : ... 188 91 152 77 118 78 141 98 142 103 113 71 129 192 370 ~156     43   106      9.62 sec  T/O =  0  PRV =  0
+SBY 13:21:23 [tx_fine_gates] engine_0: 64 : ... 109 175 80 118 78 141 98 142 103 113 71 129 192 370 ~156        45   106      9.75 sec  T/O =  0  PRV =  0
+SBY 13:21:23 [tx_fine_gates] engine_0: 64 : ... 110 181 98 146 96 159 98 142 103 113 71 129 192 370 ~156        47   106      9.89 sec  T/O =  0  PRV =  0
+SBY 13:21:23 [tx_fine_gates] engine_0: 64 : ... 110 181 98 146 96 175 120 175 123 117 71 129 192 370 ~156       47   106     10.03 sec  T/O =  0  PRV =  0
+SBY 13:21:23 [tx_fine_gates] engine_0: 64 : ... 110 181 98 146 96 175 120 175 123 149 96 164 197 370 ~156       47   106     10.15 sec  T/O =  0  PRV =  0
+SBY 13:21:23 [tx_fine_gates] engine_0: 64 : ... 110 181 98 146 96 175 120 188 138 162 108 173 223 418 ~156      47   131     10.34 sec  T/O =  0  PRV =  0
+SBY 13:21:23 [tx_fine_gates] engine_0: 64 : ... 110 183 99 146 96 175 120 188 138 162 108 173 229 431 ~156      49   143     10.43 sec  T/O =  0  PRV =  0
+SBY 13:21:23 [tx_fine_gates] engine_0: 64 : ... 110 183 99 146 96 175 120 188 138 162 108 173 229 431 ~156      45   157     10.55 sec  T/O =  0  PRV =  0
+SBY 13:21:23 [tx_fine_gates] engine_0: 64 : ... 119 197 103 146 96 175 120 188 138 162 108 173 229 431 ~156     37   159     10.68 sec  T/O =  0  PRV =  0
+SBY 13:21:24 [tx_fine_gates] engine_0: 64 : ... 197 108 163 106 189 131 205 149 173 108 173 229 431 ~156        32   159     10.79 sec  T/O =  0  PRV =  0
+SBY 13:21:24 [tx_fine_gates] engine_0: 64 : ... 197 108 164 107 190 131 205 149 179 120 191 241 455 ~156        27   159     10.87 sec  T/O =  0  PRV =  0
+SBY 13:21:24 [tx_fine_gates] engine_0: 64 : ... 197 108 164 107 190 131 205 149 179 120 191 241 455 ~156        49   159     10.99 sec  T/O =  0  PRV =  0
+SBY 13:21:24 [tx_fine_gates] engine_0: 64 : ... 197 108 164 107 190 131 205 149 179 120 191 241 455 ~156        40   159     11.12 sec  T/O =  0  PRV =  0
+SBY 13:21:24 [tx_fine_gates] engine_0: 64 : ... 211 117 177 117 206 133 205 149 179 120 191 241 455 ~156        35   159     11.22 sec  T/O =  0  PRV =  0
+SBY 13:21:24 [tx_fine_gates] engine_0: 64 : ... 211 117 177 117 208 142 222 160 195 132 209 251 455 ~156        31   167     11.30 sec  T/O =  0  PRV =  0
+SBY 13:21:24 [tx_fine_gates] engine_0: 64 : ... 211 117 177 117 208 142 223 161 196 132 209 253 479 ~156        49   167     11.37 sec  T/O =  0  PRV =  0
+SBY 13:21:24 [tx_fine_gates] engine_0: 64 : ... 211 117 177 117 208 142 223 161 196 132 209 253 479 ~156        45   167     11.49 sec  T/O =  0  PRV =  0
+SBY 13:21:24 [tx_fine_gates] engine_0: 64 : ... 225 117 177 117 208 142 223 161 196 132 209 253 479 ~156        37   167     11.58 sec  T/O =  0  PRV =  0
+SBY 13:21:24 [tx_fine_gates] engine_0: 64 : ... 225 126 190 127 225 152 238 172 207 132 209 253 479 ~156        33   167     11.65 sec  T/O =  0  PRV =  0
+SBY 13:21:25 [tx_fine_gates] engine_0: 64 : ... 225 126 190 127 225 152 238 172 214 144 227 266 505 ~156        48   167     11.74 sec  T/O =  0  PRV =  0
+SBY 13:21:25 [tx_fine_gates] engine_0: 64 : ... 225 126 190 127 225 152 238 172 214 144 227 266 505 ~156        41   167     11.81 sec  T/O =  0  PRV =  0
+SBY 13:21:25 [tx_fine_gates] engine_0: 64 : ... 239 135 203 129 225 152 238 172 214 144 227 266 505 ~156        35   167     11.88 sec  T/O =  0  PRV =  0
+SBY 13:21:25 [tx_fine_gates] engine_0: 64 : ... 239 135 203 137 241 162 253 183 231 155 236 266 505 ~156        30   167     11.94 sec  T/O =  0  PRV =  0
+SBY 13:21:25 [tx_fine_gates] engine_0: 64 : ... 239 135 203 137 241 162 253 183 231 155 244 279 530 ~156        48   167     11.99 sec  T/O =  0  PRV =  0
+SBY 13:21:25 [tx_fine_gates] engine_0: 64 : ... 239 135 203 137 241 162 253 183 231 155 244 279 530 ~156        47   167     12.06 sec  T/O =  0  PRV =  0
+SBY 13:21:25 [tx_fine_gates] engine_0: 64 : ... 239 135 203 137 241 162 253 183 231 155 244 279 530 ~156        37   167     12.12 sec  T/O =  0  PRV =  0
+SBY 13:21:25 [tx_fine_gates] engine_0: 64 : ... 253 144 217 147 256 172 268 183 231 155 244 279 530 ~156        33   167     12.19 sec  T/O =  0  PRV =  0
+SBY 13:21:25 [tx_fine_gates] engine_0: 64 : ... 253 144 217 147 256 172 268 194 249 166 262 292 554 ~156        28   167     12.24 sec  T/O =  0  PRV =  0
+SBY 13:21:25 [tx_fine_gates] engine_0: 64 : ... 253 144 217 147 256 172 270 202 259 178 278 307 575 ~156        19   169     12.34 sec  T/O =  0  PRV =  0
+SBY 13:21:25 [tx_fine_gates] engine_0: 64 : ... 258 149 223 154 261 180 279 207 259 178 279 313 585 ~156        25   169     12.42 sec  T/O =  0  PRV =  0
+SBY 13:21:25 [tx_fine_gates] engine_0: 64 : ... 258 149 223 154 261 180 279 213 274 190 297 335 598 ~156        27   169     12.52 sec  T/O =  0  PRV =  0
+SBY 13:21:25 [tx_fine_gates] engine_0: 64 : ... 258 149 223 154 261 180 279 213 274 190 297 335 615 ~156        63   171     12.58 sec  T/O =  0  PRV =  0
+SBY 13:21:25 [tx_fine_gates] engine_0: 64 : ... 258 149 223 154 261 180 279 213 274 190 297 335 617 ~156        67   174     12.68 sec  T/O =  0  PRV =  0
+SBY 13:21:26 [tx_fine_gates] engine_0: 64 : ... 258 149 223 154 261 180 279 213 274 190 297 335 617 ~156        60   174     12.80 sec  T/O =  0  PRV =  0
+SBY 13:21:26 [tx_fine_gates] engine_0: 64 : ... 258 149 223 154 261 180 279 213 274 190 297 335 617 ~156        67   174     12.92 sec  T/O =  0  PRV =  0
+SBY 13:21:26 [tx_fine_gates] engine_0: 64 : ... 258 149 223 154 261 180 279 213 274 190 297 335 617 ~156        61   174     13.02 sec  T/O =  0  PRV =  0
+SBY 13:21:26 [tx_fine_gates] engine_0: 64 : ... 258 149 223 154 261 180 279 213 274 190 297 335 617 ~156        43   174     13.13 sec  T/O =  0  PRV =  0
+SBY 13:21:26 [tx_fine_gates] engine_0: 64 : ... 260 149 223 154 261 180 279 213 274 190 297 335 617 ~156        48   174     13.24 sec  T/O =  0  PRV =  0
+SBY 13:21:26 [tx_fine_gates] engine_0: 64 : ... 287 175 253 163 261 180 279 213 274 190 297 335 617 ~156        47   174     13.36 sec  T/O =  0  PRV =  0
+SBY 13:21:26 [tx_fine_gates] engine_0: 64 : ... 287 175 253 180 293 209 296 213 274 190 297 335 617 ~156        49   174     13.48 sec  T/O =  0  PRV =  0
+SBY 13:21:26 [tx_fine_gates] engine_0: 64 : ... 287 175 253 180 293 209 317 242 309 199 297 335 617 ~156        49   174     13.60 sec  T/O =  0  PRV =  0
+SBY 13:21:27 [tx_fine_gates] engine_0: 64 : ... 287 175 253 180 293 209 317 242 309 222 334 368 623 ~156        47   174     13.72 sec  T/O =  0  PRV =  0
+SBY 13:21:27 [tx_fine_gates] engine_0: 64 : ... 288 176 253 181 295 212 322 246 314 223 335 373 667 ~156        37   182     13.82 sec  T/O =  0  PRV =  0
+SBY 13:21:27 [tx_fine_gates] engine_0: 65 : ... 95 181 75 142 61 189 75 182 94 124 83 94 69 132 804 ~292         0   182     14.61 sec  T/O =  0  PRV =  0
+SBY 13:21:28 [tx_fine_gates] engine_0: 66 : ... 169 74 130 57 170 70 161 87 108 73 86 58 128 286 520 ~292       49   182     15.04 sec  T/O =  0  PRV =  0
+SBY 13:21:28 [tx_fine_gates] engine_0: 66 : ... 169 74 130 57 170 70 161 87 108 73 86 58 128 286 520 ~292       42   182     15.14 sec  T/O =  0  PRV =  0
+SBY 13:21:28 [tx_fine_gates] engine_0: 66 : ... 183 83 143 64 170 70 161 87 108 73 86 58 128 286 520 ~292       35   182     15.22 sec  T/O =  0  PRV =  0
+SBY 13:21:28 [tx_fine_gates] engine_0: 66 : ... 183 83 143 67 187 80 176 98 125 84 98 58 128 286 520 ~292       31   182     15.32 sec  T/O =  0  PRV =  0
+SBY 13:21:28 [tx_fine_gates] engine_0: 66 : ... 183 83 143 67 187 80 176 98 125 84 102 70 146 298 544 ~292      29   182     15.38 sec  T/O =  0  PRV =  0
+SBY 13:21:28 [tx_fine_gates] engine_0: 66 : ... 183 83 143 67 187 80 176 98 125 84 102 70 146 298 544 ~292      49   182     15.47 sec  T/O =  0  PRV =  0
+SBY 13:21:28 [tx_fine_gates] engine_0: 66 : ... 183 83 143 67 187 80 176 98 125 84 102 70 146 298 544 ~292      39   182     15.55 sec  T/O =  0  PRV =  0
+SBY 13:21:28 [tx_fine_gates] engine_0: 66 : ... 196 92 156 77 203 90 180 98 125 84 102 70 146 298 544 ~292      34   182     15.62 sec  T/O =  0  PRV =  0
+SBY 13:21:28 [tx_fine_gates] engine_0: 66 : ... 196 92 156 77 203 90 191 109 141 95 118 82 164 300 544 ~292     30   182     15.68 sec  T/O =  0  PRV =  0
+SBY 13:21:28 [tx_fine_gates] engine_0: 66 : ... 196 92 156 77 203 90 191 109 141 95 118 82 164 310 582 ~292     27   182     15.71 sec  T/O =  0  PRV =  0
+SBY 13:21:29 [tx_fine_gates] engine_0: 67 : ... 74 132 57 174 70 164 87 110 73 89 58 127 288 414 230 ~300        4   270     16.19 sec  T/O =  0  PRV =  0
+SBY 13:21:29 [tx_fine_gates] engine_0: 68 : ... 132 57 174 70 163 87 110 73 88 58 126 251 371 209 95 ~263       41   281     16.61 sec  T/O =  0  PRV =  0
+SBY 13:21:30 [tx_fine_gates] engine_0: 68 : ... 139 63 183 76 172 94 119 73 88 58 126 251 371 209 95 ~263       36   281     16.71 sec  T/O =  0  PRV =  0
+SBY 13:21:30 [tx_fine_gates] engine_0: 68 : ... 139 63 183 76 172 94 121 80 98 66 138 259 385 219 116 ~263      29   287     16.84 sec  T/O =  0  PRV =  0
+SBY 13:21:30 [tx_fine_gates] engine_0: 68 : ... 139 63 183 76 172 94 121 80 98 66 138 273 412 244 127 ~263      27   328     16.94 sec  T/O =  0  PRV =  0
+SBY 13:21:30 [tx_fine_gates] engine_0: 68 : ... 139 63 183 76 172 94 121 80 98 66 138 273 414 250 128 ~263      61   330     17.03 sec  T/O =  0  PRV =  0
+SBY 13:21:30 [tx_fine_gates] engine_0: 68 : ... 69 192 82 181 101 132 87 108 66 138 273 414 250 128 ~263        54   330     17.13 sec  T/O =  0  PRV =  0
+SBY 13:21:30 [tx_fine_gates] engine_0: 68 : ... 69 192 82 181 101 132 87 108 74 150 281 430 267 155 ~263        47   339     17.22 sec  T/O =  0  PRV =  0
+SBY 13:21:30 [tx_fine_gates] engine_0: 68 : ... 69 192 82 181 101 132 87 108 74 150 281 432 274 165 ~263        36   344     17.28 sec  T/O =  0  PRV =  0
+SBY 13:21:30 [tx_fine_gates] engine_0: 68 : ... 75 201 88 190 104 132 87 108 74 150 281 432 274 165 ~263        32   344     17.38 sec  T/O =  0  PRV =  0
+SBY 13:21:30 [tx_fine_gates] engine_0: 68 : ... 75 201 88 190 108 142 94 118 82 162 289 444 283 181 ~263        24   346     17.48 sec  T/O =  0  PRV =  0
+SBY 13:21:30 [tx_fine_gates] engine_0: 68 : ... 75 201 88 190 108 142 94 118 82 162 290 447 290 197 ~263        37   357     17.58 sec  T/O =  0  PRV =  0
+SBY 13:21:30 [tx_fine_gates] engine_0: 68 : ... 81 210 94 199 115 152 101 128 90 165 290 447 290 197 ~263       29   357     17.66 sec  T/O =  0  PRV =  0
+SBY 13:21:31 [tx_fine_gates] engine_0: 68 : ... 81 210 94 199 115 152 101 128 90 174 299 479 337 291 ~263       23   378     17.85 sec  T/O =  0  PRV =  0
+SBY 13:21:31 [tx_fine_gates] engine_0: 68 : ... 81 210 94 199 115 152 101 128 90 174 299 488 364 319 ~263        5   388     17.93 sec  T/O =  0  PRV =  0
+SBY 13:21:31 [tx_fine_gates] engine_0: 68 : ... 81 210 94 199 115 152 101 128 90 174 299 497 387 346 ~263        5   400     18.00 sec  T/O =  0  PRV =  0
+SBY 13:21:31 [tx_fine_gates] engine_0: 68 : ... 81 210 94 199 115 152 101 128 90 174 299 507 411 373 ~263        5   402     18.08 sec  T/O =  0  PRV =  0
+SBY 13:21:31 [tx_fine_gates] engine_0: 68 : ... 81 210 94 199 115 152 101 128 90 174 301 522 436 416 ~263        6   406     18.18 sec  T/O =  0  PRV =  0
+SBY 13:21:31 [tx_fine_gates] engine_0: 68 : ... 81 210 94 199 115 152 101 128 90 174 305 538 458 437 ~263        6   406     18.27 sec  T/O =  0  PRV =  0
+SBY 13:21:31 [tx_fine_gates] engine_0: 68 : ... 81 210 94 199 115 152 101 128 90 174 310 571 499 497 ~263       72   453     18.50 sec  T/O =  0  PRV =  0
+SBY 13:21:31 [tx_fine_gates] engine_0: Block = 1190  Oblig = 23449  Clause = 17418  Call =404015 (sat=65.0%)  Cex =   0  Start =1201
+SBY 13:21:31 [tx_fine_gates] engine_0: SAT solving =    27.52 sec ( 60.77 %)
+SBY 13:21:31 [tx_fine_gates] engine_0: unsat     =     4.01 sec (  8.86 %)
+SBY 13:21:31 [tx_fine_gates] engine_0: sat       =    23.51 sec ( 51.91 %)
+SBY 13:21:31 [tx_fine_gates] engine_0: Generalize  =    12.60 sec ( 27.83 %)
+SBY 13:21:31 [tx_fine_gates] engine_0: Push clause =    15.17 sec ( 33.49 %)
+SBY 13:21:31 [tx_fine_gates] engine_0: Ternary sim =     0.50 sec (  1.11 %)
+SBY 13:21:31 [tx_fine_gates] engine_0: Containment =     0.93 sec (  2.05 %)
+SBY 13:21:31 [tx_fine_gates] engine_0: CNF compute =     2.62 sec (  5.78 %)
+SBY 13:21:31 [tx_fine_gates] engine_0: Refinement  =     0.00 sec (  0.00 %)
+SBY 13:21:31 [tx_fine_gates] engine_0: TOTAL       =    45.29 sec (100.00 %)
+SBY 13:21:31 [tx_fine_gates] engine_0: Output 0 of miter "model/design_aiger" was asserted in frame 70.  Time =    45.32 sec
+SBY 13:21:31 [tx_fine_gates] engine_0: finished (returncode=0)
+SBY 13:21:31 [tx_fine_gates] engine_0: Status returned by engine: FAIL
+SBY 13:21:31 [tx_fine_gates] smt2: starting process "cd tx_fine_gates/model; yosys -ql design_smt2.log design_smt2.ys"
+SBY 13:21:31 [tx_fine_gates] engine_0: starting process "cd tx_fine_gates; yosys-witness aiw2yw engine_0/trace.aiw model/design_aiger.ywa engine_0/trace_aiw.yw"
+SBY 13:21:31 [tx_fine_gates] smt2: finished (returncode=0)
+SBY 13:21:31 [tx_fine_gates] engine_0: Converting AIGER witness trace 'engine_0/trace.aiw' to Yosys witness trace 'engine_0/trace_aiw.yw'...
+SBY 13:21:31 [tx_fine_gates] engine_0: Using Yosys witness AIGER map file 'model/design_aiger.ywa'
+SBY 13:21:31 [tx_fine_gates] engine_0: Converted 71 time steps.
+SBY 13:21:31 [tx_fine_gates] engine_0: finished (returncode=0)
+SBY 13:21:31 [tx_fine_gates] engine_0: starting process "cd tx_fine_gates; yosys-smtbmc -s yices --noprogress --append 0 --dump-vcd engine_0/trace.vcd --dump-yw engine_0/trace.yw --dump-vlogtb engine_0/trace_tb.v --dump-smtc engine_0/trace.smtc --yw engine_0/trace_aiw.yw model/design_smt2.smt2"
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Solver: yices
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 0..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 1..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 2..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 3..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 4..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 5..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 6..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 7..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 8..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 9..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 10..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 11..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 12..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 13..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 14..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 15..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 16..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 17..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 18..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 19..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 20..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 21..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 22..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 23..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 24..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 25..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 26..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 27..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 28..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 29..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 30..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 31..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 32..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 33..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 34..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 35..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 36..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 37..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 38..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 39..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 40..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 41..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 42..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 43..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 44..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 45..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 46..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 47..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 48..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 49..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 50..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 51..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 52..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 53..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 54..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 55..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 56..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 57..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 58..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 59..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 60..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 61..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 62..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 63..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 64..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 65..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 66..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 67..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 68..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Skipping step 69..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Checking assertions in step 70..
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  BMC failed!
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Assert failed in fv_tx_fine: fv_tx_fine.sv:46.9-47.107 (_witness_.check_assert_fv_tx_fine_sv_46_173)
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Writing trace to VCD file: engine_0/trace.vcd
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Writing trace to Verilog testbench: engine_0/trace_tb.v
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Writing trace to constraints file: engine_0/trace.smtc
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Writing trace to Yosys witness file: engine_0/trace.yw
+SBY 13:21:32 [tx_fine_gates] engine_0: ##   0:00:00  Status: FAILED
+SBY 13:21:32 [tx_fine_gates] engine_0: finished (returncode=1)
+SBY 13:21:32 [tx_fine_gates] summary: Elapsed clock time [H:MM:SS (secs)]: 0:00:47 (47)
+SBY 13:21:32 [tx_fine_gates] summary: Elapsed process time [H:MM:SS (secs)]: 0:00:47 (47)
+SBY 13:21:32 [tx_fine_gates] summary: engine_0 (abc pdr) returned FAIL
+SBY 13:21:32 [tx_fine_gates] summary: counterexample trace: tx_fine_gates/engine_0/trace.vcd
+SBY 13:21:32 [tx_fine_gates] summary:   failed assertion fv_tx_fine._witness_.check_assert_fv_tx_fine_sv_46_173 at fv_tx_fine.sv:46.9-47.107 step 70
+SBY 13:21:32 [tx_fine_gates] DONE (FAIL, rc=2)
+SBY 13:21:32 The following tasks failed: ['gates']

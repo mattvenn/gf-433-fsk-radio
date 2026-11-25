@@ -1,0 +1,11 @@
+gds /foss/designs/gf-433-fsk-radio/layout/rx_lim.gds  top rx_lim  source /foss/designs/gf-433-fsk-radio/build/tile/run/blocks/rx_lim/xsch/rx_lim_lvs.spice  magic 8.3.684  klayout KLayout 0.30.12  2026-11-25T13:54:13+01:00
+== schematic: xschem/rx_lim.sch; netlisted rx_lim: 42 element lines; LVS copy: removed 0 'Cc a0' metal-finger cap line(s)
+== magic DRC (1 s): count 0
+== antenna (0 s): violations 0, feedback 6
+count 0
+== KLayout DRC (7 s), decks all,-density, rules run 768: count 0
+LVS PASS (0 s): Final result: Circuits match uniquely. 
+== sizes: SIZES OK (42 groups)
+== mutation XMLa m 2 -> 1: FAIL (expected)  [Final result: Circuits match uniquely. Netlists match uniquely with property errors. Property errors were found. The following cells had property errors: ]
+== mutation XMvbs gate enb -> VSS: FAIL (expected)  [Final result: Netlists do not match. Netlists do not match. ]
+CHECK OK  (LVS vs xschem 1, DRC 1, antenna 1, mutations caught 1, sizes 1)

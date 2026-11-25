@@ -1,0 +1,22 @@
+ok   top cell tt_um_mattvenn_gf433_vco
+ok   bbox (0,0;693280,325360) = die 0 0 693280 325360
+ok   no 81/0 (Metal5 / Via4)
+ok   no 82/0 (Metal5 / Via4)
+ok   no 81/10 (Metal5 / Via4)
+ok   VDPWR: 7 Metal4 stripe(s) >= 1.2 um wide spanning to within 10 um of both edges
+ok   VGND: 22 Metal4 stripe(s) >= 1.2 um wide spanning to within 10 um of both edges
+ok   VAPWR: 14 Metal4 stripe(s) >= 1.2 um wide spanning to within 10 um of both edges
+ok   LEF power / ground uses
+ok   LEF VAPWR
+ok   project.v declares VAPWR
+ok   analog_pins 6
+ok   analog pin ua[0]: connected True, analog_pins says True, pinout description True
+ok   analog pin ua[1]: connected True, analog_pins says True, pinout description True
+ok   analog pin ua[2]: connected True, analog_pins says True, pinout description True
+ok   analog pin ua[3]: connected True, analog_pins says True, pinout description True
+ok   analog pin ua[4]: connected True, analog_pins says True, pinout description True
+ok   analog pin ua[5]: connected True, analog_pins says True, pinout description True
+ok   analog pin ua[6]: connected False, analog_pins says False, pinout description False
+ok   analog pin ua[7]: connected False, analog_pins says False, pinout description False
+ok   51 template pins at their DEF rectangles; 51 in the LEF
+PRECHECK (local) OK

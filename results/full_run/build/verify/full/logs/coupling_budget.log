@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "/foss/designs/gf-433-fsk-radio/sim/verify/coupling.py", line 214, in <module>
+    main()
+  File "/foss/designs/gf-433-fsk-radio/sim/verify/coupling.py", line 159, in main
+    rs = json.loads((REPO / 'build/tile_sims_nb/rxs_c_tt_-95_p/result.json').read_text())
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/pathlib.py", line 1029, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/pathlib.py", line 1015, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/foss/designs/gf-433-fsk-radio/build/tile_sims_nb/rxs_c_tt_-95_p/result.json'

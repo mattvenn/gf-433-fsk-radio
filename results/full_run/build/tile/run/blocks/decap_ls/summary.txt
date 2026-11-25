@@ -1,0 +1,11 @@
+gds /foss/designs/gf-433-fsk-radio/layout/decap_ls.gds  top decap_ls  source /foss/designs/gf-433-fsk-radio/build/tile/run/blocks/decap_ls/decap_ls_src.spice (decap_ls)  magic 8.3.684  netgen Netgen 1.5.323  klayout KLayout 0.30.12
+== magic DRC (1 s): count 0
+== antenna (0 s): violations 0, feedback 3
+== KLayout DRC (8 s), decks all,-density, executing 176 deck(s)  rules run 768: count 0
+== LVS (0 s):
+Netlists match uniquely.
+Final result: Circuits match uniquely.
+LVS PASS
+== mutation XDC m 3 -> 2: FAIL (expected)  [Final result: Circuits match uniquely. Netlists match uniquely with property errors. Property errors were found. The following cells had property errors: ]
+== mutation XDC gate VDD_LS -> VSS: FAIL (expected)  [Final result: Netlists do not match. Netlists do not match. ]
+CHECK OK (decap_ls)

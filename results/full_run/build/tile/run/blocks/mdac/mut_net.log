@@ -1,0 +1,119 @@
+Netgen 1.5.323 compiled on Tue Sep 22 03:35:51 PM CEST 2026
+Warning: netgen command 'format' use fully-qualified name '::netgen::format'
+Warning: netgen command 'global' use fully-qualified name '::netgen::global'
+Reading netlist file mdac_lay.spice for mdac_lay.spice mdac
+Call to undefined subcircuit pfet_03v3
+Creating placeholder cell definition.
+Call to undefined subcircuit nfet_03v3
+Creating placeholder cell definition.
+Reading netlist file mut_net.spice for mut_net.spice mdac
+Call to undefined subcircuit pfet_03v3
+Creating placeholder cell definition.
+Call to undefined subcircuit nfet_03v3
+Creating placeholder cell definition.
+
+Reading setup file /foss/pdks/gf180mcuD/libs.tech/netgen/gf180mcuD_setup.tcl
+
+Model nfet_03v3 pin 1 == 3
+No property par1 found for device nfet_03v3
+No property NRD found for device nfet_03v3
+No property NRS found for device nfet_03v3
+No property par found for device nfet_03v3
+No property sa found for device nfet_03v3
+No property sb found for device nfet_03v3
+No property sd found for device nfet_03v3
+No property par found for device nfet_03v3
+No property dtemp found for device nfet_03v3
+No property nf found for device nfet_03v3
+No property $D found for device nfet_03v3
+No property $X found for device nfet_03v3
+No property $Y found for device nfet_03v3
+Model nfet_03v3 pin 1 == 3
+No property par1 found for device nfet_03v3
+No property NRD found for device nfet_03v3
+No property NRS found for device nfet_03v3
+No property par found for device nfet_03v3
+No property sa found for device nfet_03v3
+No property sb found for device nfet_03v3
+No property sd found for device nfet_03v3
+No property par found for device nfet_03v3
+No property dtemp found for device nfet_03v3
+No property nf found for device nfet_03v3
+No property as found for device nfet_03v3
+No property ad found for device nfet_03v3
+No property ps found for device nfet_03v3
+No property pd found for device nfet_03v3
+No property $D found for device nfet_03v3
+No property $X found for device nfet_03v3
+No property $Y found for device nfet_03v3
+Model pfet_03v3 pin 1 == 3
+No property par1 found for device pfet_03v3
+No property NRD found for device pfet_03v3
+No property NRS found for device pfet_03v3
+No property par found for device pfet_03v3
+No property sa found for device pfet_03v3
+No property sb found for device pfet_03v3
+No property sd found for device pfet_03v3
+No property par found for device pfet_03v3
+No property dtemp found for device pfet_03v3
+No property nf found for device pfet_03v3
+No property $D found for device pfet_03v3
+No property $X found for device pfet_03v3
+No property $Y found for device pfet_03v3
+Model pfet_03v3 pin 1 == 3
+No property par1 found for device pfet_03v3
+No property NRD found for device pfet_03v3
+No property NRS found for device pfet_03v3
+No property par found for device pfet_03v3
+No property sa found for device pfet_03v3
+No property sb found for device pfet_03v3
+No property sd found for device pfet_03v3
+No property par found for device pfet_03v3
+No property dtemp found for device pfet_03v3
+No property nf found for device pfet_03v3
+No property as found for device pfet_03v3
+No property ad found for device pfet_03v3
+No property ps found for device pfet_03v3
+No property pd found for device pfet_03v3
+No property $D found for device pfet_03v3
+No property $X found for device pfet_03v3
+No property $Y found for device pfet_03v3
+Comparison output logged to file mut_net.report
+Logging to file "mut_net.report" enabled
+Circuit pfet_03v3 contains no devices.
+Circuit nfet_03v3 contains no devices.
+
+Contents of circuit 1:  Circuit: 'mdac'
+Circuit mdac contains 1390 device instances.
+  Class: nfet_03v3             instances:  36
+  Class: pfet_03v3             instances: 1354
+Circuit contains 81 nets.
+Contents of circuit 2:  Circuit: 'mdac'
+Circuit mdac contains 1390 device instances.
+  Class: nfet_03v3             instances:  36
+  Class: pfet_03v3             instances: 1354
+Circuit contains 81 nets.
+
+Circuit was modified by parallel/series device merging.
+New circuit summary:
+
+Contents of circuit 1:  Circuit: 'mdac'
+Circuit mdac contains 118 device instances.
+  Class: nfet_03v3             instances:   4
+  Class: pfet_03v3             instances: 114
+Circuit contains 81 nets.
+Contents of circuit 2:  Circuit: 'mdac'
+Circuit mdac contains 119 device instances.
+  Class: nfet_03v3             instances:   5
+  Class: pfet_03v3             instances: 114
+Circuit contains 81 nets.
+
+Circuit 1 contains 118 devices, Circuit 2 contains 119 devices. *** MISMATCH ***
+Circuit 1 contains 81 nets,    Circuit 2 contains 81 nets.
+
+
+Final result: 
+Top level cell failed pin matching.
+
+Logging to file "mut_net.report" disabled
+LVS Done.

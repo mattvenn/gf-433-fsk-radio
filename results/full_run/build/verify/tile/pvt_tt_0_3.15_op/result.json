@@ -1,0 +1,25 @@
+{
+ "name": "pvt_tt_0_3.15_op",
+ "flags": [],
+ "case": {
+  "corner": "typical",
+  "temp": 0,
+  "vap": 3.15,
+  "vdp": 3.15,
+  "vnom": 3.15,
+  "kind": "op",
+  "tstop": 0,
+  "rx_en": 1,
+  "ic": null,
+  "est": 60
+ },
+ "deck_temp": 0.0,
+ "deck_vsa": 3.15,
+ "deck_vsd": 3.15,
+ "runtime_s": 22.0,
+ "vbnf": 1.2101702079240113,
+ "vg": 1.2736673825546847,
+ "nb": 0.9710192003290011,
+ "vap": 3.15,
+ "vdp": 3.15
+}

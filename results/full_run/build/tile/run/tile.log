@@ -1,0 +1,11 @@
+unlanded supplies (wired by the router): {'vco.decap': ['VDD_LS'], 'xdbg_vctrl': ['VDD', 'VSS'], 'xvpd': ['b'], 'xbits': ['VDD', 'VSS'], 'rx.lsqh': ['qenb'], 'rx.lobuf_q': ['VDD'], 'xant_tx': ['VDD', 'VSS'], 'xant_rx': ['VDD', 'VSS'], 'xant_dbg': ['VDD', 'VSS']}
+stripes added: [('VAPWR', 118.1, 2.0)]
+unrouted dbg_sel[3] from [(0, 455.6, 133.96)] to a tree of 1 nodes near [(0, 443.36, 135.32)]
+unrouted bit1 from [(1, 383.52, 142.8)] to a tree of 398 nodes near [(2, 391.68, 213.52), (0, 346.8, 316.88)]
+unrouted bit3 from [(1, 383.52, 146.2)] to a tree of 413 nodes near [(2, 383.52, 231.2), (2, 383.52, 237.32)]
+round 1: unrouted ['dbg_sel[3]', 'bit1', 'bit3']  (16 s)
+unrouted bit2 from [(1, 383.52, 144.16)] to a tree of 407 nodes near [(1, 284.24, 318.92), (2, 386.24, 216.92)]
+round 2: unrouted ['bit2']  (29 s)
+round 3: unrouted []  (48 s)
+skipped (missing ends): []
+decap: {'regions': [{'rect': [445.58, 76.0, 693.0, 128.4], 'supply': 'VDPWR', 'units': 38}, {'rect': [77.0, 104.0, 156.93, 147.0], 'supply': 'VAPWR', 'units': 6}, {'rect': [404.64, 120.6, 430.4, 195.0], 'units': 0, 'why': 'no stripe pair crosses it'}, {'rect': [668.0, 3.0, 693.0, 73.0], 'units': 0, 'why': 'no stripe pair crosses it'}, {'rect': [0.0, 3.0, 11.0, 160.0], 'units': 0, 'why': 'no stripe pair crosses it'}, {'rect': [340.0, 313.84, 430.4, 322.0], 'supply': 'VAPWR', 'units': 0}, {'rect': [212.31, 76.0, 273.0, 88.0], 'supply': 'VAPWR', 'units': 0}, {'rect': [160.0, 138.02, 187.0, 161.9], 'units': 0, 'why': 'no stripe pair crosses it'}, {'rect': [213.0, 91.0, 273.0, 99.0], 'supply': 'VAPWR', 'units': 0}, {'rect': [77.0, 150.0, 115.4, 160.0], 'units': 0, 'why': 'no stripe pair crosses it'}, {'rect': [155.0, 3.0, 164.93, 73.0], 'units': 0, 'why': 'no stripe pair crosses it'}], 'units': 44, 'pF': 8.6}

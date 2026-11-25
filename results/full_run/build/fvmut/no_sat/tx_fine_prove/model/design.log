@@ -1,0 +1,723 @@
+
+ /----------------------------------------------------------------------------\
+ |  yosys -- Yosys Open SYnthesis Suite                                       |
+ |  Copyright (C) 2012 - 2026  Claire Xenia Wolf <claire@yosyshq.com>         |
+ |  Distributed under an ISC-like license, type "license" to see terms        |
+ \----------------------------------------------------------------------------/
+ Yosys 0.69 (git sha1 9f75ca1f9, Release, GNU /usr/bin/c++ 13.3.0)
+
+-- Executing script file `../model/design.ys' --
+
+1. Executing Verilog-2005 frontend: tx_fine.v
+Parsing formal SystemVerilog input from `tx_fine.v' to AST representation.
+Generating RTLIL representation for module `\tx_cg'.
+Note: Assuming pure combinatorial block at tx_fine.v:52.5-53.29 in
+compliance with IEC 62142(E):2005 / IEEE Std. 1364.1(E):2002. Recommending
+use of @* instead of @(...) for better match of synthesis and simulation.
+Generating RTLIL representation for module `\tx_fine'.
+Successfully finished Verilog frontend.
+
+2. Executing Verilog-2005 frontend: fv_tx_fine.sv
+Parsing formal SystemVerilog input from `fv_tx_fine.sv' to AST representation.
+Generating RTLIL representation for module `\fv_tx_fine'.
+Generating RTLIL representation for module `\fv_props'.
+Successfully finished Verilog frontend.
+
+3. Executing HIERARCHY pass (managing design hierarchy).
+
+3.1. Analyzing design hierarchy..
+Top module:  \fv_tx_fine
+Used module:     \fv_props
+Used module:     \tx_fine
+Used module:         \tx_cg
+
+3.2. Analyzing design hierarchy..
+Top module:  \fv_tx_fine
+Used module:     \fv_props
+Used module:     \tx_fine
+Used module:         \tx_cg
+Removed 0 unused modules.
+Module fv_props directly or indirectly contains formal properties -> setting "keep" attribute.
+Module fv_tx_fine directly or indirectly contains formal properties -> setting "keep" attribute.
+
+4. Executing PROC pass (convert processes to netlists).
+
+4.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Cleaned up 0 empty switches.
+
+4.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).
+Marked 1 switch rules as full_case in process $proc$fv_tx_fine.sv:147$256 in module fv_props.
+Marked 2 switch rules as full_case in process $proc$fv_tx_fine.sv:117$205 in module fv_props.
+Marked 2 switch rules as full_case in process $proc$fv_tx_fine.sv:92$197 in module fv_props.
+Marked 1 switch rules as full_case in process $proc$tx_fine.v:222$154 in module tx_fine.
+Marked 1 switch rules as full_case in process $proc$tx_fine.v:222$151 in module tx_fine.
+Marked 1 switch rules as full_case in process $proc$tx_fine.v:222$148 in module tx_fine.
+Marked 1 switch rules as full_case in process $proc$tx_fine.v:222$145 in module tx_fine.
+Marked 1 switch rules as full_case in process $proc$tx_fine.v:222$142 in module tx_fine.
+Marked 1 switch rules as full_case in process $proc$tx_fine.v:222$139 in module tx_fine.
+Marked 1 switch rules as full_case in process $proc$tx_fine.v:222$136 in module tx_fine.
+Marked 1 switch rules as full_case in process $proc$tx_fine.v:219$133 in module tx_fine.
+Marked 1 switch rules as full_case in process $proc$tx_fine.v:236$130 in module tx_fine.
+Marked 1 switch rules as full_case in process $proc$tx_fine.v:233$128 in module tx_fine.
+Marked 1 switch rules as full_case in process $proc$tx_fine.v:206$126 in module tx_fine.
+Marked 1 switch rules as full_case in process $proc$tx_fine.v:194$61 in module tx_fine.
+Marked 2 switch rules as full_case in process $proc$tx_fine.v:181$58 in module tx_fine.
+Marked 1 switch rules as full_case in process $proc$tx_fine.v:177$56 in module tx_fine.
+Marked 5 switch rules as full_case in process $proc$tx_fine.v:127$15 in module tx_fine.
+Marked 1 switch rules as full_case in process $proc$tx_fine.v:81$6 in module tx_fine.
+Marked 1 switch rules as full_case in process $proc$tx_fine.v:52$2 in module tx_cg.
+Removed a total of 0 dead cases.
+
+4.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).
+Removed 26 redundant assignments.
+Promoted 17 assignments to connections.
+
+4.4. Executing PROC_INIT pass (extract init attributes).
+Found init rule in `\fv_props.$proc$fv_tx_fine.sv:152$287'.
+  Set init value: \f_rstn_q = 1'0
+Found init rule in `\fv_props.$proc$fv_tx_fine.sv:152$286'.
+  Set init value: \f_cko_q = 1'0
+Found init rule in `\fv_props.$proc$fv_tx_fine.sv:152$285'.
+  Set init value: \f_ck_q = 1'0
+Found init rule in `\fv_props.$proc$fv_tx_fine.sv:146$284'.
+  Set init value: \f_sdoff = 1'0
+Found init rule in `\fv_props.$proc$fv_tx_fine.sv:74$283'.
+  Set init value: \f_rst_q = 1'0
+Found init rule in `\fv_tx_fine.$proc$fv_tx_fine.sv:29$167'.
+  Set init value: \f_init = 1'1
+
+4.5. Executing PROC_ARST pass (detect async resets in processes).
+Found async reset \rst_n in `\fv_props.$proc$fv_tx_fine.sv:147$256'.
+Found async reset \rst_n in `\fv_props.$proc$fv_tx_fine.sv:117$205'.
+Found async reset \rst_n in `\fv_props.$proc$fv_tx_fine.sv:92$197'.
+Found async reset \rst_ck_n in `\tx_fine.$proc$tx_fine.v:222$154'.
+Found async reset \rst_ck_n in `\tx_fine.$proc$tx_fine.v:222$151'.
+Found async reset \rst_ck_n in `\tx_fine.$proc$tx_fine.v:222$148'.
+Found async reset \rst_ck_n in `\tx_fine.$proc$tx_fine.v:222$145'.
+Found async reset \rst_ck_n in `\tx_fine.$proc$tx_fine.v:222$142'.
+Found async reset \rst_ck_n in `\tx_fine.$proc$tx_fine.v:222$139'.
+Found async reset \rst_ck_n in `\tx_fine.$proc$tx_fine.v:222$136'.
+Found async reset \rst_ck_n in `\tx_fine.$proc$tx_fine.v:219$133'.
+Found async reset \rst_ck_n in `\tx_fine.$proc$tx_fine.v:236$130'.
+Found async reset \rst_ck_n in `\tx_fine.$proc$tx_fine.v:233$128'.
+Found async reset \rst_n in `\tx_fine.$proc$tx_fine.v:206$126'.
+Found async reset \rst_n in `\tx_fine.$proc$tx_fine.v:194$61'.
+Found async reset \rst_n in `\tx_fine.$proc$tx_fine.v:181$58'.
+Found async reset \rst_n in `\tx_fine.$proc$tx_fine.v:177$56'.
+Found async reset \rst_n in `\tx_fine.$proc$tx_fine.v:127$15'.
+Found async reset \rst_n in `\tx_fine.$proc$tx_fine.v:81$6'.
+
+4.6. Executing PROC_ROM pass (convert switches to ROMs).
+Converted 0 switches.
+<suppressed ~26 debug messages>
+
+4.7. Executing PROC_MUX pass (convert decision trees to multiplexers).
+Creating decoders for process `\fv_props.$proc$fv_tx_fine.sv:152$287'.
+Creating decoders for process `\fv_props.$proc$fv_tx_fine.sv:152$286'.
+Creating decoders for process `\fv_props.$proc$fv_tx_fine.sv:152$285'.
+Creating decoders for process `\fv_props.$proc$fv_tx_fine.sv:146$284'.
+Creating decoders for process `\fv_props.$proc$fv_tx_fine.sv:74$283'.
+Creating decoders for process `\fv_props.$proc$fv_tx_fine.sv:154$266'.
+     1/3: $assert$fv_tx_fine.sv:157$280_EN
+     2/3: $assert$fv_tx_fine.sv:156$275_EN
+     3/3: $assert$fv_tx_fine.sv:155$270_EN
+Creating decoders for process `\fv_props.$proc$fv_tx_fine.sv:153$265'.
+Creating decoders for process `\fv_props.$proc$fv_tx_fine.sv:149$259'.
+     1/1: $assert$fv_tx_fine.sv:149$262_EN
+Creating decoders for process `\fv_props.$proc$fv_tx_fine.sv:147$256'.
+     1/1: $0\f_sdoff[0:0]
+Creating decoders for process `\fv_props.$proc$fv_tx_fine.sv:140$243'.
+     1/2: $assert$fv_tx_fine.sv:142$249_EN
+     2/2: $assert$fv_tx_fine.sv:141$245_EN
+Creating decoders for process `\fv_props.$proc$fv_tx_fine.sv:136$238'.
+     1/1: $assert$fv_tx_fine.sv:136$240_EN
+Creating decoders for process `\fv_props.$proc$fv_tx_fine.sv:124$214'.
+     1/2: $assert$fv_tx_fine.sv:126$222_EN
+     2/2: $assert$fv_tx_fine.sv:125$216_EN
+Creating decoders for process `\fv_props.$proc$fv_tx_fine.sv:122$211'.
+Creating decoders for process `\fv_props.$proc$fv_tx_fine.sv:117$205'.
+     1/1: $0\f_len[5:0]
+Creating decoders for process `\fv_props.$proc$fv_tx_fine.sv:92$197'.
+     1/10: $0\f_mosi[1:0]
+     2/10: $0\f_cs[2:0]
+     3/10: $0\f_sclk[2:0]
+     4/10: $0\m_dbg[3:0]
+     5/10: $0\m_ctrl[4:0]
+     6/10: $0\m_fsk_dev[11:0]
+     7/10: $0\m_med_frac[7:0]
+     8/10: $0\m_med_int[9:0]
+     9/10: $0\f_sr[15:0]
+    10/10: $0\f_n[4:0]
+Creating decoders for process `\fv_props.$proc$fv_tx_fine.sv:76$170'.
+     1/3: $assert$fv_tx_fine.sv:79$186_EN
+     2/3: $assert$fv_tx_fine.sv:78$180_EN
+     3/3: $assert$fv_tx_fine.sv:77$175_EN
+Creating decoders for process `\fv_props.$proc$fv_tx_fine.sv:75$168'.
+Creating decoders for process `\fv_tx_fine.$proc$fv_tx_fine.sv:29$167'.
+Creating decoders for process `\fv_tx_fine.$proc$fv_tx_fine.sv:32$162'.
+     1/1: $assume$fv_tx_fine.sv:32$165_EN
+Creating decoders for process `\fv_tx_fine.$proc$fv_tx_fine.sv:31$159'.
+     1/1: $assume$fv_tx_fine.sv:31$160_EN
+Creating decoders for process `\fv_tx_fine.$proc$fv_tx_fine.sv:30$158'.
+Creating decoders for process `\tx_fine.$proc$tx_fine.v:222$154'.
+     1/1: $0\rip[7].q[0:0]
+Creating decoders for process `\tx_fine.$proc$tx_fine.v:222$151'.
+     1/1: $0\rip[6].q[0:0]
+Creating decoders for process `\tx_fine.$proc$tx_fine.v:222$148'.
+     1/1: $0\rip[5].q[0:0]
+Creating decoders for process `\tx_fine.$proc$tx_fine.v:222$145'.
+     1/1: $0\rip[4].q[0:0]
+Creating decoders for process `\tx_fine.$proc$tx_fine.v:222$142'.
+     1/1: $0\rip[3].q[0:0]
+Creating decoders for process `\tx_fine.$proc$tx_fine.v:222$139'.
+     1/1: $0\rip[2].q[0:0]
+Creating decoders for process `\tx_fine.$proc$tx_fine.v:222$136'.
+     1/1: $0\rip[1].q[0:0]
+Creating decoders for process `\tx_fine.$proc$tx_fine.v:219$133'.
+     1/1: $0\rip[0].q[0:0]
+Creating decoders for process `\tx_fine.$proc$tx_fine.v:236$130'.
+     1/1: $0\g_en[0:0]
+Creating decoders for process `\tx_fine.$proc$tx_fine.v:233$128'.
+     1/1: $0\s_cken[1:0]
+Creating decoders for process `\tx_fine.$proc$tx_fine.v:206$126'.
+     1/1: $0\r_ck[1:0]
+Creating decoders for process `\tx_fine.$proc$tx_fine.v:194$61'.
+     1/34: $0\dac_bn[4:0]
+     2/34: $1\i[31:0]
+     3/34: $0\dac_tn[30:0] [30]
+     4/34: $0\dac_tn[30:0] [29]
+     5/34: $0\dac_tn[30:0] [28]
+     6/34: $0\dac_tn[30:0] [27]
+     7/34: $0\dac_tn[30:0] [26]
+     8/34: $0\dac_tn[30:0] [25]
+     9/34: $0\dac_tn[30:0] [24]
+    10/34: $0\dac_tn[30:0] [23]
+    11/34: $0\dac_tn[30:0] [22]
+    12/34: $0\dac_tn[30:0] [21]
+    13/34: $0\dac_tn[30:0] [20]
+    14/34: $0\dac_tn[30:0] [19]
+    15/34: $0\dac_tn[30:0] [18]
+    16/34: $0\dac_tn[30:0] [17]
+    17/34: $0\dac_tn[30:0] [16]
+    18/34: $0\dac_tn[30:0] [15]
+    19/34: $0\dac_tn[30:0] [14]
+    20/34: $0\dac_tn[30:0] [13]
+    21/34: $0\dac_tn[30:0] [12]
+    22/34: $0\dac_tn[30:0] [11]
+    23/34: $0\dac_tn[30:0] [10]
+    24/34: $0\dac_tn[30:0] [9]
+    25/34: $0\dac_tn[30:0] [8]
+    26/34: $0\dac_tn[30:0] [7]
+    27/34: $0\dac_tn[30:0] [6]
+    28/34: $0\dac_tn[30:0] [5]
+    29/34: $0\dac_tn[30:0] [4]
+    30/34: $0\dac_tn[30:0] [3]
+    31/34: $0\dac_tn[30:0] [2]
+    32/34: $0\dac_tn[30:0] [1]
+    33/34: $0\dac_tn[30:0] [0]
+    34/34: $0\eff_int[9:0]
+Creating decoders for process `\tx_fine.$proc$tx_fine.v:181$58'.
+     1/2: $0\dac_sdn[0:0]
+     2/2: $0\acc[7:0]
+Creating decoders for process `\tx_fine.$proc$tx_fine.v:177$56'.
+     1/1: $0\eff_q[17:0]
+Creating decoders for process `\tx_fine.$proc$tx_fine.v:127$15'.
+     1/20: $5\rdmux$func$tx_fine.v:140$5.$result[11:0]$30
+     2/20: $4\rdmux$func$tx_fine.v:140$5.$result[11:0]$28
+     3/20: $4\rdmux$func$tx_fine.v:140$5.a[2:0]$29
+     4/20: $3\rdmux$func$tx_fine.v:140$5.a[2:0]$25
+     5/20: $3\rdmux$func$tx_fine.v:140$5.$result[11:0]$24
+     6/20: $2\rdmux$func$tx_fine.v:140$5.a[2:0]$23
+     7/20: $2\rdmux$func$tx_fine.v:140$5.$result[11:0]$22
+     8/20: $1\rdmux$func$tx_fine.v:140$5.a[2:0]$20
+     9/20: $1\rdmux$func$tx_fine.v:140$5.$result[11:0]$19
+    10/20: $0\addr[2:0]
+    11/20: $0\rnw[0:0]
+    12/20: $0\rd[11:0]
+    13/20: $0\sr[15:0]
+    14/20: $0\bitcnt[4:0]
+    15/20: $0\dbg[3:0]
+    16/20: $0\ctrl[4:0]
+    17/20: $0\fsk_dev[11:0]
+    18/20: $0\med_frac[7:0]
+    19/20: $0\med_int[9:0]
+    20/20: $0\miso[0:0]
+Creating decoders for process `\tx_fine.$proc$tx_fine.v:81$6'.
+     1/4: $0\s_fsk[2:0]
+     2/4: $0\s_mosi[1:0]
+     3/4: $0\s_cs[2:0]
+     4/4: $0\s_sclk[2:0]
+Creating decoders for process `\tx_cg.$proc$tx_fine.v:52$2'.
+     1/1: $1\en_l[0:0]
+
+4.8. Executing PROC_DLATCH pass (convert process syncs to latches).
+Warning: Latch inferred for signal `\tx_cg.\en_l' from process `\tx_cg.$proc$tx_fine.v:52$2': $auto$proc_dlatch.cc:547:proc_dlatch$571
+
+4.9. Executing PROC_DFF pass (convert process syncs to FFs).
+Creating register for signal `\fv_props.\f_ck_q' using process `\fv_props.$proc$fv_tx_fine.sv:153$265'.
+  created $ff cell `$procdff$572' with global clock.
+Creating register for signal `\fv_props.\f_cko_q' using process `\fv_props.$proc$fv_tx_fine.sv:153$265'.
+  created $ff cell `$procdff$573' with global clock.
+Creating register for signal `\fv_props.\f_rstn_q' using process `\fv_props.$proc$fv_tx_fine.sv:153$265'.
+  created $ff cell `$procdff$574' with global clock.
+Creating register for signal `\fv_props.\f_sdoff' using process `\fv_props.$proc$fv_tx_fine.sv:147$256'.
+  created $adff cell `$procdff$579' with positive edge clock and positive level reset.
+Creating register for signal `\fv_props.\f_len' using process `\fv_props.$proc$fv_tx_fine.sv:117$205'.
+  created $adff cell `$procdff$584' with positive edge clock and positive level reset.
+Creating register for signal `\fv_props.\f_sclk' using process `\fv_props.$proc$fv_tx_fine.sv:92$197'.
+  created $adff cell `$procdff$589' with positive edge clock and positive level reset.
+Creating register for signal `\fv_props.\f_cs' using process `\fv_props.$proc$fv_tx_fine.sv:92$197'.
+  created $adff cell `$procdff$594' with positive edge clock and positive level reset.
+Creating register for signal `\fv_props.\f_mosi' using process `\fv_props.$proc$fv_tx_fine.sv:92$197'.
+  created $adff cell `$procdff$599' with positive edge clock and positive level reset.
+Creating register for signal `\fv_props.\f_n' using process `\fv_props.$proc$fv_tx_fine.sv:92$197'.
+  created $adff cell `$procdff$604' with positive edge clock and positive level reset.
+Creating register for signal `\fv_props.\f_sr' using process `\fv_props.$proc$fv_tx_fine.sv:92$197'.
+  created $adff cell `$procdff$609' with positive edge clock and positive level reset.
+Creating register for signal `\fv_props.\m_med_int' using process `\fv_props.$proc$fv_tx_fine.sv:92$197'.
+  created $adff cell `$procdff$614' with positive edge clock and positive level reset.
+Creating register for signal `\fv_props.\m_med_frac' using process `\fv_props.$proc$fv_tx_fine.sv:92$197'.
+  created $adff cell `$procdff$619' with positive edge clock and positive level reset.
+Creating register for signal `\fv_props.\m_fsk_dev' using process `\fv_props.$proc$fv_tx_fine.sv:92$197'.
+  created $adff cell `$procdff$624' with positive edge clock and positive level reset.
+Creating register for signal `\fv_props.\m_ctrl' using process `\fv_props.$proc$fv_tx_fine.sv:92$197'.
+  created $adff cell `$procdff$629' with positive edge clock and positive level reset.
+Creating register for signal `\fv_props.\m_dbg' using process `\fv_props.$proc$fv_tx_fine.sv:92$197'.
+  created $adff cell `$procdff$634' with positive edge clock and positive level reset.
+Creating register for signal `\fv_props.\f_rst_q' using process `\fv_props.$proc$fv_tx_fine.sv:75$168'.
+  created $ff cell `$procdff$635' with global clock.
+Creating register for signal `\fv_tx_fine.$past$fv_tx_fine.sv:32$157$0' using process `\fv_tx_fine.$proc$fv_tx_fine.sv:32$162'.
+  created $ff cell `$procdff$636' with global clock.
+Creating register for signal `\fv_tx_fine.\f_init' using process `\fv_tx_fine.$proc$fv_tx_fine.sv:30$158'.
+  created $ff cell `$procdff$637' with global clock.
+Creating register for signal `\tx_fine.\rip[7].q' using process `\tx_fine.$proc$tx_fine.v:222$154'.
+  created $adff cell `$procdff$642' with negative edge clock and positive level reset.
+Creating register for signal `\tx_fine.\rip[6].q' using process `\tx_fine.$proc$tx_fine.v:222$151'.
+  created $adff cell `$procdff$647' with negative edge clock and positive level reset.
+Creating register for signal `\tx_fine.\rip[5].q' using process `\tx_fine.$proc$tx_fine.v:222$148'.
+  created $adff cell `$procdff$652' with negative edge clock and positive level reset.
+Creating register for signal `\tx_fine.\rip[4].q' using process `\tx_fine.$proc$tx_fine.v:222$145'.
+  created $adff cell `$procdff$657' with negative edge clock and positive level reset.
+Creating register for signal `\tx_fine.\rip[3].q' using process `\tx_fine.$proc$tx_fine.v:222$142'.
+  created $adff cell `$procdff$662' with negative edge clock and positive level reset.
+Creating register for signal `\tx_fine.\rip[2].q' using process `\tx_fine.$proc$tx_fine.v:222$139'.
+  created $adff cell `$procdff$667' with negative edge clock and positive level reset.
+Creating register for signal `\tx_fine.\rip[1].q' using process `\tx_fine.$proc$tx_fine.v:222$136'.
+  created $adff cell `$procdff$672' with negative edge clock and positive level reset.
+Creating register for signal `\tx_fine.\rip[0].q' using process `\tx_fine.$proc$tx_fine.v:219$133'.
+  created $adff cell `$procdff$677' with positive edge clock and positive level reset.
+Creating register for signal `\tx_fine.\g_en' using process `\tx_fine.$proc$tx_fine.v:236$130'.
+  created $adff cell `$procdff$682' with negative edge clock and positive level reset.
+Creating register for signal `\tx_fine.\s_cken' using process `\tx_fine.$proc$tx_fine.v:233$128'.
+  created $adff cell `$procdff$687' with positive edge clock and positive level reset.
+Creating register for signal `\tx_fine.\r_ck' using process `\tx_fine.$proc$tx_fine.v:206$126'.
+  created $adff cell `$procdff$692' with positive edge clock and positive level reset.
+Creating register for signal `\tx_fine.\i' using process `\tx_fine.$proc$tx_fine.v:194$61'.
+  created $dff cell `$procdff$699' with positive edge clock.
+Creating register for signal `\tx_fine.\dac_tn' using process `\tx_fine.$proc$tx_fine.v:194$61'.
+  created $adff cell `$procdff$704' with positive edge clock and positive level reset.
+Creating register for signal `\tx_fine.\dac_bn' using process `\tx_fine.$proc$tx_fine.v:194$61'.
+  created $adff cell `$procdff$709' with positive edge clock and positive level reset.
+Creating register for signal `\tx_fine.\eff_int' using process `\tx_fine.$proc$tx_fine.v:194$61'.
+  created $adff cell `$procdff$714' with positive edge clock and positive level reset.
+Creating register for signal `\tx_fine.\dac_sdn' using process `\tx_fine.$proc$tx_fine.v:181$58'.
+  created $adff cell `$procdff$719' with positive edge clock and positive level reset.
+Creating register for signal `\tx_fine.\acc' using process `\tx_fine.$proc$tx_fine.v:181$58'.
+  created $adff cell `$procdff$724' with positive edge clock and positive level reset.
+Creating register for signal `\tx_fine.\eff_q' using process `\tx_fine.$proc$tx_fine.v:177$56'.
+  created $adff cell `$procdff$729' with positive edge clock and positive level reset.
+Creating register for signal `\tx_fine.\miso' using process `\tx_fine.$proc$tx_fine.v:127$15'.
+  created $adff cell `$procdff$734' with positive edge clock and positive level reset.
+Creating register for signal `\tx_fine.\med_int' using process `\tx_fine.$proc$tx_fine.v:127$15'.
+  created $adff cell `$procdff$739' with positive edge clock and positive level reset.
+Creating register for signal `\tx_fine.\med_frac' using process `\tx_fine.$proc$tx_fine.v:127$15'.
+  created $adff cell `$procdff$744' with positive edge clock and positive level reset.
+Creating register for signal `\tx_fine.\fsk_dev' using process `\tx_fine.$proc$tx_fine.v:127$15'.
+  created $adff cell `$procdff$749' with positive edge clock and positive level reset.
+Creating register for signal `\tx_fine.\ctrl' using process `\tx_fine.$proc$tx_fine.v:127$15'.
+  created $adff cell `$procdff$754' with positive edge clock and positive level reset.
+Creating register for signal `\tx_fine.\dbg' using process `\tx_fine.$proc$tx_fine.v:127$15'.
+  created $adff cell `$procdff$759' with positive edge clock and positive level reset.
+Creating register for signal `\tx_fine.\bitcnt' using process `\tx_fine.$proc$tx_fine.v:127$15'.
+  created $adff cell `$procdff$764' with positive edge clock and positive level reset.
+Creating register for signal `\tx_fine.\sr' using process `\tx_fine.$proc$tx_fine.v:127$15'.
+  created $adff cell `$procdff$769' with positive edge clock and positive level reset.
+Creating register for signal `\tx_fine.\rd' using process `\tx_fine.$proc$tx_fine.v:127$15'.
+  created $adff cell `$procdff$774' with positive edge clock and positive level reset.
+Creating register for signal `\tx_fine.\rnw' using process `\tx_fine.$proc$tx_fine.v:127$15'.
+  created $adff cell `$procdff$779' with positive edge clock and positive level reset.
+Creating register for signal `\tx_fine.\addr' using process `\tx_fine.$proc$tx_fine.v:127$15'.
+  created $adff cell `$procdff$784' with positive edge clock and positive level reset.
+Creating register for signal `\tx_fine.\rdmux$func$tx_fine.v:140$5.$result' using process `\tx_fine.$proc$tx_fine.v:127$15'.
+  created $adff cell `$procdff$789' with positive edge clock and positive level reset.
+Creating register for signal `\tx_fine.\rdmux$func$tx_fine.v:140$5.a' using process `\tx_fine.$proc$tx_fine.v:127$15'.
+  created $adff cell `$procdff$794' with positive edge clock and positive level reset.
+Creating register for signal `\tx_fine.\s_sclk' using process `\tx_fine.$proc$tx_fine.v:81$6'.
+  created $adff cell `$procdff$799' with positive edge clock and positive level reset.
+Creating register for signal `\tx_fine.\s_cs' using process `\tx_fine.$proc$tx_fine.v:81$6'.
+  created $adff cell `$procdff$804' with positive edge clock and positive level reset.
+Creating register for signal `\tx_fine.\s_mosi' using process `\tx_fine.$proc$tx_fine.v:81$6'.
+  created $adff cell `$procdff$809' with positive edge clock and positive level reset.
+Creating register for signal `\tx_fine.\s_fsk' using process `\tx_fine.$proc$tx_fine.v:81$6'.
+  created $adff cell `$procdff$814' with positive edge clock and positive level reset.
+
+4.10. Executing PROC_MEMWR pass (convert process memory writes to cells).
+
+4.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Removing empty process `fv_props.$proc$fv_tx_fine.sv:152$287'.
+Removing empty process `fv_props.$proc$fv_tx_fine.sv:152$286'.
+Removing empty process `fv_props.$proc$fv_tx_fine.sv:152$285'.
+Removing empty process `fv_props.$proc$fv_tx_fine.sv:146$284'.
+Removing empty process `fv_props.$proc$fv_tx_fine.sv:74$283'.
+Found and cleaned up 3 empty switches in `\fv_props.$proc$fv_tx_fine.sv:154$266'.
+Removing empty process `fv_props.$proc$fv_tx_fine.sv:154$266'.
+Removing empty process `fv_props.$proc$fv_tx_fine.sv:153$265'.
+Found and cleaned up 1 empty switch in `\fv_props.$proc$fv_tx_fine.sv:149$259'.
+Removing empty process `fv_props.$proc$fv_tx_fine.sv:149$259'.
+Removing empty process `fv_props.$proc$fv_tx_fine.sv:147$256'.
+Found and cleaned up 1 empty switch in `\fv_props.$proc$fv_tx_fine.sv:140$243'.
+Removing empty process `fv_props.$proc$fv_tx_fine.sv:140$243'.
+Found and cleaned up 1 empty switch in `\fv_props.$proc$fv_tx_fine.sv:136$238'.
+Removing empty process `fv_props.$proc$fv_tx_fine.sv:136$238'.
+Found and cleaned up 1 empty switch in `\fv_props.$proc$fv_tx_fine.sv:124$214'.
+Removing empty process `fv_props.$proc$fv_tx_fine.sv:124$214'.
+Removing empty process `fv_props.$proc$fv_tx_fine.sv:122$211'.
+Found and cleaned up 2 empty switches in `\fv_props.$proc$fv_tx_fine.sv:117$205'.
+Removing empty process `fv_props.$proc$fv_tx_fine.sv:117$205'.
+Found and cleaned up 5 empty switches in `\fv_props.$proc$fv_tx_fine.sv:92$197'.
+Removing empty process `fv_props.$proc$fv_tx_fine.sv:92$197'.
+Found and cleaned up 1 empty switch in `\fv_props.$proc$fv_tx_fine.sv:76$170'.
+Removing empty process `fv_props.$proc$fv_tx_fine.sv:76$170'.
+Removing empty process `fv_props.$proc$fv_tx_fine.sv:75$168'.
+Removing empty process `fv_tx_fine.$proc$fv_tx_fine.sv:29$167'.
+Found and cleaned up 1 empty switch in `\fv_tx_fine.$proc$fv_tx_fine.sv:32$162'.
+Removing empty process `fv_tx_fine.$proc$fv_tx_fine.sv:32$162'.
+Found and cleaned up 1 empty switch in `\fv_tx_fine.$proc$fv_tx_fine.sv:31$159'.
+Removing empty process `fv_tx_fine.$proc$fv_tx_fine.sv:31$159'.
+Removing empty process `fv_tx_fine.$proc$fv_tx_fine.sv:30$158'.
+Removing empty process `tx_fine.$proc$tx_fine.v:222$154'.
+Removing empty process `tx_fine.$proc$tx_fine.v:222$151'.
+Removing empty process `tx_fine.$proc$tx_fine.v:222$148'.
+Removing empty process `tx_fine.$proc$tx_fine.v:222$145'.
+Removing empty process `tx_fine.$proc$tx_fine.v:222$142'.
+Removing empty process `tx_fine.$proc$tx_fine.v:222$139'.
+Removing empty process `tx_fine.$proc$tx_fine.v:222$136'.
+Removing empty process `tx_fine.$proc$tx_fine.v:219$133'.
+Removing empty process `tx_fine.$proc$tx_fine.v:236$130'.
+Removing empty process `tx_fine.$proc$tx_fine.v:233$128'.
+Removing empty process `tx_fine.$proc$tx_fine.v:206$126'.
+Removing empty process `tx_fine.$proc$tx_fine.v:194$61'.
+Found and cleaned up 1 empty switch in `\tx_fine.$proc$tx_fine.v:181$58'.
+Removing empty process `tx_fine.$proc$tx_fine.v:181$58'.
+Removing empty process `tx_fine.$proc$tx_fine.v:177$56'.
+Found and cleaned up 7 empty switches in `\tx_fine.$proc$tx_fine.v:127$15'.
+Removing empty process `tx_fine.$proc$tx_fine.v:127$15'.
+Removing empty process `tx_fine.$proc$tx_fine.v:81$6'.
+Found and cleaned up 1 empty switch in `\tx_cg.$proc$tx_fine.v:52$2'.
+Removing empty process `tx_cg.$proc$tx_fine.v:52$2'.
+Cleaned up 26 empty switches.
+
+4.12. Executing OPT_EXPR pass (perform const folding).
+Optimizing module fv_props.
+<suppressed ~36 debug messages>
+Optimizing module fv_tx_fine.
+<suppressed ~1 debug messages>
+Optimizing module tx_fine.
+<suppressed ~74 debug messages>
+Optimizing module tx_cg.
+<suppressed ~7 debug messages>
+
+5. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \fv_props..
+Removed 20 unused cells and 110 unused wires.
+<suppressed ~22 debug messages>
+
+6. Executing FLATTEN pass (flatten design).
+Deleting now unused module fv_props.
+Deleting now unused module tx_fine.
+Deleting now unused module tx_cg.
+<suppressed ~6 debug messages>
+
+7. Executing PREP pass.
+
+7.1. Executing HIERARCHY pass (managing design hierarchy).
+
+7.1.1. Analyzing design hierarchy..
+Top module:  \fv_tx_fine
+
+7.1.2. Analyzing design hierarchy..
+Top module:  \fv_tx_fine
+Removed 0 unused modules.
+Module fv_tx_fine directly or indirectly contains formal properties -> setting "keep" attribute.
+
+7.2. Executing PROC pass (convert processes to netlists).
+
+7.2.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Cleaned up 0 empty switches.
+
+7.2.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).
+Removed a total of 0 dead cases.
+
+7.2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).
+Removed 0 redundant assignments.
+Promoted 0 assignments to connections.
+
+7.2.4. Executing PROC_INIT pass (extract init attributes).
+
+7.2.5. Executing PROC_ARST pass (detect async resets in processes).
+
+7.2.6. Executing PROC_ROM pass (convert switches to ROMs).
+Converted 0 switches.
+
+7.2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).
+
+7.2.8. Executing PROC_DLATCH pass (convert process syncs to latches).
+
+7.2.9. Executing PROC_DFF pass (convert process syncs to FFs).
+
+7.2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).
+
+7.2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Cleaned up 0 empty switches.
+
+7.2.12. Executing OPT_EXPR pass (perform const folding).
+Optimizing module fv_tx_fine.
+
+7.3. Executing FUTURE pass.
+
+7.4. Executing OPT_EXPR pass (perform const folding).
+Optimizing module fv_tx_fine.
+
+7.5. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \fv_tx_fine..
+Removed 81 unused cells and 303 unused wires.
+<suppressed ~85 debug messages>
+
+7.6. Executing CHECK pass (checking for obvious problems).
+Checking module fv_tx_fine...
+Found and reported 0 problems.
+
+7.7. Executing OPT pass (performing simple optimizations).
+
+7.7.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module fv_tx_fine.
+
+7.7.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\fv_tx_fine'.
+Computing hashes of 365 cells of `\fv_tx_fine'.
+Finding duplicate cells in `\fv_tx_fine'.
+Computing hashes of 358 cells of `\fv_tx_fine'.
+Finding duplicate cells in `\fv_tx_fine'.
+<suppressed ~21 debug messages>
+Removed a total of 7 cells.
+
+7.7.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \fv_tx_fine..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+    dead port 2/2 on $mux $flatten\dut.$procmux$409.
+    dead port 2/2 on $mux $flatten\dut.$procmux$411.
+    dead port 1/2 on $mux $flatten\dut.$procmux$414.
+Removed 3 multiplexer ports.
+<suppressed ~129 debug messages>
+
+7.7.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \fv_tx_fine.
+Performed a total of 0 changes.
+
+7.7.5. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\fv_tx_fine'.
+Computing hashes of 355 cells of `\fv_tx_fine'.
+Finding duplicate cells in `\fv_tx_fine'.
+Computing hashes of 348 cells of `\fv_tx_fine'.
+Finding duplicate cells in `\fv_tx_fine'.
+<suppressed ~21 debug messages>
+Removed a total of 7 cells.
+
+7.7.6. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \fv_tx_fine..
+Removed 0 unused cells and 16 unused wires.
+<suppressed ~1 debug messages>
+
+7.7.7. Executing OPT_EXPR pass (perform const folding).
+Optimizing module fv_tx_fine.
+
+7.7.8. Rerunning OPT passes. (Maybe there is more to do..)
+
+7.7.9. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \fv_tx_fine..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~112 debug messages>
+
+7.7.10. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \fv_tx_fine.
+Performed a total of 0 changes.
+
+7.7.11. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\fv_tx_fine'.
+Computing hashes of 348 cells of `\fv_tx_fine'.
+Finding duplicate cells in `\fv_tx_fine'.
+Removed a total of 0 cells.
+
+7.7.12. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \fv_tx_fine..
+
+7.7.13. Executing OPT_EXPR pass (perform const folding).
+Optimizing module fv_tx_fine.
+
+7.7.14. Finished fast OPT passes. (There is nothing left to do.)
+
+7.8. Executing WREDUCE pass (reducing word size of cells).
+Removed top 2 bits (of 3) from port B of cell fv_tx_fine.$flatten\dut.$procmux$531_CMP0 ($eq).
+Removed top 1 bits (of 3) from port B of cell fv_tx_fine.$flatten\dut.$procmux$518_CMP0 ($eq).
+Removed top 1 bits (of 3) from port B of cell fv_tx_fine.$flatten\dut.$procmux$506_CMP0 ($eq).
+Removed top 2 bits (of 3) from port B of cell fv_tx_fine.$flatten\dut.$procmux$407_CMP0 ($eq).
+Removed top 1 bits (of 3) from port B of cell fv_tx_fine.$flatten\dut.$procmux$406_CMP0 ($eq).
+Removed top 1 bits (of 3) from port B of cell fv_tx_fine.$flatten\dut.$procmux$405_CMP0 ($eq).
+Removed top 27 bits (of 32) from port B of cell fv_tx_fine.$flatten\dut.$gt$tx_fine.v:200$123 ($gt).
+Removed top 27 bits (of 32) from port B of cell fv_tx_fine.$flatten\dut.$gt$tx_fine.v:200$121 ($gt).
+Removed top 27 bits (of 32) from port B of cell fv_tx_fine.$flatten\dut.$gt$tx_fine.v:200$119 ($gt).
+Removed top 27 bits (of 32) from port B of cell fv_tx_fine.$flatten\dut.$gt$tx_fine.v:200$117 ($gt).
+Removed top 27 bits (of 32) from port B of cell fv_tx_fine.$flatten\dut.$gt$tx_fine.v:200$115 ($gt).
+Removed top 27 bits (of 32) from port B of cell fv_tx_fine.$flatten\dut.$gt$tx_fine.v:200$113 ($gt).
+Removed top 27 bits (of 32) from port B of cell fv_tx_fine.$flatten\dut.$gt$tx_fine.v:200$111 ($gt).
+Removed top 27 bits (of 32) from port B of cell fv_tx_fine.$flatten\dut.$gt$tx_fine.v:200$109 ($gt).
+Removed top 27 bits (of 32) from port B of cell fv_tx_fine.$flatten\dut.$gt$tx_fine.v:200$107 ($gt).
+Removed top 27 bits (of 32) from port B of cell fv_tx_fine.$flatten\dut.$gt$tx_fine.v:200$105 ($gt).
+Removed top 27 bits (of 32) from port B of cell fv_tx_fine.$flatten\dut.$gt$tx_fine.v:200$103 ($gt).
+Removed top 27 bits (of 32) from port B of cell fv_tx_fine.$flatten\dut.$gt$tx_fine.v:200$101 ($gt).
+Removed top 27 bits (of 32) from port B of cell fv_tx_fine.$flatten\dut.$gt$tx_fine.v:200$99 ($gt).
+Removed top 27 bits (of 32) from port B of cell fv_tx_fine.$flatten\dut.$gt$tx_fine.v:200$97 ($gt).
+Removed top 27 bits (of 32) from port B of cell fv_tx_fine.$flatten\dut.$gt$tx_fine.v:200$95 ($gt).
+Removed top 28 bits (of 32) from port B of cell fv_tx_fine.$flatten\dut.$gt$tx_fine.v:200$93 ($gt).
+Removed top 28 bits (of 32) from port B of cell fv_tx_fine.$flatten\dut.$gt$tx_fine.v:200$91 ($gt).
+Removed top 28 bits (of 32) from port B of cell fv_tx_fine.$flatten\dut.$gt$tx_fine.v:200$89 ($gt).
+Removed top 28 bits (of 32) from port B of cell fv_tx_fine.$flatten\dut.$gt$tx_fine.v:200$87 ($gt).
+Removed top 28 bits (of 32) from port B of cell fv_tx_fine.$flatten\dut.$gt$tx_fine.v:200$85 ($gt).
+Removed top 28 bits (of 32) from port B of cell fv_tx_fine.$flatten\dut.$gt$tx_fine.v:200$83 ($gt).
+Removed top 28 bits (of 32) from port B of cell fv_tx_fine.$flatten\dut.$gt$tx_fine.v:200$81 ($gt).
+Removed top 28 bits (of 32) from port B of cell fv_tx_fine.$flatten\dut.$gt$tx_fine.v:200$79 ($gt).
+Removed top 29 bits (of 32) from port B of cell fv_tx_fine.$flatten\dut.$gt$tx_fine.v:200$77 ($gt).
+Removed top 29 bits (of 32) from port B of cell fv_tx_fine.$flatten\dut.$gt$tx_fine.v:200$75 ($gt).
+Removed top 29 bits (of 32) from port B of cell fv_tx_fine.$flatten\dut.$gt$tx_fine.v:200$73 ($gt).
+Removed top 29 bits (of 32) from port B of cell fv_tx_fine.$flatten\dut.$gt$tx_fine.v:200$71 ($gt).
+Removed top 30 bits (of 32) from port B of cell fv_tx_fine.$flatten\dut.$gt$tx_fine.v:200$69 ($gt).
+Removed top 30 bits (of 32) from port B of cell fv_tx_fine.$flatten\dut.$gt$tx_fine.v:200$67 ($gt).
+Removed top 31 bits (of 32) from port B of cell fv_tx_fine.$flatten\dut.$gt$tx_fine.v:200$65 ($gt).
+Removed top 31 bits (of 32) from port B of cell fv_tx_fine.$flatten\dut.$gt$tx_fine.v:200$63 ($gt).
+Removed top 1 bits (of 9) from port A of cell fv_tx_fine.$flatten\dut.$add$tx_fine.v:169$47 ($add).
+Removed top 1 bits (of 9) from port B of cell fv_tx_fine.$flatten\dut.$add$tx_fine.v:169$47 ($add).
+Removed top 1 bits (of 19) from port A of cell fv_tx_fine.$flatten\dut.$sub$tx_fine.v:163$41 ($sub).
+Removed top 7 bits (of 19) from port B of cell fv_tx_fine.$flatten\dut.$sub$tx_fine.v:163$41 ($sub).
+Removed top 1 bits (of 19) from port A of cell fv_tx_fine.$flatten\dut.$add$tx_fine.v:163$40 ($add).
+Removed top 7 bits (of 19) from port B of cell fv_tx_fine.$flatten\dut.$add$tx_fine.v:163$40 ($add).
+Removed top 1 bits (of 5) from port B of cell fv_tx_fine.$flatten\dut.$le$tx_fine.v:153$36 ($le).
+Removed top 2 bits (of 5) from port B of cell fv_tx_fine.$flatten\dut.$ge$tx_fine.v:153$34 ($ge).
+Removed top 1 bits (of 5) from port B of cell fv_tx_fine.$flatten\dut.$eq$tx_fine.v:142$31 ($eq).
+Removed top 3 bits (of 5) from port B of cell fv_tx_fine.$flatten\dut.$eq$tx_fine.v:137$27 ($eq).
+Removed top 1 bits (of 3) from FF cell fv_tx_fine.$flatten\chk.$procdff$594 ($adff).
+Removed top 2 bits (of 3) from port B of cell fv_tx_fine.$flatten\chk.$procmux$349_CMP0 ($eq).
+Removed top 1 bits (of 3) from port B of cell fv_tx_fine.$flatten\chk.$procmux$337_CMP0 ($eq).
+Removed top 1 bits (of 3) from port B of cell fv_tx_fine.$flatten\chk.$procmux$326_CMP0 ($eq).
+Removed top 30 bits (of 31) from port B of cell fv_tx_fine.$flatten\chk.$sub$fv_tx_fine.sv:142$251 ($sub).
+Removed top 30 bits (of 31) from port A of cell fv_tx_fine.$flatten\chk.$shl$fv_tx_fine.sv:142$250 ($shl).
+Removed top 30 bits (of 31) from port B of cell fv_tx_fine.$flatten\chk.$add$fv_tx_fine.sv:141$246 ($add).
+Removed top 1 bits (of 19) from port A of cell fv_tx_fine.$flatten\chk.$lt$fv_tx_fine.sv:135$233 ($lt).
+Removed top 1 bits (of 19) from port B of cell fv_tx_fine.$flatten\chk.$gt$fv_tx_fine.sv:134$231 ($gt).
+Removed top 1 bits (of 19) from port A of cell fv_tx_fine.$flatten\chk.$add$fv_tx_fine.sv:132$229 ($add).
+Removed top 1 bits (of 5) from port B of cell fv_tx_fine.$flatten\chk.$eq$fv_tx_fine.sv:102$202 ($eq).
+
+7.9. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \fv_tx_fine..
+
+7.10. Executing MEMORY_COLLECT pass (generating $mem cells).
+
+7.11. Executing OPT pass (performing simple optimizations).
+
+7.11.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module fv_tx_fine.
+
+7.11.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\fv_tx_fine'.
+Computing hashes of 348 cells of `\fv_tx_fine'.
+Finding duplicate cells in `\fv_tx_fine'.
+Computing hashes of 347 cells of `\fv_tx_fine'.
+Finding duplicate cells in `\fv_tx_fine'.
+<suppressed ~3 debug messages>
+Removed a total of 1 cells.
+
+7.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \fv_tx_fine..
+Removed 0 unused cells and 1 unused wires.
+<suppressed ~1 debug messages>
+
+7.11.4. Finished fast OPT passes.
+
+7.12. Executing SORT pass.
+
+7.13. Printing statistics.
+
+=== fv_tx_fine ===
+
+        +----------Local Count, excluding submodules.
+        | 
+      370 wires
+     1615 wire bits
+      146 public wires
+      676 public wire bits
+        7 ports
+        7 port bits
+      347 cells
+        6   $add
+       43   $adff
+        9   $and
+       15   $check
+        4   $dlatch
+       28   $eq
+        6   $ff
+        1   $ge
+       32   $gt
+        2   $le
+       28   $logic_and
+       20   $logic_not
+        1   $logic_or
+        1   $lt
+       80   $mux
+        4   $ne
+       49   $not
+        3   $or
+        1   $pmux
+        2   $reduce_or
+        6   $scopeinfo
+        1   $shl
+        3   $sub
+        2   $xor
+
+7.14. Executing CHECK pass (checking for obvious problems).
+Checking module fv_tx_fine...
+Found and reported 0 problems.
+
+8. Executing HIERARCHY pass (managing design hierarchy).
+Attribute `top' found on module `fv_tx_fine'. Setting top module to fv_tx_fine.
+
+8.1. Analyzing design hierarchy..
+Top module:  \fv_tx_fine
+
+8.2. Analyzing design hierarchy..
+Top module:  \fv_tx_fine
+Removed 0 unused modules.
+Module fv_tx_fine directly or indirectly contains formal properties -> setting "keep" attribute.
+
+9. Executing jny backend.
+
+10. Executing RTLIL backend.
+Output filename: ../model/design.il
+
+Warnings: 1 unique messages, 1 total
+End of script. Logfile hash: 52e189303e, time: 0.05s, user: 0.04s, system: 0.02s, MEM: 40.34 MB peak
+Yosys 0.69 (git sha1 9f75ca1f9, Release, GNU /usr/bin/c++ 13.3.0)
+Time spent: 20% 6x opt_clean (0 sec), 19% 3x read_verilog (0 sec), ...

@@ -1,0 +1,9 @@
+box 4894 6441 6894 8079
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box 2782 6441 4782 8079
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box 670 6441 2670 8079
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale

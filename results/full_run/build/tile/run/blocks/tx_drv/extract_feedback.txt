@@ -1,0 +1,72 @@
+box 7480 -12600 9480 -10600
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box 5240 -12600 7240 -10600
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box 3000 -12600 5000 -10600
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box 760 -12600 2760 -10600
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box 9720 -9880 11720 -7880
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box 7480 -9880 9480 -7880
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box 5240 -9880 7240 -7880
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box 3000 -9880 5000 -7880
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box 760 -9880 2760 -7880
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box 9720 -7600 11720 -5600
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box 7480 -7600 9480 -5600
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box 5240 -7600 7240 -5600
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box 3000 -7600 5000 -5600
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box 760 -7600 2760 -5600
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box 9720 -4880 11720 -2880
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box 7480 -4880 9480 -2880
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box 5240 -4880 7240 -2880
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box 3000 -4880 5000 -2880
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box 760 -4880 2760 -2880
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box 9720 -2600 11720 -600
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box 7480 -2600 9480 -600
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box 5240 -2600 7240 -600
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box 3000 -2600 5000 -600
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box 760 -2600 2760 -600
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale

@@ -1,0 +1,15 @@
+ok  ('nfet_03v3', 0.28, ('VSS', 'enb'), 'en', '-')  sim 0.42  layout 0.42
+ok  ('nfet_03v3', 0.28, ('VSS', 'nb'), 'enb', '-')  sim 0.42  layout 0.42
+ok  ('nfet_03v3', 0.28, ('VSS', 'x'), 'enb', '-')  sim 0.42  layout 0.42
+ok  ('nfet_03v3', 0.28, ('VSS', 'x'), 'nb', '-')  sim 2.0  layout 2.0
+ok  ('nfet_03v3', 0.28, ('n2', 'nb'), 'x', '-')  sim 1.0  layout 1.0
+ok  ('nfet_03v3', 0.5, ('VSS', 'nb'), 'nb', '-')  sim 2.0  layout 2.0
+ok  ('nfet_03v3', 0.5, ('n2', 'nr'), 'nb', '-')  sim 8.0  layout 8.0
+ok  ('nfet_03v3', 10.0, ('VSS',), 'nb', '-')  sim 24.57  layout 24.57
+ok  ('pfet_03v3', 0.28, ('VDD', 'enb'), 'en', 'VDD')  sim 1.0  layout 1.0
+ok  ('pfet_03v3', 0.28, ('VDD', 'vh'), 'enb', 'VDD')  sim 4.0  layout 4.0
+ok  ('pfet_03v3', 1.0, ('n2', 'vh'), 'n2', 'VDD')  sim 8.0  layout 8.0
+ok  ('pfet_03v3', 1.0, ('nb', 'vh'), 'n2', 'VDD')  sim 8.0  layout 8.0
+ok  ('pfet_03v3', 10.0, ('vh', 'x'), 'VSS', 'VDD')  sim 0.42  layout 0.42
+ok  ('ppolyf_u', 2.0, ('VSS', 'nr'))  sim 29.714  layout 29.72
+SIZES OK (14 groups)

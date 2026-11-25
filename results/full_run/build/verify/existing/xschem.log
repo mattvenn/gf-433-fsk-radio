@@ -1,0 +1,52 @@
+netlisted cfed_ring: 10 element lines
+netlisted cfed_dac: 22 element lines
+netlisted ring_core_v3: 33 element lines
+netlisted cgm_ref: 37 element lines
+netlisted vco_cfed: 70 element lines
+netlisted lsdiv: 34 element lines
+netlisted vco_top: 105 element lines
+netlisted tx_drv: 29 element lines
+netlisted mdac: 118 element lines
+ring_core_v3 (wfu 0.3) vs export_core_v3.py: PASS  [Netlists match uniquely.; Final result: Circuits match uniquely.]
+ring_core_v3 vs layout/ref/ring_core_v3.spice: PASS  [Netlists match uniquely.; Final result: Circuits match uniquely.]
+vco_cfed vs vco_bias.netlist(): PASS  [Netlists match uniquely.; Final result: Circuits match uniquely.]
+vco_cfed vs vco_bias.netlist(), device-by-device sizes (incl. R, C): PASS (70 devices)
+lsdiv vs lsdiv.py block(): PASS  [Netlists match uniquely.; Final result: Circuits match uniquely.]; device sizes PASS (34 devices)
+mutation R1 length +10 %: device diff FAIL (expected)  [('ppolyf_u_1k', 1e-06, 0.000159125): 0 vs 1; ('ppolyf_u_1k', 1e-06, 0.000175038): 1 vs 0]
+tx_drv vs tx_drv.py block(): PASS  [Netlists match uniquely.; Final result: Circuits match uniquely.]; device sizes PASS (29 devices)
+mutation M5n W -10 %: netgen FAIL (expected)  [Netlists match uniquely.; Final result: Circuits match uniquely.; The following cells had property errors:]; device diff FAIL (expected)  [('nfet_03v3', 7.2e-06, 2.8e-07, 5): 1 vs 0; ('nfet_03v3', 8e-06, 2.8e-07, 5): 0 vs 1]
+mutation TGn gate VDD -> VSS: netgen FAIL (expected)  [Netlists match uniquely.; Netlists do not match.; Final result: Netlists do not match.]
+mdac vs layout/gen/mdac.py lvs_source(): PASS  [Netlists match uniquely.; Final result: Circuits match uniquely.]
+mdac (dummies removed) vs mdac_sim.mdac_netlist(): PASS  [Netlists match uniquely.; Final result: Circuits match uniquely.]
+mutation MUsd m 1 -> 2: vs layout FAIL (expected)  [Netlists match uniquely with property errors.; Final result: Top level cell failed pin matching.; The following cells had property errors:]; vs sim FAIL (expected)  [Netlists match uniquely with property errors.; Final result: Top level cell failed pin matching.; The following cells had property errors:]
+netlisted rx_bias: 14 element lines
+netlisted rx_lna2: 5 element lines
+netlisted rx_lna: 16 element lines
+netlisted rx_mix: 10 element lines
+netlisted rx_lobuf: 38 element lines
+netlisted rx_lsq: 26 element lines
+netlisted rx_lo: 64 element lines
+netlisted rx_bb: 41 element lines
+netlisted rx_lim: 42 element lines
+netlisted rx_top: 188 element lines
+rx_bias vs sim/rx: netgen PASS [Netlists match uniquely.; Final result: Circuits match uniquely.]; device sizes PASS (14 devices)
+rx_lna2 vs sim/rx: netgen PASS [Netlists match uniquely.; Final result: Circuits match uniquely.]; device sizes PASS (5 devices)
+rx_lna vs sim/rx: netgen PASS [Netlists match uniquely.; Final result: Circuits match uniquely.]; device sizes PASS (21 devices)
+rx_mix vs sim/rx: netgen PASS [Netlists match uniquely.; Final result: Circuits match uniquely.]; device sizes PASS (10 devices)
+rx_lobuf vs sim/rx: netgen PASS [Netlists match uniquely.; Final result: Circuits match uniquely.]; device sizes PASS (38 devices)
+rx_lsq vs sim/rx: netgen PASS [Netlists match uniquely.; Final result: Circuits match uniquely.]; device sizes PASS (25 devices)
+rx_lo vs sim/rx: netgen PASS [Netlists match uniquely.; Final result: Circuits match uniquely.]; device sizes PASS (101 devices)
+rx_bb vs sim/rx: netgen PASS [Netlists match uniquely.; Final result: Circuits match uniquely.]; device sizes PASS (41 devices)
+rx_lim vs sim/rx: netgen PASS [Netlists match uniquely.; Final result: Circuits match uniquely.]; device sizes PASS (42 devices)
+rx_top vs sim/rx: netgen PASS [Netlists match uniquely.; Final result: Circuits match uniquely.]; device sizes PASS (323 devices)
+mutation rx_lna M1 W -10 %: netgen FAIL (expected); sizes FAIL (expected)
+mutation rx_mix S1n gate lo -> lob: netgen FAIL (expected)
+mutation rx_bb Rp2ar L +20 %: sizes FAIL (expected)
+mutation rx_top qenb VSS -> enb: netgen FAIL (expected)
+CHECK_RX OK
+mutation FC_3 m 8 -> 7: ring_core_v3 FAIL (expected)  [Netlists match uniquely with property errors.; Final result: Circuits match uniquely.; The following cells had property errors:]
+mutation FC_3 m 8 -> 7: vco_cfed FAIL (expected)  [Netlists match uniquely with property errors.; Final result: Circuits match uniquely.; The following cells had property errors:]
+mutation FC_3 m 8 -> 7: device diff FAIL (expected)  [('nfet_03v3', 1.2e-06, 5.333333333333e-06, 7): 1 vs 0; ('nfet_03v3', 1.2e-06, 5.333333333333e-06, 8): 0 vs 1]
+sim tt 27C code 9 vctrl 1.65: vco_bias f 504.22 MHz (P 0.451 mW, vbn 1.2320 V), xschem f 504.22 MHz (P 0.451 mW, vbn 1.2320 V): df -0.001 % PASS
+CHECK OK
+RESULT xschem PASS every sheet matches; mutations caught

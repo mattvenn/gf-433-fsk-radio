@@ -1,0 +1,164 @@
+
+Magic 8.3 revision 684 - Compiled on Tue Sep 22 03:44:29 PM CEST 2026.
+Starting magic under Tcl interpreter
+Using the terminal as the console.
+WARNING: RLIMIT_NOFILE is above 1024 and Tcl_Version<9 this may cause runtime issues [rlim_cur=1073741816]
+Using NULL graphics device.
+Processing system .magicrc file
+Switching to WIRING tool.
+Switching to NETLIST tool.
+Switching to PICK tool.
+Switching to BOX tool.
+Sourcing design .magicrc for technology gf180mcuD ...
+10 Magic internal units = 1 Lambda
+Input style import: scaleFactor=10, multiplier=2
+The following types are not handled by extraction and will be treated as non-electrical types:
+    obsactive mvobsactive filldiff fillpoly m1hole obsm1 fillm1 obsv1 m2hole obsm2 fillm2 obsv2 m3hole obsm3 fillm3 m4hole obsm4 fillm4 m5hole obsm5 fillm5 glass fillblock lvstext obscomment 
+Scaled tech values by 10 / 1 to match internal grid scaling
+Loading gf180mcuD Device Generator Menu ...
+Loading "extract.tcl" from command line.
+Warning: Calma reading is not undoable!  I hope that's OK.
+Library written using GDS-II Release 6.0
+Library name: decap_u
+Reading "vco_core__ring_inv_m".
+Reading "vco_core__ring_inv".
+Reading "vco_core__ring_core".
+Reading "vco_core__lsdiv".
+Moving label "ls" from metal2 to via1 in cell vco_core__lsdiv.
+Moving label "lf" from metal3 to via2 in cell vco_core__lsdiv.
+Reading "vco_core__rx_lsq_ls".
+Moving label "lsq" from metal2 to via1 in cell vco_core__rx_lsq_ls.
+Moving label "q1" from metal2 to via1 in cell vco_core__rx_lsq_ls.
+Moving label "tt" from metal2 to via1 in cell vco_core__rx_lsq_ls.
+Moving label "lf" from metal3 to via2 in cell vco_core__rx_lsq_ls.
+Reading "vco_core__vco_core_dcap".
+Reading "gf180mcu_fd_sc_mcu7t5v0__filltie".
+Reading "gf180mcu_fd_sc_mcu7t5v0__inv_1".
+Reading "gf180mcu_fd_sc_mcu7t5v0__fill_1".
+Reading "gf180mcu_fd_sc_mcu7t5v0__antenna".
+Reading "gf180mcu_fd_sc_mcu7t5v0__fillcap_64".
+Reading "gf180mcu_fd_sc_mcu7t5v0__or3_1".
+Reading "gf180mcu_fd_sc_mcu7t5v0__tiel".
+Reading "gf180mcu_fd_sc_mcu7t5v0__clkbuf_2".
+Reading "gf180mcu_fd_sc_mcu7t5v0__and3_4".
+Reading "gf180mcu_fd_sc_mcu7t5v0__mux2_4".
+Reading "gf180mcu_fd_sc_mcu7t5v0__oai21_4".
+Reading "gf180mcu_fd_sc_mcu7t5v0__buf_12".
+Reading "gf180mcu_fd_sc_mcu7t5v0__tieh".
+Reading "gf180mcu_fd_sc_mcu7t5v0__oai32_4".
+Reading "gf180mcu_fd_sc_mcu7t5v0__dffrnq_4".
+Reading "gf180mcu_fd_sc_mcu7t5v0__and2_4".
+Reading "gf180mcu_fd_sc_mcu7t5v0__nor2_2".
+Reading "gf180mcu_fd_sc_mcu7t5v0__nand2_2".
+Reading "gf180mcu_fd_sc_mcu7t5v0__dffnrnq_1".
+Reading "gf180mcu_fd_sc_mcu7t5v0__oai221_1".
+Reading "gf180mcu_fd_sc_mcu7t5v0__oai211_4".
+Reading "gf180mcu_fd_sc_mcu7t5v0__dffsnq_1".
+Reading "gf180mcu_fd_sc_mcu7t5v0__clkbuf_3".
+Reading "gf180mcu_fd_sc_mcu7t5v0__clkinv_8".
+Reading "gf180mcu_fd_sc_mcu7t5v0__oai22_1".
+Reading "gf180mcu_fd_sc_mcu7t5v0__oai31_4".
+Reading "gf180mcu_fd_sc_mcu7t5v0__icgtp_1".
+Reading "gf180mcu_fd_sc_mcu7t5v0__aoi21_2".
+Reading "gf180mcu_fd_sc_mcu7t5v0__oai21_2".
+Reading "gf180mcu_fd_sc_mcu7t5v0__aoi211_4".
+Reading "gf180mcu_fd_sc_mcu7t5v0__oai22_2".
+Reading "gf180mcu_fd_sc_mcu7t5v0__xor3_1".
+Reading "gf180mcu_fd_sc_mcu7t5v0__buf_8".
+Reading "gf180mcu_fd_sc_mcu7t5v0__inv_2".
+Reading "gf180mcu_fd_sc_mcu7t5v0__xor2_1".
+Reading "gf180mcu_fd_sc_mcu7t5v0__and2_2".
+Reading "gf180mcu_fd_sc_mcu7t5v0__aoi222_1".
+Reading "gf180mcu_fd_sc_mcu7t5v0__aoi211_1".
+Reading "gf180mcu_fd_sc_mcu7t5v0__xnor2_2".
+Reading "gf180mcu_fd_sc_mcu7t5v0__nor3_2".
+Reading "gf180mcu_fd_sc_mcu7t5v0__aoi21_4".
+Reading "gf180mcu_fd_sc_mcu7t5v0__xor2_2".
+Reading "gf180mcu_fd_sc_mcu7t5v0__xnor2_1".
+Reading "gf180mcu_fd_sc_mcu7t5v0__or4_2".
+Reading "gf180mcu_fd_sc_mcu7t5v0__aoi221_1".
+Reading "gf180mcu_fd_sc_mcu7t5v0__buf_2".
+Reading "gf180mcu_fd_sc_mcu7t5v0__oai31_1".
+Reading "gf180mcu_fd_sc_mcu7t5v0__oai211_1".
+Reading "gf180mcu_fd_sc_mcu7t5v0__clkinv_2".
+Reading "gf180mcu_fd_sc_mcu7t5v0__inv_3".
+Reading "gf180mcu_fd_sc_mcu7t5v0__nand3_2".
+Reading "gf180mcu_fd_sc_mcu7t5v0__clkbuf_4".
+Reading "gf180mcu_fd_sc_mcu7t5v0__inv_4".
+Reading "gf180mcu_fd_sc_mcu7t5v0__dffrnq_2".
+Reading "gf180mcu_fd_sc_mcu7t5v0__or2_1".
+Reading "gf180mcu_fd_sc_mcu7t5v0__aoi22_1".
+Reading "gf180mcu_fd_sc_mcu7t5v0__nor4_2".
+Reading "gf180mcu_fd_sc_mcu7t5v0__nor3_1".
+Reading "gf180mcu_fd_sc_mcu7t5v0__and3_1".
+Reading "gf180mcu_fd_sc_mcu7t5v0__nor4_1".
+Reading "gf180mcu_fd_sc_mcu7t5v0__nand4_1".
+Reading "gf180mcu_fd_sc_mcu7t5v0__nand3_1".
+Reading "gf180mcu_fd_sc_mcu7t5v0__or4_1".
+Reading "gf180mcu_fd_sc_mcu7t5v0__and2_1".
+Reading "gf180mcu_fd_sc_mcu7t5v0__buf_1".
+Reading "gf180mcu_fd_sc_mcu7t5v0__fillcap_16".
+Reading "gf180mcu_fd_sc_mcu7t5v0__nor2_1".
+Reading "gf180mcu_fd_sc_mcu7t5v0__aoi21_1".
+Reading "gf180mcu_fd_sc_mcu7t5v0__clkinv_1".
+Reading "gf180mcu_fd_sc_mcu7t5v0__nand2_1".
+Reading "gf180mcu_fd_sc_mcu7t5v0__oai21_1".
+Reading "gf180mcu_fd_sc_mcu7t5v0__fillcap_32".
+Reading "gf180mcu_fd_sc_mcu7t5v0__dffrnq_1".
+Reading "gf180mcu_fd_sc_mcu7t5v0__fillcap_8".
+Reading "gf180mcu_fd_sc_mcu7t5v0__fillcap_4".
+Reading "gf180mcu_fd_sc_mcu7t5v0__fill_2".
+Reading "gf180mcu_fd_sc_mcu7t5v0__mux2_2".
+Reading "gf180mcu_fd_sc_mcu7t5v0__endcap".
+Reading "vco_core".
+Making label "a0" on type metal2 in cell vco_core sticky.
+Reading "cgm_ref".
+Moving label "net4" from metal1 to nsubdiffcont in cell cgm_ref.
+Moving label "net3" from metal2 to via1 in cell cgm_ref.
+Moving label "net2" from metal2 to via2 in cell cgm_ref.
+Reading "decap_ls".
+Reading "dbg_tg".
+Reading "mdac".
+Reading "vctrl_pd".
+Reading "bits_inv".
+Reading "tx_drv".
+Reading "tx_fine".
+Reading "rx_lna".
+Moving label "outn" from metal2 to via1 in cell rx_lna.
+Moving label "inp" from metal2 to via1 in cell rx_lna.
+Reading "rx_bias".
+Reading "rx_lsq_hdr".
+Reading "rx_lobuf".
+Moving label "Ngs" from metal1 to ndiffc in cell rx_lobuf.
+Moving label "g0s" from metal1 to ndiffc in cell rx_lobuf.
+Moving label "Pgs" from metal1 to ndiffc in cell rx_lobuf.
+Reading "rx_mix".
+Moving label "lob" from metal2 to via2 in cell rx_mix.
+Moving label "lo" from metal3 to via2 in cell rx_mix.
+Reading "rx_bb".
+Moving label "o1n" from metal2 to via1 in cell rx_bb.
+Moving label "vgr" from metal3 to via2 in cell rx_bb.
+Moving label "g3p" from metal3 to via2 in cell rx_bb.
+Moving label "o1p" from metal3 to via2 in cell rx_bb.
+Reading "rx_lim".
+Moving label "vgr" from metal3 to via2 in cell rx_lim.
+Moving label "q" from metal3 to via2 in cell rx_lim.
+Moving label "lp" from metal3 to via2 in cell rx_lim.
+Reading "rx_decap".
+Reading "ant_row2".
+Reading "ant_row1".
+Reading "ant_row4".
+Reading "gf180mcu_fd_sc_mcu7t5v0__fill_4".
+Reading "decap_u".
+Reading "tt_um_mattvenn_gf433_vco".
+Root cell box:
+           width x height  (   llx,  lly  ), (   urx,  ury  )  area (units^2)
+
+microns:   5.025 x 2.000   ( 116.740,  1.500), ( 121.765,  3.500)  10.050    
+lambda:   100.50 x 40.00   ( 2334.80,  30.00), ( 2435.30,  70.00)  4020.00   
+internal:   1005 x 400     ( 23348,  300  ), ( 24353,  700  )  402000    
+Extracting tt_um_mattvenn_gf433_vco into tt_um_mattvenn_gf433_vco.ext:
+Processing tt_um_mattvenn_gf433_vco
+tt_um_mattvenn_gf433_vco: 394 warnings
+Total of 394 warnings.
+exttospice finished.

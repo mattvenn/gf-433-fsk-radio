@@ -1,0 +1,9 @@
+box 14298 120 16298 1758
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box 12098 120 14098 1758
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box 9898 120 11898 1758
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale

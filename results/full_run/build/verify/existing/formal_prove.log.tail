@@ -1,0 +1,201 @@
+[tail: last 200 lines of 149828 bytes]
+SBY 13:19:49 [tx_fine_prove] engine_0: 127 : ... 28 19 28 21 32 31 36 38 39 24 33 28 118 172 -379 ~765     57   188     20.19 sec  T/O =  1  PRV = 10
+SBY 13:19:49 [tx_fine_prove] engine_0: 127 : ... 30 22 30 24 34 34 37 38 39 24 33 28 118 172 -379 ~765     45   188     20.25 sec  T/O =  1  PRV = 10
+SBY 13:19:49 [tx_fine_prove] engine_0: 127 : ... 30 22 30 24 34 34 38 41 41 27 35 32 121 174 -378 ~765     69   190     20.31 sec  T/O =  1  PRV = 10
+SBY 13:19:49 [tx_fine_prove] engine_0: 127 : ... 31 23 31 25 35 35 39 41 41 27 35 32 121 174 -378 ~765     68   190     20.38 sec  T/O =  1  PRV = 10
+SBY 13:19:49 [tx_fine_prove] engine_0: 127 : ... 31 23 31 25 35 36 39 42 43 28 36 33 122 177 -372 ~765     49   190     20.44 sec  T/O =  1  PRV = 10
+SBY 13:19:49 [tx_fine_prove] engine_0: 127 : ... 33 26 33 28 37 39 41 45 45 31 38 36 123 177 -372 ~765     38   190     20.50 sec  T/O =  1  PRV = 10
+SBY 13:19:49 [tx_fine_prove] engine_0: 127 : ... 33 26 33 28 37 39 41 45 45 31 38 36 125 182 -367 ~765     65   191     20.57 sec  T/O =  1  PRV = 10
+SBY 13:19:49 [tx_fine_prove] engine_0: 127 : ... 34 26 33 28 37 39 41 45 45 31 38 36 125 182 -367 ~765     56   191     20.65 sec  T/O =  1  PRV = 10
+SBY 13:19:50 [tx_fine_prove] engine_0: 127 : ... 35 29 35 31 39 42 43 48 47 34 40 39 127 185 -345 ~765     21   191     20.71 sec  T/O =  1  PRV = 10
+SBY 13:19:50 [tx_fine_prove] engine_0: 128 : ... 5 15 6 15 4 17 6 19 5 19 5 18 4 15 3 14 4 -113 ~684        0   191     20.94 sec  T/O =  1  PRV = 10
+SBY 13:19:50 [tx_fine_prove] engine_0: 129 : ... 15 6 15 4 17 6 19 5 19 5 17 4 15 3 14 4 85 -183 ~684       1   191     21.06 sec  T/O =  1  PRV = 10
+SBY 13:19:50 [tx_fine_prove] engine_0: 130 : ... 6 15 4 17 6 19 5 19 5 17 4 15 3 14 4 85 143 -445 ~764     65   192     21.27 sec  T/O =  1  PRV = 10
+SBY 13:19:50 [tx_fine_prove] engine_0: 130 : ... 8 17 6 19 8 21 7 21 7 19 6 17 5 16 6 87 145 -437 ~764     64   192     21.45 sec  T/O =  1  PRV = 10
+SBY 13:19:50 [tx_fine_prove] engine_0: 130 : ... 20 8 22 10 24 9 22 7 19 6 17 5 16 6 87 145 -437 ~764      47   192     21.53 sec  T/O =  1  PRV = 10
+SBY 13:19:50 [tx_fine_prove] engine_0: 130 : ... 20 8 22 10 24 9 24 9 22 8 20 7 19 8 91 147 -433 ~764      61   192     21.60 sec  T/O =  1  PRV = 10
+SBY 13:19:50 [tx_fine_prove] engine_0: 130 : ... 21 9 23 11 24 9 24 9 22 8 20 7 19 8 91 147 -433 ~764      64   192     21.66 sec  T/O =  1  PRV = 10
+SBY 13:19:51 [tx_fine_prove] engine_0: 130 : ... 9 23 11 25 10 25 10 23 9 21 8 20 9 92 148 -397 ~764       16   192     21.69 sec  T/O =  1  PRV = 10
+SBY 13:19:51 [tx_fine_prove] engine_0: 131 : ... 15 4 17 6 19 5 19 5 17 4 15 3 14 4 87 143 8 -414 ~663      1   192     21.86 sec  T/O =  1  PRV = 10
+SBY 13:19:51 [tx_fine_prove] engine_0: 132 : ... 4 17 6 19 5 19 5 17 4 15 3 14 4 87 143 8 44 -417 ~659      2   192     22.04 sec  T/O =  1  PRV = 10
+SBY 13:19:51 [tx_fine_prove] engine_0: 133 : ... 6 19 5 19 5 17 4 15 3 14 4 87 143 8 43 40 -411 ~659        3   192     22.20 sec  T/O =  1  PRV = 10
+SBY 13:19:51 [tx_fine_prove] engine_0: 134 : ... 6 19 5 19 5 17 4 15 3 14 4 87 143 8 5 3 4 -419 ~663        0   192     22.34 sec  T/O =  1  PRV = 10
+SBY 13:19:51 [tx_fine_prove] engine_0: 135 : ... 19 5 19 5 17 4 15 3 14 4 87 143 8 6 5 5 40 -417 ~663       7   192     22.49 sec  T/O =  1  PRV = 10
+SBY 13:19:52 [tx_fine_prove] engine_0: 136 : ... 19 5 17 4 15 3 15 6 90 148 13 9 17 11 47 45 -446 ~661     16   192     22.69 sec  T/O =  1  PRV = 10
+SBY 13:19:52 [tx_fine_prove] engine_0: 136 : ... 19 5 17 4 15 3 15 6 90 148 13 9 18 17 53 55 -396 ~661     11   192     22.76 sec  T/O =  1  PRV = 10
+SBY 13:19:52 [tx_fine_prove] engine_0: 137 : ... 5 19 5 17 4 15 3 12 6 85 146 6 2 6 6 5 5 21 -409 ~677      1   192     22.92 sec  T/O =  1  PRV = 10
+SBY 13:19:52 [tx_fine_prove] engine_0: 138 : ... 5 17 4 15 3 12 6 85 146 6 2 6 6 5 5 23 24 -398 ~678        3   192     23.10 sec  T/O =  1  PRV = 10
+SBY 13:19:52 [tx_fine_prove] engine_0: 139 : ... 5 17 4 15 3 12 6 85 146 6 2 6 6 5 6 6 25 23 -399 ~669      5   192     23.25 sec  T/O =  1  PRV = 10
+SBY 13:19:52 [tx_fine_prove] engine_0: 140 : ... 17 4 15 3 12 6 85 146 6 2 6 6 5 4 6 5 22 23 -401 ~671      3   192     23.42 sec  T/O =  1  PRV = 10
+SBY 13:19:52 [tx_fine_prove] engine_0: 141 : ... 4 15 3 12 6 85 146 6 2 6 8 6 5 7 7 6 26 21 -400 ~668      14   192     23.62 sec  T/O =  1  PRV = 10
+SBY 13:19:53 [tx_fine_prove] engine_0: 142 : ... 4 15 3 12 6 85 146 6 2 6 4 4 2 5 1 2 4 4 1 -392 ~667       0   192     23.74 sec  T/O =  1  PRV = 10
+SBY 13:19:53 [tx_fine_prove] engine_0: 143 : ... 15 3 12 6 85 146 6 2 6 4 4 2 5 1 2 3 4 1 2 -394 ~667       0   192     23.84 sec  T/O =  1  PRV = 10
+SBY 13:19:53 [tx_fine_prove] engine_0: 144 : ... 3 12 6 85 146 6 2 6 4 4 2 5 1 2 3 4 1 2 22 -394 ~667       4   192     23.96 sec  T/O =  1  PRV = 10
+SBY 13:19:53 [tx_fine_prove] engine_0: 145 : ... 3 12 6 85 146 6 2 6 4 4 2 5 1 2 3 4 1 2 4 5 -399 ~667      0   192     24.08 sec  T/O =  1  PRV = 10
+SBY 13:19:53 [tx_fine_prove] engine_0: 146 : ... 6 85 146 6 2 6 4 4 2 5 1 2 3 4 1 2 4 5 23 -404 ~667        1   192     24.20 sec  T/O =  1  PRV = 10
+SBY 13:19:53 [tx_fine_prove] engine_0: 147 : ... 85 146 6 2 6 4 4 2 5 1 2 3 4 1 2 5 6 26 22 -398 ~667       7   192     24.36 sec  T/O =  1  PRV = 10
+SBY 13:19:53 [tx_fine_prove] engine_0: 148 : ... 85 146 6 2 6 4 4 2 5 1 2 3 4 1 2 2 2 4 1 4 -396 ~667       0   192     24.48 sec  T/O =  1  PRV = 10
+SBY 13:19:53 [tx_fine_prove] engine_0: 149 : ... 146 6 2 6 4 4 2 5 1 2 3 4 1 2 2 2 4 1 4 21 -400 ~667       1   192     24.60 sec  T/O =  1  PRV = 10
+SBY 13:19:54 [tx_fine_prove] engine_0: 150 : ... 6 2 6 4 4 2 5 1 2 3 4 1 2 2 2 4 1 4 22 23 -400 ~667        3   192     24.75 sec  T/O =  1  PRV = 10
+SBY 13:19:54 [tx_fine_prove] engine_0: 151 : ... 6 2 6 4 4 2 5 1 2 3 4 1 2 2 2 4 1 4 3 24 22 -398 ~667      3   192     24.89 sec  T/O =  1  PRV = 10
+SBY 13:19:54 [tx_fine_prove] engine_0: 152 : ... 2 6 4 4 2 5 1 2 3 4 1 2 2 2 4 1 4 3 4 5 20 -401 ~667       1   192     25.01 sec  T/O =  1  PRV = 10
+SBY 13:19:54 [tx_fine_prove] engine_0: 153 : ... 7 6 6 3 6 2 3 6 6 3 4 4 3 5 2 5 4 6 7 23 21 -398 ~667     32   192     25.21 sec  T/O =  1  PRV = 10
+SBY 13:19:54 [tx_fine_prove] engine_0: 154 : ... 3 3 2 1 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -382 ~670      0   192     25.36 sec  T/O =  1  PRV = 10
+SBY 13:19:55 [tx_fine_prove] engine_0: Proved output 1 in frame 1323994228 (converged).
+SBY 13:19:55 [tx_fine_prove] engine_0: Starting new anytime pass, reusing clauses.
+SBY 13:19:55 [tx_fine_prove] engine_0: Frame Clauses                                                     Max Queue Flops Time
+SBY 13:19:55 [tx_fine_prove] engine_0: 1 : 0 208 ~780                                                           0     0      1.25 sec  T/O =  0  PRV = 11
+SBY 13:19:55 [tx_fine_prove] engine_0: 2 : 0 1 207 ~780                                                         0     0      1.25 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 3 : 0 1 18 189 ~780                                                      0     0      1.25 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 4 : 0 1 18 17 172 ~780                                                   0     0      1.26 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 5 : 0 1 18 17 3 169 ~780                                                 0     0      1.26 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 6 : 0 1 18 17 3 2 167 ~780                                               0     0      1.27 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 7 : 0 1 18 17 3 2 2 165 ~780                                             0     0      1.27 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 8 : 0 1 18 17 3 2 2 2 163 ~780                                           0     0      1.28 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 9 : 0 1 18 17 3 2 2 2 2 161 ~780                                         0     0      1.28 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 10 : 0 1 18 17 3 2 2 2 2 1 160 ~780                                       0     0      1.29 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 11 : 0 1 18 17 3 2 2 2 2 1 2 158 ~780                                     0     0      1.30 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 12 : 0 1 18 17 3 2 2 2 2 1 2 2 156 ~780                                   0     0      1.30 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 13 : 0 1 18 17 3 2 2 2 2 1 2 2 2 154 ~780                                 0     0      1.31 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 14 : 0 1 18 17 3 2 2 2 2 1 2 2 2 1 153 ~780                               0     0      1.32 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 15 : 0 1 18 17 3 2 2 2 2 1 2 2 2 1 1 152 ~780                             0     0      1.32 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 16 : 0 1 18 17 3 2 2 2 2 1 2 2 2 1 1 1 151 ~780                           0     0      1.33 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 17 : 0 1 18 17 3 2 2 2 2 1 2 2 2 1 1 1 2 149 ~780                         0     0      1.34 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 18 : 0 1 18 17 3 2 2 2 2 1 2 2 2 1 1 1 2 2 147 ~780                       0     0      1.35 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 19 : 0 1 18 17 3 2 2 2 2 1 2 2 2 1 1 1 2 2 3 144 ~780                     0     0      1.35 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 20 : 0 1 18 17 3 2 2 2 2 1 2 2 2 1 1 1 2 2 3 3 141 ~780                   0     0      1.36 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 21 : 0 1 18 17 3 2 2 2 2 1 2 2 2 1 1 1 2 2 3 3 2 139 ~780                 0     0      1.37 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 22 : 0 1 18 17 3 2 2 2 2 1 2 2 2 1 1 1 2 2 3 3 2 1 138 ~780               0     0      1.38 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 23 : 0 1 18 17 3 2 2 2 2 1 2 2 2 1 1 1 2 2 3 3 2 1 1 137 ~780             0     0      1.39 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 24 : 0 1 18 17 3 2 2 2 2 1 2 2 2 1 1 1 2 2 3 3 2 1 1 1 136 ~780           0     0      1.40 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 25 : ... 1 18 17 3 2 2 2 2 1 2 2 2 1 1 1 2 2 3 3 2 1 1 1 2 134 ~780       0     0      1.41 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 26 : ... 18 17 3 2 2 2 2 1 2 2 2 1 1 1 2 2 3 3 2 1 1 1 2 1 133 ~780       0     0      1.41 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 27 : ... 17 3 2 2 2 2 1 2 2 2 1 1 1 2 2 3 3 2 1 1 1 2 1 2 131 ~780        0     0      1.42 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 28 : ... 17 3 2 2 2 2 1 2 2 2 1 1 1 2 2 3 3 2 1 1 1 2 1 2 1 130 ~780      0     0      1.43 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 29 : ... 3 2 2 2 2 1 2 2 2 1 1 1 2 2 3 3 2 1 1 1 2 1 2 1 2 128 ~780       0     0      1.44 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 30 : ... 2 2 2 2 1 2 2 2 1 1 1 2 2 3 3 2 1 1 1 2 1 2 1 2 1 127 ~780       0     0      1.45 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 31 : ... 2 2 2 1 2 2 2 1 1 1 2 2 3 3 2 1 1 1 2 1 2 1 2 1 1 126 ~780       0     0      1.46 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 32 : ... 2 2 1 2 2 2 1 1 1 2 2 3 3 2 1 1 1 2 1 2 1 2 1 1 1 125 ~780       0     0      1.47 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 33 : ... 2 1 2 2 2 1 1 1 2 2 3 3 2 1 1 1 2 1 2 1 2 1 1 1 2 123 ~780       0     0      1.49 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 34 : ... 1 2 2 2 1 1 1 2 2 3 3 2 1 1 1 2 1 2 1 2 1 1 1 2 2 121 ~780       0     0      1.50 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 35 : ... 2 2 2 1 1 1 2 2 3 3 2 1 1 1 2 1 2 1 2 1 1 1 2 2 2 119 ~780       0     0      1.51 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 36 : ... 2 2 1 1 1 2 2 3 3 2 1 1 1 2 1 2 1 2 1 1 1 2 2 2 2 117 ~780       0     0      1.52 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 37 : ... 2 1 1 1 2 2 3 3 2 1 1 1 2 1 2 1 2 1 1 1 2 2 2 2 2 115 ~780       0     0      1.53 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 38 : ... 1 1 1 2 2 3 3 2 1 1 1 2 1 2 1 2 1 1 1 2 2 2 2 2 1 114 ~780       0     0      1.54 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 39 : ... 1 1 2 2 3 3 2 1 1 1 2 1 2 1 2 1 1 1 2 2 2 2 2 1 2 112 ~780       0     0      1.56 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 40 : ... 1 2 2 3 3 2 1 1 1 2 1 2 1 2 1 1 1 2 2 2 2 2 1 2 1 111 ~780       0     0      1.57 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 41 : ... 2 2 3 3 2 1 1 1 2 1 2 1 2 1 1 1 2 2 2 2 2 1 2 1 2 109 ~780       0     0      1.58 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 42 : ... 2 3 3 2 1 1 1 2 1 2 1 2 1 1 1 2 2 2 2 2 1 2 1 2 2 107 ~780       0     0      1.59 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 43 : ... 3 3 2 1 1 1 2 1 2 1 2 1 1 1 2 2 2 2 2 1 2 1 2 2 2 105 ~780       0     0      1.61 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 44 : ... 3 2 1 1 1 2 1 2 1 2 1 1 1 2 2 2 2 2 1 2 1 2 2 2 1 104 ~780       0     0      1.62 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 45 : ... 2 1 1 1 2 1 2 1 2 1 1 1 2 2 2 2 2 1 2 1 2 2 2 1 2 102 ~780       0     0      1.64 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 46 : ... 1 1 1 2 1 2 1 2 1 1 1 2 2 2 2 2 1 2 1 2 2 2 1 2 1 101 ~780       0     0      1.65 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 47 : ... 1 1 1 2 1 2 1 2 1 1 1 2 2 2 2 2 1 2 1 2 2 2 1 2 1 2 99 ~780      0     0      1.66 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 48 : ... 1 1 2 1 2 1 2 1 1 1 2 2 2 2 2 1 2 1 2 2 2 1 2 1 2 2 97 ~780      0     0      1.68 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 49 : ... 1 2 1 2 1 2 1 1 1 2 2 2 2 2 1 2 1 2 2 2 1 2 1 2 2 2 95 ~780      0     0      1.69 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 50 : ... 2 1 2 1 2 1 1 1 2 2 2 2 2 1 2 1 2 2 2 1 2 1 2 2 2 1 94 ~780      0     0      1.71 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 51 : ... 1 2 1 2 1 1 1 2 2 2 2 2 1 2 1 2 2 2 1 2 1 2 2 2 1 2 92 ~780      0     0      1.72 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 52 : ... 2 1 2 1 1 1 2 2 2 2 2 1 2 1 2 2 2 1 2 1 2 2 2 1 2 1 91 ~780      0     0      1.74 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 53 : ... 1 2 1 1 1 2 2 2 2 2 1 2 1 2 2 2 1 2 1 2 2 2 1 2 1 2 89 ~780      0     0      1.76 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 54 : ... 2 1 1 1 2 2 2 2 2 1 2 1 2 2 2 1 2 1 2 2 2 1 2 1 2 1 88 ~780      0     0      1.77 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 55 : ... 1 1 1 2 2 2 2 2 1 2 1 2 2 2 1 2 1 2 2 2 1 2 1 2 1 1 87 ~780      0     0      1.79 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 56 : ... 1 1 2 2 2 2 2 1 2 1 2 2 2 1 2 1 2 2 2 1 2 1 2 1 1 1 86 ~780      0     0      1.81 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 57 : ... 1 2 2 2 2 2 1 2 1 2 2 2 1 2 1 2 2 2 1 2 1 2 1 1 1 2 84 ~780      0     0      1.82 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 58 : ... 2 2 2 2 2 1 2 1 2 2 2 1 2 1 2 2 2 1 2 1 2 1 1 1 2 1 83 ~780      0     0      1.84 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 59 : ... 2 2 2 2 1 2 1 2 2 2 1 2 1 2 2 2 1 2 1 2 1 1 1 2 1 1 82 ~780      0     0      1.86 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 60 : ... 2 2 2 1 2 1 2 2 2 1 2 1 2 2 2 1 2 1 2 1 1 1 2 1 1 1 81 ~780      0     0      1.87 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 61 : ... 2 2 1 2 1 2 2 2 1 2 1 2 2 2 1 2 1 2 1 1 1 2 1 1 1 2 79 ~780      0     0      1.89 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 62 : ... 2 1 2 1 2 2 2 1 2 1 2 2 2 1 2 1 2 1 1 1 2 1 1 1 2 1 78 ~780      0     0      1.91 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 63 : ... 1 2 1 2 2 2 1 2 1 2 2 2 1 2 1 2 1 1 1 2 1 1 1 2 1 2 76 ~780      0     0      1.93 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 64 : ... 2 1 2 2 2 1 2 1 2 2 2 1 2 1 2 1 1 1 2 1 1 1 2 1 2 2 74 ~780      0     0      1.95 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 65 : ... 2 2 2 1 2 1 2 2 2 1 2 1 2 1 1 1 2 1 1 1 2 1 2 2 41 33 ~780       0     0      1.97 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 66 : ... 1 2 2 2 1 2 1 2 1 1 1 2 1 1 1 2 1 2 2 41 47 -14 ~780      0     0      1.99 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 67 : ... 2 2 1 2 1 2 1 1 1 2 1 1 1 2 1 2 2 41 47 44 -58 ~780       0     0      2.02 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 68 : ... 2 1 2 1 2 1 1 1 2 1 1 1 2 1 2 2 41 47 44 44 -102 ~780      0     0      2.05 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 69 : ... 2 1 2 1 1 1 2 1 1 1 2 1 2 2 41 47 44 44 10 -112 ~780       0     0      2.08 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 70 : ... 1 2 1 1 1 2 1 1 1 2 1 2 2 41 47 44 44 10 4 -116 ~780       0     0      2.12 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 71 : ... 2 1 1 1 2 1 1 1 2 1 2 2 41 47 44 44 10 4 3 -119 ~780       0     0      2.15 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 72 : ... 1 1 1 2 1 1 1 2 1 2 2 41 47 44 44 10 4 3 2 -121 ~780       0     0      2.18 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 73 : ... 1 1 2 1 1 1 2 1 2 2 41 47 44 44 10 4 3 2 3 -124 ~780       0     0      2.22 sec  T/O =  0  PRV = 11
+SBY 13:19:56 [tx_fine_prove] engine_0: 74 : ... 1 2 1 1 1 2 1 2 2 41 47 44 44 10 4 3 2 3 1 -125 ~780       0     0      2.25 sec  T/O =  0  PRV = 11
+SBY 13:19:57 [tx_fine_prove] engine_0: 75 : ... 2 1 1 1 2 1 2 2 41 47 44 44 10 4 3 2 3 1 3 -128 ~780       0     0      2.28 sec  T/O =  0  PRV = 11
+SBY 13:19:57 [tx_fine_prove] engine_0: 76 : ... 1 1 1 2 1 2 2 41 47 44 44 10 4 3 2 3 1 3 3 -131 ~780       0     0      2.31 sec  T/O =  0  PRV = 11
+SBY 13:19:57 [tx_fine_prove] engine_0: 77 : ... 1 1 2 1 2 2 41 47 44 44 10 4 3 2 3 1 3 3 3 -134 ~780       0     0      2.35 sec  T/O =  0  PRV = 11
+SBY 13:19:57 [tx_fine_prove] engine_0: 78 : ... 1 2 1 2 2 41 47 44 44 10 4 3 2 3 1 3 3 3 2 -136 ~780       0     0      2.39 sec  T/O =  0  PRV = 11
+SBY 13:19:57 [tx_fine_prove] engine_0: 79 : ... 2 1 2 2 41 47 44 44 10 4 3 2 3 1 3 3 3 2 2 -138 ~780       0     0      2.43 sec  T/O =  0  PRV = 11
+SBY 13:19:57 [tx_fine_prove] engine_0: 80 : ... 1 2 2 41 47 44 44 10 4 3 2 3 1 3 3 3 2 2 1 -139 ~780       0     0      2.47 sec  T/O =  0  PRV = 11
+SBY 13:19:57 [tx_fine_prove] engine_0: 81 : ... 2 2 41 47 44 44 10 4 3 2 3 1 3 3 3 2 2 1 4 -143 ~780       0     0      2.50 sec  T/O =  0  PRV = 11
+SBY 13:19:57 [tx_fine_prove] engine_0: 82 : ... 2 41 47 44 44 10 4 3 2 3 1 3 3 3 2 2 1 4 1 -144 ~780       0     0      2.54 sec  T/O =  0  PRV = 11
+SBY 13:19:57 [tx_fine_prove] engine_0: 83 : ... 41 47 44 44 10 4 3 2 3 1 3 3 3 2 2 1 4 1 4 -148 ~780       0     0      2.57 sec  T/O =  0  PRV = 11
+SBY 13:19:57 [tx_fine_prove] engine_0: 84 : ... 47 44 44 10 4 3 2 3 1 3 3 3 2 2 1 4 1 4 2 -150 ~780        0     0      2.61 sec  T/O =  0  PRV = 11
+SBY 13:19:57 [tx_fine_prove] engine_0: 85 : ... 47 44 44 10 4 3 2 3 1 3 3 3 2 2 1 4 1 4 2 5 -155 ~780      0     0      2.64 sec  T/O =  0  PRV = 11
+SBY 13:19:57 [tx_fine_prove] engine_0: 86 : ... 44 44 10 4 3 2 3 1 3 3 3 2 2 1 4 1 4 2 5 1 -156 ~780       0     0      2.68 sec  T/O =  0  PRV = 11
+SBY 13:19:57 [tx_fine_prove] engine_0: 87 : ... 44 10 4 3 2 3 1 3 3 3 2 2 1 4 1 4 2 5 1 4 -160 ~780        0     0      2.72 sec  T/O =  0  PRV = 11
+SBY 13:19:57 [tx_fine_prove] engine_0: 88 : ... 44 10 4 3 2 3 1 3 3 3 2 2 1 4 1 4 2 5 1 4 1 -161 ~780      0     0      2.75 sec  T/O =  0  PRV = 11
+SBY 13:19:57 [tx_fine_prove] engine_0: 89 : ... 10 4 3 2 3 1 3 3 3 2 2 1 4 1 4 2 5 1 4 1 2 -163 ~780       0     0      2.79 sec  T/O =  0  PRV = 11
+SBY 13:19:57 [tx_fine_prove] engine_0: 90 : ... 4 3 2 3 1 3 3 3 2 2 1 4 1 4 2 5 1 4 1 2 1 -164 ~780        0     0      2.83 sec  T/O =  0  PRV = 11
+SBY 13:19:57 [tx_fine_prove] engine_0: 91 : ... 4 3 2 3 1 3 3 3 2 2 1 4 1 4 2 5 1 4 1 2 1 2 -166 ~780      0     0      2.87 sec  T/O =  0  PRV = 11
+SBY 13:19:57 [tx_fine_prove] engine_0: 92 : ... 3 2 3 1 3 3 3 2 2 1 4 1 4 2 5 1 4 1 2 1 2 1 -167 ~780      0     0      2.91 sec  T/O =  0  PRV = 11
+SBY 13:19:57 [tx_fine_prove] engine_0: 93 : ... 2 3 1 3 3 3 2 2 1 4 1 4 2 5 1 4 1 2 1 2 1 4 -171 ~780      0     0      2.94 sec  T/O =  0  PRV = 11
+SBY 13:19:57 [tx_fine_prove] engine_0: 94 : ... 3 1 3 3 3 2 2 1 4 1 4 2 5 1 4 1 2 1 2 1 4 1 -172 ~780      0     0      2.98 sec  T/O =  0  PRV = 11
+SBY 13:19:57 [tx_fine_prove] engine_0: 95 : ... 1 3 3 3 2 2 1 4 1 4 2 5 1 4 1 2 1 2 1 4 1 5 -177 ~780      0     0      3.02 sec  T/O =  0  PRV = 11
+SBY 13:19:57 [tx_fine_prove] engine_0: 96 : ... 3 3 3 2 2 1 4 1 4 2 5 1 4 1 2 1 2 1 4 1 5 3 -180 ~780      0     0      3.06 sec  T/O =  0  PRV = 11
+SBY 13:19:57 [tx_fine_prove] engine_0: 97 : ... 3 3 2 2 1 4 1 4 2 5 1 4 1 2 1 2 1 4 1 5 3 2 -182 ~780      0     0      3.10 sec  T/O =  0  PRV = 11
+SBY 13:19:57 [tx_fine_prove] engine_0: 98 : ... 3 2 2 1 4 1 4 2 5 1 4 1 2 1 2 1 4 1 5 3 2 1 -183 ~780      0     0      3.14 sec  T/O =  0  PRV = 11
+SBY 13:19:57 [tx_fine_prove] engine_0: 99 : ... 2 2 1 4 1 4 2 5 1 4 1 2 1 2 1 4 1 5 3 2 1 3 -186 ~780      0     0      3.18 sec  T/O =  0  PRV = 11
+SBY 13:19:57 [tx_fine_prove] engine_0: 100 : ... 2 1 4 1 4 2 5 1 4 1 2 1 2 1 4 1 5 3 2 1 3 1 -187 ~780      0     0      3.22 sec  T/O =  0  PRV = 11
+SBY 13:19:58 [tx_fine_prove] engine_0: 101 : ... 1 4 1 4 2 5 1 4 1 2 1 2 1 4 1 5 3 2 1 3 1 4 -191 ~780      0     0      3.27 sec  T/O =  0  PRV = 11
+SBY 13:19:58 [tx_fine_prove] engine_0: 102 : ... 4 1 4 2 5 1 4 1 2 1 2 1 4 1 5 3 2 1 3 1 4 3 -194 ~780      0     0      3.31 sec  T/O =  0  PRV = 11
+SBY 13:19:58 [tx_fine_prove] engine_0: 103 : ... 1 4 2 5 1 4 1 2 1 2 1 4 1 5 3 2 1 3 1 4 3 3 -197 ~780      0     0      3.35 sec  T/O =  0  PRV = 11
+SBY 13:19:58 [tx_fine_prove] engine_0: 104 : ... 4 2 5 1 4 1 2 1 2 1 4 1 5 3 2 1 3 1 4 3 3 1 -198 ~780      0     0      3.40 sec  T/O =  0  PRV = 11
+SBY 13:19:58 [tx_fine_prove] engine_0: 105 : ... 2 5 1 4 1 2 1 2 1 4 1 5 3 2 1 3 1 4 3 3 1 2 -200 ~780      0     0      3.44 sec  T/O =  0  PRV = 11
+SBY 13:19:58 [tx_fine_prove] engine_0: 106 : ... 5 1 4 1 2 1 2 1 4 1 5 3 2 1 3 1 4 3 3 1 2 1 -201 ~780      0     0      3.48 sec  T/O =  0  PRV = 11
+SBY 13:19:58 [tx_fine_prove] engine_0: 107 : ... 1 4 1 2 1 2 1 4 1 5 3 2 1 3 1 4 3 3 1 2 1 2 -203 ~780      0     0      3.53 sec  T/O =  0  PRV = 11
+SBY 13:19:58 [tx_fine_prove] engine_0: 108 : ... 4 1 2 1 2 1 4 1 5 3 2 1 3 1 4 3 3 1 2 1 2 1 -204 ~780      0     0      3.57 sec  T/O =  0  PRV = 11
+SBY 13:19:58 [tx_fine_prove] engine_0: 109 : ... 1 2 1 2 1 4 1 5 3 2 1 3 1 4 3 3 1 2 1 2 1 4 -208 ~780      0     0      3.62 sec  T/O =  0  PRV = 11
+SBY 13:19:58 [tx_fine_prove] engine_0: 110 : ... 2 1 2 1 4 1 5 3 2 1 3 1 4 3 3 1 2 1 2 1 4 1 -209 ~780      0     0      3.66 sec  T/O =  0  PRV = 11
+SBY 13:19:58 [tx_fine_prove] engine_0: 111 : ... 1 2 1 4 1 5 3 2 1 3 1 4 3 3 1 2 1 2 1 4 1 4 -213 ~780      0     0      3.71 sec  T/O =  0  PRV = 11
+SBY 13:19:58 [tx_fine_prove] engine_0: 112 : ... 2 1 4 1 5 3 2 1 3 1 4 3 3 1 2 1 2 1 4 1 4 2 -215 ~780      0     0      3.75 sec  T/O =  0  PRV = 11
+SBY 13:19:58 [tx_fine_prove] engine_0: 113 : ... 1 4 1 5 3 2 1 3 1 4 3 3 1 2 1 2 1 4 1 4 2 2 -217 ~780      0     0      3.80 sec  T/O =  0  PRV = 11
+SBY 13:19:58 [tx_fine_prove] engine_0: 114 : ... 4 1 5 3 2 1 3 1 4 3 3 1 2 1 2 1 4 1 4 2 2 2 -219 ~780      0     0      3.84 sec  T/O =  0  PRV = 11
+SBY 13:19:58 [tx_fine_prove] engine_0: 115 : ... 1 5 3 2 1 3 1 4 3 3 1 2 1 2 1 4 1 4 2 2 2 2 -221 ~780      0     0      3.89 sec  T/O =  0  PRV = 11
+SBY 13:19:58 [tx_fine_prove] engine_0: 116 : ... 5 3 2 1 3 1 4 3 3 1 2 1 2 1 4 1 4 2 2 2 2 1 -222 ~780      0     0      3.93 sec  T/O =  0  PRV = 11
+SBY 13:19:58 [tx_fine_prove] engine_0: 117 : ... 3 2 1 3 1 4 3 3 1 2 1 2 1 4 1 4 2 2 2 2 1 3 -225 ~780      0     0      3.98 sec  T/O =  0  PRV = 11
+SBY 13:19:58 [tx_fine_prove] engine_0: 118 : ... 2 1 3 1 4 3 3 1 2 1 2 1 4 1 4 2 2 2 2 1 3 2 -227 ~780      0     0      4.03 sec  T/O =  0  PRV = 11
+SBY 13:19:58 [tx_fine_prove] engine_0: 119 : ... 1 3 1 4 3 3 1 2 1 2 1 4 1 4 2 2 2 2 1 3 2 3 -230 ~780      0     0      4.08 sec  T/O =  0  PRV = 11
+SBY 13:19:58 [tx_fine_prove] engine_0: 120 : ... 3 1 4 3 3 1 2 1 2 1 4 1 4 2 2 2 2 1 3 2 3 1 -231 ~780      0     0      4.13 sec  T/O =  0  PRV = 11
+SBY 13:19:58 [tx_fine_prove] engine_0: 121 : ... 1 4 3 3 1 2 1 2 1 4 1 4 2 2 2 2 1 3 2 3 1 2 -233 ~780      0     0      4.17 sec  T/O =  0  PRV = 11
+SBY 13:19:58 [tx_fine_prove] engine_0: 122 : ... 4 3 3 1 2 1 2 1 4 1 4 2 2 2 2 1 3 2 3 1 2 1 -234 ~780      0     0      4.22 sec  T/O =  0  PRV = 11
+SBY 13:19:59 [tx_fine_prove] engine_0: 123 : ... 3 3 1 2 1 2 1 4 1 4 2 2 2 2 1 3 2 3 1 2 1 2 -236 ~780      0     0      4.27 sec  T/O =  0  PRV = 11
+SBY 13:19:59 [tx_fine_prove] engine_0: 124 : ... 3 1 2 1 2 1 4 1 4 2 2 2 2 1 3 2 3 1 2 1 2 1 -237 ~780      0     0      4.32 sec  T/O =  0  PRV = 11
+SBY 13:19:59 [tx_fine_prove] engine_0: 125 : ... 1 2 1 2 1 4 1 4 2 2 2 2 1 3 2 3 1 2 1 2 1 5 -242 ~780      0     0      4.36 sec  T/O =  0  PRV = 11
+SBY 13:19:59 [tx_fine_prove] engine_0: 126 : ... 2 1 2 1 4 1 4 2 2 2 2 1 3 2 3 1 2 1 2 1 5 3 -245 ~780      0     0      4.41 sec  T/O =  0  PRV = 11
+SBY 13:19:59 [tx_fine_prove] engine_0: 127 : ... 1 2 1 4 1 4 2 2 2 2 1 3 2 3 1 2 1 2 1 5 3 5 -250 ~780      0     0      4.46 sec  T/O =  0  PRV = 11
+SBY 13:19:59 [tx_fine_prove] engine_0: 128 : ... 2 1 4 1 4 2 2 2 2 1 3 2 3 1 2 1 2 1 5 3 5 4 -254 ~780      0     0      4.51 sec  T/O =  0  PRV = 11
+SBY 13:19:59 [tx_fine_prove] engine_0: 129 : ... 4 1 4 2 2 2 2 1 3 2 3 1 2 1 2 1 5 3 5 4 82 -276 ~780       1    62      4.63 sec  T/O =  0  PRV = 11
+SBY 13:19:59 [tx_fine_prove] engine_0: 130 : ... 1 4 2 2 2 2 1 3 2 3 1 2 1 2 1 5 3 5 4 82 84 -216 ~766      1    88      4.84 sec  T/O =  0  PRV = 11
+SBY 13:19:59 [tx_fine_prove] engine_0: Proved output 0 in frame 130.
+SBY 13:19:59 [tx_fine_prove] engine_0: 131 : ... 2 2 2 2 1 3 2 3 1 2 1 2 1 5 3 5 4 82 84 5 -485 ~1030       0    88      5.02 sec  T/O =  0  PRV = 12
+SBY 13:19:59 [tx_fine_prove] engine_0: 132 : ... 2 2 2 1 3 2 3 1 2 1 2 1 5 3 5 4 82 84 5 2 -487 ~1030       0    88      5.09 sec  T/O =  0  PRV = 12
+SBY 13:19:59 [tx_fine_prove] engine_0: All outputs solved or timed out in frame 132.
+SBY 13:19:59 [tx_fine_prove] engine_0: Block = 5513  Oblig = 34980  Clause = 24573  Call =616991 (sat=61.8%)  Cex =   0  Start =1710
+SBY 13:19:59 [tx_fine_prove] engine_0: SAT solving =    39.62 sec ( 69.02 %)
+SBY 13:19:59 [tx_fine_prove] engine_0: unsat     =     3.72 sec (  6.48 %)
+SBY 13:19:59 [tx_fine_prove] engine_0: sat       =    35.90 sec ( 62.54 %)
+SBY 13:19:59 [tx_fine_prove] engine_0: Generalize  =    16.05 sec ( 27.97 %)
+SBY 13:19:59 [tx_fine_prove] engine_0: Push clause =    22.59 sec ( 39.35 %)
+SBY 13:19:59 [tx_fine_prove] engine_0: Ternary sim =     0.61 sec (  1.07 %)
+SBY 13:19:59 [tx_fine_prove] engine_0: Containment =     0.42 sec (  0.73 %)
+SBY 13:19:59 [tx_fine_prove] engine_0: CNF compute =     1.49 sec (  2.59 %)
+SBY 13:19:59 [tx_fine_prove] engine_0: Refinement  =     0.00 sec (  0.00 %)
+SBY 13:19:59 [tx_fine_prove] engine_0: TOTAL       =    57.41 sec (100.00 %)
+SBY 13:19:59 [tx_fine_prove] engine_0: Property proved.  Time =    57.43 sec
+SBY 13:19:59 [tx_fine_prove] engine_0: Counter-example is not available.
+SBY 13:19:59 [tx_fine_prove] engine_0: finished (returncode=0)
+SBY 13:19:59 [tx_fine_prove] engine_0: Status returned by engine: PASS
+SBY 13:19:59 [tx_fine_prove] summary: Elapsed clock time [H:MM:SS (secs)]: 0:00:57 (57)
+SBY 13:19:59 [tx_fine_prove] summary: Elapsed process time [H:MM:SS (secs)]: 0:00:57 (57)
+SBY 13:19:59 [tx_fine_prove] summary: engine_0 (abc pdr) returned PASS
+SBY 13:19:59 [tx_fine_prove] summary: engine_0 did not produce any traces
+SBY 13:19:59 [tx_fine_prove] DONE (PASS, rc=0)
+RESULT formal_prove PASS sby prove: PASS

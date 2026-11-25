@@ -1,0 +1,156 @@
+2026-11-25 14:08:39 +0100: Memory Usage (454320K) : Starting running GF180MCU Klayout DRC runset on /foss/designs/gf-433-fsk-radio/gds/tt_um_mattvenn_gf433_vco.gds
+2026-11-25 14:08:39 +0100: Memory Usage (454320K) : Ruby Version for klayout: 3.2.3
+2026-11-25 14:08:39 +0100: Memory Usage (455280K) : Input file: /foss/designs/gf-433-fsk-radio/gds/tt_um_mattvenn_gf433_vco.gds
+2026-11-25 14:08:39 +0100: Memory Usage (455280K) : DRC Run Report: /foss/designs/gf-433-fsk-radio/build/tile/run/antenna/antenna.lyrdb
+2026-11-25 14:08:39 +0100: Memory Usage (455280K) : MIM Option selected: B
+2026-11-25 14:08:39 +0100: Memory Usage (455280K) : Verbose enabled: false
+2026-11-25 14:08:39 +0100: Memory Usage (455280K) : Number of parallel workers: 1
+2026-11-25 14:08:39 +0100: Memory Usage (455280K) : Number of threads for DRC functions: 8
+2026-11-25 14:08:39 +0100: Memory Usage (455280K) : Run mode: deep
+2026-11-25 14:08:39 +0100: Memory Usage (455280K) : metal_top selected: 11K
+2026-11-25 14:08:39 +0100: Memory Usage (455280K) : metal_level selected: 5LM
+2026-11-25 14:08:39 +0100: Memory Usage (455280K) : Selected decks: antenna_contact, antenna_metal1, antenna_metal2, antenna_metal3, antenna_metal4, antenna_metal5, antenna_metaltop, antenna_poly2, antenna_via1, antenna_via2, antenna_via3, antenna_via4, antenna_via5
+2026-11-25 14:08:39 +0100: Memory Usage (463144K) : Total area of the design is 225565.5808 um^2.
+2026-11-25 14:08:39 +0100: Memory Usage (463144K) : Read in polygons from layers
+2026-11-25 14:08:39 +0100: Memory Usage (463396K) : comp has 5535 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (463636K) : dnwell has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (463636K) : nwell has 2120 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (463636K) : lvpwell has 1984 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (463636K) : dualgate has 1984 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (463876K) : poly2_drawn has 10845 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (463876K) : nplus has 3844 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (464116K) : pplus has 3442 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (464116K) : sab has 530 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (464356K) : esd has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (464356K) : resistor has 72 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (464356K) : fhres has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (464356K) : fusetop has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (464356K) : fusewindow_d has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (464596K) : polyfuse has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (464596K) : mvsd has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (464596K) : mvpsd has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (464596K) : nat has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (464596K) : comp_dummy has 2783 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (464836K) : poly2_dummy has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (464836K) : schottky_diode has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (464836K) : zener has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (464836K) : res_mk has 531 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (465076K) : opc_drc has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (465076K) : v5_xtor has 1984 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (465076K) : cap_mk has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (465076K) : mos_cap_mk has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (465076K) : ind_mk has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (465316K) : diode_mk has 21 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (465316K) : drc_bjt has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (465316K) : lvs_bjt has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (465316K) : mim_l_mk has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (465316K) : latchup_mk has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (465316K) : guard_ring_mk has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (465556K) : otp_mk has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (465556K) : mtpmark has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (465556K) : neo_ee_mk has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (465556K) : sramcore has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (465556K) : lvs_rf has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (465796K) : lvs_drain has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (465796K) : hvpolyrs has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (465796K) : lvs_io has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (465796K) : probe_mk has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (465796K) : esd_mk has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (465796K) : lvs_source has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (466036K) : well_diode_mk has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (466036K) : ldmos_xtor has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (466036K) : plfuse has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (466036K) : efuse_mk has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (466036K) : mcell_feol_mk has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (466036K) : ymtp_mk has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (466276K) : dev_wf_mk has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (466276K) : comp_label has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (466276K) : poly2_label has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (466276K) : mdiode has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (466276K) : ndmy has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (466276K) : pmndmy has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (466516K) : pad has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (466516K) : ubmpperi has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (466516K) : ubmparray has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (466516K) : ubmeplate has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (466516K) : pr_bndry has 1990 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (466756K) : border has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (467476K) : contact has 73856 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (467716K) : metal1_drawn has 25487 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (467956K) : metal1_slot has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (467956K) : metal1_dummy has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (467956K) : metal1_label has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (467956K) : metal1_blk has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (468196K) : metal1_res has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (468196K) : via1 has 13971 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (468676K) : metal2_drawn has 7505 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (468676K) : metal2_slot has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (468916K) : metal2_dummy has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (468916K) : metal2_blk has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (468916K) : metal2_label has 219 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (468916K) : metal2_res has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (469156K) : via2 has 12466 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (469396K) : metal3_drawn has 4791 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (469396K) : metal3_slot has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (469636K) : metal3_dummy has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (469636K) : metal3_blk has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (469636K) : metal3_label has 116 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (469636K) : metal3_res has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (469876K) : via3 has 5696 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (469876K) : metal4_drawn has 635 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (469876K) : metal4_slot has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (469876K) : metal4_dummy has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (470116K) : metal4_blk has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (470116K) : metal4_label has 106 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (470116K) : metal4_res has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (470116K) : via4 has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (470116K) : metal5_drawn has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (470356K) : metal5_slot has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (470356K) : metal5_dummy has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (470356K) : metal5_blk has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (470356K) : metal5_label has 0 polygons
+2026-11-25 14:08:39 +0100: Memory Usage (470356K) : metal5_res has 0 polygons
+2026-11-25 14:08:40 +0100: Memory Usage (487304K) : No rules requiring connectivity, skipping connectivity generation.
+2026-11-25 14:08:40 +0100: Memory Usage (487304K) : # Setup took 0.977635264 seconds
+2026-11-25 14:08:40 +0100: Memory Usage (487304K) : Starting GF180MCU DRC rules.
+2026-11-25 14:08:40 +0100: Memory Usage (487568K) : Starting DRC: executing 13 deck(s).
+2026-11-25 14:08:40 +0100: Memory Usage (487568K) : Executing deck antenna_contact from /foss/pdks/gf180mcuD/libs.tech/klayout/tech/drc/rule_decks/antenna.rb
+2026-11-25 14:08:40 +0100: Memory Usage (487568K) : Executing rule ANT.8
+2026-11-25 14:08:40 +0100: Memory Usage (495008K) : Executing deck antenna_metal1 from /foss/pdks/gf180mcuD/libs.tech/klayout/tech/drc/rule_decks/antenna.rb
+2026-11-25 14:08:40 +0100: Memory Usage (495008K) : Executing rule ANT.16_i_ANT.2
+2026-11-25 14:08:40 +0100: Memory Usage (495008K) : Executing rule ANT.16_ii_ANT.2
+2026-11-25 14:08:40 +0100: Memory Usage (495008K) : Executing deck antenna_metal2 from /foss/pdks/gf180mcuD/libs.tech/klayout/tech/drc/rule_decks/antenna.rb
+2026-11-25 14:08:41 +0100: Memory Usage (495008K) : Executing rule ANT.16_i_ANT.3
+2026-11-25 14:08:41 +0100: Memory Usage (495248K) : Executing rule ANT.16_ii_ANT.3
+2026-11-25 14:08:41 +0100: Memory Usage (495248K) : Executing deck antenna_metal3 from /foss/pdks/gf180mcuD/libs.tech/klayout/tech/drc/rule_decks/antenna.rb
+2026-11-25 14:08:41 +0100: Memory Usage (495248K) : Executing rule ANT.16_i_ANT.4
+2026-11-25 14:08:41 +0100: Memory Usage (495248K) : Executing rule ANT.16_ii_ANT.4
+2026-11-25 14:08:41 +0100: Memory Usage (495248K) : Executing deck antenna_metal4 from /foss/pdks/gf180mcuD/libs.tech/klayout/tech/drc/rule_decks/antenna.rb
+2026-11-25 14:08:41 +0100: Memory Usage (495248K) : Executing rule ANT.16_i_ANT.5
+2026-11-25 14:08:42 +0100: Memory Usage (495248K) : Executing rule ANT.16_ii_ANT.5
+2026-11-25 14:08:42 +0100: Memory Usage (495248K) : Executing rule ANT.16_iii_ANT.15_M4_MIMB
+2026-11-25 14:08:42 +0100: Memory Usage (495248K) : Executing deck antenna_metal5 from /foss/pdks/gf180mcuD/libs.tech/klayout/tech/drc/rule_decks/antenna.rb
+2026-11-25 14:08:42 +0100: Memory Usage (495248K) : Executing rule ANT.16_i_ANT.6
+2026-11-25 14:08:43 +0100: Memory Usage (495248K) : Executing rule ANT.16_ii_ANT.6
+2026-11-25 14:08:43 +0100: Memory Usage (495248K) : Executing rule ANT.16_iii_ANT.15_M5_MIMB
+2026-11-25 14:08:43 +0100: Memory Usage (495248K) : Executing deck antenna_metaltop from /foss/pdks/gf180mcuD/libs.tech/klayout/tech/drc/rule_decks/antenna.rb
+2026-11-25 14:08:43 +0100: Memory Usage (495248K) : Executing deck antenna_poly2 from /foss/pdks/gf180mcuD/libs.tech/klayout/tech/drc/rule_decks/antenna.rb
+2026-11-25 14:08:43 +0100: Memory Usage (495248K) : Executing rule ANT.1
+2026-11-25 14:08:43 +0100: Memory Usage (495248K) : Executing deck antenna_via1 from /foss/pdks/gf180mcuD/libs.tech/klayout/tech/drc/rule_decks/antenna.rb
+2026-11-25 14:08:43 +0100: Memory Usage (495248K) : Executing rule ANT.16_i_ANT.9
+2026-11-25 14:08:43 +0100: Memory Usage (495248K) : Executing rule ANT.16_ii_ANT.9
+2026-11-25 14:08:43 +0100: Memory Usage (495248K) : Executing deck antenna_via2 from /foss/pdks/gf180mcuD/libs.tech/klayout/tech/drc/rule_decks/antenna.rb
+2026-11-25 14:08:43 +0100: Memory Usage (495248K) : Executing rule ANT.16_i_ANT.10
+2026-11-25 14:08:44 +0100: Memory Usage (495248K) : Executing rule ANT.16_ii_ANT.10
+2026-11-25 14:08:44 +0100: Memory Usage (495248K) : Executing deck antenna_via3 from /foss/pdks/gf180mcuD/libs.tech/klayout/tech/drc/rule_decks/antenna.rb
+2026-11-25 14:08:44 +0100: Memory Usage (495248K) : Executing rule ANT.16_i_ANT.11
+2026-11-25 14:08:44 +0100: Memory Usage (496208K) : Executing rule ANT.16_ii_ANT.11
+2026-11-25 14:08:44 +0100: Memory Usage (496208K) : Executing rule ANT.16_iii_ANT.15_V3_MIMB
+2026-11-25 14:08:44 +0100: Memory Usage (496208K) : Executing deck antenna_via4 from /foss/pdks/gf180mcuD/libs.tech/klayout/tech/drc/rule_decks/antenna.rb
+2026-11-25 14:08:44 +0100: Memory Usage (496208K) : Executing rule ANT.16_i_ANT.12
+2026-11-25 14:08:45 +0100: Memory Usage (496208K) : Executing rule ANT.16_ii_ANT.12
+2026-11-25 14:08:45 +0100: Memory Usage (496208K) : Executing rule ANT.16_iii_ANT.15_V4_MIMB
+2026-11-25 14:08:45 +0100: Memory Usage (496208K) : Executing deck antenna_via5 from /foss/pdks/gf180mcuD/libs.tech/klayout/tech/drc/rule_decks/antenna.rb
+2026-11-25 14:08:45 +0100: Memory Usage (496740K) : 
+2026-11-25 14:08:45 +0100: Memory Usage (496740K) : DRC RESULT: SUCCESS (0 violations)
+2026-11-25 14:08:45 +0100: Memory Usage (496740K) : # DRC Total Run time 6.066644577 seconds

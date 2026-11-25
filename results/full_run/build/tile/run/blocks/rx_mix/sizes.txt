@@ -1,0 +1,11 @@
+ok  ('nfet_03v3', 0.28, ('bbn', 'rfn'), 'lo', '-')  sim 8.0  layout 8.0
+ok  ('nfet_03v3', 0.28, ('bbn', 'rfp'), 'lob', '-')  sim 8.0  layout 8.0
+ok  ('nfet_03v3', 0.28, ('bbp', 'rfn'), 'lob', '-')  sim 8.0  layout 8.0
+ok  ('nfet_03v3', 0.28, ('bbp', 'rfp'), 'lo', '-')  sim 8.0  layout 8.0
+ok  ('nfet_03v3', 5.0, ('VSS',), 'bbn', '-')  sim 24.57  layout 24.57
+ok  ('nfet_03v3', 5.0, ('VSS',), 'bbp', '-')  sim 24.57  layout 24.57
+ok  ('pfet_03v3', 0.28, ('bbn', 'rfn'), 'lob', 'VDD')  sim 16.0  layout 16.0
+ok  ('pfet_03v3', 0.28, ('bbn', 'rfp'), 'lo', 'VDD')  sim 16.0  layout 16.0
+ok  ('pfet_03v3', 0.28, ('bbp', 'rfn'), 'lo', 'VDD')  sim 16.0  layout 16.0
+ok  ('pfet_03v3', 0.28, ('bbp', 'rfp'), 'lob', 'VDD')  sim 16.0  layout 16.0
+SIZES OK (10 groups)

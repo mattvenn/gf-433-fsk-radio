@@ -1,0 +1,27 @@
+gds /foss/designs/gf-433-fsk-radio/layout/vco_core.gds  top vco_core  magic 8.3.684  netgen Netgen 1.5.323  klayout KLayout 0.30.12
+== schematic: xschem/vco_top.sch + rx_lsq.sch; netlisted vco_top: 105 element lines
+netlisted rx_lsq: 26 element lines; LVS source: vco_core cut from vco_top (0 Cc lines left, 0 xref, 1 XDCU, 1 xlsq)
+== Metal4 (46/0), via3 (41/0), Metal5 (81/0), via4 (82/0) in the GDS: none
+== magic DRC (1 s incl. extraction): count 0
+   layout netlist: 131 X devices; ports: bitb0 bit0 bitb1 bit1 bitb2 bit2 bitb3 bit3 bitb4 bit4 vbnf ck lsq
+== antenna (1 s): violations 0, feedback 14
+== KLayout DRC (8 s), decks all,-density, executing 176 deck(s)  rules run 768: count 0
+== LVS (0 s):
+Final result: Circuits match uniquely.
+Netlists match with 3 symmetries.
+LVS PASS
+== resistor size check (w/l): PASS  2 source / 2 layout: ppolyf_u_1k src 1/159.125 lay 1/159.12 um (-0.003 % L); ppolyf_u_1k src 1/159.125 lay 1/159.12 um (-0.003 % L)
+== mutation XDCU m 6 -> 5 (one VDD_LS decap finger): FAIL (expected)  [Final result: Circuits match uniquely. Netlists match with 3 symmetries with property errors. Property errors were found. The following cells had property errors: ]
+== mutation xlsq vq <-> lsq (Q level shifter supply / output): FAIL (expected)  [Final result: Top level cell failed pin matching. ]
+== mutation xls supply VDD_LS -> VDD (supplies merged): FAIL (expected)  [Final result: Top level cell failed pin matching. Netlists do not match. ]
+== mutation xls ck <-> ls: FAIL (expected)  [Final result: Top level cell failed pin matching. ]
+== mutation xcore vbnf <-> vctrl: FAIL (expected)  [Final result: Top level cell failed pin matching. ]
+== mutation XR1 r_length 159.125 -> 140 um: FAIL (expected)  [FAIL  2 source / 2 layout: ppolyf_u_1k src 1/140 lay 1/159.12 um (+13.657 % L) BAD; ppolyf_u_1k src 1/140 lay 1/159.12 um (+13.657 % L) BAD]
+== block port map (hierarchical extraction): PASS  ring_core.a2=a2 rx_lsq_ls.aq=a2 ring_core.a0=a0 lsdiv.a0=a0 rx_lsq_ls.vq=vq rx_lsq_ls.lsq=lsq rx_lsq_ls.VSS=VSS ring_core.vctrl=vctrl ring_core.vbn=vbnf ring_core.vg=vg ring_core.VDD=VDD lsdiv.VDD=VDD_LS lsdiv.ck=ck lsdiv.ls=ls ring_core.bit2=bit2 ring_core.bitb2=bitb2
+== mutation port map ring_core.a1=a2: FAIL (expected)  [FAIL  ring_core.a1: ring_core_0/a1 (want a2)]
+== mutation port map ring_core.a3=a2: FAIL (expected)  [FAIL  ring_core.a3: ring_core_0/a3 (want a2)]
+== mutation port map ring_core.a4=a2: FAIL (expected)  [FAIL  ring_core.a4: ring_core_0/a4 (want a2)]
+== mutation port map lsdiv.VDD=VDD: FAIL (expected)  [FAIL  lsdiv.VDD: VDD_LS (want VDD)]
+== mutation port map rx_lsq_ls.aq=a0: FAIL (expected)  [FAIL  rx_lsq_ls.aq: a2 (want a0)]
+== mutation port map rx_lsq_ls.vq=VDD_LS: FAIL (expected)  [FAIL  rx_lsq_ls.vq: vq (want VDD_LS)]
+CHECK OK  (LVS vs xschem 1, DRC 1, antenna 1, resistor sizes 1, mutations caught 1, no Metal4/5 1, block port map 1)

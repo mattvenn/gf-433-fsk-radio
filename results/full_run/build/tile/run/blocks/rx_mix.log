@@ -1,0 +1,11 @@
+gds /foss/designs/gf-433-fsk-radio/layout/rx_mix.gds  top rx_mix  source /foss/designs/gf-433-fsk-radio/build/tile/run/blocks/rx_mix/xsch/rx_mix_lvs.spice  magic 8.3.684  klayout KLayout 0.30.12  2026-11-25T13:53:54+01:00
+== schematic: xschem/rx_mix.sch; netlisted rx_mix: 10 element lines; LVS copy: removed 0 'Cc a0' metal-finger cap line(s)
+== magic DRC (1 s): count 0
+== antenna (0 s): violations 0, feedback 6
+count 0
+== KLayout DRC (7 s), decks all,-density, rules run 768: count 0
+LVS PASS (0 s): Final result: Circuits match uniquely. 
+== sizes: SIZES OK (10 groups)
+== mutation XS1n W x 0.9: FAIL (expected)  [Final result: Top level cell failed pin matching. Netlists match uniquely with property errors. The following cells had property errors: ]
+== mutation XS1n gate lo -> VSS: FAIL (expected)  [Final result: Top level cell failed pin matching. Netlists do not match. ]
+CHECK OK  (LVS vs xschem 1, DRC 1, antenna 1, mutations caught 1, sizes 1)

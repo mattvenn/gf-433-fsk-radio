@@ -1,0 +1,152 @@
+
+ /----------------------------------------------------------------------------\
+ |  yosys -- Yosys Open SYnthesis Suite                                       |
+ |  Copyright (C) 2012 - 2026  Claire Xenia Wolf <claire@yosyshq.com>         |
+ |  Distributed under an ISC-like license, type "license" to see terms        |
+ \----------------------------------------------------------------------------/
+ Yosys 0.69 (git sha1 9f75ca1f9, Release, GNU /usr/bin/c++ 13.3.0)
+
+-- Executing script file `design_prep.ys' --
+
+1. Executing RTLIL frontend.
+Input filename: design.il
+
+2. Executing SCC pass (detecting logic loops).
+Found 0 SCCs in module fv_tx_fine.
+Found 0 SCCs.
+
+3. Executing SIMPLEMAP pass (map simple cells to gate primitives).
+
+4. Executing MEMORY_NORDFF pass (extracting $dff cells from memories).
+
+5. Executing CLK2FFLOGIC pass (convert clocked FFs to generic $ff cells).
+
+5.1. Executing PEEPOPT pass (run peephole optimizers).
+replacing clock gate pattern in fv_tx_fine with ff: latch=$flatten\dut.\g_dec.$auto$proc_dlatch.cc:547:proc_dlatch$650, and=$flatten\dut.\g_dec.$and$tx_fine.v:54$4
+replacing clock gate pattern in fv_tx_fine with ff: latch=$flatten\dut.\g_eff.$auto$proc_dlatch.cc:547:proc_dlatch$650, and=$flatten\dut.\g_eff.$and$tx_fine.v:54$4
+replacing clock gate pattern in fv_tx_fine with ff: latch=$flatten\dut.\g_sd.$auto$proc_dlatch.cc:547:proc_dlatch$650, and=$flatten\dut.\g_sd.$and$tx_fine.v:54$4
+replacing clock gate pattern in fv_tx_fine with ff: latch=$flatten\dut.\g_spi.$auto$proc_dlatch.cc:547:proc_dlatch$650, and=$flatten\dut.\g_spi.$and$tx_fine.v:54$4
+Replacing fv_tx_fine.$auto$peepopt_pm.h:1854:block_31$1025 ($dff): CLK=\clk, D=\dut.en_spi, Q=$auto$peepopt_pm.h:1853:block_31$1024
+Replacing fv_tx_fine.$auto$peepopt_pm.h:1854:block_31$1023 ($dff): CLK=\clk, D=\dut.g_sd.en, Q=$auto$peepopt_pm.h:1853:block_31$1022
+Replacing fv_tx_fine.$auto$peepopt_pm.h:1854:block_31$1021 ($dff): CLK=\clk, D=\dut.g_eff.en, Q=$auto$peepopt_pm.h:1853:block_31$1020
+Replacing fv_tx_fine.$auto$peepopt_pm.h:1854:block_31$1019 ($dff): CLK=\clk, D=\dut.g_dec.en, Q=$auto$peepopt_pm.h:1853:block_31$1018
+Replacing fv_tx_fine.$flatten\dut.$procdff$1002 ($adff): CLK=\clk, D={ \dut.s_mosi [0] \mosi }, Q=\dut.s_mosi
+Replacing fv_tx_fine.$flatten\dut.$procdff$1007 ($adff): CLK=\clk, D={ \dut.s_fsk [1:0] \fsk }, Q=\dut.s_fsk
+Replacing fv_tx_fine.$flatten\dut.$procdff$835 ($adff): CLK=\dut.rip[6].q, D=$flatten\dut.$0\rip[7].q[0:0], Q=\dut.rip[7].q
+Replacing fv_tx_fine.$flatten\dut.$procdff$840 ($adff): CLK=\dut.rip[5].q, D=$flatten\dut.$0\rip[6].q[0:0], Q=\dut.rip[6].q
+Replacing fv_tx_fine.$flatten\dut.$procdff$845 ($adff): CLK=\dut.rip[4].q, D=$flatten\dut.$0\rip[5].q[0:0], Q=\dut.rip[5].q
+Replacing fv_tx_fine.$flatten\dut.$procdff$850 ($adff): CLK=\dut.rip[3].q, D=$flatten\dut.$0\rip[4].q[0:0], Q=\dut.rip[4].q
+Replacing fv_tx_fine.$flatten\dut.$procdff$855 ($adff): CLK=\dut.rip[2].q, D=$flatten\dut.$0\rip[3].q[0:0], Q=\dut.rip[3].q
+Replacing fv_tx_fine.$flatten\dut.$procdff$860 ($adff): CLK=\dut.rip[1].q, D=$flatten\dut.$0\rip[2].q[0:0], Q=\dut.rip[2].q
+Replacing fv_tx_fine.$flatten\dut.$procdff$865 ($adff): CLK=\dut.rip[0].q, D=$flatten\dut.$0\rip[1].q[0:0], Q=\dut.rip[1].q
+Replacing fv_tx_fine.$flatten\dut.$procdff$870 ($adff): CLK=\ck, D=$flatten\dut.$0\rip[0].q[0:0], Q=\dut.rip[0].q
+Replacing fv_tx_fine.$flatten\dut.$procdff$875 ($adff): CLK=\ck, D=\dut.s_cken [1], Q=\dut.g_en
+Replacing fv_tx_fine.$flatten\dut.$procdff$880 ($adff): CLK=\ck, D={ \dut.s_cken [0] \dut.ctrl [1] }, Q=\dut.s_cken
+Replacing fv_tx_fine.$flatten\dut.$procdff$885 ($adff): CLK=\ck, D={ \dut.r_ck [0] 1'1 }, Q=\dut.r_ck
+Replacing fv_tx_fine.$flatten\dut.$procdff$897 ($adff): CLK=\dut.clk_dec, D=$flatten\dut.$0\dac_tn[30:0], Q=\dut.dac_tn
+Replacing fv_tx_fine.$flatten\dut.$procdff$902 ($adff): CLK=\dut.clk_dec, D=$flatten\dut.$0\dac_bn[4:0], Q=\dut.dac_bn
+Replacing fv_tx_fine.$flatten\dut.$procdff$907 ($adff): CLK=\dut.clk_dec, D=\dut.eff_q [17:8], Q=\dut.eff_int
+Replacing fv_tx_fine.$flatten\dut.$procdff$912 ($adff): CLK=\dut.clk_sd, D=$flatten\dut.$0\dac_sdn[0:0], Q=\dut.dac_sdn
+Replacing fv_tx_fine.$flatten\dut.$procdff$917 ($adff): CLK=\dut.clk_sd, D=$flatten\dut.$0\acc[7:0], Q=\dut.acc
+Replacing fv_tx_fine.$flatten\dut.$procdff$922 ($adff): CLK=\dut.clk_eff, D=\dut.eff, Q=\dut.eff_q
+Replacing fv_tx_fine.$flatten\dut.$procdff$927 ($adff): CLK=\dut.clk_spi, D=$flatten\dut.$0\miso[0:0], Q=\dut.miso
+Replacing fv_tx_fine.$flatten\dut.$procdff$932 ($adff): CLK=\dut.clk_spi, D=$flatten\dut.$0\med_int[9:0], Q=\dut.med_int
+Replacing fv_tx_fine.$flatten\dut.$procdff$937 ($adff): CLK=\dut.clk_spi, D=$flatten\dut.$0\med_frac[7:0], Q=\dut.med_frac
+Replacing fv_tx_fine.$flatten\dut.$procdff$942 ($adff): CLK=\dut.clk_spi, D=$flatten\dut.$0\fsk_dev[11:0], Q=\dut.fsk_dev
+Replacing fv_tx_fine.$flatten\dut.$procdff$947 ($adff): CLK=\dut.clk_spi, D=$flatten\dut.$0\ctrl[4:0], Q=\dut.ctrl
+Replacing fv_tx_fine.$flatten\dut.$procdff$952 ($adff): CLK=\dut.clk_spi, D=$flatten\dut.$0\dbg[3:0], Q=\dut.dbg
+Replacing fv_tx_fine.$flatten\dut.$procdff$957 ($adff): CLK=\dut.clk_spi, D=$flatten\dut.$0\bitcnt[4:0], Q=\dut.bitcnt
+Replacing fv_tx_fine.$flatten\dut.$procdff$962 ($adff): CLK=\dut.clk_spi, D=$flatten\dut.$0\sr[15:0], Q=\dut.sr
+Replacing fv_tx_fine.$flatten\dut.$procdff$967 ($adff): CLK=\dut.clk_spi, D=$flatten\dut.$0\rd[11:0], Q=\dut.rd
+Replacing fv_tx_fine.$flatten\dut.$procdff$972 ($adff): CLK=\dut.clk_spi, D=$flatten\dut.$0\rnw[0:0], Q=\dut.rnw
+Replacing fv_tx_fine.$flatten\dut.$procdff$992 ($adff): CLK=\clk, D={ \dut.s_sclk [1:0] \sclk }, Q=\dut.s_sclk
+Replacing fv_tx_fine.$flatten\dut.$procdff$997 ($adff): CLK=\clk, D={ \dut.s_cs [1:0] \cs_n }, Q=\dut.s_cs
+Replacing fv_tx_fine.$flatten\dut.\g_dec.$auto$proc_dlatch.cc:547:proc_dlatch$650 ($dlatch): EN=\clk, D=\dut.g_dec.en, Q=\dut.g_dec.en_l
+Replacing fv_tx_fine.$flatten\dut.\g_eff.$auto$proc_dlatch.cc:547:proc_dlatch$650 ($dlatch): EN=\clk, D=\dut.g_eff.en, Q=\dut.g_eff.en_l
+Replacing fv_tx_fine.$flatten\dut.\g_sd.$auto$proc_dlatch.cc:547:proc_dlatch$650 ($dlatch): EN=\clk, D=\dut.g_sd.en, Q=\dut.g_sd.en_l
+Replacing fv_tx_fine.$flatten\dut.\g_spi.$auto$proc_dlatch.cc:547:proc_dlatch$650 ($dlatch): EN=\clk, D=\dut.en_spi, Q=\dut.g_spi.en_l
+Replacing fv_tx_fine.$flatten\ref.$procdff$655 ($adff): CLK=\clk, D={ \ref.s_sclk [1:0] \sclk }, Q=\ref.s_sclk
+Replacing fv_tx_fine.$flatten\ref.$procdff$660 ($adff): CLK=\clk, D={ \ref.s_cs [0] \cs_n }, Q=\ref.s_cs [1:0]
+Replacing fv_tx_fine.$flatten\ref.$procdff$665 ($adff): CLK=\clk, D={ \ref.s_mosi [0] \mosi }, Q=\ref.s_mosi
+Replacing fv_tx_fine.$flatten\ref.$procdff$670 ($adff): CLK=\clk, D={ \ref.s_fsk [0] \fsk }, Q=\ref.s_fsk [1:0]
+Replacing fv_tx_fine.$flatten\ref.$procdff$675 ($adff): CLK=\clk, D=$flatten\ref.$0\miso[0:0], Q=\ref.miso
+Replacing fv_tx_fine.$flatten\ref.$procdff$680 ($adff): CLK=\clk, D=$flatten\ref.$0\med_int[9:0], Q=\ref.med_int
+Replacing fv_tx_fine.$flatten\ref.$procdff$685 ($adff): CLK=\clk, D=$flatten\ref.$0\med_frac[7:0], Q=\ref.med_frac
+Replacing fv_tx_fine.$flatten\ref.$procdff$690 ($adff): CLK=\clk, D=$flatten\ref.$0\fsk_dev[11:0], Q=\ref.fsk_dev
+Replacing fv_tx_fine.$flatten\ref.$procdff$695 ($adff): CLK=\clk, D=$flatten\ref.$0\ctrl[4:0], Q=\ref.ctrl
+Replacing fv_tx_fine.$flatten\ref.$procdff$700 ($adff): CLK=\clk, D=$flatten\ref.$0\dbg[3:0], Q=\ref.dbg
+Replacing fv_tx_fine.$flatten\ref.$procdff$705 ($adff): CLK=\clk, D=$flatten\ref.$0\bitcnt[4:0], Q=\ref.bitcnt
+Replacing fv_tx_fine.$flatten\ref.$procdff$710 ($adff): CLK=\clk, D=$flatten\ref.$0\sr[15:0], Q=\ref.sr
+Replacing fv_tx_fine.$flatten\ref.$procdff$715 ($adff): CLK=\clk, D=$flatten\ref.$0\rd[11:0], Q=\ref.rd
+Replacing fv_tx_fine.$flatten\ref.$procdff$720 ($adff): CLK=\clk, D=$flatten\ref.$0\rnw[0:0], Q=\ref.rnw
+Replacing fv_tx_fine.$flatten\ref.$procdff$740 ($adff): CLK=\clk, D=\ref.eff, Q=\ref.eff_q
+Replacing fv_tx_fine.$flatten\ref.$procdff$745 ($adff): CLK=\clk, D=$flatten\ref.$0\dac_sdn[0:0], Q=\ref.dac_sdn
+Replacing fv_tx_fine.$flatten\ref.$procdff$750 ($adff): CLK=\clk, D=$flatten\ref.$0\acc[7:0], Q=\ref.acc
+Replacing fv_tx_fine.$flatten\ref.$procdff$762 ($adff): CLK=\clk, D=$flatten\ref.$0\dac_tn[30:0], Q=\ref.dac_tn
+Replacing fv_tx_fine.$flatten\ref.$procdff$767 ($adff): CLK=\clk, D=$flatten\ref.$0\dac_bn[4:0], Q=\ref.dac_bn
+Replacing fv_tx_fine.$flatten\ref.$procdff$772 ($adff): CLK=\clk, D=\ref.eff_q [17:8], Q=\ref.eff_int
+Replacing fv_tx_fine.$flatten\ref.$procdff$777 ($adff): CLK=\ck, D={ \ref.r_ck [0] 1'1 }, Q=\ref.r_ck
+Replacing fv_tx_fine.$flatten\ref.$procdff$782 ($adff): CLK=\ck, D={ \ref.s_cken [0] \ref.ctrl [1] }, Q=\ref.s_cken
+Replacing fv_tx_fine.$flatten\ref.$procdff$787 ($adff): CLK=\ck, D=\ref.s_cken [1], Q=\ref.g_en
+Replacing fv_tx_fine.$flatten\ref.$procdff$792 ($adff): CLK=\ck, D=$flatten\ref.$0\rip[0].q[0:0], Q=\ref.rip[0].q
+Replacing fv_tx_fine.$flatten\ref.$procdff$797 ($adff): CLK=\ref.rip[0].q, D=$flatten\ref.$0\rip[1].q[0:0], Q=\ref.rip[1].q
+Replacing fv_tx_fine.$flatten\ref.$procdff$802 ($adff): CLK=\ref.rip[1].q, D=$flatten\ref.$0\rip[2].q[0:0], Q=\ref.rip[2].q
+Replacing fv_tx_fine.$flatten\ref.$procdff$807 ($adff): CLK=\ref.rip[2].q, D=$flatten\ref.$0\rip[3].q[0:0], Q=\ref.rip[3].q
+Replacing fv_tx_fine.$flatten\ref.$procdff$812 ($adff): CLK=\ref.rip[3].q, D=$flatten\ref.$0\rip[4].q[0:0], Q=\ref.rip[4].q
+Replacing fv_tx_fine.$flatten\ref.$procdff$817 ($adff): CLK=\ref.rip[4].q, D=$flatten\ref.$0\rip[5].q[0:0], Q=\ref.rip[5].q
+Replacing fv_tx_fine.$flatten\ref.$procdff$822 ($adff): CLK=\ref.rip[5].q, D=$flatten\ref.$0\rip[6].q[0:0], Q=\ref.rip[6].q
+Replacing fv_tx_fine.$flatten\ref.$procdff$827 ($adff): CLK=\ref.rip[6].q, D=$flatten\ref.$0\rip[7].q[0:0], Q=\ref.rip[7].q
+
+6. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \fv_tx_fine..
+Removed 6 unused cells and 76 unused wires.
+<suppressed ~7 debug messages>
+
+7. Executing FORMALFF pass.
+
+8. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \fv_tx_fine..
+
+9. Executing CHECK pass (checking for obvious problems).
+Checking module fv_tx_fine...
+Found and reported 0 problems.
+
+10. Executing SETUNDEF pass (replace undef values with defined constants).
+
+11. Executing OPT pass (performing simple optimizations).
+
+11.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module fv_tx_fine.
+<suppressed ~66 debug messages>
+
+11.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\fv_tx_fine'.
+Computing hashes of 932 cells of `\fv_tx_fine'.
+Finding duplicate cells in `\fv_tx_fine'.
+Computing hashes of 821 cells of `\fv_tx_fine'.
+Finding duplicate cells in `\fv_tx_fine'.
+Computing hashes of 714 cells of `\fv_tx_fine'.
+Finding duplicate cells in `\fv_tx_fine'.
+<suppressed ~654 debug messages>
+Removed a total of 218 cells.
+
+11.3. Executing OPT_DFF pass (perform DFF optimizations).
+
+11.4. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \fv_tx_fine..
+Removed 0 unused cells and 220 unused wires.
+<suppressed ~1 debug messages>
+
+11.5. Finished fast OPT passes.
+
+12. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \fv_tx_fine..
+Removed 0 unused cells and 1 unused wires.
+<suppressed ~1 debug messages>
+
+13. Executing RTLIL backend.
+Output filename: ../model/design_prep.il
+
+End of script. Logfile hash: 40ac4acf58, time: 0.08s, user: 0.04s, system: 0.01s, MEM: 39.68 MB peak
+Yosys 0.69 (git sha1 9f75ca1f9, Release, GNU /usr/bin/c++ 13.3.0)
+Time spent: 45% 4x opt_clean (0 sec), 10% 1x check (0 sec), ...

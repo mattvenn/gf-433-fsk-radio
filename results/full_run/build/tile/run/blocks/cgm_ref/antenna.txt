@@ -1,0 +1,7 @@
+ANTENNA_BEGIN
+Reading extract file.
+Building flattened netlist.
+Running antenna checks.
+antennacheck finished.
+FEEDBACK 10
+ANTENNA_END

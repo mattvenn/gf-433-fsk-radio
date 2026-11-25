@@ -1,0 +1,42 @@
+box 4770 258 5594 6222
+feedback add "device missing 1 terminal;
+ connecting remainder to node VDD" pale
+box 3834 258 4658 6222
+feedback add "device missing 1 terminal;
+ connecting remainder to node VDD" pale
+box 2898 258 3722 6222
+feedback add "device missing 1 terminal;
+ connecting remainder to node VDD" pale
+box 1962 258 2786 6222
+feedback add "device missing 1 terminal;
+ connecting remainder to node VDD" pale
+box 1026 258 1850 6222
+feedback add "device missing 1 terminal;
+ connecting remainder to node VDD" pale
+box 90 258 914 6222
+feedback add "device missing 1 terminal;
+ connecting remainder to node VDD" pale
+box -7872 -118 -4672 3082
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box 9850 9892 11850 12492
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box 7738 9892 9738 12492
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box 5626 9892 7626 12492
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box 3514 9892 5514 12492
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box 1402 9892 3402 12492
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box -710 9892 1290 12492
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale
+box -7872 9020 -4672 12220
+feedback add "device missing 1 terminal;
+ connecting remainder to node VSS" pale

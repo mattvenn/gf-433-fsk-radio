@@ -1,0 +1,25 @@
+{
+ "name": "pvt_ss_27_3.45_op",
+ "flags": [],
+ "case": {
+  "corner": "ss",
+  "temp": 27,
+  "vap": 3.45,
+  "vdp": 3.45,
+  "vnom": 3.45,
+  "kind": "op",
+  "tstop": 0,
+  "rx_en": 1,
+  "ic": null,
+  "est": 60
+ },
+ "deck_temp": 27.0,
+ "deck_vsa": 3.45,
+ "deck_vsd": 3.45,
+ "runtime_s": 23.0,
+ "vbnf": 1.384256148371404,
+ "vg": 1.3121208390632209,
+ "nb": 1.1138526140722327,
+ "vap": 3.45,
+ "vdp": 3.45
+}
