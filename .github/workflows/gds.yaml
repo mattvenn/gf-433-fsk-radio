@@ -2,6 +2,7 @@ name: gds
 
 on:
   push:
+    branches-ignore: [verify-gaps]     # the full verification run's branch: no Actions (Matt 2026-11-25)
   workflow_dispatch:
 
 jobs:

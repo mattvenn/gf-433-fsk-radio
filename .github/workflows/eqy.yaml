@@ -5,6 +5,7 @@ name: eqy
 # line); the cells' liberty file from the same ciel gf180mcuD PDK as the lvs action.
 on:
   push:
+    branches-ignore: [verify-gaps]     # the full verification run's branch: no Actions (Matt 2026-11-25)
   workflow_dispatch:
 
 env:

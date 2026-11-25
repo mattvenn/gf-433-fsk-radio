@@ -6,6 +6,7 @@ name: lvs
 # 14 mutations are caught. Same PDK as the TT precheck (gf180mcuD, open_pdks e8daeda, via ciel).
 on:
   push:
+    branches-ignore: [verify-gaps]     # the full verification run's branch: no Actions (Matt 2026-11-25)
   workflow_dispatch:
 
 env:

@@ -18,16 +18,25 @@ a failed job whose command changed runs again. It exits once nothing is running 
 
     nohup setsid python3 sim/rerun/sched.py sim/rerun/jobs_2026-10-13.py --budget 26 > build/rerun/sched.log 2>&1 &
     python3 sim/rerun/sched.py --status [--out build/rerun]
+
+Disk watch (2026-11-25: the full run's pod was lost, possibly at its 50 GB disk limit): every --disk-every s the
+scheduler measures `du` over --disk-paths and writes <out>/disk.txt.
+  >= --disk-soft GB: no new job starts, and finished jobs' *.raw waveforms are deleted, oldest first, until the
+            total is 5 GB below the soft limit. Only a raw with a newer result.json beside it, in a directory no
+            unfinished job depends on, is deleted; the verdicts read result.json, not the raw.
+  >= --disk-hard GB: the most recently started job is killed and requeued (state wait), one per check.
 """
 import argparse
 import json
 import os
 import runpy
+import signal
 import subprocess
 import time
+from pathlib import Path
 
 H_RESERVE = 3600                                          # jobs this long (s) reserve their threads
-ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..'))
+ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))   # the repo (was '..', '..' from sim/rerun/)
 
 
 def load_status(path):
@@ -46,6 +55,42 @@ def alive(pid):
         return False
 
 
+def disk_gb(paths):
+    """Bytes under the paths (du -sbx), in GB; None if du fails. Hard links are counted once."""
+    try:
+        r = subprocess.run(['du', '-scbx'] + paths, capture_output=True, text=True, timeout=600)
+        return int(r.stdout.strip().splitlines()[-1].split()[0]) / 1e9
+    except Exception:                                    # noqa: BLE001
+        return None
+
+
+def prune_raws(roots, keep_dirs, need_gb, log):
+    """Delete finished jobs' *.raw files, oldest first, until need_gb GB are freed. A raw is deletable when a newer
+    result.json sits beside it (the job analysed it) and its directory's name is not in keep_dirs (a job a waiting
+    or running job depends on: it may read the raw). Returns the GB freed."""
+    cand = []
+    for r in roots:
+        for f in Path(r).rglob('*.raw'):
+            res = f.parent / 'result.json'
+            try:
+                if f.parent.name in keep_dirs or not res.exists() or res.stat().st_mtime < f.stat().st_mtime:
+                    continue
+                cand.append((f.stat().st_mtime, f.stat().st_size, f))
+            except OSError:
+                continue
+    freed = 0
+    for _, size, f in sorted(cand):
+        if freed >= need_gb * 1e9:
+            break
+        try:
+            f.unlink()
+            freed += size
+            log(f'disk: pruned {f} ({size / 1e9:.2f} GB)')
+        except OSError:
+            pass
+    return freed / 1e9
+
+
 def show(out):
     st = load_status(os.path.join(out, 'status.json'))
     now = time.time()
@@ -61,6 +106,12 @@ def main():
     ap.add_argument('--load', type=float, default=28.0)
     ap.add_argument('--out', default=os.path.join(ROOT, 'build', 'rerun'))
     ap.add_argument('--status', action='store_true')
+    ap.add_argument('--disk-paths', default=ROOT, help='comma-separated paths whose total size is watched')
+    ap.add_argument('--disk-soft', type=float, default=70.0, help='GB: start no job, prune finished raws')
+    ap.add_argument('--disk-hard', type=float, default=78.0, help='GB: kill and requeue the newest job')
+    ap.add_argument('--disk-every', type=float, default=120.0, help='s between disk checks')
+    ap.add_argument('--prune-roots', default=os.path.join(ROOT, 'build'),
+                    help='comma-separated directories where finished raws may be pruned')
     a = ap.parse_args()
     if a.status:
         return show(a.out)
@@ -101,10 +152,56 @@ def main():
     def log(msg):
         print(time.strftime('%H:%M:%S'), msg, flush=True)
 
+    dpaths = [p for p in a.disk_paths.split(',') if p and os.path.exists(p)]
+    droots = [p for p in a.prune_roots.split(',') if p]
+    dlast, dgb, dfull = 0.0, None, False
+
+    def disk_check():
+        """Measure; above soft prune and hold new jobs; above hard kill the newest job. Returns True when full."""
+        nonlocal dgb
+        dgb = disk_gb(dpaths)
+        if dgb is None:
+            log('disk: du failed, treating as full')
+            return True
+        full = dgb >= a.disk_soft
+        if full:
+            pending = {n for n, s0 in st.items() if s0['state'] in ('wait', 'run')}
+            keep = set()
+            for n in pending:
+                for d in jobs.get(n, {}).get('deps', []):
+                    keep |= {d, d.split('_', 1)[-1]}     # te_x / mx_x jobs write to a directory named x
+            freed = prune_raws(droots, keep, dgb - (a.disk_soft - 5), log)
+            if freed:
+                dgb = disk_gb(dpaths) or dgb
+            full = dgb >= a.disk_soft
+        if dgb >= a.disk_hard and run:
+            n = max(run, key=lambda m: st[m]['start'])
+            try:
+                os.killpg(run[n].pid, signal.SIGTERM)
+                run[n].wait(timeout=60)
+            except Exception:                            # noqa: BLE001
+                try:
+                    os.killpg(run[n].pid, signal.SIGKILL)
+                except OSError:
+                    pass
+            del run[n]
+            st[n].update(state='wait', rc=None, start=None, pid=None, requeued=st[n].get('requeued', 0) + 1)
+            log(f'disk: {dgb:.1f} GB >= hard {a.disk_hard} GB: killed and requeued {n}')
+        with open(os.path.join(a.out, 'disk.txt'), 'w') as fh:
+            fh.write(f"{time.strftime('%F %H:%M:%S')} {dgb:.1f} GB (soft {a.disk_soft}, hard {a.disk_hard})"
+                     f"{' FULL: no new jobs' if full else ''}\n")
+        return full
+
     reload()
     for n, pid in adopted.items():
         log(f'adopted {n} (pid {pid}, started by an earlier instance)')
     while True:
+        if time.time() - dlast >= a.disk_every:
+            was = dfull
+            dfull = disk_check()
+            dlast = time.time()
+            if dfull != was:
+                log(f'disk: {dgb if dgb is not None else -1:.1f} GB, ' + ('holding new jobs' if dfull else 'resumed'))
         for n, pid in list(adopted.items()):
             if not alive(pid):                            # its exit status isn't ours to read: judge by its log
                 st[n].update(state='exited', rc=None, end=time.time())
@@ -134,7 +231,7 @@ def main():
                  and all(st[d]['state'] in ('ok', 'exited') for d in j['deps'])]
         ready.sort(key=lambda n: (-jobs[n].get('prio', 0), -jobs[n]['est']))   # prio first (a long chain's head)
         reserved = 0                                      # threads held back for a longer job that didn't fit
-        for n in ready:
+        for n in ready if not dfull else []:
             j = jobs[n]
             used = sum(jobs[m]['threads'] for m in run) + sum(st[m]['threads'] for m in adopted) + reserved
             if used + j['threads'] > a.budget and (run or adopted):

@@ -1,6 +1,6 @@
 # Handoff: the full verification run (existing checks + receiver / system gaps 1-6)
 
-> Running: step 2/4 jobs since 2026-11-21 09:41: ok 538, run 7, wait 428
+> Not started: the first full run (from 2026-11-21 09:41, last heartbeat 2026-11-22 23:42: ok 538, run 7, wait 428) was lost with the sim server's pod; its results were never saved. Restart with the 2026-11-25 changes below.
 
 [![Made with Claude](https://img.shields.io/badge/Made%20with-Claude-D97757?logo=anthropic&logoColor=white)](https://claude.com/claude-code)
 
@@ -13,6 +13,26 @@ criterion and its planted error), [`verification.md`](verification.md) (the exis
 (`build/verify/verdict.md`) that lists every check PASS / FAIL / pending and every planted error caught / missed /
 pending; then the write-up.** Nothing in the design changes. A FAIL in the verdict is a result to report, not a
 reason to stop or to fix anything.
+
+## Changes after the lost first run (2026-11-25)
+
+The first full run was lost: the sim server's pod was replaced some time after 2026-11-22 23:42, and every output was
+in `build/` on that pod. The cause is not known; the pod's disk limit was 50 GB, which the run may have reached. Three
+changes, tested with the dry run:
+- **Results saved to git as the run goes.** Hourly (with the progress line), `sim/verify/persist.py save` copies every
+  job's small outputs (`result.json`, `*.txt`, `*.csv`, logs; logs over 64 kB as their last 200 lines; no `*.raw`,
+  no decks) to `results/full_run/`, committed and pushed with the progress line. If `results/full_run/` holds a run
+  when the driver starts, it **resumes**: `persist.py restore` puts the files back in `build/`, sets the jobs that
+  were running (and any finished job an unfinished job depends on) back to wait, and the scheduler skips the rest.
+  `FRESH=1` starts over. Tested: a dry run killed during a job, `build/` deleted, restarted: only that job ran again.
+- **Disk watch in the scheduler** (Matt: the pod now has 100 GB and must stay under 80 GB). Every 2 minutes
+  `du` over `DISK_PATHS` (`/foss/designs`, `/tmp`, `$HOME`) goes to `build/verify/full/disk.txt` and the progress
+  line. At `DISK_SOFT` (70 GB) no new job starts and finished jobs' `*.raw` files are deleted, oldest first, down to
+  65 GB (only raws beside a newer `result.json`, never one a waiting job depends on: the verdicts read `result.json`).
+  At `DISK_HARD` (78 GB) the most recently started job is killed and set back to wait. Tested on a small directory
+  with MB limits: prune, hold and kill all happened as described.
+- **No GitHub Actions on this branch:** every workflow has `branches-ignore: [verify-gaps]`, and the driver's commits
+  carry `[skip ci]`.
 
 ## What runs
 
@@ -43,6 +63,10 @@ first guesses), `python3 sim/verify/jobs_full.py` prints them.
 BUDGET=28        # CPUs for the scheduler (the sim server has 30: keep 2 free)
 LOAD=30          # the scheduler starts no job while the 1-minute load is above this
 TOUT_H=96        # the scheduler's give-up time (h)
+DISK_SOFT=70     # GB: hold new jobs, prune finished raws
+DISK_HARD=78     # GB: kill and requeue the newest job (the pod's disk is 100 GB; stay under 80)
+DISK_PATHS=/foss/designs,/tmp,$HOME
+FRESH=0          # 1: ignore results/full_run/ and start over
 ```
 Corners per job are in the job files and in [`plan_verify_gaps.md`](plan_verify_gaps.md) Table I: 27 °C, 3.3 V and
 tt / ss / ff unless the job is a gap-3 PVT job (corner policy: `handoff_autonomy.md`; 0 / 70 °C and ±4.5 % only for
@@ -67,7 +91,7 @@ this sign-off-style run). To trim the run, edit the job files (`plan_verify_gaps
    4. done.
    With `GITHUB_TOKEN` set, the driver itself commits and pushes the `>` line at the top of this file at each step
    change and hourly in step 2. Without it, do that yourself at each step change.
-4. While it runs: `python3 sim/sched.py --status --out build/verify/full`. A failed job is retried by bumping its
+4. While it runs: `python3 sim/sched.py --status --out build/verify/full`; disk use in `build/verify/full/disk.txt`. A failed job is retried by bumping its
    entry in the `RERUN` dict of its job file (the scheduler re-runs a failed job whose command changed); at most
    twice, then leave it failed: the verdict reports it.
 5. When `DONE` appears, write up (below) straight away.
