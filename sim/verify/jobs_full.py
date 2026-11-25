@@ -100,6 +100,12 @@ if __name__ == "__main__":
     for b in (28, 30):
         print(f"budget {b}: >= {max(cpu / b, longest['est'] / 3600):.1f} h wall (CPU-bound lower limit)")
 
+# 2026-11-25: coupling_budget reads the settled -95 dBm tt RX result; on a fresh pod only this run's own copy exists
+for j in JOBS:
+    if j["name"] == "coupling_budget":
+        j["deps"] = j.get("deps", []) + ["te_rxs_c_tt_-95_p"]
+        j["cmd"] += "  # 2026-11-25: after te_rxs_c_tt_-95_p"
+
 # 2026-11-21: the scheduler process keeps its first import of tile_verify, so the packet's new thread count
 # (tile_verify.py: 8 -> 3) is set here too, for the running scheduler's reload
 for j in JOBS:

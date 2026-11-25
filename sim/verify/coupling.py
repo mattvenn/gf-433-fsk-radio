@@ -156,7 +156,9 @@ def main():
         (OUT / 'budget.json').write_text(json.dumps(r, indent=1))
         print(r)
         sys.exit(1)
-    rs = json.loads((REPO / 'build/tile_sims_nb/rxs_c_tt_-95_p/result.json').read_text())
+    # the settled -95 dBm tt RX run: the full run's own (job te_rxs_c_tt_-95_p), else the 2026-11-20 one (smoke runs)
+    rp = REPO / 'build/verify/tile_existing/rxs_c_tt_-95_p/result.json'
+    rs = json.loads((rp if rp.exists() else REPO / 'build/tile_sims_nb/rxs_c_tt_-95_p/result.json').read_text())
     vmix = rs['mix_i_v'] * 10 ** (-10 / 20)                        # -105 dBm at the mixer output (V, amplitude)
     vsig = h[0][0] * vmix
     r.update(h_sig=h[0][0], v_mix_105=vmix, v_sig_cmp_105=vsig)
