@@ -1,6 +1,6 @@
 # Handoff: the full verification run (existing checks + receiver / system gaps 1-6)
 
-> Running: step 1/4 setup since 2026-11-26 10:09
+> Running: step 2/4 jobs since 2026-11-26 10:09, estimate budget 28: >= 73.8 h wall (CPU-bound lower limit)
 
 [![Made with Claude](https://img.shields.io/badge/Made%20with-Claude-D97757?logo=anthropic&logoColor=white)](https://claude.com/claude-code)
 
