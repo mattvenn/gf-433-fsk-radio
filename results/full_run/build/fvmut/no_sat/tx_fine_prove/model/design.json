@@ -1,0 +1,4598 @@
+{
+  "$schema": "https://raw.githubusercontent.com/YosysHQ/yosys/main/misc/jny.schema.json",
+  "generator": "Yosys 0.69 (git sha1 9f75ca1f9, Release, GNU /usr/bin/c++ 13.3.0)",
+  "version": "0.0.1",
+  "invocation": "write_jny -no-connections ../model/design.json ",
+  "features": ["attributes", "properties"],
+  "modules": [
+      {
+        "name": "fv_tx_fine",
+        "cell_sorts": [
+          {
+            "type": "$scopeinfo",
+            "ports": [
+
+            ],
+            "cells": [
+                {
+                  "name": "chk",
+                  "attributes": {
+                    "cell_module_not_derived": "00000000000000000000000000000001",
+                    "cell_src": "fv_tx_fine.sv:50.14-54.20",
+                    "module": "fv_props",
+                    "module_keep": "00000000000000000000000000000001",
+                    "module_src": "fv_tx_fine.sv:58.1-164.10"
+                  },
+                  "parameters": {
+                    "TYPE": "module"
+                  }
+                },
+                {
+                  "name": "dut",
+                  "attributes": {
+                    "cell_module_not_derived": "00000000000000000000000000000001",
+                    "cell_src": "fv_tx_fine.sv:25.13-27.70",
+                    "module": "tx_fine",
+                    "module_src": "tx_fine.v:58.1-239.10"
+                  },
+                  "parameters": {
+                    "TYPE": "module"
+                  }
+                },
+                {
+                  "name": "dut.g_dec",
+                  "attributes": {
+                    "cell_module_not_derived": "00000000000000000000000000000001",
+                    "cell_src": "tx_fine.v:173.11-173.73",
+                    "hdlname": "dut g_dec",
+                    "module": "tx_cg",
+                    "module_src": "tx_fine.v:47.1-56.10"
+                  },
+                  "parameters": {
+                    "TYPE": "module"
+                  }
+                },
+                {
+                  "name": "dut.g_eff",
+                  "attributes": {
+                    "cell_module_not_derived": "00000000000000000000000000000001",
+                    "cell_src": "tx_fine.v:172.11-172.81",
+                    "hdlname": "dut g_eff",
+                    "module": "tx_cg",
+                    "module_src": "tx_fine.v:47.1-56.10"
+                  },
+                  "parameters": {
+                    "TYPE": "module"
+                  }
+                },
+                {
+                  "name": "dut.g_sd",
+                  "attributes": {
+                    "cell_module_not_derived": "00000000000000000000000000000001",
+                    "cell_src": "tx_fine.v:175.11-175.89",
+                    "hdlname": "dut g_sd",
+                    "module": "tx_cg",
+                    "module_src": "tx_fine.v:47.1-56.10"
+                  },
+                  "parameters": {
+                    "TYPE": "module"
+                  }
+                },
+                {
+                  "name": "dut.g_spi",
+                  "attributes": {
+                    "cell_module_not_derived": "00000000000000000000000000000001",
+                    "cell_src": "tx_fine.v:112.11-112.57",
+                    "hdlname": "dut g_spi",
+                    "module": "tx_cg",
+                    "module_src": "tx_fine.v:47.1-56.10"
+                  },
+                  "parameters": {
+                    "TYPE": "module"
+                  }
+                }
+            ]
+          },
+          {
+            "type": "$dlatch",
+            "ports": [
+                {
+                  "name": "D",
+                  "direction": "io",
+                  "range": [0, 0]
+                },
+                {
+                  "name": "EN",
+                  "direction": "io",
+                  "range": [0, 0]
+                },
+                {
+                  "name": "Q",
+                  "direction": "",
+                  "range": [0, 0]
+                }
+            ],
+            "cells": [
+                {
+                  "name": "$flatten\\dut.\\g_dec.$auto$proc_dlatch.cc:547:proc_dlatch$571",
+                  "attributes": {
+                    "src": "tx_fine.v:52.5-53.29"
+                  },
+                  "parameters": {
+                    "EN_POLARITY": "00000000000000000000000000000000",
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.\\g_eff.$auto$proc_dlatch.cc:547:proc_dlatch$571",
+                  "attributes": {
+                    "src": "tx_fine.v:52.5-53.29"
+                  },
+                  "parameters": {
+                    "EN_POLARITY": "00000000000000000000000000000000",
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.\\g_sd.$auto$proc_dlatch.cc:547:proc_dlatch$571",
+                  "attributes": {
+                    "src": "tx_fine.v:52.5-53.29"
+                  },
+                  "parameters": {
+                    "EN_POLARITY": "00000000000000000000000000000000",
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.\\g_spi.$auto$proc_dlatch.cc:547:proc_dlatch$571",
+                  "attributes": {
+                    "src": "tx_fine.v:52.5-53.29"
+                  },
+                  "parameters": {
+                    "EN_POLARITY": "00000000000000000000000000000000",
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                }
+            ]
+          },
+          {
+            "type": "$reduce_or",
+            "ports": [
+                {
+                  "name": "A",
+                  "direction": "io",
+                  "range": [8, 0]
+                },
+                {
+                  "name": "Y",
+                  "direction": "",
+                  "range": [0, 0]
+                }
+            ],
+            "cells": [
+                {
+                  "name": "$flatten\\dut.$reduce_or$tx_fine.v:175$51",
+                  "attributes": {
+                    "src": "tx_fine.v:175.42-175.53"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000001000",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$reduce_or$tx_fine.v:175$52",
+                  "attributes": {
+                    "src": "tx_fine.v:175.56-175.60"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000001000",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                }
+            ]
+          },
+          {
+            "type": "$xor",
+            "ports": [
+                {
+                  "name": "A",
+                  "direction": "io",
+                  "range": [0, 0]
+                },
+                {
+                  "name": "B",
+                  "direction": "io",
+                  "range": [0, 0]
+                },
+                {
+                  "name": "Y",
+                  "direction": "",
+                  "range": [0, 0]
+                }
+            ],
+            "cells": [
+                {
+                  "name": "$flatten\\dut.$xor$tx_fine.v:162$39",
+                  "attributes": {
+                    "src": "tx_fine.v:162.24-162.42"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$xor$tx_fine.v:172$48",
+                  "attributes": {
+                    "src": "tx_fine.v:172.43-172.62"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                }
+            ]
+          },
+          {
+            "type": "$pmux",
+            "ports": [
+                {
+                  "name": "A",
+                  "direction": "io",
+                  "range": [12, 0]
+                },
+                {
+                  "name": "B",
+                  "direction": "io",
+                  "range": [84, 0]
+                },
+                {
+                  "name": "S",
+                  "direction": "io",
+                  "range": [7, 0]
+                },
+                {
+                  "name": "Y",
+                  "direction": "",
+                  "range": [12, 0]
+                }
+            ],
+            "cells": [
+                {
+                  "name": "$flatten\\dut.$procmux$401",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "tx_fine.v:121.40-121.40|tx_fine.v:115.9-124.16"
+                  },
+                  "parameters": {
+                    "S_WIDTH": "00000000000000000000000000000111",
+                    "WIDTH": "00000000000000000000000000001100"
+                  }
+                }
+            ]
+          },
+          {
+            "type": "$or",
+            "ports": [
+                {
+                  "name": "A",
+                  "direction": "io",
+                  "range": [0, 0]
+                },
+                {
+                  "name": "B",
+                  "direction": "io",
+                  "range": [0, 0]
+                },
+                {
+                  "name": "Y",
+                  "direction": "",
+                  "range": [0, 0]
+                }
+            ],
+            "cells": [
+                {
+                  "name": "$flatten\\dut.$or$tx_fine.v:111$14",
+                  "attributes": {
+                    "src": "tx_fine.v:111.19-111.33"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$or$tx_fine.v:172$49",
+                  "attributes": {
+                    "src": "tx_fine.v:172.33-172.63"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$or$tx_fine.v:175$55",
+                  "attributes": {
+                    "src": "tx_fine.v:175.33-175.72"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                }
+            ]
+          },
+          {
+            "type": "$ge",
+            "ports": [
+                {
+                  "name": "A",
+                  "direction": "io",
+                  "range": [5, 0]
+                },
+                {
+                  "name": "B",
+                  "direction": "io",
+                  "range": [3, 0]
+                },
+                {
+                  "name": "Y",
+                  "direction": "",
+                  "range": [0, 0]
+                }
+            ],
+            "cells": [
+                {
+                  "name": "$flatten\\dut.$ge$tx_fine.v:153$34",
+                  "attributes": {
+                    "src": "tx_fine.v:153.29-153.43"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000101",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000011",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                }
+            ]
+          },
+          {
+            "type": "$check",
+            "ports": [
+                {
+                  "name": "A",
+                  "direction": "io",
+                  "range": [0, 0]
+                },
+                {
+                  "name": "ARGS",
+                  "direction": "io",
+                  "range": [0, 0]
+                },
+                {
+                  "name": "EN",
+                  "direction": "io",
+                  "range": [0, 0]
+                },
+                {
+                  "name": "TRG",
+                  "direction": "io",
+                  "range": [0, 0]
+                }
+            ],
+            "cells": [
+                {
+                  "name": "_witness_.check_assume_fv_tx_fine_sv_31_160",
+                  "attributes": {
+                    "hdlname": "_witness_ check_assume_fv_tx_fine_sv_31_160",
+                    "keep": "00000000000000000000000000000001",
+                    "src": "fv_tx_fine.sv:31.29-31.44"
+                  },
+                  "parameters": {
+                    "ARGS_WIDTH": "00000000000000000000000000000000",
+                    "FLAVOR": "assume",
+                    "FORMAT": true,
+                    "PRIORITY": "11111111111111111111111111111111",
+                    "TRG_ENABLE": "00000000000000000000000000000000",
+                    "TRG_POLARITY": true,
+                    "TRG_WIDTH": "00000000000000000000000000000000"
+                  }
+                },
+                {
+                  "name": "_witness_.check_assume_fv_tx_fine_sv_32_165",
+                  "attributes": {
+                    "hdlname": "_witness_ check_assume_fv_tx_fine_sv_32_165",
+                    "keep": "00000000000000000000000000000001",
+                    "src": "fv_tx_fine.sv:32.42-32.68"
+                  },
+                  "parameters": {
+                    "ARGS_WIDTH": "00000000000000000000000000000000",
+                    "FLAVOR": "assume",
+                    "FORMAT": true,
+                    "PRIORITY": "11111111111111111111111111111111",
+                    "TRG_ENABLE": "00000000000000000000000000000000",
+                    "TRG_POLARITY": true,
+                    "TRG_WIDTH": "00000000000000000000000000000000"
+                  }
+                },
+                {
+                  "name": "_witness_.check_flatten_chk__assert_fv_tx_fine_sv_125_216",
+                  "attributes": {
+                    "hdlname": "_witness_ check_flatten_chk__assert_fv_tx_fine_sv_125_216",
+                    "keep": "00000000000000000000000000000001",
+                    "src": "fv_tx_fine.sv:125.9-125.94"
+                  },
+                  "parameters": {
+                    "ARGS_WIDTH": "00000000000000000000000000000000",
+                    "FLAVOR": "assert",
+                    "FORMAT": true,
+                    "PRIORITY": "11111111111111111111111111111111",
+                    "TRG_ENABLE": "00000000000000000000000000000000",
+                    "TRG_POLARITY": true,
+                    "TRG_WIDTH": "00000000000000000000000000000000"
+                  }
+                },
+                {
+                  "name": "_witness_.check_flatten_chk__assert_fv_tx_fine_sv_126_222",
+                  "attributes": {
+                    "hdlname": "_witness_ check_flatten_chk__assert_fv_tx_fine_sv_126_222",
+                    "keep": "00000000000000000000000000000001",
+                    "src": "fv_tx_fine.sv:126.9-126.76"
+                  },
+                  "parameters": {
+                    "ARGS_WIDTH": "00000000000000000000000000000000",
+                    "FLAVOR": "assert",
+                    "FORMAT": true,
+                    "PRIORITY": "11111111111111111111111111111110",
+                    "TRG_ENABLE": "00000000000000000000000000000000",
+                    "TRG_POLARITY": true,
+                    "TRG_WIDTH": "00000000000000000000000000000000"
+                  }
+                },
+                {
+                  "name": "_witness_.check_flatten_chk__assert_fv_tx_fine_sv_136_240",
+                  "attributes": {
+                    "hdlname": "_witness_ check_flatten_chk__assert_fv_tx_fine_sv_136_240",
+                    "keep": "00000000000000000000000000000001",
+                    "src": "fv_tx_fine.sv:136.30-136.54"
+                  },
+                  "parameters": {
+                    "ARGS_WIDTH": "00000000000000000000000000000000",
+                    "FLAVOR": "assert",
+                    "FORMAT": true,
+                    "PRIORITY": "11111111111111111111111111111111",
+                    "TRG_ENABLE": "00000000000000000000000000000000",
+                    "TRG_POLARITY": true,
+                    "TRG_WIDTH": "00000000000000000000000000000000"
+                  }
+                },
+                {
+                  "name": "_witness_.check_flatten_chk__assert_fv_tx_fine_sv_141_245",
+                  "attributes": {
+                    "hdlname": "_witness_ check_flatten_chk__assert_fv_tx_fine_sv_141_245",
+                    "keep": "00000000000000000000000000000001",
+                    "src": "fv_tx_fine.sv:141.9-141.52"
+                  },
+                  "parameters": {
+                    "ARGS_WIDTH": "00000000000000000000000000000000",
+                    "FLAVOR": "assert",
+                    "FORMAT": true,
+                    "PRIORITY": "11111111111111111111111111111111",
+                    "TRG_ENABLE": "00000000000000000000000000000000",
+                    "TRG_POLARITY": true,
+                    "TRG_WIDTH": "00000000000000000000000000000000"
+                  }
+                },
+                {
+                  "name": "_witness_.check_flatten_chk__assert_fv_tx_fine_sv_142_249",
+                  "attributes": {
+                    "hdlname": "_witness_ check_flatten_chk__assert_fv_tx_fine_sv_142_249",
+                    "keep": "00000000000000000000000000000001",
+                    "src": "fv_tx_fine.sv:142.9-142.91"
+                  },
+                  "parameters": {
+                    "ARGS_WIDTH": "00000000000000000000000000000000",
+                    "FLAVOR": "assert",
+                    "FORMAT": true,
+                    "PRIORITY": "11111111111111111111111111111110",
+                    "TRG_ENABLE": "00000000000000000000000000000000",
+                    "TRG_POLARITY": true,
+                    "TRG_WIDTH": "00000000000000000000000000000000"
+                  }
+                },
+                {
+                  "name": "_witness_.check_flatten_chk__assert_fv_tx_fine_sv_149_262",
+                  "attributes": {
+                    "hdlname": "_witness_ check_flatten_chk__assert_fv_tx_fine_sv_149_262",
+                    "keep": "00000000000000000000000000000001",
+                    "src": "fv_tx_fine.sv:149.41-149.74"
+                  },
+                  "parameters": {
+                    "ARGS_WIDTH": "00000000000000000000000000000000",
+                    "FLAVOR": "assert",
+                    "FORMAT": true,
+                    "PRIORITY": "11111111111111111111111111111111",
+                    "TRG_ENABLE": "00000000000000000000000000000000",
+                    "TRG_POLARITY": true,
+                    "TRG_WIDTH": "00000000000000000000000000000000"
+                  }
+                },
+                {
+                  "name": "_witness_.check_flatten_chk__assert_fv_tx_fine_sv_155_270",
+                  "attributes": {
+                    "hdlname": "_witness_ check_flatten_chk__assert_fv_tx_fine_sv_155_270",
+                    "keep": "00000000000000000000000000000001",
+                    "src": "fv_tx_fine.sv:155.9-155.29"
+                  },
+                  "parameters": {
+                    "ARGS_WIDTH": "00000000000000000000000000000000",
+                    "FLAVOR": "assert",
+                    "FORMAT": true,
+                    "PRIORITY": "11111111111111111111111111111111",
+                    "TRG_ENABLE": "00000000000000000000000000000000",
+                    "TRG_POLARITY": true,
+                    "TRG_WIDTH": "00000000000000000000000000000000"
+                  }
+                },
+                {
+                  "name": "_witness_.check_flatten_chk__assert_fv_tx_fine_sv_156_275",
+                  "attributes": {
+                    "hdlname": "_witness_ check_flatten_chk__assert_fv_tx_fine_sv_156_275",
+                    "keep": "00000000000000000000000000000001",
+                    "src": "fv_tx_fine.sv:156.31-156.53"
+                  },
+                  "parameters": {
+                    "ARGS_WIDTH": "00000000000000000000000000000000",
+                    "FLAVOR": "assert",
+                    "FORMAT": true,
+                    "PRIORITY": "11111111111111111111111111111110",
+                    "TRG_ENABLE": "00000000000000000000000000000000",
+                    "TRG_POLARITY": true,
+                    "TRG_WIDTH": "00000000000000000000000000000000"
+                  }
+                },
+                {
+                  "name": "_witness_.check_flatten_chk__assert_fv_tx_fine_sv_157_280",
+                  "attributes": {
+                    "hdlname": "_witness_ check_flatten_chk__assert_fv_tx_fine_sv_157_280",
+                    "keep": "00000000000000000000000000000001",
+                    "src": "fv_tx_fine.sv:157.31-157.53"
+                  },
+                  "parameters": {
+                    "ARGS_WIDTH": "00000000000000000000000000000000",
+                    "FLAVOR": "assert",
+                    "FORMAT": true,
+                    "PRIORITY": "11111111111111111111111111111101",
+                    "TRG_ENABLE": "00000000000000000000000000000000",
+                    "TRG_POLARITY": true,
+                    "TRG_WIDTH": "00000000000000000000000000000000"
+                  }
+                },
+                {
+                  "name": "_witness_.check_flatten_chk__assert_fv_tx_fine_sv_77_175",
+                  "attributes": {
+                    "hdlname": "_witness_ check_flatten_chk__assert_fv_tx_fine_sv_77_175",
+                    "keep": "00000000000000000000000000000001",
+                    "src": "fv_tx_fine.sv:77.9-77.71"
+                  },
+                  "parameters": {
+                    "ARGS_WIDTH": "00000000000000000000000000000000",
+                    "FLAVOR": "assert",
+                    "FORMAT": true,
+                    "PRIORITY": "11111111111111111111111111111111",
+                    "TRG_ENABLE": "00000000000000000000000000000000",
+                    "TRG_POLARITY": true,
+                    "TRG_WIDTH": "00000000000000000000000000000000"
+                  }
+                },
+                {
+                  "name": "_witness_.check_flatten_chk__assert_fv_tx_fine_sv_78_180",
+                  "attributes": {
+                    "hdlname": "_witness_ check_flatten_chk__assert_fv_tx_fine_sv_78_180",
+                    "keep": "00000000000000000000000000000001",
+                    "src": "fv_tx_fine.sv:78.9-78.52"
+                  },
+                  "parameters": {
+                    "ARGS_WIDTH": "00000000000000000000000000000000",
+                    "FLAVOR": "assert",
+                    "FORMAT": true,
+                    "PRIORITY": "11111111111111111111111111111110",
+                    "TRG_ENABLE": "00000000000000000000000000000000",
+                    "TRG_POLARITY": true,
+                    "TRG_WIDTH": "00000000000000000000000000000000"
+                  }
+                },
+                {
+                  "name": "_witness_.check_flatten_chk__assert_fv_tx_fine_sv_79_186",
+                  "attributes": {
+                    "hdlname": "_witness_ check_flatten_chk__assert_fv_tx_fine_sv_79_186",
+                    "keep": "00000000000000000000000000000001",
+                    "src": "fv_tx_fine.sv:79.9-79.55"
+                  },
+                  "parameters": {
+                    "ARGS_WIDTH": "00000000000000000000000000000000",
+                    "FLAVOR": "assert",
+                    "FORMAT": true,
+                    "PRIORITY": "11111111111111111111111111111101",
+                    "TRG_ENABLE": "00000000000000000000000000000000",
+                    "TRG_POLARITY": true,
+                    "TRG_WIDTH": "00000000000000000000000000000000"
+                  }
+                },
+                {
+                  "name": "_witness_.check_flatten_chk__assume_fv_tx_fine_sv_122_212",
+                  "attributes": {
+                    "hdlname": "_witness_ check_flatten_chk__assume_fv_tx_fine_sv_122_212",
+                    "keep": "00000000000000000000000000000001",
+                    "src": "fv_tx_fine.sv:122.17-122.40"
+                  },
+                  "parameters": {
+                    "ARGS_WIDTH": "00000000000000000000000000000000",
+                    "FLAVOR": "assume",
+                    "FORMAT": true,
+                    "PRIORITY": "11111111111111111111111111111111",
+                    "TRG_ENABLE": "00000000000000000000000000000000",
+                    "TRG_POLARITY": true,
+                    "TRG_WIDTH": "00000000000000000000000000000000"
+                  }
+                }
+            ]
+          },
+          {
+            "type": "$shl",
+            "ports": [
+                {
+                  "name": "A",
+                  "direction": "io",
+                  "range": [0, 0]
+                },
+                {
+                  "name": "B",
+                  "direction": "io",
+                  "range": [5, 0]
+                },
+                {
+                  "name": "Y",
+                  "direction": "",
+                  "range": [31, 0]
+                }
+            ],
+            "cells": [
+                {
+                  "name": "$flatten\\chk.$shl$fv_tx_fine.sv:142$250",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:142.28-142.51"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000101",
+                    "Y_WIDTH": "00000000000000000000000000011111"
+                  }
+                }
+            ]
+          },
+          {
+            "type": "$add",
+            "ports": [
+                {
+                  "name": "A",
+                  "direction": "io",
+                  "range": [5, 0]
+                },
+                {
+                  "name": "B",
+                  "direction": "io",
+                  "range": [0, 0]
+                },
+                {
+                  "name": "Y",
+                  "direction": "",
+                  "range": [5, 0]
+                }
+            ],
+            "cells": [
+                {
+                  "name": "$flatten\\chk.$add$fv_tx_fine.sv:101$201",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:101.39-101.49"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000101",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000101"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$add$fv_tx_fine.sv:120$210",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:120.53-120.65"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000110",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000110"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$add$fv_tx_fine.sv:141$246",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:141.27-141.40"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000011111",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000011111"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$add$tx_fine.v:136$26",
+                  "attributes": {
+                    "src": "tx_fine.v:136.27-136.40"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000101",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000101"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$add$tx_fine.v:163$40",
+                  "attributes": {
+                    "src": "tx_fine.v:163.30-163.49"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000010010",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000001100",
+                    "Y_WIDTH": "00000000000000000000000000010011"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$add$tx_fine.v:169$47",
+                  "attributes": {
+                    "src": "tx_fine.v:169.24-169.56"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000001000",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000001000",
+                    "Y_WIDTH": "00000000000000000000000000001001"
+                  }
+                }
+            ]
+          },
+          {
+            "type": "$and",
+            "ports": [
+                {
+                  "name": "A",
+                  "direction": "io",
+                  "range": [31, 0]
+                },
+                {
+                  "name": "B",
+                  "direction": "io",
+                  "range": [31, 0]
+                },
+                {
+                  "name": "Y",
+                  "direction": "",
+                  "range": [31, 0]
+                }
+            ],
+            "cells": [
+                {
+                  "name": "$flatten\\chk.$and$fv_tx_fine.sv:141$247",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:141.18-141.41"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000011111",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000011111",
+                    "Y_WIDTH": "00000000000000000000000000011111"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$and$fv_tx_fine.sv:89$195",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:89.19-89.41"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$and$tx_fine.v:238$132",
+                  "attributes": {
+                    "src": "tx_fine.v:238.19-238.28"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$and$tx_fine.v:90$9",
+                  "attributes": {
+                    "src": "tx_fine.v:90.21-90.43"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$and$tx_fine.v:91$11",
+                  "attributes": {
+                    "src": "tx_fine.v:91.21-91.43"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.\\g_dec.$and$tx_fine.v:54$4",
+                  "attributes": {
+                    "src": "tx_fine.v:54.19-54.29"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.\\g_eff.$and$tx_fine.v:54$4",
+                  "attributes": {
+                    "src": "tx_fine.v:54.19-54.29"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.\\g_sd.$and$tx_fine.v:54$4",
+                  "attributes": {
+                    "src": "tx_fine.v:54.19-54.29"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.\\g_spi.$and$tx_fine.v:54$4",
+                  "attributes": {
+                    "src": "tx_fine.v:54.19-54.29"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                }
+            ]
+          },
+          {
+            "type": "$eq",
+            "ports": [
+                {
+                  "name": "A",
+                  "direction": "io",
+                  "range": [5, 0]
+                },
+                {
+                  "name": "B",
+                  "direction": "io",
+                  "range": [4, 0]
+                },
+                {
+                  "name": "Y",
+                  "direction": "",
+                  "range": [0, 0]
+                }
+            ],
+            "cells": [
+                {
+                  "name": "$flatten\\chk.$eq$fv_tx_fine.sv:102$202",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:102.21-102.30"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000101",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000100",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$eq$fv_tx_fine.sv:125$217",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:125.17-125.39"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000001010",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000001010",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$eq$fv_tx_fine.sv:125$218",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:125.43-125.67"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000001000",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000001000",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$eq$fv_tx_fine.sv:125$220",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:125.71-125.93"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000001100",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000001100",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$eq$fv_tx_fine.sv:126$223",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:126.17-126.33"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000101",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000101",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$eq$fv_tx_fine.sv:126$224",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:126.37-126.55"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$eq$fv_tx_fine.sv:126$226",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:126.59-126.75"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000100",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000100",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$eq$fv_tx_fine.sv:136$241",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:136.38-136.53"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000010010",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000010010",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$eq$fv_tx_fine.sv:142$252",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:142.17-142.61"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000011111",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000011111",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$eq$fv_tx_fine.sv:142$254",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:142.65-142.90"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000101",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000101",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$eq$fv_tx_fine.sv:77$176",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:77.17-77.40"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000011111",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000011111",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$eq$fv_tx_fine.sv:77$177",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:77.44-77.59"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000101",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000101",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procmux$316_CMP0",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:107.58-107.58|fv_tx_fine.sv:103.21-110.28"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000011",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000011",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procmux$326_CMP0",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:106.59-106.59|fv_tx_fine.sv:103.21-110.28"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000011",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000010",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procmux$337_CMP0",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:105.58-105.58|fv_tx_fine.sv:103.21-110.28"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000011",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000010",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procmux$349_CMP0",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:104.58-104.58|fv_tx_fine.sv:103.21-110.28"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000011",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$eq$tx_fine.v:137$27",
+                  "attributes": {
+                    "src": "tx_fine.v:137.21-137.35"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000101",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000010",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$eq$tx_fine.v:142$31",
+                  "attributes": {
+                    "src": "tx_fine.v:142.21-142.36"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000101",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000100",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procmux$402_CMP0",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "tx_fine.v:121.40-121.40|tx_fine.v:115.9-124.16"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000011",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000011",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procmux$403_CMP0",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "tx_fine.v:120.44-120.44|tx_fine.v:115.9-124.16"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000011",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000011",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procmux$404_CMP0",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "tx_fine.v:119.41-119.41|tx_fine.v:115.9-124.16"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000011",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000011",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procmux$405_CMP0",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "tx_fine.v:118.35-118.35|tx_fine.v:115.9-124.16"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000011",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000010",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procmux$406_CMP0",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "tx_fine.v:117.44-117.44|tx_fine.v:115.9-124.16"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000011",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000010",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procmux$407_CMP0",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "tx_fine.v:116.44-116.44|tx_fine.v:115.9-124.16"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000011",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procmux$495_CMP0",
+                  "attributes": {
+                    "src": "tx_fine.v:147.64-147.64|tx_fine.v:143.21-150.28"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000011",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000011",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procmux$506_CMP0",
+                  "attributes": {
+                    "src": "tx_fine.v:146.65-146.65|tx_fine.v:143.21-150.28"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000011",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000010",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procmux$518_CMP0",
+                  "attributes": {
+                    "src": "tx_fine.v:145.64-145.64|tx_fine.v:143.21-150.28"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000011",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000010",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procmux$531_CMP0",
+                  "attributes": {
+                    "src": "tx_fine.v:144.64-144.64|tx_fine.v:143.21-150.28"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000011",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                }
+            ]
+          },
+          {
+            "type": "$adff",
+            "ports": [
+                {
+                  "name": "ARST",
+                  "direction": "io",
+                  "range": [0, 0]
+                },
+                {
+                  "name": "CLK",
+                  "direction": "io",
+                  "range": [0, 0]
+                },
+                {
+                  "name": "D",
+                  "direction": "io",
+                  "range": [0, 0]
+                },
+                {
+                  "name": "Q",
+                  "direction": "",
+                  "range": [0, 0]
+                }
+            ],
+            "cells": [
+                {
+                  "name": "$flatten\\chk.$procdff$579",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:147.5-148.65"
+                  },
+                  "parameters": {
+                    "ARST_POLARITY": "00000000000000000000000000000000",
+                    "ARST_VALUE": "1",
+                    "CLK_POLARITY": "1",
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procdff$584",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:117.5-120.66"
+                  },
+                  "parameters": {
+                    "ARST_POLARITY": "00000000000000000000000000000000",
+                    "ARST_VALUE": "000000",
+                    "CLK_POLARITY": "1",
+                    "WIDTH": "00000000000000000000000000000110"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procdff$589",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:92.5-112.12"
+                  },
+                  "parameters": {
+                    "ARST_POLARITY": "00000000000000000000000000000000",
+                    "ARST_VALUE": "000",
+                    "CLK_POLARITY": "1",
+                    "WIDTH": "00000000000000000000000000000011"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procdff$594",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:92.5-112.12"
+                  },
+                  "parameters": {
+                    "ARST_POLARITY": "00000000000000000000000000000000",
+                    "ARST_VALUE": "11",
+                    "CLK_POLARITY": "1",
+                    "WIDTH": "00000000000000000000000000000010"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procdff$599",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:92.5-112.12"
+                  },
+                  "parameters": {
+                    "ARST_POLARITY": "00000000000000000000000000000000",
+                    "ARST_VALUE": "00",
+                    "CLK_POLARITY": "1",
+                    "WIDTH": "00000000000000000000000000000010"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procdff$604",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:92.5-112.12"
+                  },
+                  "parameters": {
+                    "ARST_POLARITY": "00000000000000000000000000000000",
+                    "ARST_VALUE": "00000",
+                    "CLK_POLARITY": "1",
+                    "WIDTH": "00000000000000000000000000000101"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procdff$609",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:92.5-112.12"
+                  },
+                  "parameters": {
+                    "ARST_POLARITY": "00000000000000000000000000000000",
+                    "ARST_VALUE": "0000000000000000",
+                    "CLK_POLARITY": "1",
+                    "WIDTH": "00000000000000000000000000010000"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procdff$614",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:92.5-112.12"
+                  },
+                  "parameters": {
+                    "ARST_POLARITY": "00000000000000000000000000000000",
+                    "ARST_VALUE": "1000000000",
+                    "CLK_POLARITY": "1",
+                    "WIDTH": "00000000000000000000000000001010"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procdff$619",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:92.5-112.12"
+                  },
+                  "parameters": {
+                    "ARST_POLARITY": "00000000000000000000000000000000",
+                    "ARST_VALUE": "00000000",
+                    "CLK_POLARITY": "1",
+                    "WIDTH": "00000000000000000000000000001000"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procdff$624",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:92.5-112.12"
+                  },
+                  "parameters": {
+                    "ARST_POLARITY": "00000000000000000000000000000000",
+                    "ARST_VALUE": "000000000000",
+                    "CLK_POLARITY": "1",
+                    "WIDTH": "00000000000000000000000000001100"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procdff$629",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:92.5-112.12"
+                  },
+                  "parameters": {
+                    "ARST_POLARITY": "00000000000000000000000000000000",
+                    "ARST_VALUE": "00000",
+                    "CLK_POLARITY": "1",
+                    "WIDTH": "00000000000000000000000000000101"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procdff$634",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:92.5-112.12"
+                  },
+                  "parameters": {
+                    "ARST_POLARITY": "00000000000000000000000000000000",
+                    "ARST_VALUE": "0000",
+                    "CLK_POLARITY": "1",
+                    "WIDTH": "00000000000000000000000000000100"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procdff$642",
+                  "attributes": {
+                    "src": "tx_fine.v:222.17-223.60"
+                  },
+                  "parameters": {
+                    "ARST_POLARITY": "00000000000000000000000000000000",
+                    "ARST_VALUE": "0",
+                    "CLK_POLARITY": "0",
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procdff$647",
+                  "attributes": {
+                    "src": "tx_fine.v:222.17-223.60"
+                  },
+                  "parameters": {
+                    "ARST_POLARITY": "00000000000000000000000000000000",
+                    "ARST_VALUE": "0",
+                    "CLK_POLARITY": "0",
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procdff$652",
+                  "attributes": {
+                    "src": "tx_fine.v:222.17-223.60"
+                  },
+                  "parameters": {
+                    "ARST_POLARITY": "00000000000000000000000000000000",
+                    "ARST_VALUE": "0",
+                    "CLK_POLARITY": "0",
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procdff$657",
+                  "attributes": {
+                    "src": "tx_fine.v:222.17-223.60"
+                  },
+                  "parameters": {
+                    "ARST_POLARITY": "00000000000000000000000000000000",
+                    "ARST_VALUE": "0",
+                    "CLK_POLARITY": "0",
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procdff$662",
+                  "attributes": {
+                    "src": "tx_fine.v:222.17-223.60"
+                  },
+                  "parameters": {
+                    "ARST_POLARITY": "00000000000000000000000000000000",
+                    "ARST_VALUE": "0",
+                    "CLK_POLARITY": "0",
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procdff$667",
+                  "attributes": {
+                    "src": "tx_fine.v:222.17-223.60"
+                  },
+                  "parameters": {
+                    "ARST_POLARITY": "00000000000000000000000000000000",
+                    "ARST_VALUE": "0",
+                    "CLK_POLARITY": "0",
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procdff$672",
+                  "attributes": {
+                    "src": "tx_fine.v:222.17-223.60"
+                  },
+                  "parameters": {
+                    "ARST_POLARITY": "00000000000000000000000000000000",
+                    "ARST_VALUE": "0",
+                    "CLK_POLARITY": "0",
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procdff$677",
+                  "attributes": {
+                    "src": "tx_fine.v:219.17-220.60"
+                  },
+                  "parameters": {
+                    "ARST_POLARITY": "00000000000000000000000000000000",
+                    "ARST_VALUE": "0",
+                    "CLK_POLARITY": "1",
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procdff$682",
+                  "attributes": {
+                    "src": "tx_fine.v:236.5-237.61"
+                  },
+                  "parameters": {
+                    "ARST_POLARITY": "00000000000000000000000000000000",
+                    "ARST_VALUE": "0",
+                    "CLK_POLARITY": "0",
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procdff$687",
+                  "attributes": {
+                    "src": "tx_fine.v:233.5-234.75"
+                  },
+                  "parameters": {
+                    "ARST_POLARITY": "00000000000000000000000000000000",
+                    "ARST_VALUE": "00",
+                    "CLK_POLARITY": "1",
+                    "WIDTH": "00000000000000000000000000000010"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procdff$692",
+                  "attributes": {
+                    "src": "tx_fine.v:206.5-207.65"
+                  },
+                  "parameters": {
+                    "ARST_POLARITY": "00000000000000000000000000000000",
+                    "ARST_VALUE": "00",
+                    "CLK_POLARITY": "1",
+                    "WIDTH": "00000000000000000000000000000010"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procdff$704",
+                  "attributes": {
+                    "src": "tx_fine.v:194.5-202.12"
+                  },
+                  "parameters": {
+                    "ARST_POLARITY": "00000000000000000000000000000000",
+                    "ARST_VALUE": "1111111111111110000000000000000",
+                    "CLK_POLARITY": "1",
+                    "WIDTH": "00000000000000000000000000011111"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procdff$709",
+                  "attributes": {
+                    "src": "tx_fine.v:194.5-202.12"
+                  },
+                  "parameters": {
+                    "ARST_POLARITY": "00000000000000000000000000000000",
+                    "ARST_VALUE": "11111",
+                    "CLK_POLARITY": "1",
+                    "WIDTH": "00000000000000000000000000000101"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procdff$714",
+                  "attributes": {
+                    "src": "tx_fine.v:194.5-202.12"
+                  },
+                  "parameters": {
+                    "ARST_POLARITY": "00000000000000000000000000000000",
+                    "ARST_VALUE": "1000000000",
+                    "CLK_POLARITY": "1",
+                    "WIDTH": "00000000000000000000000000001010"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procdff$719",
+                  "attributes": {
+                    "src": "tx_fine.v:181.5-190.12"
+                  },
+                  "parameters": {
+                    "ARST_POLARITY": "00000000000000000000000000000000",
+                    "ARST_VALUE": "1",
+                    "CLK_POLARITY": "1",
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procdff$724",
+                  "attributes": {
+                    "src": "tx_fine.v:181.5-190.12"
+                  },
+                  "parameters": {
+                    "ARST_POLARITY": "00000000000000000000000000000000",
+                    "ARST_VALUE": "00000000",
+                    "CLK_POLARITY": "1",
+                    "WIDTH": "00000000000000000000000000001000"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procdff$729",
+                  "attributes": {
+                    "src": "tx_fine.v:177.5-179.34"
+                  },
+                  "parameters": {
+                    "ARST_POLARITY": "00000000000000000000000000000000",
+                    "ARST_VALUE": "100000000000000000",
+                    "CLK_POLARITY": "1",
+                    "WIDTH": "00000000000000000000000000010010"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procdff$734",
+                  "attributes": {
+                    "src": "tx_fine.v:127.5-157.12"
+                  },
+                  "parameters": {
+                    "ARST_POLARITY": "00000000000000000000000000000000",
+                    "ARST_VALUE": "0",
+                    "CLK_POLARITY": "1",
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procdff$739",
+                  "attributes": {
+                    "src": "tx_fine.v:127.5-157.12"
+                  },
+                  "parameters": {
+                    "ARST_POLARITY": "00000000000000000000000000000000",
+                    "ARST_VALUE": "1000000000",
+                    "CLK_POLARITY": "1",
+                    "WIDTH": "00000000000000000000000000001010"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procdff$744",
+                  "attributes": {
+                    "src": "tx_fine.v:127.5-157.12"
+                  },
+                  "parameters": {
+                    "ARST_POLARITY": "00000000000000000000000000000000",
+                    "ARST_VALUE": "00000000",
+                    "CLK_POLARITY": "1",
+                    "WIDTH": "00000000000000000000000000001000"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procdff$749",
+                  "attributes": {
+                    "src": "tx_fine.v:127.5-157.12"
+                  },
+                  "parameters": {
+                    "ARST_POLARITY": "00000000000000000000000000000000",
+                    "ARST_VALUE": "000000000000",
+                    "CLK_POLARITY": "1",
+                    "WIDTH": "00000000000000000000000000001100"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procdff$754",
+                  "attributes": {
+                    "src": "tx_fine.v:127.5-157.12"
+                  },
+                  "parameters": {
+                    "ARST_POLARITY": "00000000000000000000000000000000",
+                    "ARST_VALUE": "00000",
+                    "CLK_POLARITY": "1",
+                    "WIDTH": "00000000000000000000000000000101"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procdff$759",
+                  "attributes": {
+                    "src": "tx_fine.v:127.5-157.12"
+                  },
+                  "parameters": {
+                    "ARST_POLARITY": "00000000000000000000000000000000",
+                    "ARST_VALUE": "0000",
+                    "CLK_POLARITY": "1",
+                    "WIDTH": "00000000000000000000000000000100"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procdff$764",
+                  "attributes": {
+                    "src": "tx_fine.v:127.5-157.12"
+                  },
+                  "parameters": {
+                    "ARST_POLARITY": "00000000000000000000000000000000",
+                    "ARST_VALUE": "00000",
+                    "CLK_POLARITY": "1",
+                    "WIDTH": "00000000000000000000000000000101"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procdff$769",
+                  "attributes": {
+                    "src": "tx_fine.v:127.5-157.12"
+                  },
+                  "parameters": {
+                    "ARST_POLARITY": "00000000000000000000000000000000",
+                    "ARST_VALUE": "0000000000000000",
+                    "CLK_POLARITY": "1",
+                    "WIDTH": "00000000000000000000000000010000"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procdff$774",
+                  "attributes": {
+                    "src": "tx_fine.v:127.5-157.12"
+                  },
+                  "parameters": {
+                    "ARST_POLARITY": "00000000000000000000000000000000",
+                    "ARST_VALUE": "000000000000",
+                    "CLK_POLARITY": "1",
+                    "WIDTH": "00000000000000000000000000001100"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procdff$779",
+                  "attributes": {
+                    "src": "tx_fine.v:127.5-157.12"
+                  },
+                  "parameters": {
+                    "ARST_POLARITY": "00000000000000000000000000000000",
+                    "ARST_VALUE": "0",
+                    "CLK_POLARITY": "1",
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procdff$799",
+                  "attributes": {
+                    "src": "tx_fine.v:81.5-89.12"
+                  },
+                  "parameters": {
+                    "ARST_POLARITY": "00000000000000000000000000000000",
+                    "ARST_VALUE": "000",
+                    "CLK_POLARITY": "1",
+                    "WIDTH": "00000000000000000000000000000011"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procdff$804",
+                  "attributes": {
+                    "src": "tx_fine.v:81.5-89.12"
+                  },
+                  "parameters": {
+                    "ARST_POLARITY": "00000000000000000000000000000000",
+                    "ARST_VALUE": "111",
+                    "CLK_POLARITY": "1",
+                    "WIDTH": "00000000000000000000000000000011"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procdff$809",
+                  "attributes": {
+                    "src": "tx_fine.v:81.5-89.12"
+                  },
+                  "parameters": {
+                    "ARST_POLARITY": "00000000000000000000000000000000",
+                    "ARST_VALUE": "00",
+                    "CLK_POLARITY": "1",
+                    "WIDTH": "00000000000000000000000000000010"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procdff$814",
+                  "attributes": {
+                    "src": "tx_fine.v:81.5-89.12"
+                  },
+                  "parameters": {
+                    "ARST_POLARITY": "00000000000000000000000000000000",
+                    "ARST_VALUE": "000",
+                    "CLK_POLARITY": "1",
+                    "WIDTH": "00000000000000000000000000000011"
+                  }
+                }
+            ]
+          },
+          {
+            "type": "$gt",
+            "ports": [
+                {
+                  "name": "A",
+                  "direction": "io",
+                  "range": [19, 0]
+                },
+                {
+                  "name": "B",
+                  "direction": "io",
+                  "range": [18, 0]
+                },
+                {
+                  "name": "Y",
+                  "direction": "",
+                  "range": [0, 0]
+                }
+            ],
+            "cells": [
+                {
+                  "name": "$flatten\\chk.$gt$fv_tx_fine.sv:134$231",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:134.34-134.50"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000010011",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000010010",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$gt$tx_fine.v:200$101",
+                  "attributes": {
+                    "src": "tx_fine.v:200.32-200.48"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000101",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000101",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$gt$tx_fine.v:200$103",
+                  "attributes": {
+                    "src": "tx_fine.v:200.32-200.48"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000101",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000101",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$gt$tx_fine.v:200$105",
+                  "attributes": {
+                    "src": "tx_fine.v:200.32-200.48"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000101",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000101",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$gt$tx_fine.v:200$107",
+                  "attributes": {
+                    "src": "tx_fine.v:200.32-200.48"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000101",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000101",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$gt$tx_fine.v:200$109",
+                  "attributes": {
+                    "src": "tx_fine.v:200.32-200.48"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000101",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000101",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$gt$tx_fine.v:200$111",
+                  "attributes": {
+                    "src": "tx_fine.v:200.32-200.48"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000101",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000101",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$gt$tx_fine.v:200$113",
+                  "attributes": {
+                    "src": "tx_fine.v:200.32-200.48"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000101",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000101",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$gt$tx_fine.v:200$115",
+                  "attributes": {
+                    "src": "tx_fine.v:200.32-200.48"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000101",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000101",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$gt$tx_fine.v:200$117",
+                  "attributes": {
+                    "src": "tx_fine.v:200.32-200.48"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000101",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000101",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$gt$tx_fine.v:200$119",
+                  "attributes": {
+                    "src": "tx_fine.v:200.32-200.48"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000101",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000101",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$gt$tx_fine.v:200$121",
+                  "attributes": {
+                    "src": "tx_fine.v:200.32-200.48"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000101",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000101",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$gt$tx_fine.v:200$123",
+                  "attributes": {
+                    "src": "tx_fine.v:200.32-200.48"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000101",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000101",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$gt$tx_fine.v:200$63",
+                  "attributes": {
+                    "src": "tx_fine.v:200.32-200.48"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000101",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$gt$tx_fine.v:200$65",
+                  "attributes": {
+                    "src": "tx_fine.v:200.32-200.48"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000101",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$gt$tx_fine.v:200$67",
+                  "attributes": {
+                    "src": "tx_fine.v:200.32-200.48"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000101",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000010",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$gt$tx_fine.v:200$69",
+                  "attributes": {
+                    "src": "tx_fine.v:200.32-200.48"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000101",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000010",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$gt$tx_fine.v:200$71",
+                  "attributes": {
+                    "src": "tx_fine.v:200.32-200.48"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000101",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000011",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$gt$tx_fine.v:200$73",
+                  "attributes": {
+                    "src": "tx_fine.v:200.32-200.48"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000101",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000011",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$gt$tx_fine.v:200$75",
+                  "attributes": {
+                    "src": "tx_fine.v:200.32-200.48"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000101",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000011",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$gt$tx_fine.v:200$77",
+                  "attributes": {
+                    "src": "tx_fine.v:200.32-200.48"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000101",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000011",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$gt$tx_fine.v:200$79",
+                  "attributes": {
+                    "src": "tx_fine.v:200.32-200.48"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000101",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000100",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$gt$tx_fine.v:200$81",
+                  "attributes": {
+                    "src": "tx_fine.v:200.32-200.48"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000101",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000100",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$gt$tx_fine.v:200$83",
+                  "attributes": {
+                    "src": "tx_fine.v:200.32-200.48"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000101",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000100",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$gt$tx_fine.v:200$85",
+                  "attributes": {
+                    "src": "tx_fine.v:200.32-200.48"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000101",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000100",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$gt$tx_fine.v:200$87",
+                  "attributes": {
+                    "src": "tx_fine.v:200.32-200.48"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000101",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000100",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$gt$tx_fine.v:200$89",
+                  "attributes": {
+                    "src": "tx_fine.v:200.32-200.48"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000101",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000100",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$gt$tx_fine.v:200$91",
+                  "attributes": {
+                    "src": "tx_fine.v:200.32-200.48"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000101",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000100",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$gt$tx_fine.v:200$93",
+                  "attributes": {
+                    "src": "tx_fine.v:200.32-200.48"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000101",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000100",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$gt$tx_fine.v:200$95",
+                  "attributes": {
+                    "src": "tx_fine.v:200.32-200.48"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000101",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000101",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$gt$tx_fine.v:200$97",
+                  "attributes": {
+                    "src": "tx_fine.v:200.32-200.48"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000101",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000101",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$gt$tx_fine.v:200$99",
+                  "attributes": {
+                    "src": "tx_fine.v:200.32-200.48"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000101",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000101",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                }
+            ]
+          },
+          {
+            "type": "$mux",
+            "ports": [
+                {
+                  "name": "A",
+                  "direction": "io",
+                  "range": [0, 0]
+                },
+                {
+                  "name": "B",
+                  "direction": "io",
+                  "range": [0, 0]
+                },
+                {
+                  "name": "S",
+                  "direction": "io",
+                  "range": [0, 0]
+                },
+                {
+                  "name": "Y",
+                  "direction": "",
+                  "range": [0, 0]
+                }
+            ],
+            "cells": [
+                {
+                  "name": "$flatten\\chk.$procmux$288",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:157.13-157.29|fv_tx_fine.sv:157.9-157.54"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procmux$290",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:154.21-154.49|fv_tx_fine.sv:154.17-158.8"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procmux$292",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:156.13-156.29|fv_tx_fine.sv:156.9-156.54"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procmux$294",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:154.21-154.49|fv_tx_fine.sv:154.17-158.8"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procmux$296",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:154.21-154.49|fv_tx_fine.sv:154.17-158.8"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procmux$298",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:149.21-149.39|fv_tx_fine.sv:149.17-149.75"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procmux$300",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:140.21-140.28|fv_tx_fine.sv:140.17-143.8"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procmux$310",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:120.18-120.42|fv_tx_fine.sv:120.14-120.66"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000110"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procmux$313",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "fv_tx_fine.sv:119.18-119.24|fv_tx_fine.sv:119.14-120.66"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000110"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procmux$315",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:107.58-107.58|fv_tx_fine.sv:103.21-110.28"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000100"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procmux$317",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:102.21-102.46|fv_tx_fine.sv:102.17-110.28"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000100"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procmux$319",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:99.22-99.28|fv_tx_fine.sv:99.18-111.16"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000100"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procmux$322",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "fv_tx_fine.sv:98.17-98.23|fv_tx_fine.sv:98.13-111.16"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000100"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procmux$325",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:106.59-106.59|fv_tx_fine.sv:103.21-110.28"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000101"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procmux$327",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:102.21-102.46|fv_tx_fine.sv:102.17-110.28"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000101"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procmux$329",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:99.22-99.28|fv_tx_fine.sv:99.18-111.16"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000101"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procmux$332",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "fv_tx_fine.sv:98.17-98.23|fv_tx_fine.sv:98.13-111.16"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000101"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procmux$336",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:105.58-105.58|fv_tx_fine.sv:103.21-110.28"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000001100"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procmux$338",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:102.21-102.46|fv_tx_fine.sv:102.17-110.28"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000001100"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procmux$340",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:99.22-99.28|fv_tx_fine.sv:99.18-111.16"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000001100"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procmux$343",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "fv_tx_fine.sv:98.17-98.23|fv_tx_fine.sv:98.13-111.16"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000001100"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procmux$348",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:104.58-104.58|fv_tx_fine.sv:103.21-110.28"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000001000"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procmux$350",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:102.21-102.46|fv_tx_fine.sv:102.17-110.28"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000001000"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procmux$352",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:99.22-99.28|fv_tx_fine.sv:99.18-111.16"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000001000"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procmux$355",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "fv_tx_fine.sv:98.17-98.23|fv_tx_fine.sv:98.13-111.16"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000001000"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procmux$361",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:103.42-103.42|fv_tx_fine.sv:103.21-110.28"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000001010"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procmux$363",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:102.21-102.46|fv_tx_fine.sv:102.17-110.28"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000001010"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procmux$365",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:99.22-99.28|fv_tx_fine.sv:99.18-111.16"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000001010"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procmux$368",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "fv_tx_fine.sv:98.17-98.23|fv_tx_fine.sv:98.13-111.16"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000001010"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procmux$370",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:99.22-99.28|fv_tx_fine.sv:99.18-111.16"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000010000"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procmux$373",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "fv_tx_fine.sv:98.17-98.23|fv_tx_fine.sv:98.13-111.16"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000010000"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procmux$375",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:101.21-101.30|fv_tx_fine.sv:101.17-101.50"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000101"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procmux$377",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:99.22-99.28|fv_tx_fine.sv:99.18-111.16"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000101"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procmux$380",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "fv_tx_fine.sv:98.17-98.23|fv_tx_fine.sv:98.13-111.16"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000101"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procmux$382",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:76.21-76.49|fv_tx_fine.sv:76.17-80.8"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$ternary$fv_tx_fine.sv:133$237",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:133.26-135.88"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000010010"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$ternary$fv_tx_fine.sv:134$232",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:134.34-134.75"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000010010"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$ternary$fv_tx_fine.sv:134$236",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:134.26-135.88"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000010010"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$ternary$fv_tx_fine.sv:135$235",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:135.34-135.87"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000010010"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procmux$393",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "tx_fine.v:184.22-184.27|tx_fine.v:184.18-190.12"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procmux$396",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "tx_fine.v:184.22-184.27|tx_fine.v:184.18-190.12"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000001000"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procmux$463",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "tx_fine.v:137.21-137.35|tx_fine.v:137.17-141.20"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procmux$465",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "tx_fine.v:134.17-134.25|tx_fine.v:134.13-152.16"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procmux$468",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "tx_fine.v:131.22-131.26|tx_fine.v:131.18-157.12"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procmux$472",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "tx_fine.v:137.21-137.35|tx_fine.v:137.17-141.20"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000001100"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procmux$474",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "tx_fine.v:134.17-134.25|tx_fine.v:134.13-152.16"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000001100"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procmux$476",
+                  "attributes": {
+                    "src": "tx_fine.v:153.17-153.69|tx_fine.v:153.13-156.16"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000001100"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procmux$479",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "tx_fine.v:131.22-131.26|tx_fine.v:131.18-157.12"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000001100"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procmux$482",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "tx_fine.v:134.17-134.25|tx_fine.v:134.13-152.16"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000010000"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procmux$485",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "tx_fine.v:131.22-131.26|tx_fine.v:131.18-157.12"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000010000"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procmux$488",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "tx_fine.v:134.17-134.25|tx_fine.v:134.13-152.16"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000101"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procmux$491",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "tx_fine.v:131.22-131.26|tx_fine.v:131.18-157.12"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000101"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procmux$494",
+                  "attributes": {
+                    "src": "tx_fine.v:147.64-147.64|tx_fine.v:143.21-150.28"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000100"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procmux$496",
+                  "attributes": {
+                    "src": "tx_fine.v:142.21-142.47|tx_fine.v:142.17-151.20"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000100"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procmux$498",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "tx_fine.v:134.17-134.25|tx_fine.v:134.13-152.16"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000100"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procmux$501",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "tx_fine.v:131.22-131.26|tx_fine.v:131.18-157.12"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000100"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procmux$505",
+                  "attributes": {
+                    "src": "tx_fine.v:146.65-146.65|tx_fine.v:143.21-150.28"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000101"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procmux$507",
+                  "attributes": {
+                    "src": "tx_fine.v:142.21-142.47|tx_fine.v:142.17-151.20"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000101"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procmux$509",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "tx_fine.v:134.17-134.25|tx_fine.v:134.13-152.16"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000101"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procmux$512",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "tx_fine.v:131.22-131.26|tx_fine.v:131.18-157.12"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000101"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procmux$517",
+                  "attributes": {
+                    "src": "tx_fine.v:145.64-145.64|tx_fine.v:143.21-150.28"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000001100"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procmux$519",
+                  "attributes": {
+                    "src": "tx_fine.v:142.21-142.47|tx_fine.v:142.17-151.20"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000001100"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procmux$521",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "tx_fine.v:134.17-134.25|tx_fine.v:134.13-152.16"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000001100"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procmux$524",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "tx_fine.v:131.22-131.26|tx_fine.v:131.18-157.12"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000001100"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procmux$530",
+                  "attributes": {
+                    "src": "tx_fine.v:144.64-144.64|tx_fine.v:143.21-150.28"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000001000"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procmux$532",
+                  "attributes": {
+                    "src": "tx_fine.v:142.21-142.47|tx_fine.v:142.17-151.20"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000001000"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procmux$534",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "tx_fine.v:134.17-134.25|tx_fine.v:134.13-152.16"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000001000"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procmux$537",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "tx_fine.v:131.22-131.26|tx_fine.v:131.18-157.12"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000001000"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procmux$544",
+                  "attributes": {
+                    "src": "tx_fine.v:143.37-143.37|tx_fine.v:143.21-150.28"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000001010"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procmux$546",
+                  "attributes": {
+                    "src": "tx_fine.v:142.21-142.47|tx_fine.v:142.17-151.20"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000001010"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procmux$548",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "tx_fine.v:134.17-134.25|tx_fine.v:134.13-152.16"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000001010"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procmux$551",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "tx_fine.v:131.22-131.26|tx_fine.v:131.18-157.12"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000001010"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procmux$553",
+                  "attributes": {
+                    "src": "tx_fine.v:153.17-153.69|tx_fine.v:153.13-156.16"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procmux$556",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "tx_fine.v:131.22-131.26|tx_fine.v:131.18-157.12"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$ternary$tx_fine.v:163$42",
+                  "attributes": {
+                    "src": "tx_fine.v:163.24-163.74"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000010011"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$ternary$tx_fine.v:164$44",
+                  "attributes": {
+                    "src": "tx_fine.v:164.48-164.79"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000010010"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$ternary$tx_fine.v:164$45",
+                  "attributes": {
+                    "src": "tx_fine.v:164.42-165.56"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000010010"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$ternary$tx_fine.v:164$46",
+                  "attributes": {
+                    "src": "tx_fine.v:164.24-165.57"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000010010"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$ternary$tx_fine.v:175$53",
+                  "attributes": {
+                    "src": "tx_fine.v:175.34-175.60"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$procmux$390",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:31.21-31.27|fv_tx_fine.sv:31.17-31.45"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                }
+            ]
+          },
+          {
+            "type": "$ne",
+            "ports": [
+                {
+                  "name": "A",
+                  "direction": "io",
+                  "range": [5, 0]
+                },
+                {
+                  "name": "B",
+                  "direction": "io",
+                  "range": [5, 0]
+                },
+                {
+                  "name": "Y",
+                  "direction": "",
+                  "range": [0, 0]
+                }
+            ],
+            "cells": [
+                {
+                  "name": "$flatten\\chk.$ne$fv_tx_fine.sv:101$200",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:101.21-101.30"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000101",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000101",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$ne$fv_tx_fine.sv:120$208",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:120.28-120.42"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000110",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000110",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$ne$tx_fine.v:173$50",
+                  "attributes": {
+                    "src": "tx_fine.v:173.33-173.55"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000001010",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000001010",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$ne$fv_tx_fine.sv:32$166",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:32.50-32.67"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                }
+            ]
+          },
+          {
+            "type": "$le",
+            "ports": [
+                {
+                  "name": "A",
+                  "direction": "io",
+                  "range": [6, 0]
+                },
+                {
+                  "name": "B",
+                  "direction": "io",
+                  "range": [6, 0]
+                },
+                {
+                  "name": "Y",
+                  "direction": "",
+                  "range": [0, 0]
+                }
+            ],
+            "cells": [
+                {
+                  "name": "$flatten\\chk.$le$fv_tx_fine.sv:122$213",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:122.25-122.39"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000110",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000110",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$le$tx_fine.v:153$36",
+                  "attributes": {
+                    "src": "tx_fine.v:153.47-153.62"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000101",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000100",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                }
+            ]
+          },
+          {
+            "type": "$logic_and",
+            "ports": [
+                {
+                  "name": "A",
+                  "direction": "io",
+                  "range": [0, 0]
+                },
+                {
+                  "name": "B",
+                  "direction": "io",
+                  "range": [0, 0]
+                },
+                {
+                  "name": "Y",
+                  "direction": "",
+                  "range": [0, 0]
+                }
+            ],
+            "cells": [
+                {
+                  "name": "$flatten\\chk.$logic_and$fv_tx_fine.sv:102$204",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:102.21-102.46"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$logic_and$fv_tx_fine.sv:120$209",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:120.18-120.42"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$logic_and$fv_tx_fine.sv:125$219",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:125.17-125.67"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$logic_and$fv_tx_fine.sv:125$221",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:125.17-125.93"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$logic_and$fv_tx_fine.sv:126$225",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:126.17-126.55"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$logic_and$fv_tx_fine.sv:126$227",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:126.17-126.75"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$logic_and$fv_tx_fine.sv:142$255",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:142.17-142.90"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$logic_and$fv_tx_fine.sv:149$261",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:149.21-149.39"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$logic_and$fv_tx_fine.sv:149$264",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:149.49-149.73"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$logic_and$fv_tx_fine.sv:154$268",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:154.21-154.37"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$logic_and$fv_tx_fine.sv:154$269",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:154.21-154.49"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$logic_and$fv_tx_fine.sv:156$274",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:156.13-156.29"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$logic_and$fv_tx_fine.sv:156$277",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:156.39-156.52"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$logic_and$fv_tx_fine.sv:157$279",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:157.13-157.29"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$logic_and$fv_tx_fine.sv:157$282",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:157.39-157.52"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$logic_and$fv_tx_fine.sv:76$172",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:76.21-76.39"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$logic_and$fv_tx_fine.sv:76$174",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:76.21-76.49"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$logic_and$fv_tx_fine.sv:77$178",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:77.17-77.59"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$logic_and$fv_tx_fine.sv:77$179",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:77.17-77.70"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$logic_and$fv_tx_fine.sv:78$183",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:78.17-78.32"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$logic_and$fv_tx_fine.sv:78$185",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:78.17-78.51"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$logic_and$fv_tx_fine.sv:79$189",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:79.17-79.32"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$logic_and$fv_tx_fine.sv:79$191",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:79.17-79.42"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$logic_and$fv_tx_fine.sv:79$193",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:79.17-79.54"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$logic_and$tx_fine.v:142$33",
+                  "attributes": {
+                    "src": "tx_fine.v:142.21-142.47"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$logic_and$tx_fine.v:153$35",
+                  "attributes": {
+                    "src": "tx_fine.v:153.17-153.43"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$logic_and$tx_fine.v:153$37",
+                  "attributes": {
+                    "src": "tx_fine.v:153.17-153.62"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$logic_and$tx_fine.v:153$38",
+                  "attributes": {
+                    "src": "tx_fine.v:153.17-153.69"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                }
+            ]
+          },
+          {
+            "type": "$sub",
+            "ports": [
+                {
+                  "name": "A",
+                  "direction": "io",
+                  "range": [18, 0]
+                },
+                {
+                  "name": "B",
+                  "direction": "io",
+                  "range": [12, 0]
+                },
+                {
+                  "name": "Y",
+                  "direction": "",
+                  "range": [18, 0]
+                }
+            ],
+            "cells": [
+                {
+                  "name": "$flatten\\chk.$sub$fv_tx_fine.sv:135$234",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:135.63-135.87"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000010010",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000001100",
+                    "Y_WIDTH": "00000000000000000000000000010010"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$sub$fv_tx_fine.sv:142$251",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:142.27-142.60"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000011111",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000011111"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$sub$tx_fine.v:163$41",
+                  "attributes": {
+                    "src": "tx_fine.v:163.54-163.73"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000010010",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000001100",
+                    "Y_WIDTH": "00000000000000000000000000010011"
+                  }
+                }
+            ]
+          },
+          {
+            "type": "$ff",
+            "ports": [
+                {
+                  "name": "D",
+                  "direction": "io",
+                  "range": [0, 0]
+                },
+                {
+                  "name": "Q",
+                  "direction": "",
+                  "range": [0, 0]
+                }
+            ],
+            "cells": [
+                {
+                  "name": "$flatten\\chk.$procdff$572",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:153.5-153.88"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procdff$573",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:153.5-153.88"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procdff$574",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:153.5-153.88"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procdff$635",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:75.5-75.47"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$procdff$636",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:32.5-32.69"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$procdff$637",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:30.5-30.44"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                }
+            ]
+          },
+          {
+            "type": "$logic_not",
+            "ports": [
+                {
+                  "name": "A",
+                  "direction": "io",
+                  "range": [31, 0]
+                },
+                {
+                  "name": "Y",
+                  "direction": "",
+                  "range": [0, 0]
+                }
+            ],
+            "cells": [
+                {
+                  "name": "$flatten\\chk.$eq$fv_tx_fine.sv:141$248",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:141.17-141.51"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000011111",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$eq$fv_tx_fine.sv:149$263",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:149.60-149.73"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000001000",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$eq$fv_tx_fine.sv:78$184",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:78.36-78.51"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000100",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$logic_not$fv_tx_fine.sv:102$203",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:102.34-102.46"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$logic_not$fv_tx_fine.sv:148$258",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:148.54-148.64"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$logic_not$fv_tx_fine.sv:149$260",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:149.21-149.28"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$logic_not$fv_tx_fine.sv:155$271",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:155.17-155.22"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$logic_not$fv_tx_fine.sv:156$273",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:156.21-156.29"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$logic_not$fv_tx_fine.sv:156$276",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:156.45-156.52"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$logic_not$fv_tx_fine.sv:157$281",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:157.39-157.42"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$logic_not$fv_tx_fine.sv:76$173",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:76.43-76.49"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$logic_not$fv_tx_fine.sv:78$181",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:78.17-78.22"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$logic_not$fv_tx_fine.sv:78$182",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:78.26-78.32"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$logic_not$fv_tx_fine.sv:79$188",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:79.26-79.32"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$logic_not$fv_tx_fine.sv:79$190",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:79.36-79.42"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$logic_not$fv_tx_fine.sv:79$192",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:79.46-79.54"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$procmux$362_CMP0",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:103.42-103.42|fv_tx_fine.sv:103.21-110.28"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000011",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$logic_not$tx_fine.v:142$32",
+                  "attributes": {
+                    "src": "tx_fine.v:142.40-142.47"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procmux$408_CMP0",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "tx_fine.v:115.17-115.17|tx_fine.v:115.9-124.16"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000011",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$procmux$545_CMP0",
+                  "attributes": {
+                    "src": "tx_fine.v:143.37-143.37|tx_fine.v:143.21-150.28"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000011",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                }
+            ]
+          },
+          {
+            "type": "$lt",
+            "ports": [
+                {
+                  "name": "A",
+                  "direction": "io",
+                  "range": [18, 0]
+                },
+                {
+                  "name": "B",
+                  "direction": "io",
+                  "range": [12, 0]
+                },
+                {
+                  "name": "Y",
+                  "direction": "",
+                  "range": [0, 0]
+                }
+            ],
+            "cells": [
+                {
+                  "name": "$flatten\\chk.$lt$fv_tx_fine.sv:135$233",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:135.34-135.52"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000010010",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000001100",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                }
+            ]
+          },
+          {
+            "type": "$logic_or",
+            "ports": [
+                {
+                  "name": "A",
+                  "direction": "io",
+                  "range": [0, 0]
+                },
+                {
+                  "name": "B",
+                  "direction": "io",
+                  "range": [0, 0]
+                },
+                {
+                  "name": "Y",
+                  "direction": "",
+                  "range": [0, 0]
+                }
+            ],
+            "cells": [
+                {
+                  "name": "$flatten\\chk.$logic_or$fv_tx_fine.sv:155$272",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:155.17-155.28"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                }
+            ]
+          },
+          {
+            "type": "$not",
+            "ports": [
+                {
+                  "name": "A",
+                  "direction": "io",
+                  "range": [31, 0]
+                },
+                {
+                  "name": "Y",
+                  "direction": "",
+                  "range": [31, 0]
+                }
+            ],
+            "cells": [
+                {
+                  "name": "$flatten\\chk.$not$fv_tx_fine.sv:139$242",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:139.25-139.32"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000011111",
+                    "Y_WIDTH": "00000000000000000000000000011111"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$not$fv_tx_fine.sv:142$253",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:142.65-142.72"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000101",
+                    "Y_WIDTH": "00000000000000000000000000000101"
+                  }
+                },
+                {
+                  "name": "$flatten\\chk.$not$fv_tx_fine.sv:89$194",
+                  "attributes": {
+                    "src": "fv_tx_fine.sv:89.31-89.41"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$not$tx_fine.v:111$13",
+                  "attributes": {
+                    "src": "tx_fine.v:111.25-111.33"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$not$tx_fine.v:175$54",
+                  "attributes": {
+                    "src": "tx_fine.v:175.64-175.72"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$not$tx_fine.v:186$60",
+                  "attributes": {
+                    "src": "tx_fine.v:186.24-186.33"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$not$tx_fine.v:200$100",
+                  "attributes": {
+                    "src": "tx_fine.v:200.30-200.49"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$not$tx_fine.v:200$102",
+                  "attributes": {
+                    "src": "tx_fine.v:200.30-200.49"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$not$tx_fine.v:200$104",
+                  "attributes": {
+                    "src": "tx_fine.v:200.30-200.49"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$not$tx_fine.v:200$106",
+                  "attributes": {
+                    "src": "tx_fine.v:200.30-200.49"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$not$tx_fine.v:200$108",
+                  "attributes": {
+                    "src": "tx_fine.v:200.30-200.49"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$not$tx_fine.v:200$110",
+                  "attributes": {
+                    "src": "tx_fine.v:200.30-200.49"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$not$tx_fine.v:200$112",
+                  "attributes": {
+                    "src": "tx_fine.v:200.30-200.49"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$not$tx_fine.v:200$114",
+                  "attributes": {
+                    "src": "tx_fine.v:200.30-200.49"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$not$tx_fine.v:200$116",
+                  "attributes": {
+                    "src": "tx_fine.v:200.30-200.49"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$not$tx_fine.v:200$118",
+                  "attributes": {
+                    "src": "tx_fine.v:200.30-200.49"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$not$tx_fine.v:200$120",
+                  "attributes": {
+                    "src": "tx_fine.v:200.30-200.49"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$not$tx_fine.v:200$122",
+                  "attributes": {
+                    "src": "tx_fine.v:200.30-200.49"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$not$tx_fine.v:200$124",
+                  "attributes": {
+                    "src": "tx_fine.v:200.30-200.49"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$not$tx_fine.v:200$64",
+                  "attributes": {
+                    "src": "tx_fine.v:200.30-200.49"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$not$tx_fine.v:200$66",
+                  "attributes": {
+                    "src": "tx_fine.v:200.30-200.49"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$not$tx_fine.v:200$68",
+                  "attributes": {
+                    "src": "tx_fine.v:200.30-200.49"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$not$tx_fine.v:200$70",
+                  "attributes": {
+                    "src": "tx_fine.v:200.30-200.49"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$not$tx_fine.v:200$72",
+                  "attributes": {
+                    "src": "tx_fine.v:200.30-200.49"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$not$tx_fine.v:200$74",
+                  "attributes": {
+                    "src": "tx_fine.v:200.30-200.49"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$not$tx_fine.v:200$76",
+                  "attributes": {
+                    "src": "tx_fine.v:200.30-200.49"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$not$tx_fine.v:200$78",
+                  "attributes": {
+                    "src": "tx_fine.v:200.30-200.49"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$not$tx_fine.v:200$80",
+                  "attributes": {
+                    "src": "tx_fine.v:200.30-200.49"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$not$tx_fine.v:200$82",
+                  "attributes": {
+                    "src": "tx_fine.v:200.30-200.49"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$not$tx_fine.v:200$84",
+                  "attributes": {
+                    "src": "tx_fine.v:200.30-200.49"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$not$tx_fine.v:200$86",
+                  "attributes": {
+                    "src": "tx_fine.v:200.30-200.49"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$not$tx_fine.v:200$88",
+                  "attributes": {
+                    "src": "tx_fine.v:200.30-200.49"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$not$tx_fine.v:200$90",
+                  "attributes": {
+                    "src": "tx_fine.v:200.30-200.49"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$not$tx_fine.v:200$92",
+                  "attributes": {
+                    "src": "tx_fine.v:200.30-200.49"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$not$tx_fine.v:200$94",
+                  "attributes": {
+                    "src": "tx_fine.v:200.30-200.49"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$not$tx_fine.v:200$96",
+                  "attributes": {
+                    "src": "tx_fine.v:200.30-200.49"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$not$tx_fine.v:200$98",
+                  "attributes": {
+                    "src": "tx_fine.v:200.30-200.49"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$not$tx_fine.v:201$125",
+                  "attributes": {
+                    "src": "tx_fine.v:201.23-201.35"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000101",
+                    "Y_WIDTH": "00000000000000000000000000000101"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$not$tx_fine.v:220$135",
+                  "attributes": {
+                    "src": "tx_fine.v:220.57-220.59"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$not$tx_fine.v:223$138",
+                  "attributes": {
+                    "src": "tx_fine.v:223.57-223.59"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$not$tx_fine.v:223$141",
+                  "attributes": {
+                    "src": "tx_fine.v:223.57-223.59"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$not$tx_fine.v:223$144",
+                  "attributes": {
+                    "src": "tx_fine.v:223.57-223.59"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$not$tx_fine.v:223$147",
+                  "attributes": {
+                    "src": "tx_fine.v:223.57-223.59"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$not$tx_fine.v:223$150",
+                  "attributes": {
+                    "src": "tx_fine.v:223.57-223.59"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$not$tx_fine.v:223$153",
+                  "attributes": {
+                    "src": "tx_fine.v:223.57-223.59"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$not$tx_fine.v:223$156",
+                  "attributes": {
+                    "src": "tx_fine.v:223.57-223.59"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$not$tx_fine.v:90$8",
+                  "attributes": {
+                    "src": "tx_fine.v:90.33-90.43"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$not$tx_fine.v:91$10",
+                  "attributes": {
+                    "src": "tx_fine.v:91.21-91.31"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$flatten\\dut.$not$tx_fine.v:92$12",
+                  "attributes": {
+                    "src": "tx_fine.v:92.16-92.24"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                }
+            ]
+          }
+        ],
+        "attributes": {
+            "keep": "00000000000000000000000000000001",
+            "top": "00000000000000000000000000000001",
+            "src": "fv_tx_fine.sv:17.1-56.10"
+        }
+      }
+  ]
+}

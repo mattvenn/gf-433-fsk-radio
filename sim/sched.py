@@ -50,6 +50,7 @@ import time
 import traceback
 from pathlib import Path
 
+BACKFILL = 3600                                           # jobs this short (s) may run in reserved threads
 H_RESERVE = 3600                                          # jobs this long (s) reserve their threads
 RAMP = 90                                                 # s: a fresh job counts at its declared threads
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))   # the repo (sim/sched.py)
@@ -329,16 +330,24 @@ def main():
                 # nothing else started for ~7 h at load 7)
                 if j['est'] >= H_RESERVE and j.get('reserve', True) and j['threads'] <= a.load and not reserved:
                     reserved += j['threads']
-                continue
+                    continue
+                # backfill: a short job may use the reserved threads, never more of them in total than are reserved,
+                # so when the long jobs ahead finish the reserving job still fits (gf-433, 2026-11-26: a 4-thread job
+                # reserved at load 24 from 04:14 to 10:00 and 4 CPUs sat idle with 333 1-thread jobs ready)
+                bf = sum(jobs[m]['threads'] for m in run if st[m].get('backfill'))
+                if not (reserved and j['est'] <= BACKFILL and bf + j['threads'] <= reserved
+                        and busy - reserved + j['threads'] <= a.load and declared + j['threads'] <= a.budget):
+                    continue
+                st[n]['backfill'] = True
             fh = open(os.path.join(a.out, 'logs', n + '.log'), 'w')
             run[n] = subprocess.Popen(['bash', '-c', j['cmd']], cwd=ROOT, stdout=fh, stderr=subprocess.STDOUT,
                                       start_new_session=True)
-            st[n].update(state='run', start=time.time(), pid=run[n].pid, cmd=j['cmd'])
+            st[n].update(state='run', start=time.time(), pid=run[n].pid, cmd=j['cmd'], backfill=st[n].get('backfill', False))
             cpu.pop(n, None)                              # a rerun starts its stall clock afresh (2026-11-17: a requeued
                                                           # job inherited its first run's reading and was killed at once)
             if j.get('stagger'):
                 last[j['stagger'][0]] = time.time()
-            log(f'start {n} ({j["threads"]} thr, est {j["est"] / 60:.0f} min; load {busy - reserved:.1f} + {j["threads"]}, '
+            log(f'start {n}{" (backfill)" if st[n]["backfill"] else ""} ({j["threads"]} thr, est {j["est"] / 60:.0f} min; load {busy - reserved:.1f} + {j["threads"]}, '
                 f'declared {declared + j["threads"]})')
         # stalled: no CPU in the job's whole session for --stall minutes
         now = time.time()

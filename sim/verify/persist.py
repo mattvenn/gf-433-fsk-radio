@@ -54,7 +54,9 @@ def save():
             continue
         out = DST / rel
         out.parent.mkdir(parents=True, exist_ok=True)
-        if size > MAX:                                   # long logs: keep the tail (the verdict reads the end)
+        # long logs: keep the tail (the verdict reads the end). JSON whole: a truncated status.json can't resume (2026-11-26:
+        # at 974 jobs it passed 64 KB, was saved only as status.json.tail, and a restart took the fresh-start path)
+        if size > MAX and p.suffix != '.json':
             out = out.with_name(out.name + '.tail')
             lines = p.read_text(errors='replace').splitlines()[-TAIL:]
             txt = f'[tail: last {len(lines)} lines of {size} bytes]\n' + '\n'.join(lines) + '\n'

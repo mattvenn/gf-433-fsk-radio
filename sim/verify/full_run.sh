@@ -81,7 +81,9 @@ push_line "Running: step 1/$NSTEP setup since $(date '+%F %H:%M')"
   echo "magic (pinned, for PEX only): $($HOME/.local/magic642/bin/magic -dnull -noconsole --version 2>&1 | tail -1)"
   echo "cores: $(nproc), load $LOAD, budget $BUDGET, disk soft $DISK_SOFT / hard $DISK_HARD GB"
 } > "$F/setup.txt" 2>&1
-if [ "$RESUME" = 1 ]; then
+if [ "$RESUME" = 1 ] && [ -s "$F/status.json" ]; then     # same pod (a scheduler restart): the live status is newer than
+  echo "resumed in place from $F/status.json" >> "$F/setup.txt"  # the saved copy; still-running jobs are adopted
+elif [ "$RESUME" = 1 ]; then
   python3 sim/verify/persist.py restore >> "$F/setup.txt" 2>&1 || fail 1 setup "$F/setup.txt"
   echo "resumed from $RES" >> "$F/setup.txt"
 elif [ "$DRY" = 0 ]; then
