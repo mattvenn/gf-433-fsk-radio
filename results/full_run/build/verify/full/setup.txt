@@ -1,4 +1,4 @@
-git 7467688 verify-gaps
+git ae650c5 verify-gaps
 ngspice: ** ngspice-47 : Circuit level simulation program
 magic: 8.3.684
 netgen: Netgen 1.5.323 compiled on Tue Sep 22 03:35:51 PM CEST 2026
