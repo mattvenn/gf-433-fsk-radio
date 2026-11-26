@@ -1030,3 +1030,4 @@
 10:07:27 done rate_tt_-10 (rc 0, 2.5 min)
 10:07:37 start rate_tt_0 (1 thr, est 5 min; load 26.9 + 1, declared 2)
 10:08:28 done fskpre_pex_tt (rc 0, 3.5 min)
+10:09:36 (restart: the scheduler instance started 10:04:56 ran a fresh start by mistake and was killed; status.json rebuilt from this log)

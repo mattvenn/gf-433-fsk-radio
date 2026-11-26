@@ -24,3 +24,4 @@
 2026-11-26 10:04:49 step 1/4 setup: started
 2026-11-26 10:04:54 step 1/4 setup: done: git ae650c5 verify-gaps; 973 jobs, 2067 CPU-hours
 2026-11-26 10:04:54 step 2/4 jobs: started
+2026-11-26 10:09:51 step 1/4 setup: started
