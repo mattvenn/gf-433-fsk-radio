@@ -1,0 +1,68 @@
+{
+ "name": "fsk_c_tt_-70_n4",
+ "flags": [],
+ "case": {
+  "kind": "fsk",
+  "rx_en": 1,
+  "step": 2e-11,
+  "outstep": 5e-09,
+  "tstop": 0.00013200007399999999,
+  "pre": "rxset_c_tt",
+  "hold": 1.23479,
+  "save": "v(uo_out4) v(uo_out5) v(oi_p) v(oi_n) v(oq_p) v(oq_n) v(bi_p) v(bi_n) v(bq_p) v(bq_n) v(vap) v(nb)",
+  "threads": 6,
+  "npre": 2,
+  "fsk": {
+   "bits": [
+    1,
+    0,
+    1,
+    1,
+    0,
+    1,
+    1
+   ],
+   "rate": 50000.0,
+   "dev": 100000.0,
+   "level": -70,
+   "lead": 2.000037e-06
+  },
+  "nf": null,
+  "nseed": null,
+  "est": 58080
+ },
+ "deck_temp": 27.0,
+ "deck_vsa": 3.3,
+ "deck_vsd": 3.3,
+ "runtime_s": 51224.0,
+ "counts": [
+  -8,
+  8,
+  -8,
+  -8,
+  8,
+  -8
+ ],
+ "sign": -1,
+ "delay_us": 0.5,
+ "preamble_score": -16.0,
+ "n_data": 4,
+ "bit_errors": 0,
+ "errors_at": [],
+ "glitches": 0,
+ "min_abs_count": 8,
+ "level_dbm": -70,
+ "nf": null,
+ "seed": null,
+ "bits_sent": [
+  1,
+  0,
+  1,
+  1,
+  0,
+  1
+ ],
+ "oi_mean": -0.044625640898475545,
+ "oi_rms": 1.4990779201936977,
+ "mix_i_mean_mv": -3.2198320488306824
+}

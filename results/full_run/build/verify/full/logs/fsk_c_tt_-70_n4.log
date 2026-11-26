@@ -1,0 +1,38 @@
+{
+ "name": "fsk_c_tt_-70_n4",
+ "flags": [],
+ "deck_temp": 27.0,
+ "deck_vsa": 3.3,
+ "deck_vsd": 3.3,
+ "runtime_s": 51224.0,
+ "counts": [
+  -8,
+  8,
+  -8,
+  -8,
+  8,
+  -8
+ ],
+ "sign": -1,
+ "delay_us": 0.5,
+ "preamble_score": -16.0,
+ "n_data": 4,
+ "bit_errors": 0,
+ "errors_at": [],
+ "glitches": 0,
+ "min_abs_count": 8,
+ "level_dbm": -70,
+ "nf": null,
+ "seed": null,
+ "bits_sent": [
+  1,
+  0,
+  1,
+  1,
+  0,
+  1
+ ],
+ "oi_mean": -0.044625640898475545,
+ "oi_rms": 1.4990779201936977,
+ "mix_i_mean_mv": -3.2198320488306824
+}

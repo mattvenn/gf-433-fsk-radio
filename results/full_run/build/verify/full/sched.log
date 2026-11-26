@@ -1015,3 +1015,6 @@
 01:22:43 start pvt_tt_0_3.30_pu (4 thr, est 267 min; load 24.0 + 4, declared 28)
 03:07:07 done fsk_pex_tt_-95_n16 (rc 0, 489.0 min)
 03:10:58 done fsk_pex_tt_-70_n16 (rc 0, 492.8 min)
+04:14:20 done fsk_c_tt_-70_n4 (rc 0, 853.8 min)
+04:14:40 start pvt_tt_0_3.45_pu (4 thr, est 267 min; load 23.5 + 4, declared 24)
+04:16:10 start pvt_tt_27_3.15_pu (4 thr, est 267 min; load 23.4 + 4, declared 28)
