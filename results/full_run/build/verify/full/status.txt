@@ -33,3 +33,4 @@
 2026-11-26 14:10 progress: ok 519, run 10, wait 442; disk 13.1 GB
 2026-11-26 15:10 progress: ok 521, run 10, wait 440; disk 13.2 GB
 2026-11-26 16:10 progress: ok 527, run 10, wait 434; disk 13.3 GB
+2026-11-26 17:10 progress: ok 534, run 10, wait 425; disk 14.1 GB
