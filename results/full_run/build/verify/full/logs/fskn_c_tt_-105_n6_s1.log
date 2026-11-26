@@ -1,0 +1,42 @@
+{
+ "name": "fskn_c_tt_-105_n6_s1",
+ "flags": [],
+ "deck_temp": 27.0,
+ "deck_vsa": 3.3,
+ "deck_vsd": 3.3,
+ "runtime_s": 77661.0,
+ "counts": [
+  -8,
+  7,
+  5,
+  8,
+  -7,
+  7,
+  -7,
+  -8
+ ],
+ "sign": -1,
+ "delay_us": 0.5,
+ "preamble_score": -15.0,
+ "n_data": 6,
+ "bit_errors": 0,
+ "errors_at": [],
+ "glitches": 0,
+ "min_abs_count": 5,
+ "level_dbm": -105,
+ "nf": 7.3,
+ "seed": 1,
+ "bits_sent": [
+  1,
+  0,
+  0,
+  0,
+  1,
+  0,
+  1,
+  1
+ ],
+ "oi_mean": -0.002879801136426967,
+ "oi_rms": 0.07027542938377963,
+ "mix_i_mean_mv": -3.1835578369420334
+}
