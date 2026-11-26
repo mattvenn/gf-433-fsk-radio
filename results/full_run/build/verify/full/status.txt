@@ -27,3 +27,4 @@
 2026-11-26 10:09:51 step 1/4 setup: started
 2026-11-26 10:09:56 step 1/4 setup: done: git 94c2838 verify-gaps; 973 jobs, 2067 CPU-hours
 2026-11-26 10:09:56 step 2/4 jobs: started
+2026-11-26 11:10 progress: ok 510, run 8, wait 456; disk 12.5 GB
