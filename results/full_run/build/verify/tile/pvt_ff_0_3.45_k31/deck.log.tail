@@ -1,23 +1,4 @@
-[tail: last 200 lines of 297559 bytes]
- Reference value :  5.84936e-07
- Reference value :  5.85011e-07
- Reference value :  5.85076e-07
- Reference value :  5.85151e-07
- Reference value :  5.85221e-07
- Reference value :  5.85296e-07
- Reference value :  5.85371e-07
- Reference value :  5.85446e-07
- Reference value :  5.85496e-07
- Reference value :  5.85561e-07
- Reference value :  5.85631e-07
- Reference value :  5.85701e-07
- Reference value :  5.85771e-07
- Reference value :  5.85846e-07
- Reference value :  5.85921e-07
- Reference value :  5.85996e-07
- Reference value :  5.86056e-07
- Reference value :  5.86121e-07
- Reference value :  5.86191e-07
+[tail: last 200 lines of 298140 bytes]
  Reference value :  5.86251e-07
  Reference value :  5.86316e-07
  Reference value :  5.86381e-07
@@ -199,3 +180,22 @@
  Reference value :  5.98676e-07
  Reference value :  5.98736e-07
  Reference value :  5.98806e-07
+ Reference value :  5.98871e-07
+ Reference value :  5.98941e-07
+ Reference value :  5.99011e-07
+ Reference value :  5.99066e-07
+ Reference value :  5.99121e-07
+ Reference value :  5.99196e-07
+ Reference value :  5.99276e-07
+ Reference value :  5.99356e-07
+ Reference value :  5.99431e-07
+ Reference value :  5.99511e-07
+ Reference value :  5.99586e-07
+ Reference value :  5.99661e-07
+ Reference value :  5.99736e-07
+ Reference value :  5.99796e-07
+ Reference value :  5.99871e-07
+ Reference value :  5.99946e-07
+No. of Data Rows : 120008
+binary raw file "out.raw"
+ngspice-47 done

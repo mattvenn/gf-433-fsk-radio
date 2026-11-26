@@ -5394,20 +5394,24 @@
   "threads": 4
  },
  "pvt_ff_0_3.45_k31": {
-  "state": "run",
+  "state": "ok",
   "threads": 1,
   "backfill": true,
   "start": 1795721415.820097,
   "pid": 292134,
-  "cmd": "cd /foss/designs/gf-433-fsk-radio && TILE_SIMS_OUT=/foss/designs/gf-433-fsk-radio/build/verify/tile python3 sim/verify/tile_verify.py run pvt_ff_0_3.45_k31"
+  "cmd": "cd /foss/designs/gf-433-fsk-radio && TILE_SIMS_OUT=/foss/designs/gf-433-fsk-radio/build/verify/tile python3 sim/verify/tile_verify.py run pvt_ff_0_3.45_k31",
+  "rc": 0,
+  "end": 1795723856.5082183
  },
  "pvt_ff_0_3.45_k0": {
-  "state": "run",
+  "state": "ok",
   "threads": 1,
   "backfill": true,
   "start": 1795721546.3857481,
   "pid": 292245,
-  "cmd": "cd /foss/designs/gf-433-fsk-radio && TILE_SIMS_OUT=/foss/designs/gf-433-fsk-radio/build/verify/tile python3 sim/verify/tile_verify.py run pvt_ff_0_3.45_k0"
+  "cmd": "cd /foss/designs/gf-433-fsk-radio && TILE_SIMS_OUT=/foss/designs/gf-433-fsk-radio/build/verify/tile python3 sim/verify/tile_verify.py run pvt_ff_0_3.45_k0",
+  "rc": 0,
+  "end": 1795723987.0459874
  },
  "pvt_ff_0_3.45_set": {
   "state": "wait",
@@ -5426,20 +5430,24 @@
   "threads": 4
  },
  "pvt_ff_27_3.15_k31": {
-  "state": "run",
+  "state": "ok",
   "threads": 1,
   "backfill": true,
   "start": 1795722962.5647044,
   "pid": 292746,
-  "cmd": "cd /foss/designs/gf-433-fsk-radio && TILE_SIMS_OUT=/foss/designs/gf-433-fsk-radio/build/verify/tile python3 sim/verify/tile_verify.py run pvt_ff_27_3.15_k31"
+  "cmd": "cd /foss/designs/gf-433-fsk-radio && TILE_SIMS_OUT=/foss/designs/gf-433-fsk-radio/build/verify/tile python3 sim/verify/tile_verify.py run pvt_ff_27_3.15_k31",
+  "rc": 0,
+  "end": 1795725403.0210516
  },
  "pvt_ff_27_3.15_k0": {
-  "state": "run",
+  "state": "ok",
   "threads": 1,
   "backfill": true,
   "start": 1795723042.9560745,
   "pid": 292835,
-  "cmd": "cd /foss/designs/gf-433-fsk-radio && TILE_SIMS_OUT=/foss/designs/gf-433-fsk-radio/build/verify/tile python3 sim/verify/tile_verify.py run pvt_ff_27_3.15_k0"
+  "cmd": "cd /foss/designs/gf-433-fsk-radio && TILE_SIMS_OUT=/foss/designs/gf-433-fsk-radio/build/verify/tile python3 sim/verify/tile_verify.py run pvt_ff_27_3.15_k0",
+  "rc": 0,
+  "end": 1795725443.320759
  },
  "pvt_ff_27_3.15_set": {
   "state": "wait",
@@ -5458,12 +5466,24 @@
   "threads": 4
  },
  "pvt_ff_27_3.30_k31": {
-  "state": "wait",
-  "threads": 1
+  "state": "ok",
+  "threads": 1,
+  "backfill": true,
+  "start": 1795723856.5103257,
+  "pid": 293238,
+  "cmd": "cd /foss/designs/gf-433-fsk-radio && TILE_SIMS_OUT=/foss/designs/gf-433-fsk-radio/build/verify/tile python3 sim/verify/tile_verify.py run pvt_ff_27_3.30_k31",
+  "rc": 0,
+  "end": 1795726306.9507546
  },
  "pvt_ff_27_3.30_k0": {
-  "state": "wait",
-  "threads": 1
+  "state": "ok",
+  "threads": 1,
+  "backfill": true,
+  "start": 1795723987.0483947,
+  "pid": 293339,
+  "cmd": "cd /foss/designs/gf-433-fsk-radio && TILE_SIMS_OUT=/foss/designs/gf-433-fsk-radio/build/verify/tile python3 sim/verify/tile_verify.py run pvt_ff_27_3.30_k0",
+  "rc": 0,
+  "end": 1795726407.421189
  },
  "pvt_ff_27_3.30_set": {
   "state": "wait",
@@ -5482,12 +5502,20 @@
   "threads": 4
  },
  "pvt_ff_27_3.45_k31": {
-  "state": "wait",
-  "threads": 1
+  "state": "run",
+  "threads": 1,
+  "backfill": true,
+  "start": 1795725403.0234053,
+  "pid": 293829,
+  "cmd": "cd /foss/designs/gf-433-fsk-radio && TILE_SIMS_OUT=/foss/designs/gf-433-fsk-radio/build/verify/tile python3 sim/verify/tile_verify.py run pvt_ff_27_3.45_k31"
  },
  "pvt_ff_27_3.45_k0": {
-  "state": "wait",
-  "threads": 1
+  "state": "run",
+  "threads": 1,
+  "backfill": true,
+  "start": 1795725443.3244658,
+  "pid": 293907,
+  "cmd": "cd /foss/designs/gf-433-fsk-radio && TILE_SIMS_OUT=/foss/designs/gf-433-fsk-radio/build/verify/tile python3 sim/verify/tile_verify.py run pvt_ff_27_3.45_k0"
  },
  "pvt_ff_27_3.45_set": {
   "state": "wait",
@@ -5506,12 +5534,20 @@
   "threads": 4
  },
  "pvt_ff_70_3.15_k31": {
-  "state": "wait",
-  "threads": 1
+  "state": "run",
+  "threads": 1,
+  "backfill": true,
+  "start": 1795726306.9533617,
+  "pid": 294225,
+  "cmd": "cd /foss/designs/gf-433-fsk-radio && TILE_SIMS_OUT=/foss/designs/gf-433-fsk-radio/build/verify/tile python3 sim/verify/tile_verify.py run pvt_ff_70_3.15_k31"
  },
  "pvt_ff_70_3.15_k0": {
-  "state": "wait",
-  "threads": 1
+  "state": "run",
+  "threads": 1,
+  "backfill": true,
+  "start": 1795726407.4234624,
+  "pid": 294326,
+  "cmd": "cd /foss/designs/gf-433-fsk-radio && TILE_SIMS_OUT=/foss/designs/gf-433-fsk-radio/build/verify/tile python3 sim/verify/tile_verify.py run pvt_ff_70_3.15_k0"
  },
  "pvt_ff_70_3.15_set": {
   "state": "wait",
@@ -6306,7 +6342,7 @@
   "threads": 1
  },
  "_sched": {
-  "beat": 1795723836.2679079,
+  "beat": 1795727441.7969139,
   "pid": 276616
  }
 }
