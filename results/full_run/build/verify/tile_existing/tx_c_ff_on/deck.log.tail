@@ -1,51 +1,4 @@
-[tail: last 200 lines of 610523 bytes]
- Reference value :  1.18469e-06
- Reference value :  1.18476e-06
- Reference value :  1.18482e-06
- Reference value :  1.18489e-06
- Reference value :  1.18495e-06
- Reference value :  1.18500e-06
- Reference value :  1.18506e-06
- Reference value :  1.18512e-06
- Reference value :  1.18518e-06
- Reference value :  1.18524e-06
- Reference value :  1.18530e-06
- Reference value :  1.18537e-06
- Reference value :  1.18543e-06
- Reference value :  1.18548e-06
- Reference value :  1.18554e-06
- Reference value :  1.18561e-06
- Reference value :  1.18567e-06
- Reference value :  1.18573e-06
- Reference value :  1.18579e-06
- Reference value :  1.18584e-06
- Reference value :  1.18590e-06
- Reference value :  1.18596e-06
- Reference value :  1.18603e-06
- Reference value :  1.18609e-06
- Reference value :  1.18615e-06
- Reference value :  1.18621e-06
- Reference value :  1.18627e-06
- Reference value :  1.18633e-06
- Reference value :  1.18640e-06
- Reference value :  1.18646e-06
- Reference value :  1.18652e-06
- Reference value :  1.18659e-06
- Reference value :  1.18664e-06
- Reference value :  1.18670e-06
- Reference value :  1.18676e-06
- Reference value :  1.18684e-06
- Reference value :  1.18690e-06
- Reference value :  1.18696e-06
- Reference value :  1.18703e-06
- Reference value :  1.18708e-06
- Reference value :  1.18715e-06
- Reference value :  1.18722e-06
- Reference value :  1.18729e-06
- Reference value :  1.18736e-06
- Reference value :  1.18743e-06
- Reference value :  1.18750e-06
- Reference value :  1.18757e-06
+[tail: last 200 lines of 612000 bytes]
  Reference value :  1.18764e-06
  Reference value :  1.18770e-06
  Reference value :  1.18776e-06
@@ -199,3 +152,50 @@
  Reference value :  1.19711e-06
  Reference value :  1.19718e-06
  Reference value :  1.19724e-06
+ Reference value :  1.19731e-06
+ Reference value :  1.19737e-06
+ Reference value :  1.19743e-06
+ Reference value :  1.19749e-06
+ Reference value :  1.19755e-06
+ Reference value :  1.19760e-06
+ Reference value :  1.19765e-06
+ Reference value :  1.19772e-06
+ Reference value :  1.19778e-06
+ Reference value :  1.19784e-06
+ Reference value :  1.19791e-06
+ Reference value :  1.19798e-06
+ Reference value :  1.19804e-06
+ Reference value :  1.19810e-06
+ Reference value :  1.19815e-06
+ Reference value :  1.19821e-06
+ Reference value :  1.19827e-06
+ Reference value :  1.19833e-06
+ Reference value :  1.19839e-06
+ Reference value :  1.19846e-06
+ Reference value :  1.19853e-06
+ Reference value :  1.19860e-06
+ Reference value :  1.19867e-06
+ Reference value :  1.19875e-06
+ Reference value :  1.19881e-06
+ Reference value :  1.19888e-06
+ Reference value :  1.19894e-06
+ Reference value :  1.19900e-06
+ Reference value :  1.19906e-06
+ Reference value :  1.19913e-06
+ Reference value :  1.19920e-06
+ Reference value :  1.19926e-06
+ Reference value :  1.19932e-06
+ Reference value :  1.19938e-06
+ Reference value :  1.19944e-06
+ Reference value :  1.19950e-06
+ Reference value :  1.19956e-06
+ Reference value :  1.19961e-06
+ Reference value :  1.19968e-06
+ Reference value :  1.19974e-06
+ Reference value :  1.19980e-06
+ Reference value :  1.19986e-06
+ Reference value :  1.19992e-06
+ Reference value :  1.19998e-06
+No. of Data Rows : 240008
+binary raw file "out.raw"
+ngspice-47 done
