@@ -21,3 +21,4 @@
 2026-11-26 07:16 progress: ok 505, run 6, wait 463; disk 11.8 GB
 2026-11-26 08:16 progress: ok 505, run 6, wait 463; disk 11.8 GB
 2026-11-26 09:16 progress: ok 505, run 6, wait 463; disk 11.8 GB
+2026-11-26 10:04:49 step 1/4 setup: started
