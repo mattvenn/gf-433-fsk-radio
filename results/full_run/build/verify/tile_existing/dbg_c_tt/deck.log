@@ -1,0 +1,125 @@
+Warning: Value of resistor r.xtile.r0 is too small, set to 1.000000e-12
+Warning: diode_nd2ps_06v0: IKR too small - model effect disabled!
+Warning: diode_pd2nw_06v0: IKR too small - model effect disabled!
+Note: Starting dynamic gmin stepping
+Note: Dynamic gmin stepping completed
+
+Note: No compatibility mode selected!
+
+
+Circuit: * tb_tile {"rx_en": 1, "ic": null, "kind": "dbg"}
+
+Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
+
+Using SPARSE 1.3 as Direct Linear Solver
+ Reference value :  0.00000e+00Note: Starting dynamic gmin stepping
+Note: Dynamic gmin stepping completed
+
+No. of Data Rows : 1
+DBG sel -1 iprb 0 0.00421353 0.00421355 2.35031 2.30989 0.978928 7.10814E-07 0
+Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
+
+Using SPARSE 1.3 as Direct Linear Solver
+ Reference value :  0.00000e+00Note: Starting dynamic gmin stepping
+Note: Dynamic gmin stepping completed
+
+No. of Data Rows : 1
+DBG sel -1 iprb 1e-06 3.67757 3.67755 2.35119 2.31082 0.979451 0.00760121 0
+Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
+
+Using SPARSE 1.3 as Direct Linear Solver
+ Reference value :  0.00000e+00Note: Starting dynamic gmin stepping
+Note: Dynamic gmin stepping completed
+
+No. of Data Rows : 1
+DBG sel 0 iprb 0 2.30337 2.30338 2.30376 2.30989 0.978928 8.3193E-07 0
+Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
+
+Using SPARSE 1.3 as Direct Linear Solver
+ Reference value :  0.00000e+00Note: Starting dynamic gmin stepping
+Note: Dynamic gmin stepping completed
+
+No. of Data Rows : 1
+DBG sel 0 iprb 1e-06 2.50304 2.50299 2.5018 2.30989 0.978928 8.53723E-07 0
+Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
+
+Using SPARSE 1.3 as Direct Linear Solver
+ Reference value :  0.00000e+00Note: Starting dynamic gmin stepping
+Note: Dynamic gmin stepping completed
+
+No. of Data Rows : 1
+DBG sel 1 iprb 0 2.26376 2.26377 2.35031 2.26413 0.978928 8.27987E-07 0
+Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
+
+Using SPARSE 1.3 as Direct Linear Solver
+ Reference value :  0.00000e+00Note: Starting dynamic gmin stepping
+Note: Dynamic gmin stepping completed
+
+No. of Data Rows : 1
+DBG sel 1 iprb 1e-06 2.46346 2.46341 2.35031 2.4622 0.978928 8.49133E-07 0
+Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
+
+Using SPARSE 1.3 as Direct Linear Solver
+ Reference value :  0.00000e+00Note: Starting dynamic gmin stepping
+Warning: Dynamic gmin stepping failed
+Note: Starting true gmin stepping
+Note: True gmin stepping completed
+
+No. of Data Rows : 1
+DBG sel 2 iprb 0 0.976995 0.977001 2.36018 2.31975 0.977104 7.48109E-07 0
+Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
+
+Using SPARSE 1.3 as Direct Linear Solver
+ Reference value :  0.00000e+00Note: Starting dynamic gmin stepping
+Note: Dynamic gmin stepping completed
+
+No. of Data Rows : 1
+DBG sel 2 iprb 1e-06 0.99595 0.995896 2.26219 2.22181 0.994937 7.48793E-07 0
+Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
+
+Using SPARSE 1.3 as Direct Linear Solver
+ Reference value :  0.00000e+00Note: Starting dynamic gmin stepping
+Note: Dynamic gmin stepping completed
+
+No. of Data Rows : 1
+DBG sel 3 iprb 0 8.37148E-05 8.37111E-05 2.35031 2.30989 0.978928 8.33848E-05 0
+Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
+
+Using SPARSE 1.3 as Direct Linear Solver
+ Reference value :  0.00000e+00Note: Starting dynamic gmin stepping
+Note: Dynamic gmin stepping completed
+
+No. of Data Rows : 1
+DBG sel 3 iprb 1e-06 0.196635 0.196583 2.35031 2.30989 0.978928 0.195776 0
+Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
+
+Using SPARSE 1.3 as Direct Linear Solver
+ Reference value :  0.00000e+00Note: Starting dynamic gmin stepping
+Note: Dynamic gmin stepping completed
+
+No. of Data Rows : 1
+FRC sel -1 vf 0.0 4.2304E-13 1.79866E-08 2.35031 2.30989 0.978928 7.09008E-07 0
+Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
+
+Using SPARSE 1.3 as Direct Linear Solver
+ Reference value :  0.00000e+00Note: Starting dynamic gmin stepping
+Note: Dynamic gmin stepping completed
+
+No. of Data Rows : 1
+FRC sel -1 vf 3.3 3.3 3.3 2.35031 2.30989 0.978928 9.90008E-07 0
+Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
+
+Using SPARSE 1.3 as Direct Linear Solver
+ Reference value :  0.00000e+00Note: Starting dynamic gmin stepping
+Note: Dynamic gmin stepping completed
+
+No. of Data Rows : 1
+FRC sel 3 vf 1.65 1.65 1.6494 2.35031 2.30989 0.978928 1.63975 0
+Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
+
+Using SPARSE 1.3 as Direct Linear Solver
+ Reference value :  0.00000e+00
+No. of Data Rows : 1
+UA1 1E-15
+binary raw file "out.raw"
+ngspice-47 done
