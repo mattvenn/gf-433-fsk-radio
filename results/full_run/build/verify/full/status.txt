@@ -52,3 +52,4 @@
 2026-11-27 09:11 progress: ok 649, run 10, wait 310; disk 19.6 GB
 2026-11-27 10:11 progress: ok 658, run 10, wait 301; disk 19.7 GB
 2026-11-27 11:11 progress: ok 695, run 10, wait 264; disk 20.7 GB
+2026-11-27 12:11 progress: ok 702, run 13, wait 254; disk 21.2 GB
