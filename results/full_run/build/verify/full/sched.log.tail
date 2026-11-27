@@ -1,9 +1,4 @@
-[tail: last 200 lines of 91814 bytes]
-03:39:17 start te_vco_c_sf_k15_w512 (backfill) (1 thr, est 33 min; load 25.8 + 1, declared 27)
-03:40:57 done pvt_fs_70_3.45_k31 (rc 0, 40.3 min)
-03:40:57 start te_vco_c_sf_k23_w512 (backfill) (1 thr, est 33 min; load 25.7 + 1, declared 27)
-03:54:31 done pvt_fs_70_3.45_k0 (rc 0, 38.5 min)
-03:54:31 start te_vco_c_sf_k31_w512 (backfill) (1 thr, est 33 min; load 26.4 + 1, declared 27)
+[tail: last 200 lines of 92232 bytes]
 04:01:32 done mut_pvt_v300 (rc 0, 41.3 min)
 04:01:32 start te_ref_tt_k9_w0 (backfill) (1 thr, est 33 min; load 26.0 + 1, declared 27)
 04:19:57 done te_vco_c_sf_k15_w512 (rc 0, 40.7 min)
@@ -199,3 +194,8 @@
 11:20:46 start fsk_pex_tt_-105_n8_nf7.3_s5 (1 thr, est 267 min; load 26.9 + 1, declared 28)
 11:22:17 start fsk_pex_tt_-105_n8_nf7.3_s6 (1 thr, est 267 min; load 27.0 + 1, declared 29)
 11:26:28 start fsk_pex_tt_-105_n8_nf7.3_s7 (1 thr, est 267 min; load 27.0 + 1, declared 30)
+13:01:38 done pvt_ff_27_3.30_pu (rc 0, 394.5 min)
+13:01:58 start fsk_pex_tt_-105_n8_nf7.3_s8 (1 thr, est 267 min; load 27.0 + 1, declared 27)
+13:03:28 start fsk_pex_tt_-108_n8_nf7.3_s1 (1 thr, est 267 min; load 26.1 + 1, declared 28)
+13:05:19 start fsk_pex_tt_-108_n8_nf7.3_s2 (1 thr, est 267 min; load 26.9 + 1, declared 29)
+13:07:20 start fsk_pex_tt_-108_n8_nf7.3_s3 (1 thr, est 267 min; load 26.7 + 1, declared 30)
