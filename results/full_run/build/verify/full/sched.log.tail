@@ -1,6 +1,4 @@
-[tail: last 200 lines of 96300 bytes]
-06:53:07 done te_vco_c_ss_k11_w512 (rc 0, 39.5 min)
-06:53:07 start te_vco_c_ff_k7_w1023 (backfill) (1 thr, est 30 min; load 26.1 + 1, declared 27)
+[tail: last 200 lines of 96450 bytes]
 07:03:29 done te_vco_c_ss_k11_w1023 (rc 0, 40.3 min)
 07:03:29 start te_vco_c_sf_k9_w512 (backfill) (1 thr, est 30 min; load 26.2 + 1, declared 27)
 07:12:02 done te_vco_c_ff_k7_w0 (rc 0, 40.3 min)
@@ -199,3 +197,5 @@
 01:30:01 start fsk_pex_tt_-110_n8_nf0_s1 (1 thr, est 267 min; load 27.0 + 1, declared 28)
 02:09:23 done fsk_pex_tt_-108_n8_nf7.3_s7 (rc 0, 692.8 min)
 02:12:25 start fsk_pex_tt_-110_n8_nf0_s2 (1 thr, est 267 min; load 26.9 + 1, declared 28)
+02:55:50 done fsk_pex_tt_-110_n8_nf7.3_s2 (rc 0, 690.3 min)
+02:57:21 start fsk_pex_tt_-110_n8_nf0_s3 (1 thr, est 267 min; load 27.0 + 1, declared 28)
