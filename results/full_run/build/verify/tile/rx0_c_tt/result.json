@@ -1,0 +1,30 @@
+{
+ "name": "rx0_c_tt",
+ "flags": [],
+ "case": {
+  "kind": "rx0",
+  "rx0": true,
+  "rx_en": 1,
+  "step": 2e-11,
+  "tstop": 2.2e-05,
+  "tskip": 6e-06,
+  "pre": "rxset_c_tt",
+  "hold": 1.23479,
+  "save": "v(uo_out4) v(uo_out5) v(oi_p) v(oi_n) v(oq_p) v(oq_n) v(bi_p) v(bi_n) v(bq_p) v(bq_n) v(vap) v(nb) v(a2)",
+  "threads": 4,
+  "est": 13500
+ },
+ "deck_temp": 27.0,
+ "deck_vsa": 3.3,
+ "deck_vsd": 3.3,
+ "runtime_s": 16757.0,
+ "q_i_edges": 0,
+ "q_i_level": 3.2999999946051224,
+ "q_q_edges": 0,
+ "q_q_level": 3.2999994618804545,
+ "oi_mean": -0.0022648706871180695,
+ "oi_pp": 0.0021503640314994854,
+ "oq_mean": -0.006125185718697767,
+ "oq_pp": 0.007930199731493559,
+ "window_us": 16.0
+}
