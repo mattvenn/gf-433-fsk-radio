@@ -1,0 +1,22 @@
+Note: Starting dynamic gmin stepping
+Note: Dynamic gmin stepping completed
+
+Note: No compatibility mode selected!
+
+
+Circuit: * mc comparators typical seed 66 sch none
+
+Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
+
+Using SPARSE 1.3 as Direct Linear Solver
+ Reference value :  1.10409e-05 Reference value :  3.12309e-05 Reference value :  5.27477e-05 Reference value :  7.41687e-05 Reference value :  9.16187e-05 Reference value :  1.08843e-04 Reference value :  1.29509e-04
+No. of Data Rows : 12114
+up1                 =  4.74256e-04
+dn1                 =  -4.69504e-02
+up1b                =  3.15001e-02
+dn1b                =  -4.68816e-02
+up2                 =  3.93182e-04
+dn2                 =  -4.48501e-02
+up2b                =  3.30869e-02
+dn2b                =  -4.49090e-02
+Note: Simulation executed from .control section 
