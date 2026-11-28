@@ -1,8 +1,4 @@
-[tail: last 200 lines of 112968 bytes]
-08:12:52 done mc_sch_tt_s47 (rc 0, 9.1 min)
-08:12:52 start mc_sch_tt_s51 (backfill) (1 thr, est 4 min; load 24.7 + 1, declared 25)
-08:13:02 done mc_sch_tt_s48 (rc 0, 7.8 min)
-08:13:02 start mc_sch_tt_s52 (backfill) (1 thr, est 4 min; load 25.7 + 1, declared 25)
+[tail: last 200 lines of 113250 bytes]
 08:13:33 done mc_sch_tt_s49 (rc 0, 7.2 min)
 08:13:43 start mc_sch_tt_s53 (backfill) (1 thr, est 4 min; load 26.9 + 1, declared 25)
 08:15:44 done mc_sch_tt_s50 (rc 0, 7.1 min)
@@ -199,3 +195,7 @@
 11:59:00 start pw_solve_p0.5_ff (backfill) (2 thr, est 1 min; load 25.8 + 2, declared 30)
 11:59:50 done pw_solve_p0.5_ff (rc 0, 0.8 min)
 12:00:41 start te_rxh_c_tt_-70_n (3 thr, est 180 min; load 24.9 + 3, declared 31)
+12:15:27 done fsk_pex_tt_-114_n8_nf7.3_s7 (rc 0, 676.8 min)
+12:31:03 done fsk_pex_tt_-110_n8_nf0_s1 (rc 0, 661.0 min)
+12:36:25 start te_rxh_c_tt_-95_p (3 thr, est 180 min; load 25.0 + 3, declared 32)
+12:48:20 start te_mut_pwrup_txon (1 thr, est 120 min; load 26.9 + 1, declared 33)
