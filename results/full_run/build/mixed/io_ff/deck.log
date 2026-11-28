@@ -1,0 +1,14 @@
+
+Note: No compatibility mode selected!
+
+
+Circuit: * mixed-signal tx_fine + analog, io ff (sim/mixed/gen_mixed.py)
+
+Reducing trtol to 1 for xspice 'A' devices
+Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
+
+Using SPARSE 1.3 as Direct Linear Solver
+ Reference value :  4.46656e-06 Reference value :  1.20940e-05 Reference value :  2.14600e-05 Reference value :  2.80697e-05 Reference value :  3.50835e-05 Reference value :  4.43980e-05 Reference value :  5.39651e-05 Reference value :  6.32066e-05
+No. of Data Rows : 36214
+binary raw file "out.raw"
+ngspice-47 done

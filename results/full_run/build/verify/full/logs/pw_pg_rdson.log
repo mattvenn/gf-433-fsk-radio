@@ -1,0 +1,9 @@
+3v3_hp_2  3.3 V typical  Ron 1.321 ohm
+3v3_hp_2  3.3 V ff       Ron 1.179 ohm
+3v3_hp_2  3.3 V ss       Ron 1.480 ohm
+5v0_2     3.3 V typical  Ron 2.706 ohm
+5v0_2     3.3 V ff       Ron 2.229 ohm
+5v0_2     3.3 V ss       Ron 3.417 ohm
+5v0_2     5.0 V typical  Ron 1.941 ohm
+5v0_2     5.0 V ff       Ron 1.655 ohm
+5v0_2     5.0 V ss       Ron 2.358 ohm

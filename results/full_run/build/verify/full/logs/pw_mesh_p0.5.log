@@ -1,0 +1,3 @@
+VDPWR: 1 labelled net(s), 83898 mesh nodes, 146440 R, Metal5 landings A [7, 7]
+VAPWR: 1 labelled net(s), 130285 mesh nodes, 236576 R, Metal5 landings A [14, 14]
+VGND: 4 labelled net(s), 233917 mesh nodes, 424371 R, Metal5 landings A [22, 22, 22, 22]

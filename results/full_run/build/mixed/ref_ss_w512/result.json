@@ -1,0 +1,39 @@
+{
+ "name": "ref_ss_w512",
+ "meta": {
+  "name": "ref_ss_w512",
+  "kind": "ref",
+  "corner": "ss",
+  "ref": "w512",
+  "tstop": 3.5e-06,
+  "fclk": 25000000.0,
+  "tsck": 4e-07,
+  "sd_frac": 64,
+  "ua0_bench": 1.65,
+  "io_mods": {
+   "oi_p": 0.3,
+   "oq_p": 3.0,
+   "vctrl": 1.65
+  }
+ },
+ "log_bad": [],
+ "log_tail": [
+  "No. of Data Rows : 700008",
+  "binary raw file \"out.raw\"",
+  "ngspice-47 done"
+ ],
+ "done": true,
+ "t_end": 3.5e-06,
+ "ok": 1.0,
+ "fm": {
+  "f": 458533245.6224396,
+  "n": 916,
+  "t0": 1.5e-06,
+  "t1": 3.5e-06,
+  "lvl": 2.510510022329562,
+  "amin": 1.575764556128557,
+  "amax": 3.445255488530568
+ },
+ "vg": 1.6765514858318034,
+ "vctrl": 6.923792481611976e-07
+}

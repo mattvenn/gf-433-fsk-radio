@@ -1,0 +1,63 @@
+{
+ "name": "fsk_pex_tt_-114_n8_nf7.3_s6",
+ "kind": "pex",
+ "level": -114.0,
+ "nf": 7.3,
+ "seed": 6,
+ "flags": [],
+ "bits": [
+  1,
+  0,
+  1,
+  0,
+  1.0,
+  0.0,
+  0.0,
+  1.0,
+  1.0,
+  0.0,
+  0.0,
+  0.0
+ ],
+ "npre": 4,
+ "counts": [
+  -4,
+  5,
+  -6,
+  0,
+  1,
+  7,
+  4,
+  -8,
+  -5,
+  2,
+  4,
+  7
+ ],
+ "sign": -1,
+ "delay_us": 5.0,
+ "preamble_score": -15.0,
+ "n_data": 8,
+ "bit_errors": 1,
+ "errors_at": [
+  0
+ ],
+ "glitches": 1,
+ "min_abs_count": 1,
+ "bit_errors_known": 1,
+ "n_data_known": 8,
+ "counts_known": [
+  -4,
+  1,
+  -4,
+  0,
+  0,
+  8,
+  3,
+  -5,
+  -7,
+  1,
+  5,
+  7
+ ]
+}

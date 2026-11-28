@@ -1,0 +1,35 @@
+A VAPWR: dropped 0 nodes; rx.bb_i 4.64, rx.bb_q 4.16, rx.bias 8.62, rx.lim_i 11.68, rx.lim_q 8.74, rx.lna 5.02, rx.lobuf_i 5.25, rx.lobuf_q 16.67, rx.lsqh 6.00, vco.core 7.79, vco.ref 14.39
+   ring I   0.84 mA switch   2.87 mV, worst vco.core 7.78 mV (mean 6.37); EM Metal1 0.35, Metal2 0.63, Metal3 0.57, Metal4 0.50, Via1 0.13, Via2 1.32, Via3 0.31, Via4 0.07, Metal5 0.04
+   rx   I   7.97 mA switch  27.23 mV, worst rx.lna 38.40 mV (mean 36.10); EM Metal1 0.36, Metal2 1.84, Metal3 0.71, Metal4 1.51, Via1 0.53, Via2 2.57, Via3 2.51, Via4 0.22, Metal5 0.32
+   tx   I   0.84 mA switch   2.87 mV, worst vco.core 7.78 mV (mean 6.37); EM Metal1 0.35, Metal2 0.63, Metal3 0.57, Metal4 0.50, Via1 0.13, Via2 1.32, Via3 0.31, Via4 0.07, Metal5 0.04
+   all  I   7.97 mA switch  27.23 mV, worst rx.lna 38.40 mV (mean 36.10); EM Metal1 0.36, Metal2 1.84, Metal3 0.71, Metal4 1.51, Via1 0.53, Via2 2.57, Via3 2.51, Via4 0.22, Metal5 0.32
+A VDPWR: dropped 0 nodes; xmac 3.25, xtxd 2.47
+   ring I   0.60 mA switch   0.89 mV, worst xmac 2.09 mV (mean 1.95); EM Metal1 0.02, Metal2 0.01, Metal3 0.02, Metal4 0.10, Via1 0.02, Via2 0.02, Via3 0.02, Via4 0.02, Metal5 0.03
+   rx   I   0.60 mA switch   0.89 mV, worst xmac 2.09 mV (mean 1.95); EM Metal1 0.02, Metal2 0.01, Metal3 0.02, Metal4 0.10, Via1 0.02, Via2 0.02, Via3 0.02, Via4 0.02, Metal5 0.03
+   tx   I  15.18 mA switch  22.47 mV, worst xtxd 38.96 mV (mean 37.32); EM Metal1 2.22, Metal2 0.64, Metal3 1.61, Metal4 2.15, Via1 1.12, Via2 1.47, Via3 0.90, Via4 0.16, Metal5 0.87
+   all  I  15.18 mA switch  22.47 mV, worst xtxd 38.96 mV (mean 37.32); EM Metal1 2.22, Metal2 0.64, Metal3 1.61, Metal4 2.15, Via1 1.12, Via2 1.47, Via3 0.90, Via4 0.16, Metal5 0.87
+A VGND: dropped 1 nodes; rx.bb_i 0.36, rx.bb_q 0.24, rx.bias 0.79, rx.lim_i 3.21, rx.lim_q 1.20, rx.lna 0.41, rx.lobuf_i 0.62, rx.lobuf_q 0.42, rx.lsqh 0.85, vco.core 3.32, vco.ref 1.52, xmac 0.22, xmdac 4.44, xtxd 0.69
+   ring I   1.44 mA switch   0.00 mV, worst xmdac 5.90 mV (mean 2.62); EM Metal1 1.04, Metal2 0.07, Metal3 0.13, Metal4 0.10, Via1 0.34, Via2 0.34, Via3 0.23, Via4 0.04, Metal5 0.02
+   rx   I   8.57 mA switch   0.00 mV, worst xmdac 6.40 mV (mean 3.15); EM Metal1 1.04, Metal2 0.20, Metal3 0.18, Metal4 0.71, Via1 0.34, Via2 0.54, Via3 0.23, Via4 0.28, Metal5 0.20
+   tx   I  16.02 mA switch   0.00 mV, worst xtxd 11.09 mV (mean 10.25); EM Metal1 2.27, Metal2 0.53, Metal3 1.20, Metal4 1.36, Via1 1.84, Via2 1.53, Via3 0.71, Via4 0.47, Metal5 0.49
+   all  I  23.15 mA switch   0.00 mV, worst xtxd 12.34 mV (mean 11.49); EM Metal1 2.27, Metal2 0.54, Metal3 1.23, Metal4 1.36, Via1 1.84, Via2 1.54, Via3 0.74, Via4 0.46, Metal5 0.48
+B VAPWR: dropped 0 nodes; rx.bb_i 5.67, rx.bb_q 5.02, rx.bias 4.80, rx.lim_i 7.73, rx.lim_q 6.29, rx.lna 3.81, rx.lobuf_i 4.24, rx.lobuf_q 14.80, rx.lsqh 5.97, vco.core 7.52, vco.ref 10.30
+   ring I   0.84 mA switch   2.87 mV, worst vco.core 7.51 mV (mean 6.14); EM Metal1 0.35, Metal2 0.63, Metal3 0.57, Metal4 0.27, Via1 0.13, Via2 1.32, Via3 0.28, Via4 0.05, Metal5 0.04
+   rx   I   7.97 mA switch  27.23 mV, worst vco.core 33.80 mV (mean 32.43); EM Metal1 0.36, Metal2 1.84, Metal3 0.71, Metal4 0.59, Via1 0.53, Via2 2.57, Via3 2.51, Via4 0.14, Metal5 0.46
+   tx   I   0.84 mA switch   2.87 mV, worst vco.core 7.51 mV (mean 6.14); EM Metal1 0.35, Metal2 0.63, Metal3 0.57, Metal4 0.27, Via1 0.13, Via2 1.32, Via3 0.28, Via4 0.05, Metal5 0.04
+   all  I   7.97 mA switch  27.23 mV, worst vco.core 33.80 mV (mean 32.43); EM Metal1 0.36, Metal2 1.84, Metal3 0.71, Metal4 0.59, Via1 0.53, Via2 2.57, Via3 2.51, Via4 0.14, Metal5 0.46
+B VDPWR: dropped 0 nodes; xmac 2.70, xtxd 3.54
+   ring I   0.60 mA switch   0.89 mV, worst xmac 1.66 mV (mean 1.62); EM Metal1 0.02, Metal2 0.02, Metal3 0.02, Metal4 0.04, Via1 0.02, Via2 0.02, Via3 0.02, Via4 0.01, Metal5 0.03
+   rx   I   0.60 mA switch   0.89 mV, worst xmac 1.66 mV (mean 1.62); EM Metal1 0.02, Metal2 0.02, Metal3 0.02, Metal4 0.04, Via1 0.02, Via2 0.02, Via3 0.02, Via4 0.01, Metal5 0.03
+   tx   I  15.18 mA switch  22.47 mV, worst xtxd 54.47 mV (mean 52.82); EM Metal1 2.22, Metal2 0.93, Metal3 1.64, Metal4 2.70, Via1 1.12, Via2 1.47, Via3 1.07, Via4 0.24, Metal5 0.66
+   all  I  15.18 mA switch  22.47 mV, worst xtxd 54.47 mV (mean 52.82); EM Metal1 2.22, Metal2 0.93, Metal3 1.64, Metal4 2.70, Via1 1.12, Via2 1.47, Via3 1.07, Via4 0.24, Metal5 0.66
+B VGND: dropped 1 nodes; rx.bb_i 0.36, rx.bb_q 0.24, rx.bias 0.79, rx.lim_i 3.21, rx.lim_q 1.20, rx.lna 0.41, rx.lobuf_i 0.62, rx.lobuf_q 0.42, rx.lsqh 0.85, vco.core 3.32, vco.ref 1.52, xmac 0.22, xmdac 4.44, xtxd 0.69
+   ring I   1.44 mA switch   0.00 mV, worst xmdac 5.90 mV (mean 2.62); EM Metal1 1.04, Metal2 0.07, Metal3 0.13, Metal4 0.10, Via1 0.34, Via2 0.34, Via3 0.23, Via4 0.04, Metal5 0.02
+   rx   I   8.57 mA switch   0.00 mV, worst xmdac 6.40 mV (mean 3.15); EM Metal1 1.04, Metal2 0.20, Metal3 0.18, Metal4 0.71, Via1 0.34, Via2 0.54, Via3 0.23, Via4 0.28, Metal5 0.20
+   tx   I  16.02 mA switch   0.00 mV, worst xtxd 11.09 mV (mean 10.25); EM Metal1 2.27, Metal2 0.53, Metal3 1.20, Metal4 1.36, Via1 1.84, Via2 1.53, Via3 0.71, Via4 0.47, Metal5 0.49
+   all  I  23.15 mA switch   0.00 mV, worst xtxd 12.34 mV (mean 11.49); EM Metal1 2.27, Metal2 0.54, Metal3 1.23, Metal4 1.36, Via1 1.84, Via2 1.54, Via3 0.74, Via4 0.46, Metal5 0.48
+A_gnd_ideal VGND: dropped 1 nodes; rx.bb_i 0.15, rx.bb_q 0.17, rx.bias 0.30, rx.lim_i 2.78, rx.lim_q 0.82, rx.lna 0.17, rx.lobuf_i 0.31, rx.lobuf_q 0.27, rx.lsqh 0.60, vco.core 2.84, vco.ref 1.21, xmac 0.08, xmdac 4.05, xtxd 0.25
+   ring I   1.44 mA switch   0.00 mV, worst xmdac 5.52 mV (mean 2.23); EM Metal1 1.04, Metal2 0.07, Metal3 0.13, Metal4 0.12, Via1 0.34, Via2 0.34, Via3 0.23, Via4 0.05, Metal5 0.00
+   rx   I   8.57 mA switch   0.00 mV, worst xmdac 5.52 mV (mean 2.23); EM Metal1 1.04, Metal2 0.24, Metal3 0.18, Metal4 0.68, Via1 0.34, Via2 0.47, Via3 0.23, Via4 0.31, Metal5 0.00
+   tx   I  16.02 mA switch   0.00 mV, worst xmdac 5.52 mV (mean 2.23); EM Metal1 2.28, Metal2 0.51, Metal3 0.78, Metal4 1.46, Via1 1.77, Via2 1.29, Via3 0.81, Via4 0.59, Metal5 0.00
+   all  I  23.15 mA switch   0.00 mV, worst xmdac 5.52 mV (mean 2.23); EM Metal1 2.28, Metal2 0.51, Metal3 0.78, Metal4 1.46, Via1 1.77, Via2 1.29, Via3 0.81, Via4 0.59, Metal5 0.00

@@ -1,0 +1,3 @@
+hand: 0.09 ohm/sq x 315.36 / 2.0 um = 14.191 ohm
+mesh P 0.5 um: 14.252 ohm over 315.00 um of cell centres (hand over the same span 14.175 ohm, +0.5 %)
+mesh P 0.25 um: 14.216 ohm over 315.25 um of cell centres (hand over the same span 14.186 ohm, +0.2 %)
