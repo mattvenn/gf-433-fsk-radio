@@ -1,6 +1,6 @@
 # Handoff: the full verification run (existing checks + receiver / system gaps 1-6)
 
-> Running: step 2/4 jobs since 2026-11-26 10:09: ok 856, run 17, wait 96; disk 29.4 GB
+> Running: step 2/4 jobs since 2026-11-26 10:09: ok 857, run 16, wait 96; disk 29.4 GB
 
 [![Made with Claude](https://img.shields.io/badge/Made%20with-Claude-D97757?logo=anthropic&logoColor=white)](https://claude.com/claude-code)
 
