@@ -1,0 +1,16 @@
+{
+ "name": "ref_tt_sd64",
+ "kind": "ref",
+ "corner": "tt",
+ "ref": "sd64",
+ "tstop": 4.5e-06,
+ "fclk": 25000000.0,
+ "tsck": 4e-07,
+ "sd_frac": 64,
+ "ua0_bench": 1.65,
+ "io_mods": {
+  "oi_p": 0.3,
+  "oq_p": 3.0,
+  "vctrl": 1.65
+ }
+}

@@ -1,0 +1,30 @@
+{
+ "name": "sd_ff",
+ "kind": "sd",
+ "corner": "ff",
+ "mut": null,
+ "tstop": 1.9e-05,
+ "frames": [
+  {
+   "t": 5.07e-07,
+   "addr": 1,
+   "data": 64,
+   "read": 0
+  },
+  {
+   "t": 8.307e-06,
+   "addr": 3,
+   "data": 17,
+   "read": 0
+  }
+ ],
+ "fclk": 25000000.0,
+ "tsck": 4e-07,
+ "sd_frac": 64,
+ "ua0_bench": 1.65,
+ "io_mods": {
+  "oi_p": 0.3,
+  "oq_p": 3.0,
+  "vctrl": 1.65
+ }
+}
