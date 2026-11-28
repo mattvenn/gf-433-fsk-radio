@@ -1,0 +1,26 @@
+{
+ "name": "fsk_pex_tt_-112_n8_nf7.3_s1",
+ "kind": "pex",
+ "level": -112.0,
+ "nf": 7.3,
+ "seed": 1,
+ "flags": [
+  "timeout"
+ ],
+ "bits": [
+  1,
+  0,
+  1,
+  0,
+  1.0,
+  1.0,
+  1.0,
+  0.0,
+  1.0,
+  0.0,
+  1.0,
+  1.0
+ ],
+ "npre": 4,
+ "error": "[Errno 2] No such file or directory: '/foss/designs/gf-433-fsk-radio/build/verify/chain/fsk_pex_tt_-112_n8_nf7.3_s1/out.raw'"
+}

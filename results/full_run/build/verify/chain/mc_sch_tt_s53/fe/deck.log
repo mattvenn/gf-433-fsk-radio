@@ -1,0 +1,14 @@
+Warning: diode_pd2nw_06v0: IKR too small - model effect disabled!
+Warning: diode_nd2ps_06v0: IKR too small - model effect disabled!
+Note: Starting dynamic gmin stepping
+Note: Dynamic gmin stepping completed
+
+Note: No compatibility mode selected!
+
+
+Circuit: * mc front end typical seed 53 sch none
+
+Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
+
+Using SPARSE 1.3 as Direct Linear Solver
+ Reference value :  0.00000e+00 Reference value :  1.18163e-09 Reference value :  2.64979e-09 Reference value :  4.00724e-09 Reference value :  5.47331e-09 Reference value :  6.92483e-09 Reference value :  8.23244e-09 Reference value :  9.70268e-09 Reference value :  1.12726e-08 Reference value :  1.27022e-08 Reference value :  1.40910e-08 Reference value :  1.54573e-08 Reference value :  1.68565e-08 Reference value :  1.83971e-08 Reference value :  1.96555e-08 Reference value :  2.11804e-08 Reference value :  2.25105e-08 Reference value :  2.40225e-08 Reference value :  2.53932e-08 Reference value :  2.69731e-08 Reference value :  2.84233e-08 Reference value :  2.99656e-08 Reference value :  3.13008e-08 Reference value :  3.27491e-08 Reference value :  3.40380e-08 Reference value :  3.54757e-08 Reference value :  3.68876e-08 Reference value :  3.84084e-08 Reference value :  3.97361e-08 Reference value :  4.12246e-08 Reference value :  4.25437e-08 Reference value :  4.39785e-08 Reference value :  4.54674e-08 Reference value :  4.72287e-08 Reference value :  4.88141e-08 Reference value :  5.04914e-08 Reference value :  5.21604e-08 Reference value :  5.37493e-08 Reference value :  5.53784e-08 Reference value :  5.70084e-08 Reference value :  5.85171e-08 Reference value :  5.99455e-08 Reference value :  6.15133e-08 Reference value :  6.29872e-08 Reference value :  6.45223e-08 Reference value :  6.58013e-08
