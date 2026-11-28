@@ -4120,12 +4120,22 @@
   "end": 1795707074.861326
  },
  "mx_build_so": {
-  "state": "wait",
-  "threads": 1
+  "state": "ok",
+  "threads": 1,
+  "backfill": true,
+  "start": 1795855180.032196,
+  "pid": 351470,
+  "cmd": "cd /foss/designs/gf-433-fsk-radio && bash sim/mixed/build_so.sh",
+  "rc": 0,
+  "end": 1795855190.1210508
  },
  "mx_step_tt": {
-  "state": "wait",
-  "threads": 1
+  "state": "run",
+  "threads": 1,
+  "backfill": true,
+  "start": 1795855190.1230226,
+  "pid": 351576,
+  "cmd": "cd /foss/designs/gf-433-fsk-radio && python3 sim/mixed/gen_mixed.py run step_tt"
  },
  "mx_sd_tt": {
   "state": "wait",
@@ -4136,8 +4146,12 @@
   "threads": 1
  },
  "mx_step_ss": {
-  "state": "wait",
-  "threads": 1
+  "state": "run",
+  "threads": 1,
+  "backfill": true,
+  "start": 1795855190.123605,
+  "pid": 351577,
+  "cmd": "cd /foss/designs/gf-433-fsk-radio && python3 sim/mixed/gen_mixed.py run step_ss"
  },
  "mx_sd_ss": {
   "state": "wait",
@@ -4148,8 +4162,12 @@
   "threads": 1
  },
  "mx_step_ff": {
-  "state": "wait",
-  "threads": 1
+  "state": "run",
+  "threads": 1,
+  "backfill": true,
+  "start": 1795855402.4747562,
+  "pid": 351769,
+  "cmd": "cd /foss/designs/gf-433-fsk-radio && python3 sim/mixed/gen_mixed.py run step_ff"
  },
  "mx_sd_ff": {
   "state": "wait",
@@ -4220,8 +4238,12 @@
   "threads": 1
  },
  "mx_step_tt_bswap": {
-  "state": "wait",
-  "threads": 1
+  "state": "run",
+  "threads": 1,
+  "backfill": true,
+  "start": 1795855452.9034667,
+  "pid": 351849,
+  "cmd": "cd /foss/designs/gf-433-fsk-radio && python3 sim/mixed/gen_mixed.py run step_tt_bswap"
  },
  "mx_sd_tt_sdinv": {
   "state": "wait",
@@ -5156,8 +5178,12 @@
   "threads": 1
  },
  "rx0_c_tt": {
-  "state": "wait",
-  "threads": 4
+  "state": "run",
+  "threads": 4,
+  "start": 1795856301.8443522,
+  "pid": 352172,
+  "cmd": "cd /foss/designs/gf-433-fsk-radio && TILE_SIMS_OUT=/foss/designs/gf-433-fsk-radio/build/verify/tile python3 sim/verify/tile_verify.py run rx0_c_tt",
+  "backfill": false
  },
  "txrx_c_tt": {
   "state": "wait",
@@ -7152,92 +7178,184 @@
   "end": 1795853572.0675466
  },
  "mc_sch_tt_s83": {
-  "state": "run",
+  "state": "ok",
   "threads": 1,
   "backfill": true,
   "start": 1795853289.0597281,
   "pid": 349625,
-  "cmd": "cd /foss/designs/gf-433-fsk-radio && python3 sim/verify/chain_x.py mc --kind sch --seed 83; exit 0"
+  "cmd": "cd /foss/designs/gf-433-fsk-radio && python3 sim/verify/chain_x.py mc --kind sch --seed 83; exit 0",
+  "rc": 0,
+  "end": 1795853683.365352
  },
  "mc_sch_tt_s84": {
-  "state": "run",
+  "state": "ok",
   "threads": 1,
   "backfill": true,
   "start": 1795853319.3525875,
   "pid": 349695,
-  "cmd": "cd /foss/designs/gf-433-fsk-radio && python3 sim/verify/chain_x.py mc --kind sch --seed 84; exit 0"
+  "cmd": "cd /foss/designs/gf-433-fsk-radio && python3 sim/verify/chain_x.py mc --kind sch --seed 84; exit 0",
+  "rc": 0,
+  "end": 1795853754.2299666
  },
  "mc_sch_tt_s85": {
-  "state": "run",
+  "state": "ok",
   "threads": 1,
   "backfill": true,
   "start": 1795853572.0696034,
   "pid": 349837,
-  "cmd": "cd /foss/designs/gf-433-fsk-radio && python3 sim/verify/chain_x.py mc --kind sch --seed 85; exit 0"
+  "cmd": "cd /foss/designs/gf-433-fsk-radio && python3 sim/verify/chain_x.py mc --kind sch --seed 85; exit 0",
+  "rc": 0,
+  "end": 1795854037.334045
  },
  "mc_sch_tt_s86": {
-  "state": "run",
+  "state": "ok",
   "threads": 1,
   "backfill": true,
   "start": 1795853592.5373313,
   "pid": 349910,
-  "cmd": "cd /foss/designs/gf-433-fsk-radio && python3 sim/verify/chain_x.py mc --kind sch --seed 86; exit 0"
+  "cmd": "cd /foss/designs/gf-433-fsk-radio && python3 sim/verify/chain_x.py mc --kind sch --seed 86; exit 0",
+  "rc": 0,
+  "end": 1795853996.9312766
  },
  "mc_sch_tt_s87": {
-  "state": "wait",
-  "threads": 1
+  "state": "ok",
+  "threads": 1,
+  "backfill": true,
+  "start": 1795853683.367555,
+  "pid": 350124,
+  "cmd": "cd /foss/designs/gf-433-fsk-radio && python3 sim/verify/chain_x.py mc --kind sch --seed 87; exit 0",
+  "rc": 0,
+  "end": 1795854098.1418943
  },
  "mc_sch_tt_s88": {
-  "state": "wait",
-  "threads": 1
+  "state": "ok",
+  "threads": 1,
+  "backfill": true,
+  "start": 1795853754.2342327,
+  "pid": 350205,
+  "cmd": "cd /foss/designs/gf-433-fsk-radio && python3 sim/verify/chain_x.py mc --kind sch --seed 88; exit 0",
+  "rc": 0,
+  "end": 1795854118.2902305
  },
  "mc_sch_tt_s89": {
-  "state": "wait",
-  "threads": 1
+  "state": "ok",
+  "threads": 1,
+  "backfill": true,
+  "start": 1795853996.9361236,
+  "pid": 350344,
+  "cmd": "cd /foss/designs/gf-433-fsk-radio && python3 sim/verify/chain_x.py mc --kind sch --seed 89; exit 0",
+  "rc": 0,
+  "end": 1795854371.0619419
  },
  "mc_sch_tt_s90": {
-  "state": "wait",
-  "threads": 1
+  "state": "ok",
+  "threads": 1,
+  "backfill": true,
+  "start": 1795854037.336231,
+  "pid": 350417,
+  "cmd": "cd /foss/designs/gf-433-fsk-radio && python3 sim/verify/chain_x.py mc --kind sch --seed 90; exit 0",
+  "rc": 0,
+  "end": 1795854411.4517756
  },
  "mc_sch_tt_s91": {
-  "state": "wait",
-  "threads": 1
+  "state": "ok",
+  "threads": 1,
+  "backfill": true,
+  "start": 1795854118.29238,
+  "pid": 350507,
+  "cmd": "cd /foss/designs/gf-433-fsk-radio && python3 sim/verify/chain_x.py mc --kind sch --seed 91; exit 0",
+  "rc": 0,
+  "end": 1795854502.4956014
  },
  "mc_sch_tt_s92": {
-  "state": "wait",
-  "threads": 1
+  "state": "ok",
+  "threads": 1,
+  "backfill": true,
+  "start": 1795854128.4059827,
+  "pid": 350576,
+  "cmd": "cd /foss/designs/gf-433-fsk-radio && python3 sim/verify/chain_x.py mc --kind sch --seed 92; exit 0",
+  "rc": 0,
+  "end": 1795854603.660405
  },
  "mc_sch_tt_s93": {
-  "state": "wait",
-  "threads": 1
+  "state": "ok",
+  "threads": 1,
+  "backfill": true,
+  "start": 1795854371.064033,
+  "pid": 350717,
+  "cmd": "cd /foss/designs/gf-433-fsk-radio && python3 sim/verify/chain_x.py mc --kind sch --seed 93; exit 0",
+  "rc": 0,
+  "end": 1795854795.618699
  },
  "mc_sch_tt_s94": {
-  "state": "wait",
-  "threads": 1
+  "state": "ok",
+  "threads": 1,
+  "backfill": true,
+  "start": 1795854411.454061,
+  "pid": 350789,
+  "cmd": "cd /foss/designs/gf-433-fsk-radio && python3 sim/verify/chain_x.py mc --kind sch --seed 94; exit 0",
+  "rc": 0,
+  "end": 1795854795.618829
  },
  "mc_sch_tt_s95": {
-  "state": "wait",
-  "threads": 1
+  "state": "ok",
+  "threads": 1,
+  "backfill": true,
+  "start": 1795854502.49796,
+  "pid": 350880,
+  "cmd": "cd /foss/designs/gf-433-fsk-radio && python3 sim/verify/chain_x.py mc --kind sch --seed 95; exit 0",
+  "rc": 0,
+  "end": 1795854846.3368895
  },
  "mc_sch_tt_s96": {
-  "state": "wait",
-  "threads": 1
+  "state": "ok",
+  "threads": 1,
+  "backfill": true,
+  "start": 1795854603.66242,
+  "pid": 350971,
+  "cmd": "cd /foss/designs/gf-433-fsk-radio && python3 sim/verify/chain_x.py mc --kind sch --seed 96; exit 0",
+  "rc": 0,
+  "end": 1795855089.0170352
  },
  "mc_sch_tt_s97": {
-  "state": "wait",
-  "threads": 1
+  "state": "ok",
+  "threads": 1,
+  "backfill": true,
+  "start": 1795854795.8692331,
+  "pid": 351102,
+  "cmd": "cd /foss/designs/gf-433-fsk-radio && python3 sim/verify/chain_x.py mc --kind sch --seed 97; exit 0",
+  "rc": 0,
+  "end": 1795855190.1209025
  },
  "mc_sch_tt_s98": {
-  "state": "wait",
-  "threads": 1
+  "state": "ok",
+  "threads": 1,
+  "backfill": true,
+  "start": 1795854795.8697782,
+  "pid": 351103,
+  "cmd": "cd /foss/designs/gf-433-fsk-radio && python3 sim/verify/chain_x.py mc --kind sch --seed 98; exit 0",
+  "rc": 0,
+  "end": 1795855180.0285378
  },
  "mc_sch_tt_s99": {
-  "state": "wait",
-  "threads": 1
+  "state": "ok",
+  "threads": 1,
+  "backfill": true,
+  "start": 1795854856.425521,
+  "pid": 351245,
+  "cmd": "cd /foss/designs/gf-433-fsk-radio && python3 sim/verify/chain_x.py mc --kind sch --seed 99; exit 0",
+  "rc": 0,
+  "end": 1795855402.2135892
  },
  "mc_sch_tt_s100": {
-  "state": "wait",
-  "threads": 1
+  "state": "ok",
+  "threads": 1,
+  "backfill": true,
+  "start": 1795855089.0192258,
+  "pid": 351379,
+  "cmd": "cd /foss/designs/gf-433-fsk-radio && python3 sim/verify/chain_x.py mc --kind sch --seed 100; exit 0",
+  "rc": 0,
+  "end": 1795855452.898454
  },
  "mc_report": {
   "state": "wait",
@@ -7574,12 +7692,14 @@
   "end": 1795850366.88203
  },
  "fsk_pex_tt_-114_n8_nf7.3_s2": {
-  "state": "run",
+  "state": "ok",
   "threads": 1,
   "start": 1795812980.4683905,
   "pid": 331993,
   "cmd": "cd /foss/designs/gf-433-fsk-radio && python3 sim/verify/chain_x.py fsk --level -114 --nf 7.3 --seed 2 --ndata 8; exit 0",
-  "backfill": false
+  "backfill": false,
+  "rc": 0,
+  "end": 1795855988.5832746
  },
  "fsk_pex_tt_-114_n8_nf7.3_s3": {
   "state": "ok",
@@ -7592,12 +7712,14 @@
   "end": 1795849750.2324111
  },
  "fsk_pex_tt_-114_n8_nf7.3_s4": {
-  "state": "run",
+  "state": "ok",
   "threads": 1,
   "start": 1795816811.4545846,
   "pid": 333373,
   "cmd": "cd /foss/designs/gf-433-fsk-radio && python3 sim/verify/chain_x.py fsk --level -114 --nf 7.3 --seed 4 --ndata 8; exit 0",
-  "backfill": false
+  "backfill": false,
+  "rc": 0,
+  "end": 1795856403.0350387
  },
  "fsk_pex_tt_-114_n8_nf7.3_s5": {
   "state": "run",
@@ -7726,7 +7848,7 @@
   "threads": 1
  },
  "_sched": {
-  "beat": 1795853643.0932872,
+  "beat": 1795857251.8839667,
   "pid": 276616
  }
 }

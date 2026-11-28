@@ -1,0 +1,36 @@
+{
+ "name": "step_tt",
+ "kind": "step",
+ "corner": "tt",
+ "mut": null,
+ "tstop": 2.6e-05,
+ "frames": [
+  {
+   "t": 5.07e-07,
+   "addr": 0,
+   "data": 513,
+   "read": 0
+  },
+  {
+   "t": 8.307e-06,
+   "addr": 0,
+   "data": 700,
+   "read": 0
+  },
+  {
+   "t": 1.6107e-05,
+   "addr": 5,
+   "data": 8,
+   "read": 0
+  }
+ ],
+ "fclk": 25000000.0,
+ "tsck": 4e-07,
+ "sd_frac": 64,
+ "ua0_bench": 1.65,
+ "io_mods": {
+  "oi_p": 0.3,
+  "oq_p": 3.0,
+  "vctrl": 1.65
+ }
+}
